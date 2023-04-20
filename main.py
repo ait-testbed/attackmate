@@ -5,7 +5,8 @@ import schemas
 
 
 with open("example.yml") as f:
-  config = yaml.safe_load(f)
+    config = yaml.safe_load(f)
 
 pyconfig = schemas.Config.parse_obj(config)
+
 print(pyconfig)
