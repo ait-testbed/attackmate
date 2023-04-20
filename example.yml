@@ -1,0 +1,9 @@
+###
+
+commands:
+  - type: shell
+    cmd: echo hello world
+
+  - type: msf
+    cmd: echo whoot
+
