@@ -1,0 +1,15 @@
+INFO:hackerman:Running shellcommand: 'echo hello world'
+INFO:hackerman:hello world
+
+INFO:hackerman:Running shellcommand: 'nmap localhost'
+INFO:hackerman:Starting Nmap 7.80 ( https://nmap.org ) at 2023-04-27 11:31 CEST
+Nmap scan report for localhost (127.0.0.1)
+Host is up (0.000037s latency).
+Not shown: 997 closed ports
+PORT    STATE SERVICE
+22/tcp  open  ssh
+53/tcp  open  domain
+631/tcp open  ipp
+
+Nmap done: 1 IP address (1 host up) scanned in 0.12 seconds
+

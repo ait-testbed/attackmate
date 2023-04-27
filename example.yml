@@ -7,3 +7,6 @@ commands:
   - type: msf
     cmd: echo whoot
 
+  - type: shell
+    cmd: nmap localhost
+
