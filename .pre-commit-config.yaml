@@ -14,7 +14,7 @@ repos:
     rev: v1.2.0
     hooks:
     -   id: mypy
-        additional_dependencies: [pydantic]
+        additional_dependencies: [pydantic, types-PyYAML]
     exclude: '.*.log'
 
 -   repo: https://github.com/pycqa/flake8

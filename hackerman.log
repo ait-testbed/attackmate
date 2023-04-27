@@ -1,0 +1,18 @@
+INFO:hackerman:Running shellcommand: 'error_if=None type='shell' cmd='echo hello world''
+INFO:hackerman:hello world
+
+INFO:hackerman:Running shellcommand: 'error_if='ipp' type='shell' cmd='nmap localhost''
+INFO:hackerman:Starting Nmap 7.80 ( https://nmap.org ) at 2023-04-27 18:19 CEST
+Nmap scan report for localhost (127.0.0.1)
+Host is up (0.000045s latency).
+Other addresses for localhost (not scanned): ::1
+Not shown: 996 closed ports
+PORT    STATE SERVICE
+22/tcp  open  ssh
+53/tcp  open  domain
+80/tcp  open  http
+631/tcp open  ipp
+
+Nmap done: 1 IP address (1 host up) scanned in 0.03 seconds
+
+ERROR:hackerman:error_if matches: ipp

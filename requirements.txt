@@ -1,2 +1,4 @@
 pydantic
 pyaml
+mypy
+pre-commit

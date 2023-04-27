@@ -1,5 +1,8 @@
 ###
 
+vars:
+  SERVER_ADDRESS: localhost
+
 commands:
   - type: shell
     cmd: echo hello world
@@ -9,4 +12,4 @@ commands:
 
   - type: shell
     cmd: nmap localhost
-
+    error_if: ipp

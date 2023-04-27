@@ -1,12 +1,12 @@
-import schemas
 import subprocess
+from baseexecutor import BaseExecutor, Result
 
-class ShellExecutor:
-    def __init__(self, logger):
-        self.logger = logger
 
-    def exec(self, command):
-        self.logger.info(f"Running shellcommand: '{command.cmd}'")
-        result = subprocess.run(command.cmd, shell=True, capture_output=True)
-        print(result)
-        self.logger.info(result.stdout.decode())
+class ShellExecutor(BaseExecutor):
+
+    def _exec(self, command):
+        result = subprocess.run(command.cmd,
+                                shell=True,
+                                stdout=subprocess.PIPE,
+                                stderr=subprocess.STDOUT)
+        return Result(result.stdout.decode(), result.returncode)

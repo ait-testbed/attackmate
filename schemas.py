@@ -1,17 +1,23 @@
-from typing import List, Literal, Union
+from typing import List, Literal, Union, Optional, Dict
 from pydantic import BaseModel
 
 # https://stackoverflow.com/questions/71539448/using-different-pydantic-models-depending-on-the-value-of-fields
 
-class ShellCommand(BaseModel):
+
+class BaseCommand(BaseModel):
+    error_if: Optional[str] = None
+
+
+class ShellCommand(BaseCommand):
     type: Literal['shell']
     cmd: str
 
-class MsfCommand(BaseModel):
+
+class MsfCommand(BaseCommand):
     type: Literal['msf']
     cmd: str
 
 
 class Config(BaseModel):
-    commands: List[Union[ShellCommand,MsfCommand]]
-
+    vars: Optional[Dict[str, str]] = None
+    commands: List[Union[ShellCommand, MsfCommand]]
