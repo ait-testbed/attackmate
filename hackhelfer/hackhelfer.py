@@ -1,17 +1,14 @@
 #!/usr/bin/env python3
 
 import yaml
-import logging
 from .shellexecutor import ShellExecutor
 from .schemas import Config
 from .varparse import VarParse
 
 
 class HackHelfer:
-    def __init__(self, config_file) -> None:
-        logging.basicConfig(
-                          filemode='w', level=logging.DEBUG)
-        self.logger = logging.getLogger("hackerman")
+    def __init__(self, config_file, logger) -> None:
+        self.logger = logger
         self.pyconfig = None
         self.parse_config(config_file)
         self.initialize_variable_parser()

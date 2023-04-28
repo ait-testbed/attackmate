@@ -1,5 +1,6 @@
 import re
 import time
+import logging
 
 
 class Result:
@@ -13,9 +14,10 @@ class Result:
 
 class BaseExecutor:
     def __init__(self, logger, cmdconfig=None):
-        self.logger = logger
+        self.logger = logging.getLogger('playbook')
         self.cmdconfig = cmdconfig
         self.logger.debug(self.cmdconfig)
+        self.output = logging.getLogger("output")
 
     def run(self, command):
         self.run_count = 1
@@ -24,7 +26,7 @@ class BaseExecutor:
     def exec(self, command):
         self.logger.info(f"Running shellcommand: '{command}'")
         result = self._exec_cmd(command)
-        self.logger.info(result.stdout)
+        self.output.info(result.stdout)
         self.error_if(command, result)
         self.error_if_not(command, result)
         self.loop_if(command, result)
@@ -52,7 +54,7 @@ class BaseExecutor:
         if command.loop_if is not None:
             m = re.search(command.loop_if, result.stdout, re.MULTILINE)
             if m is not None:
-                self.logger.error(
+                self.logger.warn(
                         f"Re-run command because loop_if matches: {m.group(0)}"
                         )
                 if self.run_count < command.loop_count:
@@ -67,7 +69,7 @@ class BaseExecutor:
         if command.loop_if_not is not None:
             m = re.search(command.loop_if_not, result.stdout, re.MULTILINE)
             if m is None:
-                self.logger.error(
+                self.logger.warn(
                         "Re-run command because loop_if_not does not match"
                         )
                 if self.run_count < command.loop_count:
