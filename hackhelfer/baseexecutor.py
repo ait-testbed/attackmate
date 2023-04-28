@@ -17,7 +17,6 @@ class BaseExecutor:
     def __init__(self, cmdconfig=None):
         self.logger = logging.getLogger('playbook')
         self.cmdconfig = cmdconfig
-        self.logger.debug(self.cmdconfig)
         self.output = logging.getLogger("output")
 
     def run(self, command: BaseCommand):
