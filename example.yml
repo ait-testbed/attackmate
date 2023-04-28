@@ -1,7 +1,7 @@
 ###
 
 vars:
-  SERVER_ADDRESS: localhost
+  $SERVER_ADDRESS: localhost
 
 commands:
   - type: shell
@@ -11,7 +11,7 @@ commands:
     cmd: echo whoot
 
   - type: shell
-    cmd: nmap localhost
+    cmd: nmap $SERVER_ADDRESS
     error_if: .*test.*
     error_if_not: ipp
     loop_if_not: ippa

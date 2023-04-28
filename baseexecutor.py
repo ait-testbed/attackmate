@@ -2,16 +2,6 @@ import re
 import time
 
 
-class VarParse:
-    def __init__(self, variables):
-        self.variables = variables
-
-    def parse(self, command):
-        for k, v in self.variables:
-            command = command.replace(k, v)
-        return command
-
-
 class Result:
     stdout: str
     returncode: int
@@ -26,7 +16,6 @@ class BaseExecutor:
         self.logger = logger
         self.cmdconfig = cmdconfig
         self.logger.debug(self.cmdconfig)
-
 
     def run(self, command):
         self.run_count = 1
@@ -45,42 +34,49 @@ class BaseExecutor:
         if command.error_if is not None:
             m = re.search(command.error_if, result.stdout, re.MULTILINE)
             if m is not None:
-                self.logger.error(f"Exitting because error_if matches: {m.group(0)}")
+                self.logger.error(
+                        f"Exitting because error_if matches: {m.group(0)}"
+                        )
                 exit(1)
 
     def error_if_not(self, command, result):
         if command.error_if_not is not None:
             m = re.search(command.error_if_not, result.stdout, re.MULTILINE)
             if m is None:
-                self.logger.error(f"Exitting because error_if_not does not match")
+                self.logger.error(
+                        "Exitting because error_if_not does not match"
+                        )
                 exit(1)
 
     def loop_if(self, command, result):
         if command.loop_if is not None:
             m = re.search(command.loop_if, result.stdout, re.MULTILINE)
             if m is not None:
-                self.logger.error(f"Re-run command because loop_if matches: '{m.group(0)}'")
+                self.logger.error(
+                        f"Re-run command because loop_if matches: {m.group(0)}"
+                        )
                 if self.run_count < command.loop_count:
                     self.run_count = self.run_count + 1
                     time.sleep(self.cmdconfig.loop_sleep)
                     self.exec(command)
                 else:
-                    self.logger.error(f"Exitting because loop_count exceeded")
+                    self.logger.error("Exitting because loop_count exceeded")
                     exit(1)
 
     def loop_if_not(self, command, result):
         if command.loop_if_not is not None:
             m = re.search(command.loop_if_not, result.stdout, re.MULTILINE)
             if m is None:
-                self.logger.error(f"Re-run command because loop_if_not does not match")
+                self.logger.error(
+                        "Re-run command because loop_if_not does not match"
+                        )
                 if self.run_count < command.loop_count:
                     self.run_count = self.run_count + 1
                     time.sleep(self.cmdconfig.loop_sleep)
                     self.exec(command)
                 else:
-                    self.logger.error(f"Exitting because loop_count exceeded")
+                    self.logger.error("Exitting because loop_count exceeded")
                     exit(1)
-
 
     def _exec_cmd(self, command):
         return Result
