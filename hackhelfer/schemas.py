@@ -27,6 +27,10 @@ class ShellCommand(BaseCommand):
 
 class MsfCommand(BaseCommand):
     type: Literal['msf']
+    module_type: str = "exploit"
+    module_name: str
+    payload: Optional[str]
+    options: Optional[Dict[str, str]]
 
 
 class CommandConfig(BaseModel):

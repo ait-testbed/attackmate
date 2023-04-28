@@ -12,9 +12,6 @@ commands:
     min_sec: 5
     seconds: 10
 
-  - type: msf
-    cmd: echo whoot
-
   - type: shell
     cmd: nmap $SERVER_ADDRESS
     error_if: .*test.*
