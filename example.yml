@@ -12,4 +12,6 @@ commands:
 
   - type: shell
     cmd: nmap localhost
-    error_if: ipp
+    error_if: .*test.*
+    error_if_not: ipp
+    loop_if_not: ippa

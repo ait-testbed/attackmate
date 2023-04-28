@@ -4,7 +4,7 @@ from baseexecutor import BaseExecutor, Result
 
 class ShellExecutor(BaseExecutor):
 
-    def _exec(self, command):
+    def _exec_cmd(self, command):
         result = subprocess.run(command.cmd,
                                 shell=True,
                                 stdout=subprocess.PIPE,

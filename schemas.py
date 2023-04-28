@@ -6,6 +6,10 @@ from pydantic import BaseModel
 
 class BaseCommand(BaseModel):
     error_if: Optional[str] = None
+    error_if_not: Optional[str] = None
+    loop_if: Optional[str] = None
+    loop_if_not: Optional[str] = None
+    loop_count: int = 3
 
 
 class ShellCommand(BaseCommand):
@@ -17,7 +21,10 @@ class MsfCommand(BaseCommand):
     type: Literal['msf']
     cmd: str
 
+class CommandConfig(BaseModel):
+    loop_sleep: int = 5
 
 class Config(BaseModel):
+    cmd_config: CommandConfig = CommandConfig(loop_sleep=5)
     vars: Optional[Dict[str, str]] = None
     commands: List[Union[ShellCommand, MsfCommand]]
