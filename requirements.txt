@@ -1,4 +1,5 @@
 pydantic
+colorlog
 pyaml
 mypy
 pre-commit
