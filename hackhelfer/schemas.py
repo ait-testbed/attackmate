@@ -21,8 +21,10 @@ class MsfCommand(BaseCommand):
     type: Literal['msf']
     cmd: str
 
+
 class CommandConfig(BaseModel):
     loop_sleep: int = 5
+
 
 class Config(BaseModel):
     cmd_config: CommandConfig = CommandConfig(loop_sleep=5)

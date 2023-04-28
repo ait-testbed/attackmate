@@ -1,5 +1,5 @@
 import subprocess
-from baseexecutor import BaseExecutor, Result
+from .baseexecutor import BaseExecutor, Result
 
 
 class ShellExecutor(BaseExecutor):
