@@ -5,6 +5,7 @@ import argparse
 import logging
 from colorlog import ColoredFormatter
 from .hackhelfer import HackHelfer
+from .metadata import __version_string__
 
 
 def initialize_output_logger():
@@ -44,6 +45,10 @@ def parse_args():
             '--config',
             help='Attack-Playbook in yaml-format',
             required=True)
+    parser.add_argument(
+            '--version',
+            action='version',
+            version=__version_string__)
     return parser.parse_args()
 
 
