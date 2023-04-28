@@ -22,8 +22,8 @@ def initialize_logger():
     playbook_logger = logging.getLogger('playbook')
     playbook_logger.setLevel(logging.DEBUG)
     console_handler = logging.StreamHandler()
-    LOGFORMAT = """  %(asctime)s %(log_color)s%(levelname)-8s%(reset)s
-    | %(log_color)s%(message)s%(reset)s"""
+    LOGFORMAT = ("  %(asctime)s %(log_color)s%(levelname)-8s%(reset)s"
+                 "| %(log_color)s%(message)s%(reset)s")
     formatter = ColoredFormatter(LOGFORMAT, datefmt="%Y-%m-%d %H:%M:%S")
     console_handler.setFormatter(formatter)
     playbook_logger.addHandler(console_handler)
