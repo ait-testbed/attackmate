@@ -39,7 +39,8 @@ def initialize_logger():
 def parse_args():
     parser = argparse.ArgumentParser(
             prog='hackhelfer',
-            description='Attack-Simulator for Testbeds')
+            description='Attack-Simulator for Testbeds',
+            epilog=__version_string__)
     parser.add_argument(
             '--config',
             help='Attack-Playbook in yaml-format',
