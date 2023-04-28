@@ -34,7 +34,6 @@ def initialize_logger():
             datefmt="%Y-%m-%d %H:%M:%S")
     file_handler.setFormatter(formatter)
     playbook_logger.addHandler(file_handler)
-    return playbook_logger
 
 
 def parse_args():
@@ -54,7 +53,7 @@ def parse_args():
 
 if __name__ == '__main__':
     args = parse_args()
-    logger = initialize_logger()
-    logger = initialize_output_logger()
-    hacky = HackHelfer(args.config, logger)
+    initialize_logger()
+    initialize_output_logger()
+    hacky = HackHelfer(args.config)
     sys.exit(hacky.main())
