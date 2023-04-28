@@ -9,22 +9,21 @@ from .varparse import VarParse
 
 
 class HackHelfer:
-    def __init__(self, config_file) -> None:
+    def __init__(self, config_file: str) -> None:
         self.logger = logging.getLogger('playbook')
-        self.pyconfig = None
+        self.pyconfig: Config
         self.parse_config(config_file)
         self.initialize_variable_parser()
         self.initialize_executors()
 
-    def parse_config(self, config_file):
+    def parse_config(self, config_file: str):
         try:
             with open(config_file) as f:
                 config = yaml.safe_load(f)
+                self.pyconfig = Config.parse_obj(config)
         except OSError:
             self.logger.error(f"Could not open file: {config_file}")
             exit(1)
-
-        self.pyconfig = Config.parse_obj(config)
 
     def initialize_variable_parser(self):
         self.varparse = VarParse(self.pyconfig.vars)

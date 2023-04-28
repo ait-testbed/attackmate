@@ -1,6 +1,7 @@
 import re
 import time
 import logging
+from .schemas import BaseCommand
 
 
 class Result:
@@ -19,14 +20,14 @@ class BaseExecutor:
         self.logger.debug(self.cmdconfig)
         self.output = logging.getLogger("output")
 
-    def run(self, command):
+    def run(self, command: BaseCommand):
         self.run_count = 1
         self.exec(command)
 
     def log_command(self, command):
         self.logger.info(f"Executing '{command}'")
 
-    def exec(self, command):
+    def exec(self, command: BaseCommand):
         self.log_command(command)
         result = self._exec_cmd(command)
         self.output.info(result.stdout)
@@ -35,7 +36,7 @@ class BaseExecutor:
         self.loop_if(command, result)
         self.loop_if_not(command, result)
 
-    def error_if(self, command, result):
+    def error_if(self, command: BaseCommand, result: Result):
         if command.error_if is not None:
             m = re.search(command.error_if, result.stdout, re.MULTILINE)
             if m is not None:
@@ -44,7 +45,7 @@ class BaseExecutor:
                         )
                 exit(1)
 
-    def error_if_not(self, command, result):
+    def error_if_not(self, command: BaseCommand, result: Result):
         if command.error_if_not is not None:
             m = re.search(command.error_if_not, result.stdout, re.MULTILINE)
             if m is None:
@@ -53,7 +54,7 @@ class BaseExecutor:
                         )
                 exit(1)
 
-    def loop_if(self, command, result):
+    def loop_if(self, command: BaseCommand, result: Result):
         if command.loop_if is not None:
             m = re.search(command.loop_if, result.stdout, re.MULTILINE)
             if m is not None:
@@ -68,7 +69,7 @@ class BaseExecutor:
                     self.logger.error("Exitting because loop_count exceeded")
                     exit(1)
 
-    def loop_if_not(self, command, result):
+    def loop_if_not(self, command: BaseCommand, result: Result):
         if command.loop_if_not is not None:
             m = re.search(command.loop_if_not, result.stdout, re.MULTILINE)
             if m is None:
@@ -83,5 +84,5 @@ class BaseExecutor:
                     self.logger.error("Exitting because loop_count exceeded")
                     exit(1)
 
-    def _exec_cmd(self, command):
-        return Result
+    def _exec_cmd(self, command: BaseCommand) -> Result:
+        return Result(None, None)

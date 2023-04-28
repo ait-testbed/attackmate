@@ -1,13 +1,14 @@
 import subprocess
 from .baseexecutor import BaseExecutor, Result
+from .schemas import BaseCommand
 
 
 class ShellExecutor(BaseExecutor):
 
-    def log_command(self, command):
+    def log_command(self, command: BaseCommand):
         self.logger.info(f"Executing Shell-Command: '{command.cmd}'")
 
-    def _exec_cmd(self, command):
+    def _exec_cmd(self, command: BaseCommand) -> Result:
         result = subprocess.run(command.cmd,
                                 shell=True,
                                 stdout=subprocess.PIPE,
