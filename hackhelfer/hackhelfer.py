@@ -3,6 +3,7 @@
 import yaml
 import logging
 from .shellexecutor import ShellExecutor
+from .sleepexecutor import SleepExecutor
 from .schemas import Config
 from .varparse import VarParse
 
@@ -30,6 +31,7 @@ class HackHelfer:
 
     def initialize_executors(self):
         self.se = ShellExecutor(self.pyconfig.cmd_config)
+        self.sleep = SleepExecutor(self.pyconfig.cmd_config)
 
     def main(self):
         self.initialize_variable_parser()
@@ -37,3 +39,5 @@ class HackHelfer:
             command.cmd = self.varparse.parse_command(command.cmd)
             if command.type == "shell":
                 self.se.run(command)
+            if command.type == "sleep":
+                self.sleep.run(command)

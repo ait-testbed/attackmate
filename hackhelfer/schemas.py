@@ -10,16 +10,23 @@ class BaseCommand(BaseModel):
     loop_if: Optional[str] = None
     loop_if_not: Optional[str] = None
     loop_count: int = 3
+    cmd: str
+
+
+class SleepCommand(BaseCommand):
+    type: Literal['sleep']
+    min_sec: int = 0
+    seconds: int = 1
+    random: bool = False
+    cmd: str = "sleep"
 
 
 class ShellCommand(BaseCommand):
     type: Literal['shell']
-    cmd: str
 
 
 class MsfCommand(BaseCommand):
     type: Literal['msf']
-    cmd: str
 
 
 class CommandConfig(BaseModel):
@@ -29,4 +36,4 @@ class CommandConfig(BaseModel):
 class Config(BaseModel):
     cmd_config: CommandConfig = CommandConfig(loop_sleep=5)
     vars: Optional[Dict[str, str]] = None
-    commands: List[Union[ShellCommand, MsfCommand]]
+    commands: List[Union[ShellCommand, MsfCommand, SleepCommand]]

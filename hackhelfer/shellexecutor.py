@@ -4,6 +4,9 @@ from .baseexecutor import BaseExecutor, Result
 
 class ShellExecutor(BaseExecutor):
 
+    def log_command(self, command):
+        self.logger.info(f"Executing Shell-Command: '{command.cmd}'")
+
     def _exec_cmd(self, command):
         result = subprocess.run(command.cmd,
                                 shell=True,

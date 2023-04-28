@@ -23,8 +23,11 @@ class BaseExecutor:
         self.run_count = 1
         self.exec(command)
 
+    def log_command(self, command):
+        self.logger.info(f"Executing '{command}'")
+
     def exec(self, command):
-        self.logger.info(f"Running shellcommand: '{command}'")
+        self.log_command(command)
         result = self._exec_cmd(command)
         self.output.info(result.stdout)
         self.error_if(command, result)
