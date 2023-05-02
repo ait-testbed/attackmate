@@ -10,7 +10,11 @@ class MsfModuleExecutor(BaseExecutor):
         super().__init__(cmdconfig)
 
     def connect(self, msfconfig=None):
-        self.msf = MsfRpcClient(**msfconfig.dict())
+        try:
+            self.msf = MsfRpcClient(**msfconfig.dict())
+        except IOError as e:
+            self.logger.error(e)
+            self.msf = None
 
     def log_command(self, command: BaseCommand):
         if self.msf is None:
@@ -19,6 +23,9 @@ class MsfModuleExecutor(BaseExecutor):
         self.logger.info(f"Executing Msf-Module: '{command.cmd}'")
 
     def _exec_cmd(self, command: MsfModuleCommand) -> Result:
+        if self.msf is None:
+            return Result("ConnectionError", 1)
+
         self.logger.debug(self.msf.sessions.list)
         exploit = self.msf.modules.use(command.module_type, command.cmd)
         self.logger.debug(exploit.description)

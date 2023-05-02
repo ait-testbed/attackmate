@@ -30,6 +30,9 @@ class BaseExecutor:
     def exec(self, command: BaseCommand):
         self.log_command(command)
         result = self._exec_cmd(command)
+        if result.returncode != 0:
+            self.logger.error(result.stdout)
+            exit(1)
         self.output.info(result.stdout)
         self.error_if(command, result)
         self.error_if_not(command, result)
