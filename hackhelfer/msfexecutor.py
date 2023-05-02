@@ -1,4 +1,4 @@
-from pymetasploit3.msfrpc import MsfRpcClient
+from pymetasploit3.msfrpc import MsfRpcClient, MsfAuthError
 from .baseexecutor import BaseExecutor, Result
 from .schemas import MsfModuleCommand, BaseCommand
 
@@ -15,6 +15,9 @@ class MsfModuleExecutor(BaseExecutor):
         except IOError as e:
             self.logger.error(e)
             self.msf = None
+        except MsfAuthError as e:
+            self.logger.error(e)
+            self.msf = None
 
     def log_command(self, command: BaseCommand):
         if self.msf is None:
@@ -29,14 +32,24 @@ class MsfModuleExecutor(BaseExecutor):
         self.logger.debug(self.msf.sessions.list)
         exploit = self.msf.modules.use(command.module_type, command.cmd)
         self.logger.debug(exploit.description)
-        for option, setting in command.options.items():
-            exploit[option] = setting
-        self.logger.debug(f"Using payload: {command.payload}")
-        payload = self.msf.modules.use('payload', command.payload)
-        for option, setting in command.payload_options.items():
-            payload[option] = setting
+        try:
+            for option, setting in command.options.items():
+                exploit[option] = setting
+        except KeyError:
+            return Result(f"Module option {option} is unknown", 1)
 
-        self.logger.debug(payload.options)
+        self.logger.debug(f"Using payload: {command.payload}")
+        if command.payload is None:
+            payload = None
+        else:
+            payload = self.msf.modules.use('payload', command.payload)
+            try:
+                for option, setting in command.payload_options.items():
+                    payload[option] = setting
+            except KeyError:
+                return Result(f"Payload option {option} is unknown", 1)
+            self.logger.debug(payload.options)
+
         result = exploit.execute(payload=payload)
         self.logger.debug(result)
         self.logger.debug(self.msf.sessions.list)

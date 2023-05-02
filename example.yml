@@ -1,7 +1,7 @@
 ###
 msf_config:
   password: hackhelfer
-  server: 10.18.3.861
+  server: 10.18.3.86
 
 vars:
   $SERVER_ADDRESS: localhost
