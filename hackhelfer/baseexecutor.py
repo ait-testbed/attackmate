@@ -2,6 +2,7 @@ import re
 import time
 import logging
 from .schemas import BaseCommand
+from typing import Any
 
 
 class Result:
@@ -83,5 +84,5 @@ class BaseExecutor:
                     self.logger.error("Exitting because loop_count exceeded")
                     exit(1)
 
-    def _exec_cmd(self, command: BaseCommand) -> Result:
+    def _exec_cmd(self, command: Any) -> Result:
         return Result(None, None)
