@@ -30,7 +30,8 @@ class MsfModuleCommand(BaseCommand):
     type: Literal['msf-module']
     module_type: str = "exploit"
     payload: Optional[str]
-    options: Dict[str, str]
+    options: Dict[str, str] = {}
+    payload_options: Dict[str, str] = {}
 
 
 class CommandConfig(BaseModel):

