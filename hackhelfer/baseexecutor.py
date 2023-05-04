@@ -5,6 +5,10 @@ from .schemas import BaseCommand
 from typing import Any
 
 
+class ExecException(Exception):
+    pass
+
+
 class Result:
     stdout: str
     returncode: int
@@ -28,8 +32,11 @@ class BaseExecutor:
         self.logger.info(f"Executing '{command}'")
 
     def exec(self, command: BaseCommand):
-        self.log_command(command)
-        result = self._exec_cmd(command)
+        try:
+            self.log_command(command)
+            result = self._exec_cmd(command)
+        except ExecException as error:
+            result = Result(error, 1)
         if result.returncode != 0:
             self.logger.error(result.stdout)
             exit(1)

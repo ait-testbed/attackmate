@@ -25,13 +25,40 @@ class ShellCommand(BaseCommand):
     type: Literal['shell']
 
 
+class MsfSessionCommand(BaseCommand):
+    type: Literal['msf-session']
+    cmd: str
+    stdapi: bool = False
+    shell: bool = False
+    session_id: Optional[int]
+
+
 class MsfModuleCommand(BaseCommand):
     cmd: str
     type: Literal['msf-module']
-    module_type: str = "exploit"
+    target: int = 0
+    interactive: Optional[bool]
     payload: Optional[str]
     options: Dict[str, str] = {}
     payload_options: Dict[str, str] = {}
+
+    def is_interactive(self):
+        if self.interactive is not None:
+            return self.interactive
+        if self.module_type() == "exploit":
+            return True
+        else:
+            return False
+
+    def module_type(self):
+        if self.cmd is None:
+            return None
+        return self.cmd.split("/")[0]
+
+    def module_path(self):
+        if self.cmd is None:
+            return None
+        return "/".join(self.cmd.split("/")[1:])
 
 
 class CommandConfig(BaseModel):
@@ -50,4 +77,4 @@ class Config(BaseModel):
     msf_config: MsfConfig = MsfConfig(password=None)
     cmd_config: CommandConfig = CommandConfig(loop_sleep=5)
     vars: Optional[Dict[str, str]] = None
-    commands: List[Union[ShellCommand, MsfModuleCommand, SleepCommand]]
+    commands: List[Union[ShellCommand, MsfModuleCommand, MsfSessionCommand, SleepCommand]]

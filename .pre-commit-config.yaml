@@ -27,5 +27,5 @@ repos:
     rev: v2.0.2
     hooks:
     - id: autopep8
-      args: [--max-line-length=140, --diff]
+      args: [--max-line-length=110, --diff]
     exclude: '.*.log'

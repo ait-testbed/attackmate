@@ -4,7 +4,7 @@ import yaml
 import logging
 from .shellexecutor import ShellExecutor
 from .sleepexecutor import SleepExecutor
-from .msfexecutor import MsfModuleExecutor
+from .msfexecutor import MsfModuleExecutor, MsfSessionExecutor
 from .schemas import Config
 from .varparse import VarParse
 
@@ -34,6 +34,9 @@ class HackHelfer:
         self.sleep = SleepExecutor(self.pyconfig.cmd_config)
         self.msfmodule = MsfModuleExecutor(self.pyconfig.cmd_config,
                                            msfconfig=self.pyconfig.msf_config)
+        self.msfsession = MsfSessionExecutor(
+                self.pyconfig.cmd_config,
+                msfconfig=self.pyconfig.msf_config)
 
     def main(self):
         self.initialize_variable_parser()
@@ -45,3 +48,5 @@ class HackHelfer:
                 self.sleep.run(command)
             if command.type == "msf-module":
                 self.msfmodule.run(command)
+            if command.type == "msf-session":
+                self.msfsession.run(command)
