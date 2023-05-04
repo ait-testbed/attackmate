@@ -14,6 +14,12 @@ from .varparse import VarParse
 
 
 class PenPal:
+    """This class reads a playbook and executes the attack
+
+    A playbook is a yaml-file with a list of attacks. Attacks
+    are executed by "Executors". There are many different
+    Executors like: ShellExecutor, SleepExecutor or MsfModuleExecutor
+    """
     def __init__(self, config_file: str) -> None:
         self.logger = logging.getLogger('playbook')
         self.pyconfig: Config
