@@ -1,10 +1,15 @@
 #!/usr/bin/env python3
+"""
+__main__.py
+=====================================
+The main-file of PenPal
+"""
 
 import sys
 import argparse
 import logging
 from colorlog import ColoredFormatter
-from .hackhelfer import HackHelfer
+from .penpal import PenPal
 from .metadata import __version_string__
 
 
@@ -56,5 +61,5 @@ if __name__ == '__main__':
     args = parse_args()
     initialize_logger()
     initialize_output_logger()
-    hacky = HackHelfer(args.config)
+    hacky = PenPal(args.config)
     sys.exit(hacky.main())

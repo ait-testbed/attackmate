@@ -1,3 +1,10 @@
+"""
+shellexecutor.py
+============================================
+This class enables executing shell
+commands in PenPal.
+"""
+
 import subprocess
 from .baseexecutor import BaseExecutor, Result
 from .schemas import BaseCommand

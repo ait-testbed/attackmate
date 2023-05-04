@@ -1,5 +1,9 @@
-#!/usr/bin/env python3
+"""Main Module for PenPal
 
+This module is the main module of the PenPal-package. Use
+PenPal.main as the initial main-function for you program.
+
+"""
 import yaml
 import logging
 from .shellexecutor import ShellExecutor
@@ -9,7 +13,7 @@ from .schemas import Config
 from .varparse import VarParse
 
 
-class HackHelfer:
+class PenPal:
     def __init__(self, config_file: str) -> None:
         self.logger = logging.getLogger('playbook')
         self.pyconfig: Config

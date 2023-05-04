@@ -1,11 +1,11 @@
-# Hackhelfer
+# PenPal
 
-Hackhelfer is an attack simulation tool that executes full attack-chains based on playbooks.
+PenPal is an attack orchestration tool that executes full attack-chains based on playbooks.
 
 # Execute
 
 ```
-$ python3 -m hackhelfer --config example.yml
+$ python3 -m penpal --config example.yml
 ```
 
 ## License
