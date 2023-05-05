@@ -17,7 +17,7 @@ Welcome to PenPal's documentation!
    :maxdepth: 2
    :caption: Development:
 
-   penpal/modules
+   penpal/penpal
 
 Indices and tables
 ==================

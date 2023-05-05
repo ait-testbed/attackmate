@@ -1,9 +1,13 @@
-"""Main Module for PenPal
+"""PenPal reads a playbook and executes the attack
 
-This module is the main module of the PenPal-package. Use
-PenPal.main as the initial main-function for you program.
-
+A playbook stored in a dictionary with a list of attacks. Attacks
+are executed by "Executors". There are many different
+Executors like: ShellExecutor, SleepExecutor or MsfModuleExecutor
+This class creates instances of all possible Executors, iterates
+over all attacks and runs the specific Executor with the given
+configuration.
 """
+
 import yaml
 import logging
 from .shellexecutor import ShellExecutor
@@ -14,13 +18,17 @@ from .varparse import VarParse
 
 
 class PenPal:
-    """This class reads a playbook and executes the attack
-
-    A playbook is a yaml-file with a list of attacks. Attacks
-    are executed by "Executors". There are many different
-    Executors like: ShellExecutor, SleepExecutor or MsfModuleExecutor
-    """
     def __init__(self, config_file: str) -> None:
+        """ Constructor for PenPal
+
+        This constructor initializes the logger('playbook'), the playbook,
+        the variable-parser and all the executors.
+
+        Parameters
+        ----------
+        config_file : str
+            The path to a yaml-playbook
+        """
         self.logger = logging.getLogger('playbook')
         self.pyconfig: Config
         self.parse_config(config_file)
