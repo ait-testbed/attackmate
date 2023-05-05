@@ -29,7 +29,7 @@ class MsfSessionCommand(BaseCommand):
     type: Literal['msf-session']
     cmd: str
     stdapi: bool = False
-    shell: bool = False
+    write: bool = False
     session_id: Optional[int]
 
 

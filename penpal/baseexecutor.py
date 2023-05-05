@@ -40,7 +40,7 @@ class BaseExecutor:
         if result.returncode != 0:
             self.logger.error(result.stdout)
             exit(1)
-        self.output.info(result.stdout)
+        self.output.info(f"Command: {command.cmd}\n{result.stdout}")
         self.error_if(command, result)
         self.error_if_not(command, result)
         self.loop_if(command, result)

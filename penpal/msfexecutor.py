@@ -1,6 +1,7 @@
 from pymetasploit3.msfrpc import MsfRpcClient, MsfAuthError
 from .baseexecutor import BaseExecutor, Result, ExecException
 from .schemas import MsfSessionCommand, MsfModuleCommand, BaseCommand
+import time
 import atexit
 
 
@@ -8,7 +9,6 @@ class MsfModuleExecutor(BaseExecutor):
     def __init__(self, cmdconfig=None, *, msfconfig=None):
         self.msfconfig = msfconfig
         self.msf = None
-        self.last_jobid = None
         self.last_uuid = None
         super().__init__(cmdconfig)
 
@@ -71,7 +71,6 @@ class MsfModuleExecutor(BaseExecutor):
         self.logger.debug(f"interactive: {command.is_interactive()}")
         if command.is_interactive():
             result = exploit.execute(payload=payload)
-            self.last_jobid = result['job_id']
             self.last_uuid = result['uuid']
             self.logger.debug(result)
             return Result("", 0)
@@ -84,6 +83,8 @@ class MsfSessionExecutor(BaseExecutor):
     def __init__(self, cmdconfig=None, *, msfconfig=None):
         self.msfconfig = msfconfig
         self.msf = None
+        self.last_uuid = None
+        self.session_id = None
         atexit.register(self.cleanup)
         super().__init__(cmdconfig)
 
@@ -102,6 +103,31 @@ class MsfSessionExecutor(BaseExecutor):
             self.logger.error(e)
             self.msf = None
 
+    def get_session_id(self, command: MsfSessionCommand):
+        seconds = 20
+        session_id = None
+
+        if self.session_id is not None:
+            return self.session_id
+
+        if command.session_id is not None:
+            return command.session_id
+
+        self.logger.debug(f"Sessions: {self.msf.sessions.list}")
+        if self.last_uuid is not None:
+            while session_id is None:
+                self.logger.debug(f"Waiting Sessions: {self.msf.sessions.list}")
+                for sid, item in self.msf.sessions.list.items():
+                    if item['exploit_uuid'] == self.last_uuid:
+                        session_id = sid
+        else:
+            while session_id is None:
+                if len(list(self.msf.sessions.list.keys())) > 0:
+                    session_id = list(self.msf.sessions.list.keys())[0]
+        self.logger.debug(f"Waiting {seconds} seconds for session to get ready")
+        time.sleep(seconds)
+        return session_id
+
     def log_command(self, command: BaseCommand):
         if self.msf is None:
             self.logger.debug("Connecting to msf-server...")
@@ -112,20 +138,16 @@ class MsfSessionExecutor(BaseExecutor):
         if self.msf is None:
             raise ExecException("ConnectionError")
 
-        if command.session_id is not None:
-            session_id = command.session_id
-        else:
-            self.logger.debug(self.msf.sessions.list)
-            session_id = list(self.msf.sessions.list.keys())[0]
-        self.logger.debug(f"Using session-id: {session_id}")
+        self.session_id = self.get_session_id(command)
+        self.logger.debug(f"Using session-id: {self.session_id}")
         if command.stdapi:
             self.logger.info("Loading stapi")
-            self.msf.sessions.session(session_id).write('load stdapi')
-        if command.shell:
-            self.logger.info("Executing a msf-shell-command")
-            self.msf.sessions.session(session_id).write(command.cmd + '\n')
-            output = self.msf.sessions.session(session_id).read()
+            self.msf.sessions.session(self.session_id).write('load stdapi')
+        if command.write:
+            self.logger.info("Writing raw-data in msf-session")
+            self.msf.sessions.session(self.session_id).write(command.cmd)
+            output = ""
         else:
             self.logger.info("Executing a msf-command")
-            output = self.msf.sessions.session(session_id).run_with_output(command.cmd)
+            output = self.msf.sessions.session(self.session_id).run_with_output(command.cmd)
         return Result(output, 0)
