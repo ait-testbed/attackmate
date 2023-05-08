@@ -4,7 +4,7 @@ msf_config:
   server: 10.18.3.86
 
 vars:
-  $SERVER_ADDRESS: 10.18.3.86
+  $SERVER_ADDRESS: 192.42.0.254
 
 commands:
   - type: shell

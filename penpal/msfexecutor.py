@@ -104,7 +104,7 @@ class MsfSessionExecutor(BaseExecutor):
             self.msf = None
 
     def get_session_id(self, command: MsfSessionCommand):
-        seconds = 20
+        seconds = 60
         session_id = None
 
         if self.session_id is not None:
