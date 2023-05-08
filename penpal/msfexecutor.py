@@ -10,7 +10,20 @@ class MsfModuleExecutor(BaseExecutor):
         self.msfconfig = msfconfig
         self.msf = None
         self.last_uuid = None
+        self.session_id = None
         super().__init__(cmdconfig)
+
+    def auto_session_id(self, last_uuid: str):
+        seconds = 60
+        session_id = None
+
+        self.logger.debug(f"Sessions: {self.msf.sessions.list}")
+        while session_id is None:
+            if len(list(self.msf.sessions.list.keys())) > 0:
+                session_id = list(self.msf.sessions.list.keys())[-1]
+        self.logger.debug(f"Waiting {seconds} seconds for session to get ready")
+        time.sleep(seconds)
+        return int(session_id)
 
     def connect(self, msfconfig=None):
         try:
@@ -51,10 +64,14 @@ class MsfModuleExecutor(BaseExecutor):
             self.logger.debug(exploit.description)
             for option, setting in command.options.items():
                 exploit[option] = setting
+            if command.auto_session:
+                session_id = self.auto_session_id(self.last_uuid)
+                self.logger.debug(f"Using session-id: {session_id}")
+                exploit['SESSION'] = session_id
         except KeyError:
             raise ExecException(f"Module option {option} is unknown")
-        except TypeError:
-            raise ExecException("Module or Module Type is Unknown")
+        except TypeError as e:
+            raise ExecException(f"Module or Module Type is Unknown: {e}")
         if exploit.missing_required:
             raise ExecException(f"Missing required exploit options: {exploit.missing_required}")
 
@@ -123,7 +140,7 @@ class MsfSessionExecutor(BaseExecutor):
         else:
             while session_id is None:
                 if len(list(self.msf.sessions.list.keys())) > 0:
-                    session_id = list(self.msf.sessions.list.keys())[0]
+                    session_id = list(self.msf.sessions.list.keys())[-1]
         self.logger.debug(f"Waiting {seconds} seconds for session to get ready")
         time.sleep(seconds)
         return session_id
@@ -140,6 +157,11 @@ class MsfSessionExecutor(BaseExecutor):
 
         self.session_id = self.get_session_id(command)
         self.logger.debug(f"Using session-id: {self.session_id}")
+        if command.read:
+            self.logger.info("Reading raw-data in msf-session")
+            output = self.msf.sessions.session(self.session_id).read()
+            return Result(output, 0)
+
         if command.stdapi:
             self.logger.info("Loading stapi")
             self.msf.sessions.session(self.session_id).write('load stdapi')
@@ -149,5 +171,5 @@ class MsfSessionExecutor(BaseExecutor):
             output = ""
         else:
             self.logger.info("Executing a msf-command")
-            output = self.msf.sessions.session(self.session_id).run_with_output(command.cmd)
+            output = self.msf.sessions.session(self.session_id).run_with_output(command.cmd, command.end_str)
         return Result(output, 0)

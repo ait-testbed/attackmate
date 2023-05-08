@@ -30,12 +30,15 @@ class MsfSessionCommand(BaseCommand):
     cmd: str
     stdapi: bool = False
     write: bool = False
+    read: bool = False
+    end_str: Optional[str]
     session_id: Optional[int]
 
 
 class MsfModuleCommand(BaseCommand):
     cmd: str
     type: Literal['msf-module']
+    auto_session: bool = False
     target: int = 0
     interactive: Optional[bool]
     payload: Optional[str]
