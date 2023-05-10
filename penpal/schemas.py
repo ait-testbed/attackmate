@@ -31,16 +31,16 @@ class MsfSessionCommand(BaseCommand):
     stdapi: bool = False
     write: bool = False
     read: bool = False
+    session: str
     end_str: Optional[str]
-    session_id: Optional[int]
 
 
 class MsfModuleCommand(BaseCommand):
     cmd: str
     type: Literal['msf-module']
-    auto_session: bool = False
     target: int = 0
-    interactive: Optional[bool]
+    creates_session: Optional[str]
+    session: Optional[str]
     payload: Optional[str]
     options: Dict[str, str] = {}
     payload_options: Dict[str, str] = {}

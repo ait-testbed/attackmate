@@ -1,29 +1,16 @@
 from pymetasploit3.msfrpc import MsfRpcClient, MsfAuthError
 from .baseexecutor import BaseExecutor, Result, ExecException
 from .schemas import MsfSessionCommand, MsfModuleCommand, BaseCommand
-import time
+from .msfsessionstore import MsfSessionStore
 import atexit
 
 
 class MsfModuleExecutor(BaseExecutor):
-    def __init__(self, cmdconfig=None, *, msfconfig=None):
+    def __init__(self, cmdconfig=None, *, msfconfig=None, msfsessionstore: MsfSessionStore):
         self.msfconfig = msfconfig
+        self.sessionstore = msfsessionstore
         self.msf = None
-        self.last_uuid = None
-        self.session_id = None
         super().__init__(cmdconfig)
-
-    def auto_session_id(self, last_uuid: str):
-        seconds = 60
-        session_id = None
-
-        self.logger.debug(f"Sessions: {self.msf.sessions.list}")
-        while session_id is None:
-            if len(list(self.msf.sessions.list.keys())) > 0:
-                session_id = list(self.msf.sessions.list.keys())[-1]
-        self.logger.debug(f"Waiting {seconds} seconds for session to get ready")
-        time.sleep(seconds)
-        return int(session_id)
 
     def connect(self, msfconfig=None):
         try:
@@ -45,7 +32,10 @@ class MsfModuleExecutor(BaseExecutor):
         self.logger.debug(f"Using payload: {command.payload}")
         if command.payload is None:
             return None
-        payload = self.msf.modules.use('payload', command.payload)
+        if self.msf is not None:
+            payload = self.msf.modules.use('payload', command.payload)
+        else:
+            raise ExecException("Problems with the metasploit connection")
         for option, setting in command.payload_options.items():
             try:
                 payload[option] = setting
@@ -56,18 +46,22 @@ class MsfModuleExecutor(BaseExecutor):
 
     def prepare_exploit(self, command: MsfModuleCommand):
         exploit = None
+        option: str = ""
         try:
             self.logger.debug(f"module_type: {command.module_type()}")
             self.logger.debug(f"module_path: {command.module_path()}")
-            exploit = self.msf.modules.use(command.module_type(),
-                                           command.module_path())
+            if self.msf is not None:
+                exploit = self.msf.modules.use(command.module_type(),
+                                               command.module_path())
+            else:
+                raise ExecException("Problems with the metasploit connection")
             self.logger.debug(exploit.description)
             for option, setting in command.options.items():
                 exploit[option] = setting
-            if command.auto_session:
-                session_id = self.auto_session_id(self.last_uuid)
+            if command.session:
+                session_id = self.sessionstore.get_session_by_name(command.session, self.msf.sessions)
                 self.logger.debug(f"Using session-id: {session_id}")
-                exploit['SESSION'] = session_id
+                exploit['SESSION'] = int(session_id)
         except KeyError:
             raise ExecException(f"Module option {option} is unknown")
         except TypeError as e:
@@ -85,11 +79,11 @@ class MsfModuleExecutor(BaseExecutor):
         exploit = self.prepare_exploit(command)
         payload = self.prepare_payload(command)
 
-        self.logger.debug(f"interactive: {command.is_interactive()}")
-        if command.is_interactive():
+        if command.creates_session is not None:
+            self.logger.debug("Command creates a msf-session")
             result = exploit.execute(payload=payload)
-            self.last_uuid = result['uuid']
             self.logger.debug(result)
+            self.sessionstore.wait_for_session(command.creates_session, result['uuid'], self.msf.sessions)
             return Result("", 0)
         cid = self.msf.consoles.console().cid
         output = self.msf.consoles.console(cid).run_module_with_output(exploit, payload=payload)
@@ -97,11 +91,10 @@ class MsfModuleExecutor(BaseExecutor):
 
 
 class MsfSessionExecutor(BaseExecutor):
-    def __init__(self, cmdconfig=None, *, msfconfig=None):
+    def __init__(self, cmdconfig=None, *, msfconfig=None, msfsessionstore: MsfSessionStore):
         self.msfconfig = msfconfig
+        self.sessionstore = msfsessionstore
         self.msf = None
-        self.last_uuid = None
-        self.session_id = None
         atexit.register(self.cleanup)
         super().__init__(cmdconfig)
 
@@ -120,31 +113,6 @@ class MsfSessionExecutor(BaseExecutor):
             self.logger.error(e)
             self.msf = None
 
-    def get_session_id(self, command: MsfSessionCommand):
-        seconds = 60
-        session_id = None
-
-        if self.session_id is not None:
-            return self.session_id
-
-        if command.session_id is not None:
-            return command.session_id
-
-        self.logger.debug(f"Sessions: {self.msf.sessions.list}")
-        if self.last_uuid is not None:
-            while session_id is None:
-                self.logger.debug(f"Waiting Sessions: {self.msf.sessions.list}")
-                for sid, item in self.msf.sessions.list.items():
-                    if item['exploit_uuid'] == self.last_uuid:
-                        session_id = sid
-        else:
-            while session_id is None:
-                if len(list(self.msf.sessions.list.keys())) > 0:
-                    session_id = list(self.msf.sessions.list.keys())[-1]
-        self.logger.debug(f"Waiting {seconds} seconds for session to get ready")
-        time.sleep(seconds)
-        return session_id
-
     def log_command(self, command: BaseCommand):
         if self.msf is None:
             self.logger.debug("Connecting to msf-server...")
@@ -155,21 +123,26 @@ class MsfSessionExecutor(BaseExecutor):
         if self.msf is None:
             raise ExecException("ConnectionError")
 
-        self.session_id = self.get_session_id(command)
-        self.logger.debug(f"Using session-id: {self.session_id}")
-        if command.read:
-            self.logger.info("Reading raw-data in msf-session")
-            output = self.msf.sessions.session(self.session_id).read()
-            return Result(output, 0)
+        session_id = self.sessionstore.get_session_by_name(command.session, self.msf.sessions)
+        self.logger.debug(f"Using session-id: {session_id}")
+        try:
+            if command.read:
+                self.logger.info("Reading raw-data in msf-session")
+                output = self.msf.sessions.session(session_id).read()
+                return Result(output, 0)
 
-        if command.stdapi:
-            self.logger.info("Loading stapi")
-            self.msf.sessions.session(self.session_id).write('load stdapi')
-        if command.write:
-            self.logger.info("Writing raw-data in msf-session")
-            self.msf.sessions.session(self.session_id).write(command.cmd)
-            output = ""
-        else:
-            self.logger.info("Executing a msf-command")
-            output = self.msf.sessions.session(self.session_id).run_with_output(command.cmd, command.end_str)
+            if command.stdapi:
+                self.logger.info("Loading stapi")
+                self.msf.sessions.session(session_id).write('load stdapi')
+            if command.write:
+                self.logger.info("Writing raw-data in msf-session")
+                self.msf.sessions.session(session_id).write(command.cmd)
+                output = ""
+            else:
+                self.logger.info("Executing a msf-command")
+                output = self.msf.sessions.session(session_id).run_with_output(command.cmd, command.end_str)
+        except KeyError as e:
+            self.logger.debug(self.msf.sessions.list)
+            self.logger.debug(session_id)
+            raise ExecException(e)
         return Result(output, 0)

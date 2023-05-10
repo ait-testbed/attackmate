@@ -13,6 +13,7 @@ import logging
 from .shellexecutor import ShellExecutor
 from .sleepexecutor import SleepExecutor
 from .msfexecutor import MsfModuleExecutor, MsfSessionExecutor
+from .msfsessionstore import MsfSessionStore
 from .schemas import Config
 from .varparse import VarParse
 
@@ -48,13 +49,16 @@ class PenPal:
         self.varparse = VarParse(self.pyconfig.vars)
 
     def initialize_executors(self):
+        self.msfsessionstore = MsfSessionStore()
         self.se = ShellExecutor(self.pyconfig.cmd_config)
         self.sleep = SleepExecutor(self.pyconfig.cmd_config)
         self.msfmodule = MsfModuleExecutor(self.pyconfig.cmd_config,
-                                           msfconfig=self.pyconfig.msf_config)
+                                           msfconfig=self.pyconfig.msf_config,
+                                           msfsessionstore=self.msfsessionstore)
         self.msfsession = MsfSessionExecutor(
                 self.pyconfig.cmd_config,
-                msfconfig=self.pyconfig.msf_config)
+                msfconfig=self.pyconfig.msf_config,
+                msfsessionstore=self.msfsessionstore)
 
     def main(self):
         self.initialize_variable_parser()
