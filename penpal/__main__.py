@@ -57,9 +57,13 @@ def parse_args():
     return parser.parse_args()
 
 
-if __name__ == '__main__':
+def main():
     args = parse_args()
     initialize_logger()
     initialize_output_logger()
     hacky = PenPal(args.config)
     sys.exit(hacky.main())
+
+
+if __name__ == '__main__':
+    main()
