@@ -12,7 +12,8 @@ import yaml
 import logging
 from .shellexecutor import ShellExecutor
 from .sleepexecutor import SleepExecutor
-from .msfexecutor import MsfModuleExecutor, MsfSessionExecutor
+from .msfexecutor import MsfModuleExecutor
+from .msfsessionexecutor import MsfSessionExecutor
 from .msfsessionstore import MsfSessionStore
 from .schemas import Config
 from .varparse import VarParse

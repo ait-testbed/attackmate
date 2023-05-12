@@ -8,12 +8,12 @@ Welcome to PenPal's documentation!
 
 .. toctree::
    :maxdepth: 2
-   :caption: README:
+   :caption: General:
 
    readme_link
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 4
    :caption: Configuration:
 
    configuration

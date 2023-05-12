@@ -2,10 +2,16 @@
 
 PenPal is an attack orchestration tool that executes full attack-chains based on playbooks.
 
+# Installation
+
+```
+$ python3 setup.py install
+```
+
 # Execute
 
 ```
-$ python3 -m penpal --config example.yml
+$ penpal --config playbook.yml
 ```
 
 ## License
