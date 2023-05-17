@@ -25,6 +25,17 @@ class ShellCommand(BaseCommand):
     type: Literal['shell']
 
 
+class SSHCommand(BaseCommand):
+    type: Literal['ssh']
+    hostname: Optional[str]
+    port: Optional[int]
+    username: Optional[str]
+    password: Optional[str]
+    passphrase: Optional[str]
+    key_filename: Optional[str]
+    timeout: float = 60
+
+
 class MsfSessionCommand(BaseCommand):
     type: Literal['msf-session']
     cmd: str
@@ -80,4 +91,4 @@ class Config(BaseModel):
     msf_config: MsfConfig = MsfConfig(password=None)
     cmd_config: CommandConfig = CommandConfig(loop_sleep=5)
     vars: Optional[Dict[str, str]] = None
-    commands: List[Union[ShellCommand, MsfModuleCommand, MsfSessionCommand, SleepCommand]]
+    commands: List[Union[ShellCommand, MsfModuleCommand, MsfSessionCommand, SleepCommand, SSHCommand]]

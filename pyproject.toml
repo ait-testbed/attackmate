@@ -13,7 +13,8 @@ dependencies = [
     "pydantic",
     "colorlog",
     "pymetasploit3",
-    "pyaml"
+    "pyaml",
+    "paramiko"
 ]
 dynamic = ["version"]
 

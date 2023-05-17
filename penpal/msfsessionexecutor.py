@@ -15,8 +15,9 @@ class MsfSessionExecutor(BaseExecutor):
 
     def cleanup(self):
         self.logger.debug("Killing all Meterpreter-Sessions")
-        for session_id in self.msf.sessions.list.keys():
-            self.msf.sessions.session(session_id).stop()
+        if self.msf is not None:
+            for session_id in self.msf.sessions.list.keys():
+                self.msf.sessions.session(session_id).stop()
 
     def connect(self, msfconfig=None):
         try:

@@ -8,8 +8,18 @@ vars:
 
 commands:
   - type: shell
-    cmd: nmap $SERVER_ADDRESS
+    cmd: 'echo "Target:  $SERVER_ADDRESS"'
     error_if: .*test.*
+
+  - type: ssh
+    cmd: nmap $SERVER_ADDRESS
+    hostname: 10.18.3.86
+    username: ait
+    key_filename: "/home/hw/.ssh/testbed"
+
+  # cached ssh-settings
+  - type: ssh
+    cmd: "nikto -host $SERVER_ADDRESS"
 
   - type: msf-module
     cmd: exploit/unix/webapp/zoneminder_snapshots

@@ -12,6 +12,7 @@ import yaml
 import logging
 from .shellexecutor import ShellExecutor
 from .sleepexecutor import SleepExecutor
+from .sshexecutor import SSHExecutor
 from .msfexecutor import MsfModuleExecutor
 from .msfsessionexecutor import MsfSessionExecutor
 from .msfsessionstore import MsfSessionStore
@@ -53,6 +54,7 @@ class PenPal:
         self.msfsessionstore = MsfSessionStore()
         self.se = ShellExecutor(self.pyconfig.cmd_config)
         self.sleep = SleepExecutor(self.pyconfig.cmd_config)
+        self.ssh = SSHExecutor(self.pyconfig.cmd_config)
         self.msfmodule = MsfModuleExecutor(self.pyconfig.cmd_config,
                                            msfconfig=self.pyconfig.msf_config,
                                            msfsessionstore=self.msfsessionstore)
@@ -73,3 +75,5 @@ class PenPal:
                 self.msfmodule.run(command)
             if command.type == "msf-session":
                 self.msfsession.run(command)
+            if command.type == "ssh":
+                self.ssh.run(command)

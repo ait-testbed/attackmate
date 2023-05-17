@@ -18,7 +18,7 @@ release = '1.0.0'
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
-extensions = ['sphinx.ext.autodoc', 'sphinx.ext.napoleon', 'myst_parser']
+extensions = ['sphinx.ext.autodoc', 'sphinx.ext.napoleon', 'myst_parser', 'sphinx_toolbox.confval']
 
 templates_path = ['_templates']
 exclude_patterns = []  # type: ignore
@@ -31,13 +31,6 @@ html_static_path = ['_static']
 
 html_theme_options = {
     'logo_only': False,
-    'display_version': True,
-    'prev_next_buttons_location': 'bottom',
-    'style_external_links': False,
-    # Toc options
+    'navigation_depth': 2,
     'collapse_navigation': False,
-    'sticky_navigation': True,
-    'navigation_depth': 4,
-    'includehidden': True,
-    'titles_only': False
 }

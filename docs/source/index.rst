@@ -7,7 +7,7 @@ Welcome to PenPal's documentation!
 ==================================
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
    :caption: General:
 
    readme_link
@@ -16,11 +16,15 @@ Welcome to PenPal's documentation!
    :maxdepth: 4
    :caption: Configuration:
 
-   configuration
+   configuration/configuration
+   configuration/config_vars
+   configuration/command_config
+   configuration/msf_config
+   configuration/commands
 
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
    :caption: Development:
 
    penpal/penpal
