@@ -32,7 +32,10 @@ class MsfModuleExecutor(BaseExecutor):
         if command.payload is None:
             return None
         if self.msf is not None:
-            payload = self.msf.modules.use('payload', command.payload)
+            try:
+                payload = self.msf.modules.use('payload', command.payload)
+            except TypeError:
+                raise ExecException(f"Payload {command.payload} seems to be incorrect")
         else:
             raise ExecException("Problems with the metasploit connection")
         for option, setting in command.payload_options.items():
