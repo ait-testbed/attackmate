@@ -46,6 +46,9 @@ class PenPal:
         except OSError:
             self.logger.error(f"Could not open file: {config_file}")
             exit(1)
+        except yaml.parser.ParserError as e:
+            self.logger.error(e)
+            exit(1)
 
     def initialize_variable_parser(self):
         self.varparse = VarParse(self.pyconfig.vars)
