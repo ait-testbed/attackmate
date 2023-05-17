@@ -5,9 +5,12 @@ This class enables executing commands via
 ssh.
 """
 
-from .baseexecutor import BaseExecutor, Result
+from .baseexecutor import BaseExecutor, ExecException, Result
 from .schemas import SSHCommand
 from paramiko.client import SSHClient
+from paramiko.ssh_exception import (BadHostKeyException,
+                                    AuthenticationException,
+                                    SSHException)
 
 
 class SSHExecutor(BaseExecutor):
@@ -45,14 +48,23 @@ class SSHExecutor(BaseExecutor):
         self.cache_settings(command)
         client = SSHClient()
         client.load_system_host_keys()
-        client.connect(self.hostname,
-                       port=self.port,
-                       username=self.username,
-                       password=self.password,
-                       passphrase=self.passphrase,
-                       key_filename=self.key_filename,
-                       timeout=self.timeout)
-        stdin, stdout, stderr = client.exec_command(command.cmd)
+        try:
+            client.connect(self.hostname,
+                           port=self.port,
+                           username=self.username,
+                           password=self.password,
+                           passphrase=self.passphrase,
+                           key_filename=self.key_filename,
+                           timeout=self.timeout)
+            stdin, stdout, stderr = client.exec_command(command.cmd)
+        except BadHostKeyException as e:
+            raise ExecException(e)
+        except AuthenticationException as e:
+            raise ExecException(e)
+        except OSError as e:
+            raise ExecException(e)
+        except SSHException as e:
+            raise ExecException(e)
         output = stdout.read().decode()
         error = stderr.read().decode()
 
