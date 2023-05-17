@@ -1,6 +1,5 @@
 [project]
 name = "penpal"
-version = "1.0.0"
 authors = [
     {name = "Wolfgang Hotwagner", email = "wolfgang.hotwagner@ait.ac.at"},
 ]
@@ -17,6 +16,9 @@ dependencies = [
     "paramiko"
 ]
 dynamic = ["version"]
+
+[project.scripts]
+penpal = "penpal.__main__:main"
 
 [build-system]
 requires = ["setuptools"]

@@ -42,10 +42,11 @@ def initialize_logger():
 
 
 def parse_args():
+    description = ('PenPal is an attack orchestration tool',
+                   'that executes full attack-chains based on playbooks.')
     parser = argparse.ArgumentParser(
             prog='penpal',
-            description=('PenPal is an attack orchestration tool',
-                         'that executes full attack-chains based on playbooks.'),
+            description=description,
             epilog=__version_string__)
     parser.add_argument(
             '--config',
