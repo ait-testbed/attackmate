@@ -42,8 +42,8 @@ def initialize_logger():
 
 
 def parse_args():
-    description = ('PenPal is an attack orchestration tool',
-                   'that executes full attack-chains based on playbooks.')
+    description = 'PenPal is an attack orchestration tool' \
+                  'that executes full attack-chains based on playbooks.'
     parser = argparse.ArgumentParser(
             prog='penpal',
             description=description,
