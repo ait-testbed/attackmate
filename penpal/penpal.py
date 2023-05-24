@@ -39,6 +39,19 @@ class PenPal:
         self.initialize_executors()
 
     def parse_config(self, config_file: str):
+        """ Config-Parser for PenPal
+
+        This parser reads the playbook-file and validates the config-settings.
+
+        Parameters
+        ----------
+        config_file : str
+            The path to a yaml-playbook
+
+        Notes
+        -----
+        This method will exit(1) on errors.
+        """
         try:
             with open(config_file) as f:
                 config = yaml.safe_load(f)
@@ -51,9 +64,19 @@ class PenPal:
             exit(1)
 
     def initialize_variable_parser(self):
+        """ Initializes the variable-parser
+
+        The variable-parser replaces variables with values in certain strings
+        """
         self.varparse = VarParse(self.pyconfig.vars)
 
     def initialize_executors(self):
+        """ Initialize all Executors
+
+        Executors are supposed to execute commands. This method initializes
+        all possible executors.
+
+        """
         self.msfsessionstore = MsfSessionStore()
         self.se = ShellExecutor(self.pyconfig.cmd_config)
         self.sleep = SleepExecutor(self.pyconfig.cmd_config)
@@ -67,6 +90,13 @@ class PenPal:
                 msfsessionstore=self.msfsessionstore)
 
     def main(self):
+        """ The main function
+
+        This function calls the variable_parser() and interates
+        over all configured commands and passes them to the
+        executors.
+
+        """
         self.initialize_variable_parser()
         for command in self.pyconfig.commands:
             command.cmd = self.varparse.parse_command(command.cmd)

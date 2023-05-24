@@ -6,25 +6,83 @@ from typing import Any
 
 
 class ExecException(Exception):
+    """ Exception for all Executors
+
+    This exception is raised by Executors if anything
+    goes wrong. The BaseExecutor will catch the
+    Exception, writes it to the console and exits
+    gracefully.
+
+    """
     pass
 
 
 class Result:
+    """
+
+    Instances of this Result-class will be returned
+    by the Executors. It stores the standard-output
+    and the returncode.
+    """
     stdout: str
     returncode: int
 
     def __init__(self, stdout, returncode):
+        """ Constructor of the Result
+
+        Instances of this Result-class will be returned
+        by the Executors. It stores the standard-output
+        and the returncode.
+
+        Parameters
+        ----------
+        stdout : str
+            The standard-output of a command.
+        returncode : int
+            The returncode of a previous executed command
+        """
         self.stdout = stdout
         self.returncode = returncode
 
 
 class BaseExecutor:
+    """
+
+    The BaseExecutor is the base class of all Executors.
+    It enables base functionality for all Executors and
+    provides a structure for all Executors.
+
+    In order to create a custom Executor, one must simply
+    derive from the BaseExecutor and implement the method
+    _exec_cmd()
+
+    """
     def __init__(self, cmdconfig=None):
+        """ Constructor for BaseExecutor
+
+        Parameters
+        ----------
+        cmdconfig : str, default `None`
+            cmd_config settings.
+
+        """
         self.logger = logging.getLogger('playbook')
         self.cmdconfig = cmdconfig
         self.output = logging.getLogger("output")
 
     def run(self, command: BaseCommand):
+        """ Execute the command
+
+        This method is executed by PenPal and
+        executes the given command. This method sets the
+        run_count to 1 and runs the method exec()
+
+        Parameters
+        ----------
+        command : BaseCommand
+            The settings for the command to execute
+
+        """
         self.run_count = 1
         self.exec(command)
 
