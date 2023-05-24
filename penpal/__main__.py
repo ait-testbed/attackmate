@@ -13,9 +13,12 @@ from .penpal import PenPal
 from .metadata import __version_string__
 
 
-def initialize_output_logger():
+def initialize_output_logger(debug: bool):
     output_logger = logging.getLogger('output')
-    output_logger.setLevel(logging.DEBUG)
+    if debug:
+        output_logger.setLevel(logging.DEBUG)
+    else:
+        output_logger.setLevel(logging.INFO)
     file_handler = logging.FileHandler("output.log", mode='w')
     formatter = logging.Formatter(
             '--- %(asctime)s %(levelname)s: ---\n\n%(message)s',
@@ -24,9 +27,12 @@ def initialize_output_logger():
     output_logger.addHandler(file_handler)
 
 
-def initialize_logger():
+def initialize_logger(debug: bool):
     playbook_logger = logging.getLogger('playbook')
-    playbook_logger.setLevel(logging.DEBUG)
+    if debug:
+        playbook_logger.setLevel(logging.DEBUG)
+    else:
+        playbook_logger.setLevel(logging.INFO)
     console_handler = logging.StreamHandler()
     LOGFORMAT = ("  %(asctime)s %(log_color)s%(levelname)-8s%(reset)s"
                  "| %(log_color)s%(message)s%(reset)s")
@@ -53,6 +59,11 @@ def parse_args():
             help='Attack-Playbook in yaml-format',
             required=True)
     parser.add_argument(
+            '--debug',
+            action='store_true',
+            default=False,
+            help='Enable verbose output')
+    parser.add_argument(
             '--version',
             action='version',
             version=__version_string__)
@@ -61,8 +72,8 @@ def parse_args():
 
 def main():
     args = parse_args()
-    initialize_logger()
-    initialize_output_logger()
+    initialize_logger(args.debug)
+    initialize_output_logger(args.debug)
     hacky = PenPal(args.config)
     sys.exit(hacky.main())
 
