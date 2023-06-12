@@ -87,6 +87,9 @@ class BaseExecutor:
         self.exec(command)
 
     def log_command(self, command):
+        """ Log starting-status of the command
+
+        """
         self.logger.info(f"Executing '{command}'")
 
     def exec(self, command: BaseCommand):

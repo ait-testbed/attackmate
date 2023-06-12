@@ -2,6 +2,8 @@
 
 PenPal is an attack orchestration tool that executes full attack-chains based on playbooks.
 
+![PenPal Schema](images/penpal-schema.png "PenPal Schema")
+
 # Installation
 
 ```

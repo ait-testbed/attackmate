@@ -1,0 +1,8 @@
+###
+commands:
+  - type: shell
+    cmd: 'echo "Target:  $SERVER_ADDRESS"'
+    error_if: .*test.*
+
+  - type: shell
+    cmd: cmd not found
