@@ -156,27 +156,27 @@ Execute commands on a remote server via SSH.
 
 .. code-block:: yaml
 
-   ###
-   msf_config:
-     password: hackhelfer
-     server: 10.18.3.86
-
    vars:
      $SERVER_ADDRESS: 192.42.0.254
+     $SSH_SERVER: 10.10.10.19
 
    commands:
-     - type: shell
+     # creates new ssh-connection and session
+     - type: ssh
        cmd: nmap $SERVER_ADDRESS
-       error_if: .*test.*
-
-     - type: ssh
-       cmd: ida
        hostname: 10.10.10.19
-       username: alice
+       username: aecid
        key_filename: "/home/alice/.ssh/id_rsa"
+       creates_session: "attacker"
 
+     # cached ssh-settings. creates new ssh-connection
      - type: ssh
-       cmd: id
+       cmd: "echo $SERVER_ADDRESS"
+
+     # reuses existing session "attacker"
+     - type: ssh
+       session: "attacker"
+       cmd: "id"
 
 .. confval:: hostname
 
@@ -215,6 +215,22 @@ Execute commands on a remote server via SSH.
    The timeout to drop a connection attempt in seconds.
 
    :type: float
+
+.. confval:: creates_session
+
+   A session name that identifies the session that is created when
+   executing this command. This session-name can be used by using the
+   option "session"
+
+   :type: str
+
+.. confval:: session
+
+   Reuse an existing ssh-session. This setting works only if another
+   ssh-command was executed with the command-option "creates_session"
+
+   :type: str
+
 
 .. _msf-module:
 

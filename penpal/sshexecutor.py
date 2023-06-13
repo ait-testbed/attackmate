@@ -21,6 +21,7 @@ class SSHExecutor(BaseExecutor):
         self.password = None
         self.passphrase = None
         self.key_filename = None
+        self.session_store = {}
         self.timeout = 60
         super().__init__(cmdconfig)
 
@@ -44,18 +45,30 @@ class SSHExecutor(BaseExecutor):
         self.cache_settings(command)
         self.logger.info(f"Executing SSH-Command: '{command.cmd}'")
 
-    def _exec_cmd(self, command: SSHCommand) -> Result:
-        self.cache_settings(command)
+    def connect_use_session(self, command: SSHCommand):
+        if command.session is not None:
+            if command.session not in self.session_store:
+                raise ExecException(f"SSH-Session not in Session-Store: {command.session}")
+            else:
+                return self.session_store[command.session]
+
         client = SSHClient()
         client.load_system_host_keys()
+        client.connect(self.hostname,
+                       port=self.port,
+                       username=self.username,
+                       password=self.password,
+                       passphrase=self.passphrase,
+                       key_filename=self.key_filename,
+                       timeout=self.timeout)
+        if command.creates_session is not None:
+            self.session_store[command.creates_session] = client
+        return client
+
+    def _exec_cmd(self, command: SSHCommand) -> Result:
+        self.cache_settings(command)
         try:
-            client.connect(self.hostname,
-                           port=self.port,
-                           username=self.username,
-                           password=self.password,
-                           passphrase=self.passphrase,
-                           key_filename=self.key_filename,
-                           timeout=self.timeout)
+            client = self.connect_use_session(command)
             stdin, stdout, stderr = client.exec_command(command.cmd)
         except BadHostKeyException as e:
             raise ExecException(e)

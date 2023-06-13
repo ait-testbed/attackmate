@@ -33,6 +33,8 @@ class SSHCommand(BaseCommand):
     password: Optional[str]
     passphrase: Optional[str]
     key_filename: Optional[str]
+    creates_session: Optional[str]
+    session: Optional[str]
     timeout: float = 60
 
 
