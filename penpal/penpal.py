@@ -97,7 +97,6 @@ class PenPal:
         executors.
 
         """
-        self.initialize_variable_parser()
         for command in self.pyconfig.commands:
             command.cmd = self.varparse.parse_command(command.cmd)
             if command.type == "shell":
