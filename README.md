@@ -4,6 +4,15 @@ PenPal is an attack orchestration tool that executes full attack-chains based on
 
 ![PenPal Schema](images/penpal-schema.png "PenPal Schema")
 
+# Requirements
+
+PenPal can use Metasploit-Module. For this feature it is
+required to start the Metasploit-RPC-Daemon:
+
+```
+msfrpcd -P securepassword
+```
+
 # Installation
 
 ```
