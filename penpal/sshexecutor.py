@@ -5,12 +5,13 @@ This class enables executing commands via
 ssh.
 """
 
-from .baseexecutor import BaseExecutor, ExecException, Result
-from .schemas import SSHCommand
 from paramiko.client import SSHClient
+from paramiko import AutoAddPolicy
 from paramiko.ssh_exception import (BadHostKeyException,
                                     AuthenticationException,
                                     SSHException)
+from .baseexecutor import BaseExecutor, ExecException, Result
+from .schemas import SSHCommand
 
 
 class SSHExecutor(BaseExecutor):
@@ -54,6 +55,7 @@ class SSHExecutor(BaseExecutor):
 
         client = SSHClient()
         client.load_system_host_keys()
+        client.set_missing_host_key_policy(AutoAddPolicy())
         client.connect(self.hostname,
                        port=self.port,
                        username=self.username,
