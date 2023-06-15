@@ -98,7 +98,7 @@ class BaseExecutor:
             result = self._exec_cmd(command)
         except ExecException as error:
             result = Result(error, 1)
-        if result.returncode != 0:
+        if result.returncode != 0 and command.exit_on_error:
             self.logger.error(result.stdout)
             exit(1)
         self.output.info(f"Command: {command.cmd}\n{result.stdout}")

@@ -10,6 +10,7 @@ class BaseCommand(BaseModel):
     loop_if: Optional[str] = None
     loop_if_not: Optional[str] = None
     loop_count: int = 3
+    exit_on_error: bool = True
     cmd: str
 
 

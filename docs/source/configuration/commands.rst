@@ -7,6 +7,14 @@ top to bottom.
 
 Every command, regardless of the type has the following options:
 
+.. confval:: returncode_error
+
+   If this option is true, penpal will stop the run if the command returns with a return code
+   that is not zero.
+
+   :type: bool
+   :default: ``True``
+
 .. confval:: error_if
 
    If this option is set, an error will be raised if the string was found in the output

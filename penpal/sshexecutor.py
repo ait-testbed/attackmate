@@ -72,6 +72,8 @@ class SSHExecutor(BaseExecutor):
         try:
             client = self.connect_use_session(command)
             stdin, stdout, stderr = client.exec_command(command.cmd)
+        except ValueError as e:
+            raise ExecException(e)
         except BadHostKeyException as e:
             raise ExecException(e)
         except AuthenticationException as e:
