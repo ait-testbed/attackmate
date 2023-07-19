@@ -37,6 +37,9 @@ class SSHCommand(BaseCommand):
     creates_session: Optional[str]
     session: Optional[str]
     timeout: float = 60
+    jmp_hostname: Optional[str]
+    jmp_port: Optional[int]
+    jmp_username: Optional[str]
 
 
 class MsfSessionCommand(BaseCommand):
