@@ -16,18 +16,21 @@ from .schemas import SSHCommand
 
 class SSHExecutor(BaseExecutor):
     def __init__(self, cmdconfig=None):
+        self.session_store = {}
+        self.set_defaults()
+        super().__init__(cmdconfig)
+
+    def set_defaults(self):
         self.hostname = None
         self.port = 22
         self.username = None
         self.password = None
         self.passphrase = None
         self.key_filename = None
-        self.session_store = {}
         self.timeout = 60
         self.jmp_hostname = None
         self.jmp_port = 22
         self.jmp_username = self.username
-        super().__init__(cmdconfig)
 
     def cache_settings(self, command: SSHCommand):
         if command.hostname:
@@ -95,8 +98,6 @@ class SSHExecutor(BaseExecutor):
         if self.jmp_hostname is not None:
             jmp_sock = self.connect_jmphost(command)
 
-        self.logger.debug("I am over jmp connect")
-
         kwargs = dict(
             hostname=self.hostname,
             port=self.port,
@@ -113,7 +114,10 @@ class SSHExecutor(BaseExecutor):
         return client
 
     def _exec_cmd(self, command: SSHCommand) -> Result:
-        self.cache_settings(command)
+        if command.clear_cache:
+            self.set_defaults()
+        else:
+            self.cache_settings(command)
         try:
             client = self.connect_use_session(command)
             stdin, stdout, stderr = client.exec_command(command.cmd)

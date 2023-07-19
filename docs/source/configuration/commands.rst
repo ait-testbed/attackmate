@@ -225,6 +225,21 @@ Execute commands on a remote server via SSH.
 
    :type: float
 
+.. confval:: clear_cache
+
+   Normally all settings for ssh-connections are cached. This allows to defined
+   all settings in one command and all following commands can reuse these settings
+   without set them in every single command. If a new connection with different
+   settings should be configured, this setting allows to reset the cache to default
+   values.
+
+   :type: bool
+   :default: ``False``
+
+   .. note::
+
+       This setting will not clear the session store.
+
 .. confval:: creates_session
 
    A session name that identifies the session that is created when

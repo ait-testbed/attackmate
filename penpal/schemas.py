@@ -36,6 +36,7 @@ class SSHCommand(BaseCommand):
     key_filename: Optional[str]
     creates_session: Optional[str]
     session: Optional[str]
+    clear_cache: bool = False
     timeout: float = 60
     jmp_hostname: Optional[str]
     jmp_port: Optional[int]
