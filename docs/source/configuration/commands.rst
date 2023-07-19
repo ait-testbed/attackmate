@@ -198,6 +198,7 @@ Execute commands on a remote server via SSH.
    Port to connect to on the remote host.
 
    :type: int
+   :default: ``22``
 
 .. confval:: username
 
@@ -238,6 +239,27 @@ Execute commands on a remote server via SSH.
    ssh-command was executed with the command-option "creates_session"
 
    :type: str
+
+.. confval:: jmp_hostname
+
+   This option sets the hostname or ip-address of the
+   remote jump server.
+
+   :type: str
+
+.. confval:: jmp_port
+
+   Port to connect to on the jump-host.
+
+   :type: int
+   :default: ``22``
+
+.. confval:: jmp_username
+
+   Specifies the user to log in as on the jmp-host.
+
+   :type: str
+   :default: ``same as username``
 
 
 .. _msf-module:
