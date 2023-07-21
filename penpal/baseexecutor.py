@@ -100,6 +100,7 @@ class BaseExecutor:
             result = Result(error, 1)
         if result.returncode != 0 and command.exit_on_error:
             self.logger.error(result.stdout)
+            self.logger.debug("Exiting because return-code is not 0")
             exit(1)
         self.output.info(f"Command: {command.cmd}\n{result.stdout}")
         self.error_if(command, result)
