@@ -116,8 +116,9 @@ class SSHExecutor(BaseExecutor):
     def _exec_cmd(self, command: SSHCommand) -> Result:
         if command.clear_cache:
             self.set_defaults()
-        else:
-            self.cache_settings(command)
+
+        self.cache_settings(command)
+
         try:
             client = self.connect_use_session(command)
             stdin, stdout, stderr = client.exec_command(command.cmd)
