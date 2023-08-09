@@ -9,7 +9,7 @@ requires-python = ">=3.7"
 keywords = ["Pentest", "Attack", "Orchestration", "Hacking", "Simulating", "Attackchain"]
 license = {text = "GPL-3.0"}
 dependencies = [
-    "pydantic",
+    "pydantic ~= 1.10",
     "colorlog",
     "pymetasploit3",
     "pyaml",

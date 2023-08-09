@@ -1,7 +1,0 @@
-pydantic
-colorlog
-pymetasploit3
-pyaml
-paramiko
-mypy
-pre-commit
