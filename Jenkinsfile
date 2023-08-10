@@ -33,7 +33,7 @@ pipeline {
                         dir("docs") {
                                 sh "id"
                                 sh "ls -la /docs"
-        	                sh "make html"
+        	                sh "make html || cat /tmp/*log"
                         }
                 }
         }
