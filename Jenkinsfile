@@ -31,7 +31,8 @@ pipeline {
         	                docsimage = true
         	        }
                         dir("docs") {
-                                sh "mkdir .cache"
+                                sh "id"
+                                sh "ls -la /docs"
         	                sh "make html"
                         }
                 }
