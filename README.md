@@ -25,6 +25,14 @@ $ pip3 install -e .
 $ penpal --config playbook.yml
 ```
 
+# Documentation
+
+Please take a look at our documentation for how to install and use penpal:
+
+* [Installation](https://aeciddocs.ait.ac.at/penpal/current/readme_link.html#)
+* [Configuration](https://aeciddocs.ait.ac.at/penpal/current/configuration/configuration.html)
+* [Documentation](https://aeciddocs.ait.ac.at/penpal)
+
 ## License
 
 [GPL-3.0](LICENSE)

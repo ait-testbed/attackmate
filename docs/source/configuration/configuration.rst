@@ -9,16 +9,17 @@ PenPal ships with a executable stub called "penpal" that can be called like foll
 .. code-block::
 
    penpal -h
-   usage: penpal [-h] --config CONFIG [--version]
+   usage: penpal [-h] --config CONFIG [--debug] [--version]
 
    PenPal is an attack orchestration tool that executes full attack-chains based on playbooks.
 
    options:
      -h, --help       show this help message and exit
      --config CONFIG  Attack-Playbook in yaml-format
+     --debug          Enable verbose output
      --version        show program's version number and exit
 
-   (Austrian Institute of Technology) https://aecid.ait.ac.at Version: 1.0.0
+   (Austrian Institute of Technology) https://aecid.ait.ac.at Version: 0.1.0
 
 The configuration-file is in yaml-format. The following yaml-file is an example of a playbook.yml:
 
