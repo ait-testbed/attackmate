@@ -31,6 +31,7 @@ pipeline {
         	                docsimage = true
         	        }
                         dir("docs") {
+                                sh "ls -la"
         	                sh "make html"
                         }
                 }
