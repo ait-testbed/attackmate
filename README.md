@@ -33,6 +33,10 @@ Please take a look at our documentation for how to install and use penpal:
 * [Configuration](https://aeciddocs.ait.ac.at/penpal/current/configuration/configuration.html)
 * [Documentation](https://aeciddocs.ait.ac.at/penpal)
 
+## Security
+
+If you discover any security-related issues read the [SECURITY.md](/SECURITY.md) first and report the issues.
+
 ## License
 
 [GPL-3.0](LICENSE)
