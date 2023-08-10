@@ -16,6 +16,8 @@ msfrpcd -P securepassword
 # Installation
 
 ```
+$ git clone https://github.com/ait-aecid/penpal.git
+$ cd penpal
 $ pip3 install -e .
 ```
 
