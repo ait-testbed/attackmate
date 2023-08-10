@@ -17,7 +17,7 @@ pipeline {
                 agent {
                         dockerfile {
                                      dir 'docs'
-                                     args '-v $PWD:/docs'
+                                     args '-u root -v $PWD:/docs'
                                      reuseNode true
                         }
                 }
