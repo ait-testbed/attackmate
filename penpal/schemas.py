@@ -46,6 +46,11 @@ class ShellCommand(BaseCommand):
     type: Literal['shell']
 
 
+class DebugCommand(BaseCommand):
+    type: Literal['debug']
+    varstore: bool = False
+
+
 class SSHCommand(BaseCommand):
     type: Literal['ssh']
     hostname: Optional[str]
@@ -118,4 +123,10 @@ class Config(BaseModel):
     msf_config: MsfConfig = MsfConfig(password=None)
     cmd_config: CommandConfig = CommandConfig(loop_sleep=5)
     vars: Optional[Dict[str, str]] = None
-    commands: List[Union[ShellCommand, MsfModuleCommand, MsfSessionCommand, SleepCommand, SSHCommand]]
+    commands: List[Union[
+                         ShellCommand,
+                         MsfModuleCommand,
+                         MsfSessionCommand,
+                         SleepCommand,
+                         SSHCommand,
+                         DebugCommand]]
