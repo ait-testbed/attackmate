@@ -111,6 +111,7 @@ class BaseExecutor:
 
         """
         self.run_count = 1
+        self.logger.debug(f"Template-Command: '{command.cmd}'")
         self.exec(self.replace_variables(command))
 
     def log_command(self, command):
@@ -129,6 +130,8 @@ class BaseExecutor:
             self.logger.error(result.stdout)
             self.logger.debug("Exiting because return-code is not 0")
             exit(1)
+        self.varstore.set_variable("RESULT_STDOUT", result.stdout)
+        self.varstore.set_variable("RESULT_RETURNCODE", str(result.returncode))
         self.output.info(f"Command: {command.cmd}\n{result.stdout}")
         self.error_if(command, result)
         self.error_if_not(command, result)
