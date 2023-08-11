@@ -22,6 +22,12 @@ of commands!
      - type: shell
        cmd: $NMAP $SERVER_ADDRESS
 
+.. note::
+
+   Please note that the dollar sign("$") is now reserved for variables.
+   If you need the dollar sign, use "$$" instead! For more information
+   see `string.Template <https://docs.python.org/3.8/library/string.html#string.Template>`_
+
 Builtin Variables
 =================
 
