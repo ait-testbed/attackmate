@@ -4,7 +4,8 @@ vars
 
 Variables can be defined in the key/value-format. The variables
 can be used in certain configuration places and are just placeholders
-for the values. Currently they can only be used for string-type variables!
+for the values. Currently they can only be used for string-type variables
+of commands!
 
 .. code-block:: yaml
 
@@ -20,3 +21,12 @@ for the values. Currently they can only be used for string-type variables!
    commands:
      - type: shell
        cmd: $NMAP $SERVER_ADDRESS
+
+Builtin Variables
+=================
+
+The following variables are set by the system:
+
+``RESULT_STDOUT`` is set after every command execution and stores the result output.
+
+``RESULT_CODE`` is set after every command execution and stores the returncode.
