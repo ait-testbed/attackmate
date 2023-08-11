@@ -50,6 +50,12 @@ class DebugCommand(BaseCommand):
     type: Literal['debug']
     varstore: bool = False
 
+class RegExCommand(BaseCommand):
+    type: Literal['regex']
+    mode: Literal['search', 'split', 'findall'] = 'findall'
+    input: str = 'RESULT_STDOUT'
+    output: dict[str, str]
+
 
 class SSHCommand(BaseCommand):
     type: Literal['ssh']
@@ -129,4 +135,5 @@ class Config(BaseModel):
                          MsfSessionCommand,
                          SleepCommand,
                          SSHCommand,
-                         DebugCommand]]
+                         DebugCommand,
+                         RegExCommand]]
