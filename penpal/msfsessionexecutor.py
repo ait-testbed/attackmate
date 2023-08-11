@@ -1,4 +1,6 @@
 import atexit
+
+from penpal.variablestore import VariableStore
 from .baseexecutor import BaseExecutor, Result, ExecException
 from pymetasploit3.msfrpc import MsfRpcClient, MsfAuthError
 from .schemas import MsfSessionCommand, BaseCommand
@@ -6,12 +8,15 @@ from .msfsessionstore import MsfSessionStore
 
 
 class MsfSessionExecutor(BaseExecutor):
-    def __init__(self, cmdconfig=None, *, msfconfig=None, msfsessionstore: MsfSessionStore):
+    def __init__(self, cmdconfig=None, *,
+                 varstore: VariableStore,
+                 msfconfig=None,
+                 msfsessionstore: MsfSessionStore):
         self.msfconfig = msfconfig
         self.sessionstore = msfsessionstore
         self.msf = None
         atexit.register(self.cleanup)
-        super().__init__(cmdconfig)
+        super().__init__(varstore, cmdconfig)
 
     def cleanup(self):
         self.logger.debug("Killing all Meterpreter-Sessions")

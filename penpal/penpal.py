@@ -17,7 +17,7 @@ from .msfexecutor import MsfModuleExecutor
 from .msfsessionexecutor import MsfSessionExecutor
 from .msfsessionstore import MsfSessionStore
 from .schemas import Config
-from .varparse import VarParse
+from .variablestore import VariableStore
 
 
 class PenPal:
@@ -66,9 +66,10 @@ class PenPal:
     def initialize_variable_parser(self):
         """ Initializes the variable-parser
 
-        The variable-parser replaces variables with values in certain strings
+        The variablestore stores and replaces variables with values in certain strings
         """
-        self.varparse = VarParse(self.pyconfig.vars)
+        self.varstore = VariableStore()
+        self.varstore.from_dict(self.pyconfig.vars)
 
     def initialize_executors(self):
         """ Initialize all Executors
@@ -78,14 +79,18 @@ class PenPal:
 
         """
         self.msfsessionstore = MsfSessionStore()
-        self.se = ShellExecutor(self.pyconfig.cmd_config)
-        self.sleep = SleepExecutor(self.pyconfig.cmd_config)
-        self.ssh = SSHExecutor(self.pyconfig.cmd_config)
+        self.se = ShellExecutor(self.varstore, self.pyconfig.cmd_config)
+        self.sleep = SleepExecutor(self.pyconfig.cmd_config,
+                                   varstore=self.varstore)
+        self.ssh = SSHExecutor(self.pyconfig.cmd_config,
+                               varstore=self.varstore)
         self.msfmodule = MsfModuleExecutor(self.pyconfig.cmd_config,
+                                           varstore=self.varstore,
                                            msfconfig=self.pyconfig.msf_config,
                                            msfsessionstore=self.msfsessionstore)
         self.msfsession = MsfSessionExecutor(
                 self.pyconfig.cmd_config,
+                varstore=self.varstore,
                 msfconfig=self.pyconfig.msf_config,
                 msfsessionstore=self.msfsessionstore)
 
@@ -98,7 +103,6 @@ class PenPal:
 
         """
         for command in self.pyconfig.commands:
-            command.cmd = self.varparse.parse_command(command.cmd)
             if command.type == "shell":
                 self.se.run(command)
             if command.type == "sleep":

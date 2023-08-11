@@ -1,15 +1,19 @@
 from string import Template
-from typing import Any
+from typing import Any, Optional
 
 
 class VariableStore:
     def __init__(self):
+        self.clear()
+
+    def clear(self):
         self.variables = {}
 
-    def from_dict(self, variables: dict):
-        for k, v in variables.items():
-            name = self.remove_sign(k)
-            self.variables[name] = v
+    def from_dict(self, variables: Optional[dict]):
+        if isinstance(variables, dict):
+            for k, v in variables.items():
+                name = self.remove_sign(k)
+                self.variables[name] = v
 
     def remove_sign(self, name: str, sign: str = '$') -> str:
         if name.startswith(sign):

@@ -4,7 +4,7 @@ vars
 
 Variables can be defined in the key/value-format. The variables
 can be used in certain configuration places and are just placeholders
-for the values. Currently they can only be used for "cmd"
+for the values. Currently they can only be used for string-type variables!
 
 .. code-block:: yaml
 

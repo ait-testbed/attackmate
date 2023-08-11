@@ -5,6 +5,26 @@ from pydantic import BaseModel
 
 
 class BaseCommand(BaseModel):
+    def list_template_vars(self) -> List[str]:
+        """ Get a list of all variables that can be used as templates
+
+        Returns a List with all member-names that can be used as
+        templates for the VariableStore. Basically all members
+        can be used that are strings where the value is not None.
+        The member "type" is explicitly excluded.
+
+        Returns
+        -------
+        List[str]
+            List with names of all member-variables
+        """
+        template_vars: List[str] = []
+        for k in self.__dict__.keys():
+            tmp = getattr(self, k)
+            if isinstance(tmp, str) and k != "type":
+                template_vars.append(k)
+        return template_vars
+
     error_if: Optional[str] = None
     error_if_not: Optional[str] = None
     loop_if: Optional[str] = None
