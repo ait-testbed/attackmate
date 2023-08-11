@@ -2,7 +2,9 @@ import re
 import time
 import logging
 from .schemas import BaseCommand
+from .variablestore import VariableStore
 from typing import Any
+import copy
 
 
 class ExecException(Exception):
@@ -57,7 +59,7 @@ class BaseExecutor:
     _exec_cmd()
 
     """
-    def __init__(self, cmdconfig=None):
+    def __init__(self, variablestore: VariableStore, cmdconfig=None):
         """ Constructor for BaseExecutor
 
         Parameters
@@ -69,13 +71,38 @@ class BaseExecutor:
         self.logger = logging.getLogger('playbook')
         self.cmdconfig = cmdconfig
         self.output = logging.getLogger("output")
+        self.varstore = variablestore
+
+    def replace_variables(self, command: BaseCommand) -> BaseCommand:
+        """ Replace variables using the VariableStore
+
+        Replace all template-variables of the BaseCommand and return
+        a new BaseCommand with all variables replaced with their values.
+
+        Parameters
+        ----------
+        command : BaseCommand
+            BaseCommand where all variables should be replaced
+
+        Returns
+        -------
+        BaseCommand
+            BaseCommand with replaced variables
+        """
+        template_cmd = copy.deepcopy(command)
+        for member in command.list_template_vars():
+            replaced_str = self.varstore.substitute(getattr(command, member))
+            setattr(template_cmd, member, replaced_str)
+        return template_cmd
 
     def run(self, command: BaseCommand):
         """ Execute the command
 
         This method is executed by PenPal and
         executes the given command. This method sets the
-        run_count to 1 and runs the method exec()
+        run_count to 1 and runs the method exec(). Please note
+        that this function will exchange all variables of the BaseCommand
+        with the values of the VariableStore!
 
         Parameters
         ----------
@@ -84,7 +111,7 @@ class BaseExecutor:
 
         """
         self.run_count = 1
-        self.exec(command)
+        self.exec(self.replace_variables(command))
 
     def log_command(self, command):
         """ Log starting-status of the command

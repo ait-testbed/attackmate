@@ -1,11 +1,12 @@
 import time
 from random import randint
 from .baseexecutor import BaseExecutor, Result
+from .variablestore import VariableStore
 
 
 class SleepExecutor(BaseExecutor):
-    def __init__(self, cmdconfig=None):
-        super().__init__(cmdconfig)
+    def __init__(self, cmdconfig=None, *, varstore: VariableStore):
+        super().__init__(varstore, cmdconfig)
         self.sleep_time = None
 
     def set_sleeptime(self, command):

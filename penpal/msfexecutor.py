@@ -1,15 +1,20 @@
 from pymetasploit3.msfrpc import MsfRpcClient, MsfAuthError
+
+from penpal.variablestore import VariableStore
 from .baseexecutor import BaseExecutor, Result, ExecException
 from .schemas import MsfModuleCommand, BaseCommand
 from .msfsessionstore import MsfSessionStore
 
 
 class MsfModuleExecutor(BaseExecutor):
-    def __init__(self, cmdconfig=None, *, msfconfig=None, msfsessionstore: MsfSessionStore):
+    def __init__(self, cmdconfig=None, *,
+                 varstore: VariableStore,
+                 msfconfig=None,
+                 msfsessionstore: MsfSessionStore):
         self.msfconfig = msfconfig
         self.sessionstore = msfsessionstore
         self.msf = None
-        super().__init__(cmdconfig)
+        super().__init__(varstore, cmdconfig)
 
     def connect(self, msfconfig=None):
         try:

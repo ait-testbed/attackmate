@@ -12,13 +12,14 @@ from paramiko.ssh_exception import (BadHostKeyException,
                                     SSHException)
 from .baseexecutor import BaseExecutor, ExecException, Result
 from .schemas import SSHCommand
+from .variablestore import VariableStore
 
 
 class SSHExecutor(BaseExecutor):
-    def __init__(self, cmdconfig=None):
-        self.session_store = {}
+    def __init__(self, cmdconfig=None, *, varstore: VariableStore):
+        self.session_store: dict[str, SSHClient] = {}
         self.set_defaults()
-        super().__init__(cmdconfig)
+        super().__init__(varstore, cmdconfig)
 
     def set_defaults(self):
         self.hostname = None
