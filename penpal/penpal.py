@@ -16,6 +16,7 @@ from .sshexecutor import SSHExecutor
 from .msfexecutor import MsfModuleExecutor
 from .msfsessionexecutor import MsfSessionExecutor
 from .msfsessionstore import MsfSessionStore
+from .debugexecutor import DebugExecutor
 from .schemas import Config
 from .variablestore import VariableStore
 
@@ -93,6 +94,7 @@ class PenPal:
                 varstore=self.varstore,
                 msfconfig=self.pyconfig.msf_config,
                 msfsessionstore=self.msfsessionstore)
+        self.debugger = DebugExecutor(self.varstore, self.pyconfig.cmd_config)
 
     def main(self):
         """ The main function
@@ -113,3 +115,5 @@ class PenPal:
                 self.msfsession.run(command)
             if command.type == "ssh":
                 self.ssh.run(command)
+            if command.type == "debug":
+                self.debugger.run(command)

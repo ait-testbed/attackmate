@@ -443,3 +443,33 @@ have previously created by msf-modules(see :ref:`msf-module`).
    This string indicated the end of a read-operation.
 
    :type: str
+
+debug
+-----
+
+This command prints out strings and variables and is for debugging
+purposes only.
+
+   .. code-block:: yaml
+
+      ###
+      msf_config:
+        password: top-secret
+        server: 10.18.3.86
+
+      vars:
+        $SERVER_ADDRESS: 192.42.0.254
+        $NMAP: /usr/bin/nmap
+
+      commands:
+        - type: debug
+          cmd: "$NMAP $SERVER_ADDRESS"
+          varstore: True
+
+
+.. confval:: varstore
+
+   Print out all variables that are stored in the VariableStore.
+
+   :type: bool
+   :default: ``False``
