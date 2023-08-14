@@ -447,11 +447,13 @@ have previously created by msf-modules(see :ref:`msf-module`).
 regex
 -----
 
-This command parses variables using regular expressions.
+This command parses variables using regular expressions. For more information
+about regular expressions see `Python Regex  <https://docs.python.org/3/library/re.html>`_
+
 
 .. confval:: mode
 
-   Specifies the python regex-function. One of: search, split or findall.
+   Specifies the python regex-function. One of: ``search``, ``split`` or ``findall``.
 
    :type: str
    :default: ``findall``
@@ -479,6 +481,8 @@ This command parses variables using regular expressions.
    :type: dict[str,str]
    :required: True
 
+   The following example parses the portnumber from the output of the last command and stores it in variable "UNREALPORT":
+
    .. code-block:: yaml
 
       commands:
@@ -488,6 +492,25 @@ This command parses variables using regular expressions.
         - type: regex
           cmd: (\d+).*UnrealIRCd
           output:
+              UNREALPORT: "$MATCH_0"
+
+        - type: debug
+          cmd: "Port: $UNREALPORT"
+
+
+   By using the mode "split", strings that are seperated by whitespaces can be tokenized:
+
+   .. code-block:: yaml
+
+      commands:
+        - type: shell
+          cmd: echo "6667/tcp open  irc UnrealIRCd"
+
+        - type: regex
+          cmd: "\ +"
+          mode: split
+          output:
+              # {'MATCH_0': '6667/tcp', 'MATCH_1': 'open', 'MATCH_2': 'irc', 'MATCH_3': 'UnrealIRCd\n'}
               UNREALPORT: "$MATCH_0"
 
         - type: debug
