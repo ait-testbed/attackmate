@@ -444,6 +444,55 @@ have previously created by msf-modules(see :ref:`msf-module`).
 
    :type: str
 
+regex
+-----
+
+This command parses variables using regular expressions.
+
+.. confval:: mode
+
+   Specifies the python regex-function. One of: search, split or findall.
+
+   :type: str
+   :default: ``findall``
+
+.. confval:: input
+
+   Parse the value of this variable.
+
+   :type: str
+   :default: ``RESULT_STDOUT``
+
+.. confval:: output
+
+   Defines where to store the results of the regular expression. This
+   must be a list of key-value pairs("variable-name": "$MATCH"). The matches
+   of the regular expressions are stored in temporary variables $MATCH. If the
+   match is stored in a list or in a list of tuples the variablename will be
+   numbered by the index. For examle: "$MATCH_0_0" for the first element in the
+   first occurance.
+
+   .. note::
+
+       A dump containing all matches will be printed if penpal runs in debug-mode.
+
+   :type: dict[str,str]
+   :required: True
+
+   .. code-block:: yaml
+
+      commands:
+        - type: shell
+          cmd: echo "6667/tcp open  irc UnrealIRCd"
+
+        - type: regex
+          cmd: (\d+).*UnrealIRCd
+          output:
+              UNREALPORT: "$MATCH_0"
+
+        - type: debug
+          cmd: "Port: $UNREALPORT"
+
 debug
 -----
 
