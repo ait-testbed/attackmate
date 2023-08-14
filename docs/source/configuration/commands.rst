@@ -545,3 +545,11 @@ purposes only.
 
    :type: bool
    :default: ``False``
+
+.. confval:: exit
+
+   This setting causes the programm to exit when the command was
+   executed.
+
+   :type: bool
+   :default: ``True``
