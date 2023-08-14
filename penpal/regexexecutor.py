@@ -8,6 +8,7 @@ regular expressions.
 from .baseexecutor import BaseExecutor, Result
 from .schemas import RegExCommand
 from string import Template
+from typing import Match
 import re
 
 
@@ -55,9 +56,10 @@ class RegExExecutor(BaseExecutor):
             self.logger.debug(matches)
             self.register_outputvars(command.output, matches)
         if command.mode == 'search':
-            m = re.search(command.cmd, self.varstore.get_variable(command.input))
-            matches = self.forge_variables(m.groups())
-            self.logger.debug(matches)
-            self.register_outputvars(command.output, matches)
+            m3 = re.search(command.cmd, self.varstore.get_variable(command.input))
+            if m3 is not None and isinstance(m3, Match):
+                matches = self.forge_variables(m3.groups())
+                self.logger.debug(matches)
+                self.register_outputvars(command.output, matches)
 
         return Result("", 0)

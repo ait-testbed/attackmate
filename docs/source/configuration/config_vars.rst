@@ -36,3 +36,5 @@ The following variables are set by the system:
 ``RESULT_STDOUT`` is set after every command execution and stores the result output.
 
 ``RESULT_CODE`` is set after every command execution and stores the returncode.
+
+``LAST_MSF_SESSION`` is set every time after a new metasploit session was created and contains the session number.

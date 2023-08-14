@@ -1,16 +1,19 @@
 import time
 import logging
 from typing import Dict
+from penpal.variablestore import VariableStore
 from .baseexecutor import ExecException
 
 
 class MsfSessionStore:
-    def __init__(self) -> None:
+    def __init__(self, varstore: VariableStore) -> None:
         self.sessions: Dict[str, str] = {}
         self.logger = logging.getLogger('playbook')
+        self.varstore = varstore
 
     def add_session(self, name: str, uuid: str) -> None:
         self.sessions[name] = uuid
+        self.varstore.set_variable("LAST_MSF_SESSION", uuid)
 
     def get_session_by_name(self, name: str, msfsessions) -> str:
         for k, v in msfsessions.list.items():
