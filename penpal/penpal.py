@@ -80,7 +80,7 @@ class PenPal:
         all possible executors.
 
         """
-        self.msfsessionstore = MsfSessionStore()
+        self.msfsessionstore = MsfSessionStore(self.varstore)
         self.se = ShellExecutor(self.varstore, self.pyconfig.cmd_config)
         self.sleep = SleepExecutor(self.pyconfig.cmd_config,
                                    varstore=self.varstore)
