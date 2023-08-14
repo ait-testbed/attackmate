@@ -49,6 +49,8 @@ class ShellCommand(BaseCommand):
 class DebugCommand(BaseCommand):
     type: Literal['debug']
     varstore: bool = False
+    exit: bool = False
+
 
 class RegExCommand(BaseCommand):
     type: Literal['regex']

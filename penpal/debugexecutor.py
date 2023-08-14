@@ -5,7 +5,7 @@ This class allows to print out variables.
 """
 
 from .baseexecutor import BaseExecutor, Result
-from .schemas import BaseCommand, DebugCommand
+from .schemas import DebugCommand
 
 
 class DebugExecutor(BaseExecutor):
@@ -15,5 +15,9 @@ class DebugExecutor(BaseExecutor):
         if command.varstore:
             self.logger.warn(self.varstore.variables)
 
-    def _exec_cmd(self, command: BaseCommand) -> Result:
-        return Result("", 0)
+    def _exec_cmd(self, command: DebugCommand) -> Result:
+        ret = 0
+        if command.exit:
+            ret = 1
+
+        return Result("", ret)
