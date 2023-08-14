@@ -549,7 +549,8 @@ purposes only.
 .. confval:: exit
 
    This setting causes the programm to exit when the command was
-   executed.
+   executed. It will exit with an error in order to indicate
+   that this is an exceptional break.
 
    :type: bool
    :default: ``True``
