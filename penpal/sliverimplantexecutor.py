@@ -8,7 +8,7 @@ import asyncio
 from sliver import SliverClientConfig, SliverClient
 from sliver.protobuf import client_pb2
 from .variablestore import VariableStore
-from .baseexecutor import BaseExecutor, Result
+from .baseexecutor import BaseExecutor, ExecException, Result
 from .schemas import SliverImplantCommand
 
 
@@ -44,8 +44,9 @@ class SliverImplantExecutor(BaseExecutor):
         implconfig = client_pb2.ImplantConfig()
         implconfig.C2.extend([c2])
         implconfig.IsBeacon = False
-        implconfig.GOOS = "linux"
-        implconfig.GOARCH = "amd64"
+        target = command.target.split("/")
+        implconfig.GOOS = target[0]
+        implconfig.GOARCH = target[1]
         implconfig.Name = command.name
         implconfig.Format = outformat
         implconfig.FileName = "linux_implant"
@@ -54,11 +55,17 @@ class SliverImplantExecutor(BaseExecutor):
     async def generate_implant(self, command: SliverImplantCommand):
         implconfig = self.prepare_implant_config(command)
 
-        if self.client:
-            self.result.stdout = await self.client.version()
-            implant = await self.client.generate_implant(implconfig)
-            self.logger.debug(implant.File.Name)
-            self.result.returncode = 0
+        if self.client is None:
+            raise ExecException("SliverClient is not defined")
+
+        builds = await self.client.implant_builds()
+        if len(builds) > 0:
+            await self.client.delete_implant_build(command.name)
+
+        self.result.stdout = await self.client.version()
+        implant = await self.client.generate_implant(implconfig)
+        self.logger.debug(implant.File.Name)
+        self.result.returncode = 0
 
     def _exec_cmd(self, command: SliverImplantCommand) -> Result:
         loop = asyncio.get_event_loop()
