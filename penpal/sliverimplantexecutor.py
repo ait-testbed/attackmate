@@ -19,6 +19,7 @@ class SliverImplantExecutor(BaseExecutor):
         self.sliver_config = sliver_config
         self.client = None
         self.client_config = None
+        self.result = Result("", 1)
         if self.sliver_config.config_file:
             self.client_config = SliverClientConfig.parse_config_file(sliver_config.config_file)
             self.client = SliverClient(self.client_config)
@@ -30,11 +31,16 @@ class SliverImplantExecutor(BaseExecutor):
 
     def log_command(self, command: SliverImplantCommand):
         self.logger.info(f"Generating Sliver-Implant: '{command.name}'")
-        asyncio.run(self.connect())
+        loop = asyncio.get_event_loop()
+        coro = self.connect()
+        loop.run_until_complete(coro)
 
     async def run_command(self):
-        self.output = await self.client.version()
+        self.result.stdout = await self.client.version()
+        self.result.returncode = 0
 
     def _exec_cmd(self, command: SliverImplantCommand) -> Result:
-        asyncio.run(self.run_command())
-        return Result(self.output, 0)
+        loop = asyncio.get_event_loop()
+        coro = self.run_command()
+        loop.run_until_complete(coro)
+        return self.result
