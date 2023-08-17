@@ -43,6 +43,15 @@ class SliverImplantExecutor(BaseExecutor):
         c2.URL = command.c2url
         c2.Priority = 0
         outformat = client_pb2.OutputFormat.EXECUTABLE
+        if command.format == "SERVICE":
+            outformat = client_pb2.OutputFormat.SERVICE
+
+        if command.format == "SHARED_LIB":
+            outformat = client_pb2.OutputFormat.SHARED_LIB
+
+        if command.format == "SHELLCODE":
+            outformat = client_pb2.OutputFormat.SHELLCODE
+
         implconfig = client_pb2.ImplantConfig()
         implconfig.C2.extend([c2])
         implconfig.IsBeacon = False
