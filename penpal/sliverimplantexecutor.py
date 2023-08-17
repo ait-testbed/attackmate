@@ -29,6 +29,8 @@ class SliverImplantExecutor(BaseExecutor):
     async def connect(self) -> None:
         if self.client:
             await self.client.connect()
+            version = await self.client.version()
+            self.logger.debug(version)
 
     def log_command(self, command: SliverImplantCommand):
         self.logger.info(f"Generating Sliver-Implant: '{command.name}'")
@@ -60,11 +62,11 @@ class SliverImplantExecutor(BaseExecutor):
 
         builds = await self.client.implant_builds()
         if len(builds) > 0:
+            self.logger.debug("Implant found. Delete it")
             await self.client.delete_implant_build(command.name)
 
-        self.result.stdout = await self.client.version()
         implant = await self.client.generate_implant(implconfig)
-        self.logger.debug(implant.File.Name)
+        self.result.stdout = f"Created Sliver-Implant: {implant.File.Name}"
         self.result.returncode = 0
 
     def _exec_cmd(self, command: SliverImplantCommand) -> Result:
