@@ -19,8 +19,8 @@ class SliverImplantExecutor(BaseExecutor):
         self.sliver_config = sliver_config
         self.client = None
         self.client_config = None
-        if self.sliver_config.configfile:
-            self.client_config = SliverClientConfig.parse_config_file(self.sliver_config.configfile)
+        if self.sliver_config.config_file:
+            self.client_config = SliverClientConfig.parse_config_file(sliver_config.config_file)
             self.client = SliverClient(self.client_config)
         super().__init__(varstore, cmdconfig)
 
