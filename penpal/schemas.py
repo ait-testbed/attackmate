@@ -119,6 +119,10 @@ class CommandConfig(BaseModel):
     loop_sleep: int = 5
 
 
+class SliverConfig(BaseModel):
+    config_file: Optional[str] = None
+
+
 class MsfConfig(BaseModel):
     password: Optional[str] = None
     ssl: bool = True
@@ -127,7 +131,26 @@ class MsfConfig(BaseModel):
     uri: Optional[str] = "/api/"
 
 
+class SliverImplantCommand(BaseCommand):
+    type: Literal['sliver-implant']
+    target: Literal[
+            'darwin/amd64',
+            'darwin/arm64',
+            'linux/386',
+            'linux/amd64',
+            'windows/386',
+            'windows/amd64'] = 'linux/amd64'
+    c2url: str
+    format: Literal[
+            'EXECUTABLE',
+            'SERVICE',
+            'SHARED_LIB',
+            'SHELLCODE'] = 'EXECUTABLE'
+    name: str
+
+
 class Config(BaseModel):
+    sliver_config: SliverConfig = SliverConfig(config_file=None)
     msf_config: MsfConfig = MsfConfig(password=None)
     cmd_config: CommandConfig = CommandConfig(loop_sleep=5)
     vars: Optional[Dict[str, str]] = None
@@ -138,4 +161,5 @@ class Config(BaseModel):
                          SleepCommand,
                          SSHCommand,
                          DebugCommand,
-                         RegExCommand]]
+                         RegExCommand,
+                         SliverImplantCommand]]
