@@ -6,6 +6,7 @@ Generate Sliver Implants
 
 import asyncio
 from sliver import SliverClientConfig, SliverClient
+from sliver.protobuf import client_pb2
 from .variablestore import VariableStore
 from .baseexecutor import BaseExecutor, Result
 from .schemas import SliverImplantCommand
@@ -35,12 +36,32 @@ class SliverImplantExecutor(BaseExecutor):
         coro = self.connect()
         loop.run_until_complete(coro)
 
-    async def run_command(self):
-        self.result.stdout = await self.client.version()
-        self.result.returncode = 0
+    def prepare_implant_config(self, command: SliverImplantCommand) -> client_pb2.ImplantConfig:
+        c2 = client_pb2.ImplantC2()
+        c2.URL = command.c2url
+        c2.Priority = 0
+        outformat = client_pb2.OutputFormat.EXECUTABLE
+        implconfig = client_pb2.ImplantConfig()
+        implconfig.C2.extend([c2])
+        implconfig.IsBeacon = False
+        implconfig.GOOS = "linux"
+        implconfig.GOARCH = "amd64"
+        implconfig.Name = command.name
+        implconfig.Format = outformat
+        implconfig.FileName = "linux_implant"
+        return implconfig
+
+    async def generate_implant(self, command: SliverImplantCommand):
+        implconfig = self.prepare_implant_config(command)
+
+        if self.client:
+            self.result.stdout = await self.client.version()
+            implant = await self.client.generate_implant(implconfig)
+            self.logger.debug(implant.File.Name)
+            self.result.returncode = 0
 
     def _exec_cmd(self, command: SliverImplantCommand) -> Result:
         loop = asyncio.get_event_loop()
-        coro = self.run_command()
+        coro = self.generate_implant(command)
         loop.run_until_complete(coro)
         return self.result
