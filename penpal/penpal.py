@@ -16,6 +16,7 @@ from .sshexecutor import SSHExecutor
 from .msfexecutor import MsfModuleExecutor
 from .msfsessionexecutor import MsfSessionExecutor
 from .msfsessionstore import MsfSessionStore
+from .sliverimplantexecutor import SliverImplantExecutor
 from .debugexecutor import DebugExecutor
 from .regexexecutor import RegExExecutor
 from .schemas import Config
@@ -97,6 +98,9 @@ class PenPal:
                 msfsessionstore=self.msfsessionstore)
         self.debugger = DebugExecutor(self.varstore, self.pyconfig.cmd_config)
         self.regex = RegExExecutor(self.varstore, self.pyconfig.cmd_config)
+        self.sliverimplant = SliverImplantExecutor(self.pyconfig.cmd_config,
+                                                   varstore=self.varstore,
+                                                   sliver_config=self.pyconfig.sliver_config)
 
     def main(self):
         """ The main function
@@ -121,3 +125,5 @@ class PenPal:
                 self.debugger.run(command)
             if command.type == "regex":
                 self.regex.run(command)
+            if command.type == "sliver-implant":
+                self.sliverimplant.run(command)
