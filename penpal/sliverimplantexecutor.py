@@ -5,6 +5,7 @@ Generate Sliver Implants
 """
 
 import asyncio
+import os
 from sliver import SliverClientConfig, SliverClient
 from sliver.protobuf import client_pb2
 from .variablestore import VariableStore
@@ -21,6 +22,7 @@ class SliverImplantExecutor(BaseExecutor):
         self.client = None
         self.client_config = None
         self.result = Result("", 1)
+
         if self.sliver_config.config_file:
             self.client_config = SliverClientConfig.parse_config_file(sliver_config.config_file)
             self.client = SliverClient(self.client_config)
@@ -63,6 +65,17 @@ class SliverImplantExecutor(BaseExecutor):
         implconfig.FileName = "linux_implant"
         return implconfig
 
+    def save_implant(self, implant: client_pb2.Generate) -> str:
+        implant_path = os.path.join("/tmp/", implant.File.Name)
+
+        if os.path.exists(implant_path):
+            os.remove(implant_path)
+
+        with open(implant_path, "wb") as new_file:
+            new_file.write(implant.File.Data)
+
+        return implant_path
+
     async def generate_implant(self, command: SliverImplantCommand):
         implconfig = self.prepare_implant_config(command)
 
@@ -75,7 +88,10 @@ class SliverImplantExecutor(BaseExecutor):
             await self.client.delete_implant_build(command.name)
 
         implant = await self.client.generate_implant(implconfig)
-        self.result.stdout = f"Created Sliver-Implant: {implant.File.Name}"
+        length = len(implant.File.Data)
+        self.result.stdout = f"Created Sliver-Implant: {implant.File.Name}. with {length} bytes"
+        implant_path = self.save_implant(implant)
+        self.logger.debug(f"Saved {implant.File.Name} to {implant_path}")
         self.result.returncode = 0
 
     def _exec_cmd(self, command: SliverImplantCommand) -> Result:
