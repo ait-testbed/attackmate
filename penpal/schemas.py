@@ -147,6 +147,7 @@ class SliverImplantCommand(BaseCommand):
             'SHARED_LIB',
             'SHELLCODE'] = 'EXECUTABLE'
     name: str
+    filepath: Optional[str]
 
 
 class Config(BaseModel):

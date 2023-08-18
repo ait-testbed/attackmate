@@ -66,7 +66,10 @@ class SliverImplantExecutor(BaseExecutor):
         return implconfig
 
     def save_implant(self, implant: client_pb2.Generate) -> str:
-        implant_path = os.path.join("/tmp/", implant.File.Name)
+        if implant.filepath:
+            implant_path = implant.filepath
+        else:
+            implant_path = os.path.join("/tmp/", implant.File.Name)
 
         if os.path.exists(implant_path):
             os.remove(implant_path)
