@@ -18,6 +18,7 @@ from .msfsessionexecutor import MsfSessionExecutor
 from .msfsessionstore import MsfSessionStore
 from .sliverimplantexecutor import SliverImplantExecutor
 from .sliverexecutor import SliverExecutor
+from .sliversessionexecutor import SliverSessionExecutor
 from .debugexecutor import DebugExecutor
 from .regexexecutor import RegExExecutor
 from .schemas import Config
@@ -105,6 +106,9 @@ class PenPal:
         self.sliver = SliverExecutor(self.pyconfig.cmd_config,
                                      varstore=self.varstore,
                                      sliver_config=self.pyconfig.sliver_config)
+        self.sliversession = SliverSessionExecutor(self.pyconfig.cmd_config,
+                                                   varstore=self.varstore,
+                                                   sliver_config=self.pyconfig.sliver_config)
 
     def main(self):
         """ The main function

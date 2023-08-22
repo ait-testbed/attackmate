@@ -146,6 +146,13 @@ class SliverHttpsListenerCommand(BaseCommand):
     timeout: int = 60
 
 
+class SliverSessionCDCommand(BaseCommand):
+    type: Literal['sliver-session']
+    cmd: Literal['cd']
+    remote_path: str
+    session: str
+
+
 class SliverImplantCommand(BaseCommand):
     type: Literal['sliver-implant']
     target: Literal[
