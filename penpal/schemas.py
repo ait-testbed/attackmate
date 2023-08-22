@@ -134,6 +134,16 @@ class MsfConfig(BaseModel):
 class SliverHttpsListenerCommand(BaseCommand):
     type: Literal['sliver']
     host: str = "0.0.0.0"
+    port: int = 443
+    domain: str = ""
+    website: str = ""
+    acme: bool = False
+    persistent: bool = False
+    enforce_otb: bool = True
+    randomize_jarm: bool = True
+    long_poll_timeout: int = 127
+    long_poll_jitter: int = 2
+    timeout: int = 60
 
 
 class SliverImplantCommand(BaseCommand):

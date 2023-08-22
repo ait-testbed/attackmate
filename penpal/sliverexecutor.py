@@ -35,6 +35,22 @@ class SliverExecutor(BaseExecutor):
 
     async def start_https_listener(self, command: SliverHttpsListenerCommand):
         self.logger.debug(f"{command.host=}")
+        if self.client is None:
+            raise ExecException("SliverClient is not defined")
+        listener = await self.client.start_https_listener(command.host,
+                                                          command.port,
+                                                          command.website,
+                                                          command.domain,
+                                                          b"",
+                                                          b"",
+                                                          command.acme,
+                                                          command.persistent,
+                                                          command.enforce_otb,
+                                                          command.randomize_jarm,
+                                                          command.long_poll_timeout,
+                                                          command.long_poll_jitter,
+                                                          command.timeout)
+        self.logger.debug(listener)
 
     def log_command(self, command: BaseCommand):
         self.logger.info(f"Executing Sliver-command: '{command.cmd}'")
