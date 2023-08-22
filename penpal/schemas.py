@@ -186,4 +186,5 @@ class Config(BaseModel):
                          DebugCommand,
                          RegExCommand,
                          SliverImplantCommand,
+                         SliverSessionCDCommand,
                          SliverHttpsListenerCommand]]
