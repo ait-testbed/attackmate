@@ -194,4 +194,5 @@ class Config(BaseModel):
                          RegExCommand,
                          SliverImplantCommand,
                          SliverSessionCDCommand,
+                         SliverSessionLSCommand,
                          SliverHttpsListenerCommand]]
