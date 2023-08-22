@@ -31,8 +31,6 @@ class SliverSessionExecutor(BaseExecutor):
     async def connect(self) -> None:
         if self.client:
             await self.client.connect()
-            version = await self.client.version()
-            self.logger.debug(version)
 
     async def cd(self, command: SliverSessionCDCommand):
         self.logger.debug(f"{command.remote_path=}")
@@ -47,6 +45,14 @@ class SliverSessionExecutor(BaseExecutor):
         session = await self.get_session_by_name(command.session)
         self.logger.debug(session)
         ls = await session.ls(command.remote_path)
+        output = ""
+        if ls:
+            size = 0
+            for f in ls.Files:
+                size += f.Size
+            output = f"{ls.Path} ({len(ls.Files)} items, {size} bytes)\n"
+            output += '=' * len(output)
+            self.result = Result(output, 0)
         self.logger.debug(ls)
 
     def log_command(self, command: BaseCommand):
