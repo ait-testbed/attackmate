@@ -153,6 +153,13 @@ class SliverSessionCDCommand(BaseCommand):
     session: str
 
 
+class SliverSessionLSCommand(BaseCommand):
+    type: Literal['sliver-session']
+    cmd: Literal['ls']
+    remote_path: str
+    session: str
+
+
 class SliverImplantCommand(BaseCommand):
     type: Literal['sliver-implant']
     target: Literal[

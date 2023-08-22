@@ -9,7 +9,7 @@ from sliver import SliverClientConfig, SliverClient
 from sliver.protobuf import client_pb2
 from .variablestore import VariableStore
 from .baseexecutor import BaseExecutor, ExecException, Result
-from .schemas import BaseCommand, SliverSessionCDCommand
+from .schemas import BaseCommand, SliverSessionCDCommand, SliverSessionLSCommand
 
 
 class SliverSessionExecutor(BaseExecutor):
@@ -35,11 +35,17 @@ class SliverSessionExecutor(BaseExecutor):
 
     async def cd(self, command: SliverSessionCDCommand):
         self.logger.debug(f"{command.remote_path=}")
-        if self.client is None:
-            raise ExecException("SliverClient is not defined")
-
         session = await self.get_session_by_name(command.session)
         self.logger.debug(session)
+        pwd = session.cd(command.remote_path)
+        self.logger.debug(pwd)
+
+    async def ls(self, command: SliverSessionLSCommand):
+        self.logger.debug(f"{command.remote_path=}")
+        session = await self.get_session_by_name(command.session)
+        self.logger.debug(session)
+        ls = session.ls(command.remote_path)
+        self.logger.debug(ls)
 
     def log_command(self, command: BaseCommand):
         self.logger.info(f"Executing Sliver-Session-command: '{command.cmd}'")
@@ -57,8 +63,7 @@ class SliverSessionExecutor(BaseExecutor):
                 self.logger.debug("found sliver session")
                 return session
 
-        self.logger.debug("sliver session not found")
-        return None
+        raise ExecException("Active SliverSession not found")
 
     def _exec_cmd(self, command: BaseCommand) -> Result:
         loop = asyncio.get_event_loop()
