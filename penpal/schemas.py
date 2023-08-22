@@ -131,6 +131,12 @@ class MsfConfig(BaseModel):
     uri: Optional[str] = "/api/"
 
 
+class SliverHttpsListenerCommand(BaseCommand):
+    type: Literal['sliver']
+    cmd: Literal['start_https_listener']
+    host: str = "0.0.0.0"
+
+
 class SliverImplantCommand(BaseCommand):
     type: Literal['sliver-implant']
     target: Literal[
@@ -163,4 +169,5 @@ class Config(BaseModel):
                          SSHCommand,
                          DebugCommand,
                          RegExCommand,
-                         SliverImplantCommand]]
+                         SliverImplantCommand,
+                         SliverHttpsListenerCommand]]
