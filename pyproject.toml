@@ -14,7 +14,8 @@ dependencies = [
     "pymetasploit3",
     "pyaml",
     "paramiko",
-    "sliver-py"
+    "sliver-py",
+    "tabulate"
 ]
 dynamic = ["version"]
 

@@ -59,7 +59,7 @@ class SliverSessionExecutor(BaseExecutor):
                 date_time = datetime.fromtimestamp(f.ModTime)
                 lines.append((f.Mode, f.Name, isdir, date_time.ctime()))
             output = f"\n{ls.Path} ({len(ls.Files)} items, {size} bytes)\n"
-            output += '=' * (len(output) - 2)
+#            output += '=' * (len(output) - 2)
             output += "\n"
             output += tabulate(lines)
             self.result = Result(output, 0)
