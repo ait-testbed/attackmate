@@ -62,7 +62,7 @@ class SliverSessionExecutor(BaseExecutor):
         for session in sessions:
             if session.Name == name and not session.IsDead:
                 self.logger.debug(session)
-                ret = await self.client.interact_session(session.UUID)
+                ret = await self.client.interact_session(session.ID)
                 return ret
 
         raise ExecException("Active SliverSession not found")
