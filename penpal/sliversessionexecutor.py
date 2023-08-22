@@ -5,8 +5,8 @@ Execute Commands in a Sliver Session
 """
 
 import asyncio
-from sliver import SliverClientConfig, SliverClient
-from sliver.protobuf import client_pb2
+from sliver import SliverClientConfig, SliverClient, AsyncInteractiveBeacon
+# from sliver.protobuf import client_pb2
 from .variablestore import VariableStore
 from .baseexecutor import BaseExecutor, ExecException, Result
 from .schemas import BaseCommand, SliverSessionCDCommand, SliverSessionLSCommand
@@ -53,15 +53,16 @@ class SliverSessionExecutor(BaseExecutor):
         coro = self.connect()
         loop.run_until_complete(coro)
 
-    async def get_session_by_name(self, name) -> client_pb2.Session:
+    async def get_session_by_name(self, name) -> AsyncInteractiveBeacon:
         if self.client is None:
             raise ExecException("SliverClient is not defined")
 
         sessions = await self.client.sessions()
         for session in sessions:
             if session.Name == name and not session.IsDead:
-                self.logger.debug("found sliver session")
-                return session
+                self.logger.debug(session)
+                ret = await self.client.interact_session(session.UUID)
+                return ret
 
         raise ExecException("Active SliverSession not found")
 
@@ -70,6 +71,8 @@ class SliverSessionExecutor(BaseExecutor):
 
         if command.cmd == "cd" and isinstance(command, SliverSessionCDCommand):
             coro = self.cd(command)
+        elif command.cmd == "ls" and isinstance(command, SliverSessionLSCommand):
+            coro = self.ls(command)
         else:
             raise ExecException("Sliver Session Command unknown or faulty Command-config")
         loop.run_until_complete(coro)
