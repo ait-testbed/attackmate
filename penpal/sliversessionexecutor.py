@@ -47,7 +47,15 @@ class SliverSessionExecutor(BaseExecutor):
         self.logger.debug(session)
         ifc = await session.ifconfig()
         self.logger.debug(ifc)
-        self.result = Result("", 0)
+        lines = []
+        for netif in ifc.NetInterfaces:
+            ips = ""
+            for ip in netif.IPAddresses:
+                ips += ip
+                ips += "\n"
+            lines.append((ips, netif.MAC, netif.Name))
+        output = tabulate(lines, headers=["IP Addresses", "MAC Address", "Interface"])
+        self.result = Result(output, 0)
 
     async def ls(self, command: SliverSessionLSCommand):
         self.logger.debug(f"{command.remote_path=}")
@@ -66,7 +74,6 @@ class SliverSessionExecutor(BaseExecutor):
                 date_time = datetime.fromtimestamp(f.ModTime)
                 lines.append((f.Mode, f.Name, isdir, date_time.ctime()))
             output = f"\n{ls.Path} ({len(ls.Files)} items, {size} bytes)\n"
-#            output += '=' * (len(output) - 2)
             output += "\n"
             output += tabulate(lines)
             self.result = Result(output, 0)
