@@ -136,7 +136,7 @@ class SliverSessionExecutor(BaseExecutor):
         self.logger.debug(session)
         out = await session.execute(command.exe, command.args, command.output)
         self.logger.debug(out)
-        self.result = Result("", 0)
+        self.result = Result(out.Stdout, 0)
 
     def log_command(self, command: BaseCommand):
         self.logger.info(f"Executing Sliver-Session-command: '{command.cmd}'")
