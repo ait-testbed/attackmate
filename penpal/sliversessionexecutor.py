@@ -109,7 +109,7 @@ class SliverSessionExecutor(BaseExecutor):
         self.logger.debug(session)
         net = await session.netstat(command.tcp, command.udp, command.ipv4, command.ipv6, command.listening)
         lines = []
-        for entry in net:
+        for entry in net.Entries:
             state = ""
             uid = ""
             if "SkState" in entry.keys():
