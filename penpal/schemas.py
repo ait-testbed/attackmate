@@ -222,6 +222,7 @@ class Config(BaseModel):
                          SliverSessionCDCommand,
                          SliverSessionLSCommand,
                          SliverSessionNETSTATCommand,
+                         SliverSessionEXECCommand,
                          SliverSessionSimpleCommand,
                          SliverHttpsListenerCommand,
                          ]]
