@@ -56,6 +56,7 @@ class SliverSessionExecutor(BaseExecutor):
             lines.append((netif.Index, ips, netif.MAC, netif.Name))
         output = "\n"
         output += tabulate(lines, headers=["Index", "IP Addresses", "MAC Address", "Interface"])
+        output += "\n"
         self.result = Result(output, 0)
 
     async def ls(self, command: SliverSessionLSCommand):
@@ -77,6 +78,7 @@ class SliverSessionExecutor(BaseExecutor):
             output = f"\n{ls.Path} ({len(ls.Files)} items, {size} bytes)\n"
             output += "\n"
             output += tabulate(lines)
+            output += "\n"
             self.result = Result(output, 0)
         self.logger.debug(ls)
 
