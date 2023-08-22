@@ -8,7 +8,7 @@ import asyncio
 from sliver import SliverClientConfig, SliverClient
 # from sliver.protobuf import client_pb2
 from .variablestore import VariableStore
-from .baseexecutor import BaseExecutor, Result
+from .baseexecutor import BaseExecutor, ExecException, Result
 from .schemas import BaseCommand, SliverHttpsListenerCommand
 
 
@@ -44,7 +44,10 @@ class SliverExecutor(BaseExecutor):
 
     def _exec_cmd(self, command: BaseCommand) -> Result:
         loop = asyncio.get_event_loop()
-        if command == "start_https_listener" and isinstance(command, SliverHttpsListenerCommand):
+
+        if command.cmd == "start_https_listener" and isinstance(command, SliverHttpsListenerCommand):
             coro = self.start_https_listener(command)
+        else:
+            raise ExecException("Sliver Command unknown or faulty Command-config")
         loop.run_until_complete(coro)
         return self.result

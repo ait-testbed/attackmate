@@ -133,7 +133,6 @@ class MsfConfig(BaseModel):
 
 class SliverHttpsListenerCommand(BaseCommand):
     type: Literal['sliver']
-    cmd: Literal['start_https_listener']
     host: str = "0.0.0.0"
 
 
