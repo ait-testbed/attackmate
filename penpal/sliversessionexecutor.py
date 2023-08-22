@@ -64,7 +64,13 @@ class SliverSessionExecutor(BaseExecutor):
         self.logger.debug(session)
         processes = await session.ps()
         self.logger.debug(processes)
-        self.result = Result("", 0)
+        lines = []
+        for proc in processes:
+            lines.append((proc.Pid, proc.Ppid, proc.Owner, proc.Architecture, proc.Executable))
+        output = "\n"
+        output += tabulate(lines, headers=["Pid", "Ppid", "Owner", "Arch", "Executable"])
+        output += "\n"
+        self.result = Result(output, 0)
 
     async def ls(self, command: SliverSessionLSCommand):
         self.logger.debug(f"{command.remote_path=}")
