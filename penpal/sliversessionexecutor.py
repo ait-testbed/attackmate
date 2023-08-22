@@ -40,6 +40,7 @@ class SliverSessionExecutor(BaseExecutor):
         self.logger.debug(session)
         pwd = await session.cd(command.remote_path)
         self.logger.debug(pwd)
+        self.result = Result(f"Path: {pwd.Path}", 0)
 
     async def ls(self, command: SliverSessionLSCommand):
         self.logger.debug(f"{command.remote_path=}")
