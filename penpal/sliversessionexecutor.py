@@ -117,10 +117,10 @@ class SliverSessionExecutor(BaseExecutor):
             if hasattr(entry, "UID"):
                 uid = entry.UID
             lines.append((entry.Protocol,
-                          entry.LocalAddr.Ip + ":" + entry.LocalAddr.Port,
+                          entry.LocalAddr.Ip + ":" + str(entry.LocalAddr.Port),
                           entry.RemoteAddr.Ip,
                           state,
-                          entry.Process.Pid + "/" + entry.Process.Executable,
+                          str(entry.Process.Pid) + "/" + entry.Process.Executable,
                           uid))
         output = "\n"
         output += tabulate(lines, headers=["Protocol", "Local Address",
