@@ -38,14 +38,14 @@ class SliverSessionExecutor(BaseExecutor):
         self.logger.debug(f"{command.remote_path=}")
         session = await self.get_session_by_name(command.session)
         self.logger.debug(session)
-        pwd = session.cd(command.remote_path)
+        pwd = await session.cd(command.remote_path)
         self.logger.debug(pwd)
 
     async def ls(self, command: SliverSessionLSCommand):
         self.logger.debug(f"{command.remote_path=}")
         session = await self.get_session_by_name(command.session)
         self.logger.debug(session)
-        ls = session.ls(command.remote_path)
+        ls = await session.ls(command.remote_path)
         self.logger.debug(ls)
 
     def log_command(self, command: BaseCommand):
