@@ -164,6 +164,15 @@ class SliverSessionNETSTATCommand(BaseCommand):
     session: str
 
 
+class SliverSessionEXECCommand(BaseCommand):
+    type: Literal['sliver-session']
+    cmd: Literal['execute']
+    exe: str
+    args: Optional[List[str]]
+    output: bool = True
+    session: str
+
+
 class SliverSessionSimpleCommand(BaseCommand):
     type: Literal['sliver-session']
     cmd: Literal['ifconfig', 'ps', 'pwd']

@@ -10,7 +10,7 @@ from sliver.session import InteractiveSession
 # from sliver.protobuf import client_pb2
 from .variablestore import VariableStore
 from .baseexecutor import BaseExecutor, ExecException, Result
-from .schemas import (BaseCommand, SliverSessionCDCommand,
+from .schemas import (BaseCommand, SliverSessionCDCommand, SliverSessionEXECCommand,
                       SliverSessionLSCommand, SliverSessionNETSTATCommand,
                       SliverSessionSimpleCommand)
 from datetime import datetime
@@ -131,6 +131,13 @@ class SliverSessionExecutor(BaseExecutor):
         output += "\n"
         self.result = Result(output, 0)
 
+    async def execute(self, command: SliverSessionEXECCommand):
+        session = await self.get_session_by_name(command.session)
+        self.logger.debug(session)
+        out = await session.execute(command.exe, command.args, command.output)
+        self.logger.debug(out)
+        self.result = Result("", 0)
+
     def log_command(self, command: BaseCommand):
         self.logger.info(f"Executing Sliver-Session-command: '{command.cmd}'")
         loop = asyncio.get_event_loop()
@@ -165,6 +172,8 @@ class SliverSessionExecutor(BaseExecutor):
             coro = self.pwd(command)
         elif command.cmd == "netstat" and isinstance(command, SliverSessionNETSTATCommand):
             coro = self.netstat(command)
+        elif command.cmd == "execute" and isinstance(command, SliverSessionEXECCommand):
+            coro = self.execute(command)
         else:
             raise ExecException("Sliver Session Command unknown or faulty Command-config")
         loop.run_until_complete(coro)
