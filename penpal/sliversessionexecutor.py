@@ -108,7 +108,26 @@ class SliverSessionExecutor(BaseExecutor):
         session = await self.get_session_by_name(command.session)
         self.logger.debug(session)
         net = await session.netstat(command.tcp, command.udp, command.ipv4, command.ipv6, command.listening)
-        self.logger.debug(net)
+        lines = []
+        for entry in net:
+            state = ""
+            uid = ""
+            if "SkState" in entry.keys():
+                state = entry.SkState
+            if "UID" in entry.keys():
+                uid = entry.UID
+            lines.append((entry.Protocol,
+                          entry.LocalAddr.Ip + ":" + entry.LocalAddr.Port,
+                          entry.RemoteAddr.Ip,
+                          state,
+                          entry.Process.Pid + "/" + entry.Process.Executable,
+                          uid))
+        output = "\n"
+        output += tabulate(lines, headers=["Protocol", "Local Address",
+                                           "Foreign Address", "State",
+                                           "PID/Program Name", "UID"])
+        output += "\n"
+        self.result = Result(output, 0)
 
     def log_command(self, command: BaseCommand):
         self.logger.info(f"Executing Sliver-Session-command: '{command.cmd}'")
