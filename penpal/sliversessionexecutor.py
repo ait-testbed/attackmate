@@ -54,7 +54,10 @@ class SliverSessionExecutor(BaseExecutor):
         sessions = self.client.sessions()
         for session in sessions:
             if session.Name == name and not session.IsDead:
+                self.logger.debug("found sliver session")
                 return session
+
+        self.logger.debug("sliver session not found")
         return None
 
     def _exec_cmd(self, command: BaseCommand) -> Result:
