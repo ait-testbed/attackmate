@@ -153,6 +153,17 @@ class SliverSessionCDCommand(BaseCommand):
     session: str
 
 
+class SliverSessionNETSTATCommand(BaseCommand):
+    type: Literal['sliver-session']
+    cmd: Literal['netstat']
+    tcp: bool = True
+    udp: bool = True
+    ipv4: bool = True
+    ipv6: bool = True
+    listening: bool = True
+    session: str
+
+
 class SliverSessionSimpleCommand(BaseCommand):
     type: Literal['sliver-session']
     cmd: Literal['ifconfig', 'ps', 'pwd']
@@ -201,5 +212,7 @@ class Config(BaseModel):
                          SliverImplantCommand,
                          SliverSessionCDCommand,
                          SliverSessionLSCommand,
+                         SliverSessionNETSTATCommand,
                          SliverSessionSimpleCommand,
-                         SliverHttpsListenerCommand]]
+                         SliverHttpsListenerCommand,
+                         ]]
