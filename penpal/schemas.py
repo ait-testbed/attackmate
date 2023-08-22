@@ -155,9 +155,7 @@ class SliverSessionCDCommand(BaseCommand):
 
 class SliverSessionSimpleCommand(BaseCommand):
     type: Literal['sliver-session']
-    cmd: Union[Literal['ifconfig'],
-               Literal['ps'],
-               Literal['pwd']]
+    cmd: Literal['ifconfig', 'ps', 'pwd']
     session: str
 
 
