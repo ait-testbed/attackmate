@@ -12,7 +12,7 @@ from .variablestore import VariableStore
 from .baseexecutor import BaseExecutor, ExecException, Result
 from .schemas import (BaseCommand, SliverSessionCDCommand, SliverSessionEXECCommand,
                       SliverSessionLSCommand, SliverSessionNETSTATCommand,
-                      SliverSessionSimpleCommand)
+                      SliverSessionSimpleCommand, SliverSessionMKDIRCommand)
 from datetime import datetime
 from tabulate import tabulate
 
@@ -80,6 +80,12 @@ class SliverSessionExecutor(BaseExecutor):
         pwd = await session.pwd()
         self.logger.debug(pwd)
         self.result = Result(f"Path: {pwd.Path}", 0)
+
+    async def mkdir(self, command: SliverSessionMKDIRCommand):
+        session = await self.get_session_by_name(command.session)
+        self.logger.debug(session)
+        mdir = await session.mkdir(command.remote_path)
+        self.result = Result(f"Path: {mdir.Path}", 0)
 
     async def ls(self, command: SliverSessionLSCommand):
         self.logger.debug(f"{command.remote_path=}")
@@ -174,6 +180,8 @@ class SliverSessionExecutor(BaseExecutor):
             coro = self.netstat(command)
         elif command.cmd == "execute" and isinstance(command, SliverSessionEXECCommand):
             coro = self.execute(command)
+        elif command.cmd == "mkdir" and isinstance(command, SliverSessionMKDIRCommand):
+            coro = self.mkdir(command)
         else:
             raise ExecException("Sliver Session Command unknown or faulty Command-config")
         loop.run_until_complete(coro)

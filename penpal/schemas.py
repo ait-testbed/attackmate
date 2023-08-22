@@ -153,6 +153,13 @@ class SliverSessionCDCommand(BaseCommand):
     session: str
 
 
+class SliverSessionMKDIRCommand(BaseCommand):
+    type: Literal['sliver-session']
+    cmd: Literal['mkdir']
+    remote_path: str
+    session: str
+
+
 class SliverSessionNETSTATCommand(BaseCommand):
     type: Literal['sliver-session']
     cmd: Literal['netstat']
@@ -223,6 +230,7 @@ class Config(BaseModel):
                          SliverSessionLSCommand,
                          SliverSessionNETSTATCommand,
                          SliverSessionEXECCommand,
+                         SliverSessionMKDIRCommand,
                          SliverSessionSimpleCommand,
                          SliverHttpsListenerCommand,
                          ]]
