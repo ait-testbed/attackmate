@@ -12,7 +12,7 @@ from .baseexecutor import BaseExecutor, Result
 from .schemas import BaseCommand, SliverHttpsListenerCommand
 
 
-class SliverImplantExecutor(BaseExecutor):
+class SliverExecutor(BaseExecutor):
 
     def __init__(self, cmdconfig=None, *,
                  varstore: VariableStore,
