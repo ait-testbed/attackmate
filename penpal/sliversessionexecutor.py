@@ -11,6 +11,7 @@ from sliver.session import InteractiveSession
 from .variablestore import VariableStore
 from .baseexecutor import BaseExecutor, ExecException, Result
 from .schemas import BaseCommand, SliverSessionCDCommand, SliverSessionLSCommand
+from datetime import datetime
 
 
 class SliverSessionExecutor(BaseExecutor):
@@ -48,10 +49,23 @@ class SliverSessionExecutor(BaseExecutor):
         output = ""
         if ls:
             size = 0
+            lineout = ""
             for f in ls.Files:
                 size += f.Size
-            output = f"{ls.Path} ({len(ls.Files)} items, {size} bytes)\n"
-            output += '=' * len(output)
+                lineout += f.Mode
+                lineout += "\t"
+                lineout += f.Name
+                lineout += "\t"
+                if f.IsDir:
+                    lineout += "<dir>\t"
+                else:
+                    lineout += "\t"
+                date_time = datetime.fromtimestamp(f.ModTime)
+                lineout += date_time.ctime()
+                lineout += "\n"
+            output = f"\n{ls.Path} ({len(ls.Files)} items, {size} bytes)\n"
+            output += '=' * (len(output) - 2)
+            output += lineout
             self.result = Result(output, 0)
         self.logger.debug(ls)
 
