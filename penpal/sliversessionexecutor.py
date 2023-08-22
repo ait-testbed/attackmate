@@ -72,6 +72,13 @@ class SliverSessionExecutor(BaseExecutor):
         output += "\n"
         self.result = Result(output, 0)
 
+    async def pwd(self, command: SliverSessionSimpleCommand):
+        session = await self.get_session_by_name(command.session)
+        self.logger.debug(session)
+        pwd = await session.pwd()
+        self.logger.debug(pwd)
+        self.result = Result(f"Path: {pwd.Path}", 0)
+
     async def ls(self, command: SliverSessionLSCommand):
         self.logger.debug(f"{command.remote_path=}")
         session = await self.get_session_by_name(command.session)
@@ -125,6 +132,8 @@ class SliverSessionExecutor(BaseExecutor):
             coro = self.ifconfig(command)
         elif command.cmd == "ps" and isinstance(command, SliverSessionSimpleCommand):
             coro = self.ps(command)
+        elif command.cmd == "pwd" and isinstance(command, SliverSessionSimpleCommand):
+            coro = self.pwd(command)
         else:
             raise ExecException("Sliver Session Command unknown or faulty Command-config")
         loop.run_until_complete(coro)
