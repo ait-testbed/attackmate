@@ -10,7 +10,7 @@ from sliver.session import InteractiveSession
 # from sliver.protobuf import client_pb2
 from .variablestore import VariableStore
 from .baseexecutor import BaseExecutor, ExecException, Result
-from .schemas import BaseCommand, SliverSessionCDCommand, SliverSessionLSCommand
+from .schemas import (BaseCommand, SliverSessionCDCommand, SliverSessionLSCommand, SliverSessionSimpleCommand)
 from datetime import datetime
 from tabulate import tabulate
 
@@ -41,6 +41,13 @@ class SliverSessionExecutor(BaseExecutor):
         pwd = await session.cd(command.remote_path)
         self.logger.debug(pwd)
         self.result = Result(f"Path: {pwd.Path}", 0)
+
+    async def ifconfig(self, command: SliverSessionSimpleCommand):
+        session = await self.get_session_by_name(command.session)
+        self.logger.debug(session)
+        ifc = await session.ifconfig()
+        self.logger.debug(ifc)
+        self.result = Result("", 0)
 
     async def ls(self, command: SliverSessionLSCommand):
         self.logger.debug(f"{command.remote_path=}")
@@ -91,6 +98,8 @@ class SliverSessionExecutor(BaseExecutor):
             coro = self.cd(command)
         elif command.cmd == "ls" and isinstance(command, SliverSessionLSCommand):
             coro = self.ls(command)
+        elif command.cmd == "ifconfig" and isinstance(command, SliverSessionSimpleCommand):
+            coro = self.ifconfig(command)
         else:
             raise ExecException("Sliver Session Command unknown or faulty Command-config")
         loop.run_until_complete(coro)

@@ -153,6 +153,14 @@ class SliverSessionCDCommand(BaseCommand):
     session: str
 
 
+class SliverSessionSimpleCommand(BaseCommand):
+    type: Literal['sliver-session']
+    cmd: Union[Literal['ifconfig'],
+               Literal['ps'],
+               Literal['pwd']]
+    session: str
+
+
 class SliverSessionLSCommand(BaseCommand):
     type: Literal['sliver-session']
     cmd: Literal['ls']
@@ -195,4 +203,5 @@ class Config(BaseModel):
                          SliverImplantCommand,
                          SliverSessionCDCommand,
                          SliverSessionLSCommand,
+                         SliverSessionSimpleCommand,
                          SliverHttpsListenerCommand]]
