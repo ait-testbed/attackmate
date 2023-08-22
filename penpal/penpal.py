@@ -137,3 +137,5 @@ class PenPal:
                 self.sliverimplant.run(command)
             if command.type == "sliver":
                 self.sliver.run(command)
+            if command.type == "sliver-session":
+                self.sliversession.run(command)
