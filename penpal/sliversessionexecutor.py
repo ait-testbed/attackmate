@@ -51,7 +51,7 @@ class SliverSessionExecutor(BaseExecutor):
         if self.client is None:
             raise ExecException("SliverClient is not defined")
 
-        sessions = self.client.sessions()
+        sessions = await self.client.sessions()
         for session in sessions:
             if session.Name == name and not session.IsDead:
                 self.logger.debug("found sliver session")
