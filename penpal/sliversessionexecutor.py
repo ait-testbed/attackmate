@@ -112,9 +112,9 @@ class SliverSessionExecutor(BaseExecutor):
         for entry in net.Entries:
             state = ""
             uid = ""
-            if "SkState" in entry:
+            if hasattr(entry, "SkState"):
                 state = entry.SkState
-            if "UID" in entry:
+            if hasattr(entry, "UID"):
                 uid = entry.UID
             lines.append((entry.Protocol,
                           entry.LocalAddr.Ip + ":" + entry.LocalAddr.Port,
