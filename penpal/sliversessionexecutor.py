@@ -53,8 +53,8 @@ class SliverSessionExecutor(BaseExecutor):
             for ip in netif.IPAddresses:
                 ips += ip
                 ips += "\n"
-            lines.append((ips, netif.MAC, netif.Name))
-        output = tabulate(lines, headers=["IP Addresses", "MAC Address", "Interface"])
+            lines.append((netif.Index, ips, netif.MAC, netif.Name))
+        output = tabulate(lines, headers=["Index", "IP Addresses", "MAC Address", "Interface"])
         self.result = Result(output, 0)
 
     async def ls(self, command: SliverSessionLSCommand):
