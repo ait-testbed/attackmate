@@ -50,7 +50,7 @@ class SliverExecutor(BaseExecutor):
                                                           command.long_poll_timeout,
                                                           command.long_poll_jitter,
                                                           command.timeout)
-        self.logger.debug(listener)
+        self.result = Result(f"JobID: {listener.JobID}", 0)
 
     def log_command(self, command: BaseCommand):
         self.logger.info(f"Executing Sliver-command: '{command.cmd}'")
