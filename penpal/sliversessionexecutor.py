@@ -5,7 +5,8 @@ Execute Commands in a Sliver Session
 """
 
 import asyncio
-from sliver import SliverClientConfig, SliverClient, AsyncInteractiveBeacon
+from sliver import SliverClientConfig, SliverClient
+from sliver.session import InteractiveSession
 # from sliver.protobuf import client_pb2
 from .variablestore import VariableStore
 from .baseexecutor import BaseExecutor, ExecException, Result
@@ -53,7 +54,7 @@ class SliverSessionExecutor(BaseExecutor):
         coro = self.connect()
         loop.run_until_complete(coro)
 
-    async def get_session_by_name(self, name) -> AsyncInteractiveBeacon:
+    async def get_session_by_name(self, name) -> InteractiveSession:
         if self.client is None:
             raise ExecException("SliverClient is not defined")
 
