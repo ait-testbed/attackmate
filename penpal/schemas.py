@@ -165,6 +165,12 @@ class SliverGenerateCommand(BaseCommand):
             'SHELLCODE'] = 'EXECUTABLE'
     name: str
     filepath: Optional[str]
+    IsBeacon: bool = False
+    IsSharedLib: bool = False
+    IsService: bool = False
+    IsShellcode: bool = False
+    RunAtLoad: bool = False
+    Evasion: bool = False
 
 
 class SliverSessionCommand(BaseCommand):

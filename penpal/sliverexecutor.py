@@ -69,7 +69,12 @@ class SliverExecutor(BaseExecutor):
 
         implconfig = client_pb2.ImplantConfig()
         implconfig.C2.extend([c2])
-        implconfig.IsBeacon = False
+        implconfig.IsBeacon = command.IsBeacon
+        implconfig.IsSharedLib = command.IsSharedLib
+        implconfig.IsService = command.IsService
+        implconfig.IsShellcode = command.IsShellcode
+        implconfig.RunAtLoad = command.RunAtLoad
+        implconfig.Evasion = command.Evasion
         target = command.target.split("/")
         implconfig.GOOS = target[0]
         implconfig.GOARCH = target[1]
