@@ -12,7 +12,7 @@ from sliver.session import InteractiveSession
 # from sliver.protobuf import client_pb2
 from .variablestore import VariableStore
 from .baseexecutor import BaseExecutor, ExecException, Result
-from .schemas import (BaseCommand, SliverSessionCDCommand,
+from .schemas import (SliverSessionCDCommand, SliverSessionCommand,
                       SliverSessionDOWNLOADCommand, SliverSessionEXECCommand,
                       SliverSessionLSCommand, SliverSessionNETSTATCommand, SliverSessionPROCDUMPCommand,
                       SliverSessionSimpleCommand, SliverSessionMKDIRCommand, SliverSessionUPLOADCommand)
@@ -191,7 +191,7 @@ class SliverSessionExecutor(BaseExecutor):
         self.logger.debug(out)
         self.result = Result(out.Stdout.decode("utf-8"), 0)
 
-    def log_command(self, command: BaseCommand):
+    def log_command(self, command: SliverSessionCommand):
         self.logger.info(f"Executing Sliver-Session-command: '{command.cmd}'")
         loop = asyncio.get_event_loop()
         coro = self.connect()
@@ -210,7 +210,7 @@ class SliverSessionExecutor(BaseExecutor):
 
         raise ExecException("Active SliverSession not found")
 
-    def _exec_cmd(self, command: BaseCommand) -> Result:
+    def _exec_cmd(self, command: SliverSessionCommand) -> Result:
         loop = asyncio.get_event_loop()
 
         if command.cmd == "cd" and isinstance(command, SliverSessionCDCommand):
