@@ -167,78 +167,65 @@ class SliverGenerateCommand(BaseCommand):
     filepath: Optional[str]
 
 
-class SliverSessionCDCommand(BaseCommand):
+class SliverSessionCommand(BaseCommand):
     type: Literal['sliver-session']
+    session: str
+
+
+class SliverSessionCDCommand(SliverSessionCommand):
     cmd: Literal['cd']
     remote_path: str
-    session: str
 
 
-class SliverSessionMKDIRCommand(BaseCommand):
-    type: Literal['sliver-session']
+class SliverSessionMKDIRCommand(SliverSessionCommand):
     cmd: Literal['mkdir']
     remote_path: str
-    session: str
 
 
-class SliverSessionDOWNLOADCommand(BaseCommand):
-    type: Literal['sliver-session']
+class SliverSessionDOWNLOADCommand(SliverSessionCommand):
     cmd: Literal['download']
     remote_path: str
     local_path: str = "."
     recurse: bool = False
-    session: str
 
 
-class SliverSessionUPLOADCommand(BaseCommand):
-    type: Literal['sliver-session']
+class SliverSessionUPLOADCommand(SliverSessionCommand):
     cmd: Literal['upload']
     remote_path: str
     local_path: str = "."
     recurse: bool = False
     is_ioc: bool = False
-    session: str
 
 
-class SliverSessionNETSTATCommand(BaseCommand):
-    type: Literal['sliver-session']
+class SliverSessionNETSTATCommand(SliverSessionCommand):
     cmd: Literal['netstat']
     tcp: bool = True
     udp: bool = True
     ipv4: bool = True
     ipv6: bool = True
     listening: bool = True
-    session: str
 
 
-class SliverSessionEXECCommand(BaseCommand):
-    type: Literal['sliver-session']
+class SliverSessionEXECCommand(SliverSessionCommand):
     cmd: Literal['execute']
     exe: str
     args: Optional[List[str]]
     output: bool = True
-    session: str
 
 
-class SliverSessionSimpleCommand(BaseCommand):
-    type: Literal['sliver-session']
+class SliverSessionSimpleCommand(SliverSessionCommand):
     cmd: Literal['ifconfig', 'ps', 'pwd']
-    session: str
 
 
-class SliverSessionLSCommand(BaseCommand):
-    type: Literal['sliver-session']
+class SliverSessionLSCommand(SliverSessionCommand):
     cmd: Literal['ls']
     remote_path: str
-    session: str
 
 
-class SliverSessionPROCDUMPCommand(BaseCommand):
-    type: Literal['sliver-session']
+class SliverSessionPROCDUMPCommand(SliverSessionCommand):
     cmd: Literal['process_dump']
     local_path: str
     pid: int
-    session: str
 
 
 class Config(BaseModel):
