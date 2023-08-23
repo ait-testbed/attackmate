@@ -237,5 +237,8 @@ class SliverSessionExecutor(BaseExecutor):
             coro = self.process_dump(command)
         else:
             raise ExecException("Sliver Session Command unknown or faulty Command-config")
-        loop.run_until_complete(coro)
+        try:
+            loop.run_until_complete(coro)
+        except Exception as e:
+            raise ExecException(e)
         return self.result
