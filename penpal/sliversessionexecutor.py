@@ -122,6 +122,8 @@ class SliverSessionExecutor(BaseExecutor):
         if download.Exists:
             local_file = command.local_path
             base_path = os.path.basename(download.Path)
+            if download.IsDir:
+                base_path = os.path.basename(os.path.dirname(download.Path))
             if os.path.isdir(command.local_path):
                 self.logger.debug(f"{base_path=}")
                 local_file = os.path.join(command.local_path, base_path)
