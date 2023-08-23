@@ -125,5 +125,8 @@ class SliverExecutor(BaseExecutor):
             coro = self.generate_implant(command)
         else:
             raise ExecException("Sliver Command unknown or faulty Command-config")
-        loop.run_until_complete(coro)
+        try:
+            loop.run_until_complete(coro)
+        except Exception as e:
+            raise ExecException(e)
         return self.result
