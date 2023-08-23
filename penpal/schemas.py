@@ -212,6 +212,14 @@ class SliverSessionLSCommand(BaseCommand):
     session: str
 
 
+class SliverSessionPROCDUMPCommand(BaseCommand):
+    type: Literal['sliver-session']
+    cmd: Literal['process_dump']
+    local_path: str
+    pid: int
+    session: str
+
+
 class SliverImplantCommand(BaseCommand):
     type: Literal['sliver-implant']
     target: Literal[
@@ -253,5 +261,6 @@ class Config(BaseModel):
                          SliverSessionSimpleCommand,
                          SliverSessionDOWNLOADCommand,
                          SliverSessionUPLOADCommand,
+                         SliverSessionPROCDUMPCommand,
                          SliverHttpsListenerCommand,
                          ]]

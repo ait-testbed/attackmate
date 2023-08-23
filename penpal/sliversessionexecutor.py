@@ -14,7 +14,7 @@ from .variablestore import VariableStore
 from .baseexecutor import BaseExecutor, ExecException, Result
 from .schemas import (BaseCommand, SliverSessionCDCommand,
                       SliverSessionDOWNLOADCommand, SliverSessionEXECCommand,
-                      SliverSessionLSCommand, SliverSessionNETSTATCommand,
+                      SliverSessionLSCommand, SliverSessionNETSTATCommand, SliverSessionPROCDUMPCommand,
                       SliverSessionSimpleCommand, SliverSessionMKDIRCommand, SliverSessionUPLOADCommand)
 from datetime import datetime
 from tabulate import tabulate
@@ -141,6 +141,12 @@ class SliverSessionExecutor(BaseExecutor):
             output += f"Local_file: {local_file}\n"
             self.result = Result(output, 0)
 
+    async def process_dump(self, command: SliverSessionPROCDUMPCommand):
+        session = await self.get_session_by_name(command.session)
+        self.logger.debug(session)
+        dump = await session.process_dump(command.pid)
+        self.logger.debug(dump)
+
     async def upload(self, command: SliverSessionUPLOADCommand):
         session = await self.get_session_by_name(command.session)
         self.logger.debug(session)
@@ -226,6 +232,8 @@ class SliverSessionExecutor(BaseExecutor):
             coro = self.download(command)
         elif command.cmd == "upload" and isinstance(command, SliverSessionUPLOADCommand):
             coro = self.upload(command)
+        elif command.cmd == "process_dump" and isinstance(command, SliverSessionPROCDUMPCommand):
+            coro = self.process_dump(command)
         else:
             raise ExecException("Sliver Session Command unknown or faulty Command-config")
         loop.run_until_complete(coro)
