@@ -121,8 +121,10 @@ class SliverSessionExecutor(BaseExecutor):
         self.logger.debug(download)
         if download.Exists:
             local_file = command.local_path
+            base_path = os.path.basename(download.Path)
             if os.path.isdir(command.local_path):
-                local_file = os.path.join(command.local_path, os.path.basename(download.Path))
+                self.logger.debug(f"{base_path=}")
+                local_file = os.path.join(command.local_path, base_path)
             if download.Encoder == "gzip":
                 data = gzip.decompress(download.Data)
             else:
