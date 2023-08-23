@@ -235,6 +235,12 @@ class SliverSessionRMCommand(SliverSessionCommand):
     force: bool = False
 
 
+class SliverSessionTERMINATECommand(SliverSessionCommand):
+    cmd: Literal['terminate']
+    pid: int
+    force: bool = False
+
+
 class Config(BaseModel):
     sliver_config: SliverConfig = SliverConfig(config_file=None)
     msf_config: MsfConfig = MsfConfig(password=None)
@@ -258,6 +264,7 @@ class Config(BaseModel):
                          SliverSessionUPLOADCommand,
                          SliverSessionPROCDUMPCommand,
                          SliverSessionRMCommand,
+                         SliverSessionTERMINATECommand,
                          SliverHttpsListenerCommand,
                          SliverGenerateCommand
                          ]]

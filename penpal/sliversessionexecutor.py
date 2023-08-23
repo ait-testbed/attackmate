@@ -15,8 +15,8 @@ from .baseexecutor import BaseExecutor, ExecException, Result
 from .schemas import (SliverSessionCDCommand, SliverSessionCommand,
                       SliverSessionDOWNLOADCommand, SliverSessionEXECCommand,
                       SliverSessionLSCommand, SliverSessionNETSTATCommand, SliverSessionPROCDUMPCommand,
-                      SliverSessionSimpleCommand, SliverSessionMKDIRCommand, SliverSessionUPLOADCommand,
-                      SliverSessionRMCommand)
+                      SliverSessionSimpleCommand, SliverSessionMKDIRCommand, SliverSessionTERMINATECommand,
+                      SliverSessionUPLOADCommand, SliverSessionRMCommand)
 from datetime import datetime
 from tabulate import tabulate
 
@@ -199,6 +199,13 @@ class SliverSessionExecutor(BaseExecutor):
         self.logger.debug(rm)
         self.result = Result(f"Removed {rm.Path}", 0)
 
+    async def terminate(self, command: SliverSessionTERMINATECommand):
+        session = await self.get_session_by_name(command.session)
+        self.logger.debug(session)
+        term = await session.terminate(command.pid, command.force)
+        self.logger.debug(term)
+        self.result = Result(f"Terminated process {term.Pid}", 0)
+
     def log_command(self, command: SliverSessionCommand):
         self.logger.info(f"Executing Sliver-Session-command: '{command.cmd}'")
         loop = asyncio.get_event_loop()
@@ -245,6 +252,8 @@ class SliverSessionExecutor(BaseExecutor):
             coro = self.process_dump(command)
         elif command.cmd == "rm" and isinstance(command, SliverSessionRMCommand):
             coro = self.rm(command)
+        elif command.cmd == "terminate" and isinstance(command, SliverSessionTERMINATECommand):
+            coro = self.terminate(command)
         else:
             raise ExecException("Sliver Session Command unknown or faulty Command-config")
         try:
