@@ -145,7 +145,8 @@ class SliverSessionExecutor(BaseExecutor):
         session = await self.get_session_by_name(command.session)
         self.logger.debug(session)
         dump = await session.process_dump(command.pid)
-        self.logger.debug(dump)
+        with open(command.local_path, "wb") as new_file:
+            new_file.write(dump.Data)
 
     async def upload(self, command: SliverSessionUPLOADCommand):
         session = await self.get_session_by_name(command.session)
