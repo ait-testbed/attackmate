@@ -169,6 +169,16 @@ class SliverSessionDOWNLOADCommand(BaseCommand):
     session: str
 
 
+class SliverSessionUPLOADCommand(BaseCommand):
+    type: Literal['sliver-session']
+    cmd: Literal['upload']
+    remote_path: str
+    local_path: str = "."
+    recurse: bool = False
+    is_ioc: bool = False
+    session: str
+
+
 class SliverSessionNETSTATCommand(BaseCommand):
     type: Literal['sliver-session']
     cmd: Literal['netstat']
@@ -242,5 +252,6 @@ class Config(BaseModel):
                          SliverSessionMKDIRCommand,
                          SliverSessionSimpleCommand,
                          SliverSessionDOWNLOADCommand,
+                         SliverSessionUPLOADCommand,
                          SliverHttpsListenerCommand,
                          ]]

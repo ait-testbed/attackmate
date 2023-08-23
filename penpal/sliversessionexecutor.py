@@ -15,7 +15,7 @@ from .baseexecutor import BaseExecutor, ExecException, Result
 from .schemas import (BaseCommand, SliverSessionCDCommand,
                       SliverSessionDOWNLOADCommand, SliverSessionEXECCommand,
                       SliverSessionLSCommand, SliverSessionNETSTATCommand,
-                      SliverSessionSimpleCommand, SliverSessionMKDIRCommand)
+                      SliverSessionSimpleCommand, SliverSessionMKDIRCommand, SliverSessionUPLOADCommand)
 from datetime import datetime
 from tabulate import tabulate
 
@@ -141,6 +141,15 @@ class SliverSessionExecutor(BaseExecutor):
             output += f"Local_file: {local_file}\n"
             self.result = Result(output, 0)
 
+    async def upload(self, command: SliverSessionUPLOADCommand):
+        session = await self.get_session_by_name(command.session)
+        self.logger.debug(session)
+        with open(command.local_path, 'rb') as file:
+            binary_data = file.read()
+        upload = await session.upload(command.remote_path, binary_data, command.is_ioc)
+        self.logger.debug(upload)
+        self.result = Result(f"Uploaded to {upload.Path}", 0)
+
     async def netstat(self, command: SliverSessionNETSTATCommand):
         session = await self.get_session_by_name(command.session)
         self.logger.debug(session)
@@ -215,6 +224,8 @@ class SliverSessionExecutor(BaseExecutor):
             coro = self.mkdir(command)
         elif command.cmd == "download" and isinstance(command, SliverSessionDOWNLOADCommand):
             coro = self.download(command)
+        elif command.cmd == "upload" and isinstance(command, SliverSessionUPLOADCommand):
+            coro = self.upload(command)
         else:
             raise ExecException("Sliver Session Command unknown or faulty Command-config")
         loop.run_until_complete(coro)
