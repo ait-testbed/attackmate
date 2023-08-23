@@ -228,6 +228,13 @@ class SliverSessionPROCDUMPCommand(SliverSessionCommand):
     pid: int
 
 
+class SliverSessionRMCommand(SliverSessionCommand):
+    cmd: Literal['rm']
+    remote_path: str
+    recursive: bool = False
+    force: bool = False
+
+
 class Config(BaseModel):
     sliver_config: SliverConfig = SliverConfig(config_file=None)
     msf_config: MsfConfig = MsfConfig(password=None)
@@ -250,6 +257,7 @@ class Config(BaseModel):
                          SliverSessionDOWNLOADCommand,
                          SliverSessionUPLOADCommand,
                          SliverSessionPROCDUMPCommand,
+                         SliverSessionRMCommand,
                          SliverHttpsListenerCommand,
                          SliverGenerateCommand
                          ]]
