@@ -79,7 +79,6 @@ class SliverExecutor(BaseExecutor):
         return implconfig
 
     def save_implant(self, implant: client_pb2.Generate) -> str:
-        self.logger.debug(implant)
         if hasattr(implant, "filepath"):
             implant_path = implant.filepath
         else:
