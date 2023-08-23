@@ -5,6 +5,8 @@ Execute Commands in a Sliver Session
 """
 
 import asyncio
+import os
+import gzip
 from sliver import SliverClientConfig, SliverClient
 from sliver.session import InteractiveSession
 # from sliver.protobuf import client_pb2
@@ -117,6 +119,20 @@ class SliverSessionExecutor(BaseExecutor):
         self.logger.debug(session)
         download = await session.download(command.remote_path, command.recurse)
         self.logger.debug(download)
+        if download.Exists:
+            local_file = command.local_path
+            if os.path.isdir(command.local_path):
+                local_file = os.path.join(command.local_path, os.path.basename(download.Path))
+            if download.Encoder == "gzip":
+                data = gzip.decompress(download.Data)
+            else:
+                data = download.Data
+            with open(local_file, "wb") as new_file:
+                new_file.write(data)
+            output = "Downloaded: {download.Path}\n"
+            output += "Encoder: {download.Encoder}\n"
+            output += "Local_file: {local_file}\n"
+            self.result = Result(output, 0)
 
     async def netstat(self, command: SliverSessionNETSTATCommand):
         session = await self.get_session_by_name(command.session)

@@ -164,6 +164,7 @@ class SliverSessionDOWNLOADCommand(BaseCommand):
     type: Literal['sliver-session']
     cmd: Literal['download']
     remote_path: str
+    local_path: str = "."
     recurse: bool = False
     session: str
 
