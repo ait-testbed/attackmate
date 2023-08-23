@@ -129,9 +129,9 @@ class SliverSessionExecutor(BaseExecutor):
                 data = download.Data
             with open(local_file, "wb") as new_file:
                 new_file.write(data)
-            output = "Downloaded: {download.Path}\n"
-            output += "Encoder: {download.Encoder}\n"
-            output += "Local_file: {local_file}\n"
+            output = f"Downloaded: {download.Path}\n"
+            output += f"Encoder: {download.Encoder}\n"
+            output += f"Local_file: {local_file}\n"
             self.result = Result(output, 0)
 
     async def netstat(self, command: SliverSessionNETSTATCommand):
