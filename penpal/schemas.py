@@ -133,6 +133,7 @@ class MsfConfig(BaseModel):
 
 class SliverHttpsListenerCommand(BaseCommand):
     type: Literal['sliver']
+    cmd: Literal['start_https_listener']
     host: str = "0.0.0.0"
     port: int = 443
     domain: str = ""
@@ -144,6 +145,26 @@ class SliverHttpsListenerCommand(BaseCommand):
     long_poll_timeout: int = 127
     long_poll_jitter: int = 2
     timeout: int = 60
+
+
+class SliverGenerateCommand(BaseCommand):
+    type: Literal['sliver']
+    cmd: Literal['generate_implant']
+    target: Literal[
+            'darwin/amd64',
+            'darwin/arm64',
+            'linux/386',
+            'linux/amd64',
+            'windows/386',
+            'windows/amd64'] = 'linux/amd64'
+    c2url: str
+    format: Literal[
+            'EXECUTABLE',
+            'SERVICE',
+            'SHARED_LIB',
+            'SHELLCODE'] = 'EXECUTABLE'
+    name: str
+    filepath: Optional[str]
 
 
 class SliverSessionCDCommand(BaseCommand):
@@ -263,4 +284,5 @@ class Config(BaseModel):
                          SliverSessionUPLOADCommand,
                          SliverSessionPROCDUMPCommand,
                          SliverHttpsListenerCommand,
+                         SliverGenerateCommand
                          ]]
