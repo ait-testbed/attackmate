@@ -129,7 +129,9 @@ class SliverSessionExecutor(BaseExecutor):
             if download.Encoder == "gzip":
                 data = gzip.decompress(download.Data)
                 if download.IsDir:
-                    local_file = os.path.join(local_file, ".tar.gz")
+                    if local_file[-1] == "/":
+                        local_file = local_file[:-1]
+                    local_file += ".tar.gz"
             else:
                 data = download.Data
             with open(local_file, "wb") as new_file:
