@@ -241,25 +241,6 @@ class SliverSessionPROCDUMPCommand(BaseCommand):
     session: str
 
 
-class SliverImplantCommand(BaseCommand):
-    type: Literal['sliver-implant']
-    target: Literal[
-            'darwin/amd64',
-            'darwin/arm64',
-            'linux/386',
-            'linux/amd64',
-            'windows/386',
-            'windows/amd64'] = 'linux/amd64'
-    c2url: str
-    format: Literal[
-            'EXECUTABLE',
-            'SERVICE',
-            'SHARED_LIB',
-            'SHELLCODE'] = 'EXECUTABLE'
-    name: str
-    filepath: Optional[str]
-
-
 class Config(BaseModel):
     sliver_config: SliverConfig = SliverConfig(config_file=None)
     msf_config: MsfConfig = MsfConfig(password=None)
@@ -273,7 +254,6 @@ class Config(BaseModel):
                          SSHCommand,
                          DebugCommand,
                          RegExCommand,
-                         SliverImplantCommand,
                          SliverSessionCDCommand,
                          SliverSessionLSCommand,
                          SliverSessionNETSTATCommand,
