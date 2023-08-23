@@ -99,11 +99,7 @@ class SliverExecutor(BaseExecutor):
             raise ExecException("SliverClient is not defined")
 
         builds = await self.client.implant_builds()
-        delete_needed = False
-        for implant_config in builds:
-            if implant_config.Name == command.name:
-                delete_needed = True
-        if delete_needed:
+        if command.name in builds.keys():
             self.logger.debug("Implant found. Delete it")
             await self.client.delete_implant_build(command.name)
 
