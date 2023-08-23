@@ -160,6 +160,14 @@ class SliverSessionMKDIRCommand(BaseCommand):
     session: str
 
 
+class SliverSessionDOWNLOADCommand(BaseCommand):
+    type: Literal['sliver-session']
+    cmd: Literal['download']
+    remote_path: str
+    recurse: bool = False
+    session: str
+
+
 class SliverSessionNETSTATCommand(BaseCommand):
     type: Literal['sliver-session']
     cmd: Literal['netstat']
@@ -232,5 +240,6 @@ class Config(BaseModel):
                          SliverSessionEXECCommand,
                          SliverSessionMKDIRCommand,
                          SliverSessionSimpleCommand,
+                         SliverSessionDOWNLOADCommand,
                          SliverHttpsListenerCommand,
                          ]]

@@ -10,7 +10,8 @@ from sliver.session import InteractiveSession
 # from sliver.protobuf import client_pb2
 from .variablestore import VariableStore
 from .baseexecutor import BaseExecutor, ExecException, Result
-from .schemas import (BaseCommand, SliverSessionCDCommand, SliverSessionEXECCommand,
+from .schemas import (BaseCommand, SliverSessionCDCommand,
+                      SliverSessionDOWNLOADCommand, SliverSessionEXECCommand,
                       SliverSessionLSCommand, SliverSessionNETSTATCommand,
                       SliverSessionSimpleCommand, SliverSessionMKDIRCommand)
 from datetime import datetime
@@ -110,6 +111,13 @@ class SliverSessionExecutor(BaseExecutor):
             self.result = Result(output, 0)
         self.logger.debug(ls)
 
+    async def download(self, command: SliverSessionDOWNLOADCommand):
+        self.logger.debug(f"{command.remote_path=}")
+        session = await self.get_session_by_name(command.session)
+        self.logger.debug(session)
+        download = await session.download(command.remote_path, command.recurse)
+        self.logger.debug(download)
+
     async def netstat(self, command: SliverSessionNETSTATCommand):
         session = await self.get_session_by_name(command.session)
         self.logger.debug(session)
@@ -182,6 +190,8 @@ class SliverSessionExecutor(BaseExecutor):
             coro = self.execute(command)
         elif command.cmd == "mkdir" and isinstance(command, SliverSessionMKDIRCommand):
             coro = self.mkdir(command)
+        elif command.cmd == "download" and isinstance(command, SliverSessionDOWNLOADCommand):
+            coro = self.download(command)
         else:
             raise ExecException("Sliver Session Command unknown or faulty Command-config")
         loop.run_until_complete(coro)
