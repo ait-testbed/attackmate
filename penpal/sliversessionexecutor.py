@@ -7,6 +7,7 @@ Execute Commands in a Sliver Session
 import asyncio
 import os
 import gzip
+import time
 from sliver import SliverClientConfig, SliverClient
 from sliver.session import InteractiveSession
 # from sliver.protobuf import client_pb2
@@ -213,17 +214,20 @@ class SliverSessionExecutor(BaseExecutor):
         loop.run_until_complete(coro)
 
     async def get_session_by_name(self, name) -> InteractiveSession:
+        # limit polling
+        seconds = 3
         if self.client is None:
             raise ExecException("SliverClient is not defined")
 
-        sessions = await self.client.sessions()
-        for session in sessions:
-            if session.Name == name and not session.IsDead:
-                self.logger.debug(session)
-                ret = await self.client.interact_session(session.ID)
-                return ret
-
-        raise ExecException("Active SliverSession not found")
+        while True:
+            sessions = await self.client.sessions()
+            for session in sessions:
+                if session.Name == name and not session.IsDead:
+                    self.logger.debug(session)
+                    ret = await self.client.interact_session(session.ID)
+                    return ret
+            self.logger.debug(f"Sliver-Session not found. Retry in {seconds} sec")
+            time.sleep(seconds)
 
     def _exec_cmd(self, command: SliverSessionCommand) -> Result:
         loop = asyncio.get_event_loop()
