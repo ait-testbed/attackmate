@@ -141,9 +141,9 @@ class SliverHttpsListenerCommand(BaseCommand):
     website: str = ""
     acme: bool = False
     persistent: bool = False
-    enforce_otb: bool = True
+    enforce_otp: bool = True
     randomize_jarm: bool = True
-    long_poll_timeout: int = 127
+    long_poll_timeout: int = 1
     long_poll_jitter: int = 2
     timeout: int = 60
 
