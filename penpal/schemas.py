@@ -119,6 +119,10 @@ class CommandConfig(BaseModel):
     loop_sleep: int = 5
 
 
+class SliverConfig(BaseModel):
+    config_file: Optional[str] = None
+
+
 class MsfConfig(BaseModel):
     password: Optional[str] = None
     ssl: bool = True
@@ -127,7 +131,124 @@ class MsfConfig(BaseModel):
     uri: Optional[str] = "/api/"
 
 
+class SliverHttpsListenerCommand(BaseCommand):
+    type: Literal['sliver']
+    cmd: Literal['start_https_listener']
+    host: str = "0.0.0.0"
+    port: int = 443
+    domain: str = ""
+    website: str = ""
+    acme: bool = False
+    persistent: bool = False
+    enforce_otb: bool = True
+    randomize_jarm: bool = True
+    long_poll_timeout: int = 127
+    long_poll_jitter: int = 2
+    timeout: int = 60
+
+
+class SliverGenerateCommand(BaseCommand):
+    type: Literal['sliver']
+    cmd: Literal['generate_implant']
+    target: Literal[
+            'darwin/amd64',
+            'darwin/arm64',
+            'linux/386',
+            'linux/amd64',
+            'windows/386',
+            'windows/amd64'] = 'linux/amd64'
+    c2url: str
+    format: Literal[
+            'EXECUTABLE',
+            'SERVICE',
+            'SHARED_LIB',
+            'SHELLCODE'] = 'EXECUTABLE'
+    name: str
+    filepath: Optional[str]
+    IsBeacon: bool = False
+    IsSharedLib: bool = False
+    IsService: bool = False
+    IsShellcode: bool = False
+    RunAtLoad: bool = False
+    Evasion: bool = False
+
+
+class SliverSessionCommand(BaseCommand):
+    type: Literal['sliver-session']
+    session: str
+
+
+class SliverSessionCDCommand(SliverSessionCommand):
+    cmd: Literal['cd']
+    remote_path: str
+
+
+class SliverSessionMKDIRCommand(SliverSessionCommand):
+    cmd: Literal['mkdir']
+    remote_path: str
+
+
+class SliverSessionDOWNLOADCommand(SliverSessionCommand):
+    cmd: Literal['download']
+    remote_path: str
+    local_path: str = "."
+    recurse: bool = False
+
+
+class SliverSessionUPLOADCommand(SliverSessionCommand):
+    cmd: Literal['upload']
+    remote_path: str
+    local_path: str = "."
+    recurse: bool = False
+    is_ioc: bool = False
+
+
+class SliverSessionNETSTATCommand(SliverSessionCommand):
+    cmd: Literal['netstat']
+    tcp: bool = True
+    udp: bool = True
+    ipv4: bool = True
+    ipv6: bool = True
+    listening: bool = True
+
+
+class SliverSessionEXECCommand(SliverSessionCommand):
+    cmd: Literal['execute']
+    exe: str
+    args: Optional[List[str]]
+    output: bool = True
+
+
+class SliverSessionSimpleCommand(SliverSessionCommand):
+    cmd: Literal['ifconfig', 'ps', 'pwd']
+
+
+class SliverSessionLSCommand(SliverSessionCommand):
+    cmd: Literal['ls']
+    remote_path: str
+
+
+class SliverSessionPROCDUMPCommand(SliverSessionCommand):
+    cmd: Literal['process_dump']
+    local_path: str
+    pid: int
+
+
+class SliverSessionRMCommand(SliverSessionCommand):
+    cmd: Literal['rm']
+    remote_path: str
+    recursive: bool = False
+    force: bool = False
+
+
+class SliverSessionTERMINATECommand(SliverSessionCommand):
+    cmd: Literal['terminate']
+    pid: int
+    force: bool = False
+
+
 class Config(BaseModel):
+    sliver_config: SliverConfig = SliverConfig(config_file=None)
     msf_config: MsfConfig = MsfConfig(password=None)
     cmd_config: CommandConfig = CommandConfig(loop_sleep=5)
     vars: Optional[Dict[str, str]] = None
@@ -138,4 +259,18 @@ class Config(BaseModel):
                          SleepCommand,
                          SSHCommand,
                          DebugCommand,
-                         RegExCommand]]
+                         RegExCommand,
+                         SliverSessionCDCommand,
+                         SliverSessionLSCommand,
+                         SliverSessionNETSTATCommand,
+                         SliverSessionEXECCommand,
+                         SliverSessionMKDIRCommand,
+                         SliverSessionSimpleCommand,
+                         SliverSessionDOWNLOADCommand,
+                         SliverSessionUPLOADCommand,
+                         SliverSessionPROCDUMPCommand,
+                         SliverSessionRMCommand,
+                         SliverSessionTERMINATECommand,
+                         SliverHttpsListenerCommand,
+                         SliverGenerateCommand
+                         ]]
