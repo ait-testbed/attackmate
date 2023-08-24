@@ -14,7 +14,7 @@ repos:
     rev: v1.5.0
     hooks:
     -   id: mypy
-        additional_dependencies: [pydantic, types-PyYAML, types-requests, types-paramiko]
+        additional_dependencies: [pydantic, types-PyYAML, types-requests, types-paramiko, types-tabulate]
 
 -   repo: https://github.com/pycqa/flake8
     rev: '6.1.0'  # pick a git hash / tag to point to
