@@ -31,6 +31,7 @@ class BaseCommand(BaseModel):
     loop_if_not: Optional[str] = None
     loop_count: int = 3
     exit_on_error: bool = True
+    save: Optional[str] = None
     cmd: str
 
 

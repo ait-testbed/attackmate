@@ -120,6 +120,18 @@ class BaseExecutor:
         """
         self.logger.info(f"Executing '{command}'")
 
+    def save_output(self, command: BaseCommand, result: Result):
+        """ Save output of command to a file. This method will
+            ignore all exceptions and won't stop the programm
+            on error.
+        """
+        if command.save:
+            try:
+                with open(command.save, "w") as outfile:
+                    outfile.write(result.stdout)
+            except Exception as e:
+                self.logger.warn(f"Unable to write output to file {command.save}: {e}")
+
     def exec(self, command: BaseCommand):
         try:
             self.log_command(command)
@@ -133,6 +145,7 @@ class BaseExecutor:
         self.varstore.set_variable("RESULT_STDOUT", result.stdout)
         self.varstore.set_variable("RESULT_RETURNCODE", str(result.returncode))
         self.output.info(f"Command: {command.cmd}\n{result.stdout}")
+        self.save_output(command, result)
         self.error_if(command, result)
         self.error_if_not(command, result)
         self.loop_if(command, result)

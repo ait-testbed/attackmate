@@ -7,6 +7,19 @@ top to bottom.
 
 Every command, regardless of the type has the following options:
 
+.. confval:: save
+
+   Save the output of the command to a file.
+
+   :type: str
+
+   .. code-block:: yaml
+
+      commands:
+        - type: shell
+          cmd: nmap localhost
+          save: /tmp/nmap_localhost.txt
+
 .. confval:: exit_on_error
 
    If this option is true, penpal will stop the run if the command returns with a return code
