@@ -20,8 +20,8 @@ Welcome to PenPal's documentation!
    configuration/config_vars
    configuration/command_config
    configuration/msf_config
-   configuration/commands
-
+   configuration/sliver_config
+   configuration/commands/index
 
 .. toctree::
    :maxdepth: 1

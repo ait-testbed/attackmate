@@ -32,5 +32,5 @@ html_static_path = ['_static']
 html_theme_options = {
     'logo_only': False,
     'navigation_depth': 2,
-    'collapse_navigation': False,
+    'collapse_navigation': True,
 }
