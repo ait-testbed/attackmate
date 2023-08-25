@@ -8,7 +8,6 @@ over all attacks and runs the specific Executor with the given
 configuration.
 """
 
-import yaml
 import logging
 from .shellexecutor import ShellExecutor
 from .sleepexecutor import SleepExecutor
@@ -20,12 +19,12 @@ from .sliverexecutor import SliverExecutor
 from .sliversessionexecutor import SliverSessionExecutor
 from .debugexecutor import DebugExecutor
 from .regexexecutor import RegExExecutor
-from .schemas import Config
+from .schemas import Config, Playbook
 from .variablestore import VariableStore
 
 
 class PenPal:
-    def __init__(self, config_file: str) -> None:
+    def __init__(self, playbook: Playbook, config: Config) -> None:
         """ Constructor for PenPal
 
         This constructor initializes the logger('playbook'), the playbook,
@@ -37,35 +36,10 @@ class PenPal:
             The path to a yaml-playbook
         """
         self.logger = logging.getLogger('playbook')
-        self.pyconfig: Config
-        self.parse_config(config_file)
+        self.pyconfig = config
+        self.playbook = playbook
         self.initialize_variable_parser()
         self.initialize_executors()
-
-    def parse_config(self, config_file: str):
-        """ Config-Parser for PenPal
-
-        This parser reads the playbook-file and validates the config-settings.
-
-        Parameters
-        ----------
-        config_file : str
-            The path to a yaml-playbook
-
-        Notes
-        -----
-        This method will exit(1) on errors.
-        """
-        try:
-            with open(config_file) as f:
-                config = yaml.safe_load(f)
-                self.pyconfig = Config.parse_obj(config)
-        except OSError:
-            self.logger.error(f"Could not open file: {config_file}")
-            exit(1)
-        except yaml.parser.ParserError as e:
-            self.logger.error(e)
-            exit(1)
 
     def initialize_variable_parser(self):
         """ Initializes the variable-parser
@@ -73,7 +47,7 @@ class PenPal:
         The variablestore stores and replaces variables with values in certain strings
         """
         self.varstore = VariableStore()
-        self.varstore.from_dict(self.pyconfig.vars)
+        self.varstore.from_dict(self.playbook.vars)
 
     def initialize_executors(self):
         """ Initialize all Executors
@@ -109,12 +83,11 @@ class PenPal:
     def main(self):
         """ The main function
 
-        This function calls the variable_parser() and interates
-        over all configured commands and passes them to the
-        executors.
+        This function interates over all configured
+        commands and passes them to the executors.
 
         """
-        for command in self.pyconfig.commands:
+        for command in self.playbook.commands:
             if command.type == "shell":
                 self.se.run(command)
             if command.type == "sleep":

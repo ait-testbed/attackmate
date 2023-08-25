@@ -5,11 +5,15 @@ __main__.py
 The main-file of PenPal
 """
 
+import os
 import sys
 import argparse
+import yaml
 import logging
+from typing import Optional
 from colorlog import ColoredFormatter
 from .penpal import PenPal
+from .schemas import Config, Playbook
 from .metadata import __version_string__
 
 
@@ -45,6 +49,85 @@ def initialize_logger(debug: bool):
             datefmt="%Y-%m-%d %H:%M:%S")
     file_handler.setFormatter(formatter)
     playbook_logger.addHandler(file_handler)
+    return playbook_logger
+
+
+def load_configfile(config_file: str) -> Config:
+    with open(config_file) as f:
+        config = yaml.safe_load(f)
+        return Config.parse_obj(config)
+
+
+def parse_config(config_file: Optional[str], logger: logging.Logger) -> Config:
+    """ Config-Parser for PenPal
+
+    This parser reads the configfile and validates the settings.
+    If config_file is None, this function will try to load the
+    config from ".penpal.yml", "$HOME/.config/penpal.yml" and
+    "/etc/penpal.yml"
+
+    Parameters
+    ----------
+    config_file : str
+        The path to a yaml-playbook
+
+    Returns
+    -------
+    Config
+        The parsed PenPal config object
+
+    """
+    default_cfg_path = [
+                        ".penpal.yml",
+                        os.environ['HOME'] + "/.config/penpal.yml",
+                        "/etc/penpal.yml"]
+    try:
+        if config_file is None:
+            for file in default_cfg_path:
+                cfg = None
+                try:
+                    cfg = load_configfile(file)
+                except OSError:
+                    pass
+                if cfg is not None:
+                    logger.debug(f"Cfgfile {file} loaded")
+                    return cfg
+            logger.debug("No config-file found. Using empty default-config")
+            return Config()
+        else:
+            logger.debug(f"Cfgfile {config_file} loaded")
+            return load_configfile(config_file)
+    except OSError:
+        logger.error(f"Error: Could not open file {config_file}")
+        exit(1)
+    except yaml.parser.ParserError as e:
+        logger.error(e)
+        exit(1)
+
+
+def parse_playbook(playbook_file: str, logger: logging.Logger) -> Playbook:
+    """ Playbook-Parser for PenPal
+
+    This parser reads the playbook-file and validates the config-settings.
+
+    Parameters
+    ----------
+    playbook_file : str
+        The path to a yaml-playbook
+
+    Returns
+    -------
+    Playbook
+        The parsed PenPal playbook object
+    """
+    try:
+        with open(playbook_file) as f:
+            pb_yaml = yaml.safe_load(f)
+            playbook_object = Playbook.parse_obj(pb_yaml)
+            return playbook_object
+    except OSError:
+        logger.error(f"Error: Could not open playbook file {playbook_file}")
+        exit(1)
 
 
 def parse_args():
@@ -56,8 +139,7 @@ def parse_args():
             epilog=__version_string__)
     parser.add_argument(
             '--config',
-            help='Attack-Playbook in yaml-format',
-            required=True)
+            help='Configfile in yaml-format')
     parser.add_argument(
             '--debug',
             action='store_true',
@@ -67,14 +149,17 @@ def parse_args():
             '--version',
             action='version',
             version=__version_string__)
+    parser.add_argument(
+            'playbook',
+            help="Playbook in yaml-format")
     return parser.parse_args()
 
 
 def main():
     args = parse_args()
-    initialize_logger(args.debug)
+    logger = initialize_logger(args.debug)
     initialize_output_logger(args.debug)
-    hacky = PenPal(args.config)
+    hacky = PenPal(parse_playbook(args.playbook, logger), parse_config(args.config, logger))
     sys.exit(hacky.main())
 
 

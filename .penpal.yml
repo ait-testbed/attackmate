@@ -1,0 +1,4 @@
+###
+msf_config:
+  password: hackhelfer
+  server: 10.18.3.86
