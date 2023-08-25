@@ -46,7 +46,7 @@ class SliverExecutor(BaseExecutor):
                                                           b"",
                                                           command.acme,
                                                           command.persistent,
-                                                          command.enforce_otb,
+                                                          command.enforce_otp,
                                                           command.randomize_jarm,
                                                           command.long_poll_timeout,
                                                           command.long_poll_jitter,
