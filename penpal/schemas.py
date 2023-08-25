@@ -252,6 +252,9 @@ class Config(BaseModel):
     sliver_config: SliverConfig = SliverConfig(config_file=None)
     msf_config: MsfConfig = MsfConfig(password=None)
     cmd_config: CommandConfig = CommandConfig(loop_sleep=5)
+
+
+class Playbook(BaseModel):
     vars: Optional[Dict[str, str]] = None
     commands: List[Union[
                          ShellCommand,
