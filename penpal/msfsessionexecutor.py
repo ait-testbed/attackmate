@@ -46,11 +46,9 @@ class MsfSessionExecutor(BaseExecutor):
 
         session_id = self.sessionstore.get_session_by_name(command.session, self.msf.sessions)
         self.logger.debug(f"Using session-id: {session_id}")
+        return_empty = False
+
         try:
-            if command.read:
-                self.logger.info("Reading raw-data in msf-session")
-                output = self.msf.sessions.session(session_id).read()
-                return Result(output, 0)
 
             if command.stdapi:
                 self.logger.info("Loading stapi")
@@ -59,9 +57,22 @@ class MsfSessionExecutor(BaseExecutor):
                 self.logger.info("Writing raw-data in msf-session")
                 self.msf.sessions.session(session_id).write(command.cmd)
                 output = ""
-            else:
+                return_empty = True
+            if command.read:
+                self.logger.info("Reading raw-data in msf-session")
+                output = self.msf.sessions.session(session_id).read()
+                return Result(output, 0)
+
+            if not return_empty:
                 self.logger.info("Executing a msf-command")
-                output = self.msf.sessions.session(session_id).run_with_output(command.cmd, command.end_str)
+                try:
+                    output = self.msf.sessions.session(session_id).run_with_output(command.cmd,
+                                                                                   command.end_str)
+                except TypeError:
+                    self.logger.debug("Fallback: First raw-write again and then raw-read data in msf-session")
+                    self.msf.sessions.session(session_id).write(command.cmd)
+                    output = self.msf.sessions.session(session_id).read()
+
         except KeyError as e:
             self.logger.debug(self.msf.sessions.list)
             self.logger.debug(session_id)
