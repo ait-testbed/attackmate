@@ -21,7 +21,7 @@ class BaseCommand(BaseModel):
         template_vars: List[str] = []
         for k in self.__dict__.keys():
             tmp = getattr(self, k)
-            if isinstance(tmp, str) and k != "type":
+            if isinstance(tmp, (str, dict)) and k != "type":
                 template_vars.append(k)
         return template_vars
 
