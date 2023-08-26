@@ -17,7 +17,7 @@ class TempfileExecutor(BaseExecutor):
         super().__init__(varstore, cmdconfig)
 
     def log_command(self, command: TempfileCommand):
-        if command.isdir:
+        if command.cmd == "dir":
             self.logger.warn("Creating temporary directory..")
         else:
             self.logger.warn("Creating temporary file..")
@@ -25,7 +25,7 @@ class TempfileExecutor(BaseExecutor):
     def _exec_cmd(self, command: TempfileCommand) -> Result:
         ret = 0
         fullpath = ""
-        if command.isdir:
+        if command.cmd == "dir":
             tmpfile = tempfile.TemporaryDirectory()
             self.tempfilestore[command.variable] = tmpfile
             fullpath = tmpfile.name

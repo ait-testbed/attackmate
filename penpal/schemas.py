@@ -49,8 +49,8 @@ class ShellCommand(BaseCommand):
 
 class TempfileCommand(BaseCommand):
     type: Literal['mktemp']
+    cmd: Literal['file', 'dir'] = 'file'
     variable: str
-    isdir: bool = False
 
 
 class DebugCommand(BaseCommand):
