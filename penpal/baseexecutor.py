@@ -91,8 +91,17 @@ class BaseExecutor:
         """
         template_cmd = copy.deepcopy(command)
         for member in command.list_template_vars():
-            replaced_str = self.varstore.substitute(getattr(command, member))
-            setattr(template_cmd, member, replaced_str)
+            cmd_member = getattr(command, member)
+            if isinstance(cmd_member, str):
+                replaced_str = self.varstore.substitute(cmd_member)
+                setattr(template_cmd, member, replaced_str)
+            if isinstance(cmd_member, dict):
+                # copy the dict to avoid referencing the original dict
+                new_cmd_member = copy.deepcopy(cmd_member)
+                for k, v in new_cmd_member.items():
+                    if isinstance(v, str):
+                        new_cmd_member[k] = self.varstore.substitute(v)
+                setattr(template_cmd, member, new_cmd_member)
         return template_cmd
 
     def run(self, command: BaseCommand):
