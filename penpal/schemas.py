@@ -47,6 +47,12 @@ class ShellCommand(BaseCommand):
     type: Literal['shell']
 
 
+class TempfileCommand(BaseCommand):
+    type: Literal['mktemp']
+    variable: str
+    isdir: bool = False
+
+
 class DebugCommand(BaseCommand):
     type: Literal['debug']
     varstore: bool = False
@@ -264,6 +270,7 @@ class Playbook(BaseModel):
                          SSHCommand,
                          DebugCommand,
                          RegExCommand,
+                         TempfileCommand,
                          SliverSessionCDCommand,
                          SliverSessionLSCommand,
                          SliverSessionNETSTATCommand,

@@ -17,6 +17,7 @@ from .msfsessionexecutor import MsfSessionExecutor
 from .msfsessionstore import MsfSessionStore
 from .sliverexecutor import SliverExecutor
 from .sliversessionexecutor import SliverSessionExecutor
+from .tempfileexecutor import TempfileExecutor
 from .debugexecutor import DebugExecutor
 from .regexexecutor import RegExExecutor
 from .schemas import Config, Playbook
@@ -72,6 +73,7 @@ class PenPal:
                 msfconfig=self.pyconfig.msf_config,
                 msfsessionstore=self.msfsessionstore)
         self.debugger = DebugExecutor(self.varstore, self.pyconfig.cmd_config)
+        self.mktemp = TempfileExecutor(self.varstore, self.pyconfig.cmd_config)
         self.regex = RegExExecutor(self.varstore, self.pyconfig.cmd_config)
         self.sliver = SliverExecutor(self.pyconfig.cmd_config,
                                      varstore=self.varstore,
@@ -106,3 +108,5 @@ class PenPal:
                 self.sliver.run(command)
             if command.type == "sliver-session":
                 self.sliversession.run(command)
+            if command.type == "mktemp":
+                self.mktemp.run(command)
