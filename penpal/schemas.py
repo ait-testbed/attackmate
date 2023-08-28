@@ -66,8 +66,7 @@ class RegExCommand(BaseCommand):
     output: dict[str, str]
 
 
-class SSHCommand(BaseCommand):
-    type: Literal['ssh', 'sftp']
+class SSHBase(BaseCommand):
     hostname: Optional[str]
     port: Optional[int]
     username: Optional[str]
@@ -83,7 +82,12 @@ class SSHCommand(BaseCommand):
     jmp_username: Optional[str]
 
 
-class SFTPCommand(SSHCommand):
+class SSHCommand(SSHBase):
+    type: Literal['ssh']
+
+
+class SFTPCommand(SSHBase):
+    type: Literal['sftp']
     cmd: Literal['get', 'put']
     remote_path: str
     local_path: str
@@ -274,6 +278,7 @@ class Playbook(BaseModel):
                          MsfSessionCommand,
                          SleepCommand,
                          SSHCommand,
+                         SFTPCommand,
                          DebugCommand,
                          RegExCommand,
                          TempfileCommand,

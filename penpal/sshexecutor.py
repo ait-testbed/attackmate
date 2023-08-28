@@ -132,7 +132,7 @@ class SSHExecutor(BaseExecutor):
 
         try:
             client = self.connect_use_session(command)
-            if isinstance(command, SFTPCommand):
+            if command.type == "sftp" and isinstance(command, SFTPCommand):
                 ret = self.exec_sftp(client, command)
                 return Result(ret, 0)
             else:
