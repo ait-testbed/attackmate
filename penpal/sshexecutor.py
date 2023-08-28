@@ -11,7 +11,7 @@ from paramiko.ssh_exception import (BadHostKeyException,
                                     AuthenticationException,
                                     SSHException)
 from .baseexecutor import BaseExecutor, ExecException, Result
-from .schemas import SSHCommand
+from .schemas import SFTPCommand, SSHCommand
 from .variablestore import VariableStore
 
 
@@ -84,7 +84,7 @@ class SSHExecutor(BaseExecutor):
             raise ExecException(f"Could not get transport of SSH-Jumphost {self.jmp_hostname}")
         return sock
 
-    def connect_use_session(self, command: SSHCommand):
+    def connect_use_session(self, command: SSHCommand) -> SSHClient:
         if command.session is not None:
             if command.session not in self.session_store:
                 raise ExecException(f"SSH-Session not in Session-Store: {command.session}")
@@ -114,6 +114,16 @@ class SSHExecutor(BaseExecutor):
             self.session_store[command.creates_session] = client
         return client
 
+    def exec_sftp(self, client: SSHClient, command: SFTPCommand) -> str:
+        output = ""
+        if command.cmd == "put":
+            client.open_sftp().put(command.local_path, command.remote_path)
+            output = f"Uploaded to {command.remote_path}"
+        elif command.cmd == "get":
+            client.open_sftp().get(command.remote_path, command.local_path)
+            output = f"Downloaded from {command.remote_path}"
+        return output
+
     def _exec_cmd(self, command: SSHCommand) -> Result:
         if command.clear_cache:
             self.set_defaults()
@@ -122,7 +132,11 @@ class SSHExecutor(BaseExecutor):
 
         try:
             client = self.connect_use_session(command)
-            stdin, stdout, stderr = client.exec_command(command.cmd)
+            if isinstance(command, SFTPCommand):
+                ret = self.exec_sftp(client, command)
+                return Result(ret, 0)
+            else:
+                stdin, stdout, stderr = client.exec_command(command.cmd)
         except ValueError as e:
             raise ExecException(e)
         except BadHostKeyException as e:

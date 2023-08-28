@@ -98,7 +98,7 @@ class PenPal:
                 self.msfmodule.run(command)
             if command.type == "msf-session":
                 self.msfsession.run(command)
-            if command.type == "ssh":
+            if command.type in ["ssh", "sftp"]:
                 self.ssh.run(command)
             if command.type == "debug":
                 self.debugger.run(command)

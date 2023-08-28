@@ -67,7 +67,7 @@ class RegExCommand(BaseCommand):
 
 
 class SSHCommand(BaseCommand):
-    type: Literal['ssh']
+    type: Literal['ssh', 'sftp']
     hostname: Optional[str]
     port: Optional[int]
     username: Optional[str]
@@ -81,6 +81,12 @@ class SSHCommand(BaseCommand):
     jmp_hostname: Optional[str]
     jmp_port: Optional[int]
     jmp_username: Optional[str]
+
+
+class SFTPCommand(SSHCommand):
+    cmd: Literal['get', 'put']
+    remote_path: str
+    local_path: str
 
 
 class MsfSessionCommand(BaseCommand):
