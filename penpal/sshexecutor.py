@@ -5,6 +5,7 @@ This class enables executing commands via
 ssh.
 """
 
+import os
 from paramiko.client import SSHClient
 from paramiko import AutoAddPolicy
 from paramiko.ssh_exception import (BadHostKeyException,
@@ -119,9 +120,13 @@ class SSHExecutor(BaseExecutor):
         if command.cmd == "put":
             client.open_sftp().put(command.local_path, command.remote_path)
             output = f"Uploaded to {command.remote_path}"
+            if command.mode:
+                client.open_sftp().chmod(command.remote_path, int(command.mode, 8))
         elif command.cmd == "get":
             client.open_sftp().get(command.remote_path, command.local_path)
             output = f"Downloaded from {command.remote_path}"
+            if command.mode:
+                os.chmod(command.local_path, int(command.mode, 8))
         return output
 
     def _exec_cmd(self, command: SSHCommand) -> Result:

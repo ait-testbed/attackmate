@@ -91,6 +91,7 @@ class SFTPCommand(SSHBase):
     cmd: Literal['get', 'put']
     remote_path: str
     local_path: str
+    mode: Optional[str]
 
 
 class MsfSessionCommand(BaseCommand):
