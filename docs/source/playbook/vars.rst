@@ -1,6 +1,6 @@
-====
-vars
-====
+=========
+variables
+=========
 
 Variables can be defined in the key/value-format. The variables
 can be used in certain configuration places and are just placeholders
