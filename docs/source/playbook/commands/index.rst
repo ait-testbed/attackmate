@@ -63,9 +63,11 @@ Every command, regardless of the type has the following options:
    shell
    sleep
    ssh
+   sftp
    msf-module
    msf-session
    regex
    debug
+   mktemp
    sliver
    sliver-session

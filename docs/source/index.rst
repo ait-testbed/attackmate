@@ -21,7 +21,13 @@ Welcome to PenPal's documentation!
    configuration/command_config
    configuration/msf_config
    configuration/sliver_config
-   configuration/commands/index
+
+.. toctree::
+   :maxdepth: 4
+   :caption: Playbook:
+
+   playbook/vars
+   playbook/commands/index
 
 .. toctree::
    :maxdepth: 1
