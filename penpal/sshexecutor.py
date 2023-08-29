@@ -6,6 +6,9 @@ ssh.
 """
 
 import os
+from datetime import datetime
+from typing import Optional
+from paramiko.channel import Channel
 from paramiko.client import SSHClient
 from paramiko import AutoAddPolicy
 from paramiko.ssh_exception import (BadHostKeyException,
@@ -18,8 +21,9 @@ from .variablestore import VariableStore
 
 class SSHExecutor(BaseExecutor):
     def __init__(self, cmdconfig=None, *, varstore: VariableStore):
-        self.session_store: dict[str, SSHClient] = {}
+        self.session_store = self.SessionStore()
         self.set_defaults()
+        self.timer = None
         super().__init__(varstore, cmdconfig)
 
     def set_defaults(self):
@@ -87,10 +91,10 @@ class SSHExecutor(BaseExecutor):
 
     def connect_use_session(self, command: SSHCommand) -> SSHClient:
         if command.session is not None:
-            if command.session not in self.session_store:
+            if not self.session_store.has_session(command.session):
                 raise ExecException(f"SSH-Session not in Session-Store: {command.session}")
             else:
-                return self.session_store[command.session]
+                return self.session_store.get_client_by_session(command.session)
 
         jmp_sock = None
         client = SSHClient()
@@ -112,7 +116,7 @@ class SSHExecutor(BaseExecutor):
         )
         client.connect(**kwargs)
         if command.creates_session is not None:
-            self.session_store[command.creates_session] = client
+            self.session_store.set_session(command.creates_session, client)
         return client
 
     def exec_sftp(self, client: SSHClient, command: SFTPCommand) -> str:
@@ -129,7 +133,54 @@ class SSHExecutor(BaseExecutor):
                 os.chmod(command.local_path, int(command.mode, 8))
         return output
 
+    def check_prompt(self, output: str, prompts: list[str], validate_prompt: bool = True) -> bool:
+        if output and validate_prompt:
+            for p in prompts:
+                if output.endswith(p):
+                    self.logger.debug("found prompt!")
+                    return True
+        return False
+
+    def check_timer(self, seconds: int) -> bool:
+        if not self.timer:
+            return False
+
+        delta = datetime.now() - self.timer
+        if delta.total_seconds() > seconds:
+            return False
+        else:
+            return True
+
+    def set_timer(self):
+        self.timer = datetime.now()
+
+    def exec_interactive_command(self, command: SSHCommand, client: SSHClient):
+        channel = None
+
+        if command.session and self.session_store.has_session(command.session):
+            channel = self.session_store.get_channel_by_session(command.session)
+
+        if not channel:
+            channel = client.invoke_shell()
+            if command.session:
+                self.session_store.set_existing_session(command.session, client, channel)
+            elif command.creates_session:
+                self.session_store.set_existing_session(command.creates_session, client, channel)
+
+        stdin = channel.makefile('wb')
+        stdout = channel.makefile('rb')
+        stderr = channel.makefile_stderr('rb')
+
+        if stdin.channel.send_ready():
+            stdin.write(str.encode(command.cmd))
+            stdin.flush()
+
+        return (None, stdout, stderr)
+
     def _exec_cmd(self, command: SSHCommand) -> Result:
+        error = None
+        output = ""
+
         if command.clear_cache:
             self.set_defaults()
 
@@ -141,7 +192,21 @@ class SSHExecutor(BaseExecutor):
                 ret = self.exec_sftp(client, command)
                 return Result(ret, 0)
             else:
-                stdin, stdout, stderr = client.exec_command(command.cmd)
+                if command.interactive:
+                    stdin, stdout, stderr = self.exec_interactive_command(command, client)
+                    self.set_timer()
+                    while self.check_timer(command.command_timeout):
+                        if stdout.channel.recv_ready():
+                            tmp = stdout.channel.recv(1025).decode()
+                            output += tmp
+                            if self.check_prompt(output, command.prompts, command.validate_prompt):
+                                self.timer = None
+                            else:
+                                self.set_timer()
+                else:
+                    stdin, stdout, stderr = client.exec_command(command.cmd)
+                    output = stdout.read().decode()
+                    error = stderr.read().decode()
         except ValueError as e:
             raise ExecException(e)
         except BadHostKeyException as e:
@@ -152,10 +217,44 @@ class SSHExecutor(BaseExecutor):
             raise ExecException(e)
         except SSHException as e:
             raise ExecException(e)
-        output = stdout.read().decode()
-        error = stderr.read().decode()
 
         if error:
             return Result(error, 1)
 
         return Result(output, 0)
+
+    class SessionStore:
+        def __init__(self):
+            self.store: dict[str, tuple[SSHClient, Optional[Channel]]] = {}
+
+        def has_session(self, session_name: str) -> bool:
+            if session_name in self.store:
+                return True
+            else:
+                return False
+
+        def get_client_by_session(self, session_name: str) -> SSHClient:
+            if session_name in self.store:
+                return self.store[session_name][0]
+            else:
+                raise KeyError("Session not found in Sessionstore")
+
+        def get_channel_by_session(self, session_name: str) -> Optional[Channel]:
+            if session_name in self.store:
+                return self.store[session_name][1]
+            else:
+                raise KeyError("Session not found in Sessionstore")
+
+        def get_session(self, session_name: str) -> tuple[SSHClient, Channel | None]:
+            if session_name in self.store:
+                return self.store[session_name]
+            else:
+                raise KeyError("Session not found in Sessionstore")
+
+        def set_session(self, session_name: str, client: SSHClient, channel: Optional[Channel] = None):
+            self.store[session_name] = (client, channel)
+
+        def set_existing_session(self, session_name: str,
+                                 client: SSHClient, channel: Optional[Channel] = None):
+            if self.has_session(session_name):
+                self.set_session(session_name, client, channel)
