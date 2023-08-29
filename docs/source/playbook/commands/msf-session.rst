@@ -23,6 +23,10 @@ have previously created by msf-modules(see :ref:`msf-module`).
 
    Execute a raw write-operation without reading the output.
 
+   .. note::
+
+      If read and write are both true, the programm will first write and then read.
+
    :type: bool
    :default: ``False``
 
