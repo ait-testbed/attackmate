@@ -145,6 +145,9 @@ class SSHExecutor(BaseExecutor):
         if not self.timer:
             return False
 
+        if seconds <= 0:
+            return True
+
         delta = datetime.now() - self.timer
         if delta.total_seconds() > seconds:
             return False
