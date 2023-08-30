@@ -64,7 +64,10 @@ class MsfModuleExecutor(BaseExecutor):
                 raise ExecException("Problems with the metasploit connection")
             self.logger.debug(exploit.description)
             for option, setting in command.options.items():
-                exploit[option] = setting
+                if setting.isnumeric():
+                    exploit[option] = int(setting)
+                else:
+                    exploit[option] = setting
             if command.session:
                 session_id = self.sessionstore.get_session_by_name(command.session, self.msf.sessions)
                 self.logger.debug(f"Using session-id: {session_id}")
