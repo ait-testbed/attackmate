@@ -84,6 +84,10 @@ class SSHBase(BaseCommand):
 
 class SSHCommand(SSHBase):
     type: Literal['ssh']
+    interactive: bool = False
+    validate_prompt: bool = True
+    command_timeout: int = 15
+    prompts: List[str] = ["$ ", "# ", "> "]
 
 
 class SFTPCommand(SSHBase):
