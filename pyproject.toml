@@ -26,6 +26,14 @@ penpal = "penpal.__main__:main"
 requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
 
-[tool.setuptools]
-py-modules = []
-packages = ["penpal"]
+# [tool.setuptools]
+# py-modules = []
+# packages = ["penpal"]
+# include-package-data = true
+
+[tool.setuptools.packages.find]
+namespaces = true
+where = ["src"]
+
+[tool.setuptools.package-data]
+"penpal.data" = ["*.tar.gz"]
