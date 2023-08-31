@@ -47,6 +47,22 @@ class ShellCommand(BaseCommand):
     type: Literal['shell']
 
 
+class FatherCommand(BaseCommand):
+    type: Literal['father']
+    cmd: Literal['generate']
+    gid: str = "1337"
+    srcport: str = "54321"
+    epochtime: str = "0000000000"
+    env_var: str = "lobster"
+    file_prefix: str = "lobster"
+    preload_file: str = "ld.so.preload"
+    hiddenport: str = "D431"
+    shell_pass: str = "lobster"
+    install_path: str = "/lib/selinux.so.3"
+    local_path: Optional[str]
+    arch: Literal['amd64'] = 'amd64'
+
+
 class TempfileCommand(BaseCommand):
     type: Literal['mktemp']
     cmd: Literal['file', 'dir'] = 'file'
@@ -283,6 +299,7 @@ class Playbook(BaseModel):
                          MsfSessionCommand,
                          SleepCommand,
                          SSHCommand,
+                         FatherCommand,
                          SFTPCommand,
                          DebugCommand,
                          RegExCommand,
