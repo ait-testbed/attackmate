@@ -83,6 +83,8 @@ class FatherExecutor(BaseExecutor):
                 output = "Error: Father requires libgcrypt!"
             if "nasm: No such file or directory" in result.stdout.decode("utf-8", "ignore"):
                 output = "Error: Father requires nasm!"
+            if "gcc: No such file or directory" in result.stdout.decode("utf-8", "ignore"):
+                output = "Error: Father requires gcc!"
         else:
             output = "Saved to " + os.path.join(father_path, "Father", "rk.so")
             self.varstore.set_variable("LAST_FATHER_PATH", os.path.join(father_path, "Father", "rk.so"))
