@@ -122,3 +122,78 @@ Execute commands on a remote server via SSH.
 
    :type: str
    :default: ``same as username``
+
+.. confval:: interactive
+
+   When the ssh-command is executed, the command will block until the ssh-execution finishes.
+   However, for some exploits it is necessary to run a command and send keystrokes to an
+   interactive session. For example run with the first command "vim" and with the second command
+   send keystrokes to the open vim-session. In interactive-mode the command will try reading the
+   output until no output is written for a certain amount of seconds. If the output ends with any
+   string found in ``prompts``, it will stop immediately.
+
+   .. warning::
+
+      Please note that you **MUST** send a newline when you execute a ssh-command interactively.
+
+   :type: bool
+   :default: ``False``
+
+   .. code-block:: yaml
+
+      vars:
+        $SERVER_ADDRESS: 192.42.0.254
+        $SSH_SERVER: 10.10.10.19
+
+      commands:
+        # creates new ssh-connection and session
+        - type: ssh
+          cmd: "nmap --interactive\n"
+          interactive: True
+          hostname: 10.10.10.19
+          username: aecid
+          key_filename: "/home/alice/.ssh/id_rsa"
+          creates_session: "attacker"
+
+        # break out of the nmap-interactive-mode
+        - type: ssh
+          cmd: "!sh\n"
+          interactive: True
+          session: "attacker"
+
+.. confval:: command_timeout
+
+   The interactive-mode works with timeouts while reading the output. If there is no output for some seconds,
+   the command will stop reading.
+
+   :type: int
+   :default: ``15``
+
+.. confval:: prompts
+
+   In interactive-mode the command will try reading the output for a certain amount of seconds. If the output
+   ends with any string found in ``prompts``, the command will stop immediately.
+
+   :type: list[str]
+   :default: ``["$ ", "# ", "> "]``
+
+   .. code-block:: yaml
+
+      vars:
+        $SERVER_ADDRESS: 192.42.0.254
+        $SSH_SERVER: 10.10.10.19
+
+      commands:
+        # creates new ssh-connection and session
+        - type: ssh
+          cmd: "nmap --interactive\n"
+          interactive: True
+          prompts:
+            - "$ "
+            - "# "
+            - "> "
+            - "% "
+          hostname: 10.10.10.19
+          username: aecid
+          key_filename: "/home/alice/.ssh/id_rsa"
+          creates_session: "attacker"
