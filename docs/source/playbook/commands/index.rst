@@ -71,3 +71,4 @@ Every command, regardless of the type has the following options:
    mktemp
    sliver
    sliver-session
+   father
