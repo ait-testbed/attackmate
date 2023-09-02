@@ -200,7 +200,7 @@ class SSHExecutor(BaseExecutor):
                     self.set_timer()
                     while self.check_timer(command.command_timeout):
                         if stdout.channel.recv_ready():
-                            tmp = stdout.channel.recv(1025).decode()
+                            tmp = stdout.channel.recv(1025).decode("utf-8", "ignore")
                             output += tmp
                             if self.check_prompt(output, command.prompts, command.validate_prompt):
                                 self.timer = None
@@ -208,8 +208,8 @@ class SSHExecutor(BaseExecutor):
                                 self.set_timer()
                 else:
                     stdin, stdout, stderr = client.exec_command(command.cmd)
-                    output = stdout.read().decode()
-                    error = stderr.read().decode()
+                    output = stdout.read().decode("utf-8", "ignore")
+                    error = stderr.read().decode("utf-8", "ignore")
         except ValueError as e:
             raise ExecException(e)
         except BadHostKeyException as e:

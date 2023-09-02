@@ -16,6 +16,7 @@ from .msfexecutor import MsfModuleExecutor
 from .msfsessionexecutor import MsfSessionExecutor
 from .msfsessionstore import MsfSessionStore
 from .sliverexecutor import SliverExecutor
+from .fatherexecutor import FatherExecutor
 from .sliversessionexecutor import SliverSessionExecutor
 from .tempfileexecutor import TempfileExecutor
 from .debugexecutor import DebugExecutor
@@ -63,6 +64,7 @@ class PenPal:
                                    varstore=self.varstore)
         self.ssh = SSHExecutor(self.pyconfig.cmd_config,
                                varstore=self.varstore)
+        self.father = FatherExecutor(self.varstore, self.pyconfig.cmd_config)
         self.msfmodule = MsfModuleExecutor(self.pyconfig.cmd_config,
                                            varstore=self.varstore,
                                            msfconfig=self.pyconfig.msf_config,
@@ -92,6 +94,8 @@ class PenPal:
         for command in self.playbook.commands:
             if command.type == "shell":
                 self.se.run(command)
+            if command.type == "father":
+                self.father.run(command)
             if command.type == "sleep":
                 self.sleep.run(command)
             if command.type == "msf-module":
