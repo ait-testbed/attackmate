@@ -20,4 +20,4 @@ class ShellExecutor(BaseExecutor):
                                 shell=True,
                                 stdout=subprocess.PIPE,
                                 stderr=subprocess.STDOUT)
-        return Result(result.stdout.decode(), result.returncode)
+        return Result(result.stdout.decode("utf-8", "ignore"), result.returncode)
