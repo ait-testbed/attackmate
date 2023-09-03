@@ -132,7 +132,7 @@ def parse_playbook(playbook_file: str, logger: logging.Logger) -> Playbook:
 
 def parse_args():
     description = 'AttackMate is an attack orchestration tool' \
-                  'that executes full attack-chains based on playbooks.'
+                  ' to execute full attack-chains based on playbooks.'
     parser = argparse.ArgumentParser(
             prog='attackmate',
             description=description,
