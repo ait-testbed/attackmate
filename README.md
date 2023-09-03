@@ -20,7 +20,7 @@ Manually:
 ```
 $ git clone https://github.com/ait-aecid/attackmate.git
 $ cd attackmate
-$ pip3 install -e .
+$ pip3 install .
 ```
 
 Using pip:
@@ -32,7 +32,7 @@ $ pip3 install attackmate
 ## Execute
 
 ```
-$ attackmate --config playbook.yml
+$ attackmate playbook.yml
 ```
 
 ## Documentation
