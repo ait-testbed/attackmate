@@ -1,7 +1,7 @@
-penpal
+attackmate
 ======
 
 .. toctree::
    :maxdepth: 4
 
-   penpal
+   attackmate

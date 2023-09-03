@@ -10,7 +10,7 @@ import os
 import sys
 sys.path.insert(0, os.path.abspath('../..'))
 
-project = 'PenPal'
+project = 'AttackMate'
 copyright = '2023, Wolfgang Hotwagner'
 author = 'Wolfgang Hotwagner'
 release = '0.1.0'
@@ -32,5 +32,5 @@ html_static_path = ['_static']
 html_theme_options = {
     'logo_only': False,
     'navigation_depth': 2,
-    'collapse_navigation': False,
+    'collapse_navigation': True,
 }

@@ -1,9 +1,9 @@
 [project]
-name = "penpal"
+name = "attackmate"
 authors = [
     {name = "Wolfgang Hotwagner", email = "wolfgang.hotwagner@ait.ac.at"},
 ]
-description = "PenPal is an attack orchestration tool that executes full attack-chains based on playbooks."
+description = "AttackMate is an attack orchestration tool that executes full attack-chains based on playbooks."
 readme = "README.md"
 requires-python = ">=3.7"
 keywords = ["Pentest", "Attack", "Orchestration", "Hacking", "Simulating", "Attackchain"]
@@ -13,17 +13,27 @@ dependencies = [
     "colorlog",
     "pymetasploit3",
     "pyaml",
-    "paramiko"
+    "paramiko",
+    "sliver-py",
+    "tabulate"
 ]
 dynamic = ["version"]
 
 [project.scripts]
-penpal = "penpal.__main__:main"
+attackmate = "attackmate.__main__:main"
 
 [build-system]
 requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
 
-[tool.setuptools]
-py-modules = []
-packages = ["penpal"]
+# [tool.setuptools]
+# py-modules = []
+# packages = ["attackmate"]
+# include-package-data = true
+
+[tool.setuptools.packages.find]
+namespaces = true
+where = ["src"]
+
+[tool.setuptools.package-data]
+"attackmate.data" = ["*.tar.gz"]

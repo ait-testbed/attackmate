@@ -91,14 +91,23 @@ class BaseExecutor:
         """
         template_cmd = copy.deepcopy(command)
         for member in command.list_template_vars():
-            replaced_str = self.varstore.substitute(getattr(command, member))
-            setattr(template_cmd, member, replaced_str)
+            cmd_member = getattr(command, member)
+            if isinstance(cmd_member, str):
+                replaced_str = self.varstore.substitute(cmd_member)
+                setattr(template_cmd, member, replaced_str)
+            if isinstance(cmd_member, dict):
+                # copy the dict to avoid referencing the original dict
+                new_cmd_member = copy.deepcopy(cmd_member)
+                for k, v in new_cmd_member.items():
+                    if isinstance(v, str):
+                        new_cmd_member[k] = self.varstore.substitute(v)
+                setattr(template_cmd, member, new_cmd_member)
         return template_cmd
 
     def run(self, command: BaseCommand):
         """ Execute the command
 
-        This method is executed by PenPal and
+        This method is executed by AttackMate and
         executes the given command. This method sets the
         run_count to 1 and runs the method exec(). Please note
         that this function will exchange all variables of the BaseCommand
@@ -120,6 +129,18 @@ class BaseExecutor:
         """
         self.logger.info(f"Executing '{command}'")
 
+    def save_output(self, command: BaseCommand, result: Result):
+        """ Save output of command to a file. This method will
+            ignore all exceptions and won't stop the programm
+            on error.
+        """
+        if command.save:
+            try:
+                with open(command.save, "w") as outfile:
+                    outfile.write(result.stdout)
+            except Exception as e:
+                self.logger.warn(f"Unable to write output to file {command.save}: {e}")
+
     def exec(self, command: BaseCommand):
         try:
             self.log_command(command)
@@ -133,6 +154,7 @@ class BaseExecutor:
         self.varstore.set_variable("RESULT_STDOUT", result.stdout)
         self.varstore.set_variable("RESULT_RETURNCODE", str(result.returncode))
         self.output.info(f"Command: {command.cmd}\n{result.stdout}")
+        self.save_output(command, result)
         self.error_if(command, result)
         self.error_if_not(command, result)
         self.loop_if(command, result)
