@@ -4,7 +4,7 @@ AttackMate is an attack orchestration tool that executes full attack-chains base
 
 ![AttackMate Schema](images/attackmate-schema.png "AttackMate Schema")
 
-# Requirements
+## Requirements
 
 AttackMate can use Metasploit-Module. For this feature it is
 required to start the Metasploit-RPC-Daemon:
@@ -13,7 +13,7 @@ required to start the Metasploit-RPC-Daemon:
 msfrpcd -P securepassword
 ```
 
-# Installation
+## Installation
 
 Manually:
 
@@ -29,13 +29,13 @@ Using pip:
 $ pip3 install attackmate
 ```
 
-# Execute
+## Execute
 
 ```
 $ attackmate --config playbook.yml
 ```
 
-# Documentation
+## Documentation
 
 Please take a look at our documentation for how to install and use attackmate:
 
@@ -43,9 +43,16 @@ Please take a look at our documentation for how to install and use attackmate:
 * [Configuration](https://aeciddocs.ait.ac.at/attackmate/current/configuration/configuration.html)
 * [Documentation](https://aeciddocs.ait.ac.at/attackmate)
 
+## Disclaimer
+
+AttackMate is for research and training purposes only. Please respect our philosophy and
+do not damage any computer systems.
+
 ## Security
 
-If you discover any security-related issues read the [SECURITY.md](/SECURITY.md) first and report the issues.
+AttackMate should only be executed against own test or training systems.
+For this reason, every software bug is treated equally, regardless of
+whether it is security relevant or not.
 
 ## License
 
