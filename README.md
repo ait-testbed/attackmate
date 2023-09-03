@@ -1,12 +1,12 @@
-# PenPal
+# AttackMate
 
-PenPal is an attack orchestration tool that executes full attack-chains based on playbooks.
+AttackMate is an attack orchestration tool that executes full attack-chains based on playbooks.
 
-![PenPal Schema](images/penpal-schema.png "PenPal Schema")
+![AttackMate Schema](images/attackmate-schema.png "AttackMate Schema")
 
 # Requirements
 
-PenPal can use Metasploit-Module. For this feature it is
+AttackMate can use Metasploit-Module. For this feature it is
 required to start the Metasploit-RPC-Daemon:
 
 ```
@@ -18,30 +18,30 @@ msfrpcd -P securepassword
 Manually:
 
 ```
-$ git clone https://github.com/ait-aecid/penpal.git
-$ cd penpal
+$ git clone https://github.com/ait-aecid/attackmate.git
+$ cd attackmate
 $ pip3 install -e .
 ```
 
 Using pip:
 
 ```
-$ pip3 install penpal
+$ pip3 install attackmate
 ```
 
 # Execute
 
 ```
-$ penpal --config playbook.yml
+$ attackmate --config playbook.yml
 ```
 
 # Documentation
 
-Please take a look at our documentation for how to install and use penpal:
+Please take a look at our documentation for how to install and use attackmate:
 
-* [Installation](https://aeciddocs.ait.ac.at/penpal/current/readme_link.html#)
-* [Configuration](https://aeciddocs.ait.ac.at/penpal/current/configuration/configuration.html)
-* [Documentation](https://aeciddocs.ait.ac.at/penpal)
+* [Installation](https://aeciddocs.ait.ac.at/attackmate/current/readme_link.html#)
+* [Configuration](https://aeciddocs.ait.ac.at/attackmate/current/configuration/configuration.html)
+* [Documentation](https://aeciddocs.ait.ac.at/attackmate)
 
 ## Security
 

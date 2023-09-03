@@ -24,6 +24,6 @@ In addition, please include the following information along with your report:
 Once an issue is reported we use the following disclosure process:
 
 * When a report is received, we confirm the issue and determine its severity.
-* If we know of specific third-party services or software based on PenPal that require mitigation before publication, those projects will be notified.
+* If we know of specific third-party services or software based on AttackMate that require mitigation before publication, those projects will be notified.
 * Fixes are prepared for the last minor release of the latest major release.
 * Patch releases are published for all fixed released versions.

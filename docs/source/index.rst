@@ -1,9 +1,9 @@
-.. PenPal documentation master file, created by
+.. AttackMate documentation master file, created by
    sphinx-quickstart on Thu May  4 12:55:27 2023.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to PenPal's documentation!
+Welcome to AttackMate's documentation!
 ==================================
 
 .. toctree::
@@ -20,14 +20,20 @@ Welcome to PenPal's documentation!
    configuration/config_vars
    configuration/command_config
    configuration/msf_config
-   configuration/commands
+   configuration/sliver_config
 
+.. toctree::
+   :maxdepth: 4
+   :caption: Playbook:
+
+   playbook/vars
+   playbook/commands/index
 
 .. toctree::
    :maxdepth: 1
    :caption: Development:
 
-   penpal/penpal
+   attackmate/attackmate
 
 Indices and tables
 ==================

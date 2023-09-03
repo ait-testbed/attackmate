@@ -1,7 +1,7 @@
 import time
 import logging
 from typing import Dict
-from penpal.variablestore import VariableStore
+from attackmate.variablestore import VariableStore
 from .baseexecutor import ExecException
 
 
@@ -13,7 +13,6 @@ class MsfSessionStore:
 
     def add_session(self, name: str, uuid: str) -> None:
         self.sessions[name] = uuid
-        self.varstore.set_variable("LAST_MSF_SESSION", uuid)
 
     def get_session_by_name(self, name: str, msfsessions) -> str:
         for k, v in msfsessions.list.items():
@@ -27,9 +26,10 @@ class MsfSessionStore:
         self.logger.debug(f"Sessions: {msfsessions.list}")
         while True:
             if len(list(msfsessions.list.keys())) > 0:
-                for v in msfsessions.list.values():
+                for k, v in msfsessions.list.items():
                     if v['exploit_uuid'] == uuid:
                         self.add_session(name, uuid)
+                        self.varstore.set_variable("LAST_MSF_SESSION", k)
                         self.logger.debug(f"Waiting {seconds} seconds for session to get ready")
                         time.sleep(seconds)
                         return

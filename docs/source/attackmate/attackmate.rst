@@ -1,69 +1,69 @@
-penpal package
+attackmate package
 ==============
 
 Submodules
 ----------
 
-penpal.baseexecutor module
+attackmate.baseexecutor module
 --------------------------
 
-.. automodule:: penpal.baseexecutor
+.. automodule:: attackmate.baseexecutor
    :members:
    :undoc-members:
    :show-inheritance:
 
-penpal.metadata module
+attackmate.metadata module
 ----------------------
 
-.. automodule:: penpal.metadata
+.. automodule:: attackmate.metadata
    :members:
    :undoc-members:
    :show-inheritance:
 
-penpal.msfexecutor module
+attackmate.msfexecutor module
 -------------------------
 
-.. automodule:: penpal.msfexecutor
+.. automodule:: attackmate.msfexecutor
    :members:
    :undoc-members:
    :show-inheritance:
 
-penpal.penpal module
+attackmate.attackmate module
 --------------------
 
-.. automodule:: penpal.penpal
+.. automodule:: attackmate.attackmate
    :members:
    :undoc-members:
    :show-inheritance:
 
-penpal.schemas module
+attackmate.schemas module
 ---------------------
 
-.. automodule:: penpal.schemas
+.. automodule:: attackmate.schemas
    :members:
    :undoc-members:
    :show-inheritance:
 
-penpal.shellexecutor module
+attackmate.shellexecutor module
 ---------------------------
 
-.. automodule:: penpal.shellexecutor
+.. automodule:: attackmate.shellexecutor
    :members:
    :undoc-members:
    :show-inheritance:
 
-penpal.sleepexecutor module
+attackmate.sleepexecutor module
 ---------------------------
 
-.. automodule:: penpal.sleepexecutor
+.. automodule:: attackmate.sleepexecutor
    :members:
    :undoc-members:
    :show-inheritance:
 
-penpal.varparse module
+attackmate.varparse module
 ----------------------
 
-.. automodule:: penpal.varparse
+.. automodule:: attackmate.varparse
    :members:
    :undoc-members:
    :show-inheritance:
@@ -71,7 +71,7 @@ penpal.varparse module
 Module contents
 ---------------
 
-.. automodule:: penpal
+.. automodule:: attackmate
    :members:
    :undoc-members:
    :show-inheritance:
