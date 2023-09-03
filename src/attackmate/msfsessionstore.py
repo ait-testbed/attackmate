@@ -1,7 +1,7 @@
 import time
 import logging
 from typing import Dict
-from penpal.variablestore import VariableStore
+from attackmate.variablestore import VariableStore
 from .baseexecutor import ExecException
 
 

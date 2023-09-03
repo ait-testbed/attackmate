@@ -1,6 +1,6 @@
 import atexit
 
-from penpal.variablestore import VariableStore
+from attackmate.variablestore import VariableStore
 from .baseexecutor import BaseExecutor, Result, ExecException
 from pymetasploit3.msfrpc import MsfRpcClient, MsfAuthError
 from .schemas import MsfSessionCommand, BaseCommand

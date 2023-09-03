@@ -107,7 +107,7 @@ class BaseExecutor:
     def run(self, command: BaseCommand):
         """ Execute the command
 
-        This method is executed by PenPal and
+        This method is executed by AttackMate and
         executes the given command. This method sets the
         run_count to 1 and runs the method exec(). Please note
         that this function will exchange all variables of the BaseCommand

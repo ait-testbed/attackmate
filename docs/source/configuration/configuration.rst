@@ -4,14 +4,14 @@
 Overview
 ========
 
-PenPal ships with a executable stub called "penpal" that can be called like follows:
+AttackMate ships with a executable stub called "attackmate" that can be called like follows:
 
 .. code-block::
 
-   penpal -h
-   usage: penpal [-h] --config CONFIG [--debug] [--version]
+   attackmate -h
+   usage: attackmate [-h] --config CONFIG [--debug] [--version]
 
-   PenPal is an attack orchestration tool that executes full attack-chains based on playbooks.
+   AttackMate is an attack orchestration tool that executes full attack-chains based on playbooks.
 
    options:
      -h, --help       show this help message and exit

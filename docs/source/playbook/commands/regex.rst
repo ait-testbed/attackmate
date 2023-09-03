@@ -31,7 +31,7 @@ about regular expressions see `Python Regex  <https://docs.python.org/3/library/
 
    .. note::
 
-       A dump containing all matches will be printed if penpal runs in debug-mode.
+       A dump containing all matches will be printed if attackmate runs in debug-mode.
 
    :type: dict[str,str]
    :required: True

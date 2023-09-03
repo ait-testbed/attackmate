@@ -1,4 +1,4 @@
-"""PenPal reads a playbook and executes the attack
+"""AttackMate reads a playbook and executes the attack
 
 A playbook stored in a dictionary with a list of attacks. Attacks
 are executed by "Executors". There are many different
@@ -25,9 +25,9 @@ from .schemas import Config, Playbook
 from .variablestore import VariableStore
 
 
-class PenPal:
+class AttackMate:
     def __init__(self, playbook: Playbook, config: Config) -> None:
-        """ Constructor for PenPal
+        """ Constructor for AttackMate
 
         This constructor initializes the logger('playbook'), the playbook,
         the variable-parser and all the executors.

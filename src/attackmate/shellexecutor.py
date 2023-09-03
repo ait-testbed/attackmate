@@ -2,7 +2,7 @@
 shellexecutor.py
 ============================================
 This class enables executing shell
-commands in PenPal.
+commands in AttackMate.
 """
 
 import subprocess
