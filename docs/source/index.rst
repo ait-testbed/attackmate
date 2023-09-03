@@ -26,8 +26,10 @@ Welcome to AttackMate's documentation!
    :maxdepth: 4
    :caption: Playbook:
 
+   playbook/structure
    playbook/vars
    playbook/commands/index
+   playbook/examples
 
 .. toctree::
    :maxdepth: 1
