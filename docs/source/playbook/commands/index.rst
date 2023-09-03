@@ -22,7 +22,7 @@ Every command, regardless of the type has the following options:
 
 .. confval:: exit_on_error
 
-   If this option is true, penpal will stop the run if the command returns with a return code
+   If this option is true, attackmate will stop the run if the command returns with a return code
    that is not zero.
 
    :type: bool

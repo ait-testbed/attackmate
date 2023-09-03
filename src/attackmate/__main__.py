@@ -2,7 +2,7 @@
 """
 __main__.py
 =====================================
-The main-file of PenPal
+The main-file of AttackMate
 """
 
 import os
@@ -12,7 +12,7 @@ import yaml
 import logging
 from typing import Optional
 from colorlog import ColoredFormatter
-from .penpal import PenPal
+from .attackmate import AttackMate
 from .schemas import Config, Playbook
 from .metadata import __version_string__
 
@@ -43,7 +43,7 @@ def initialize_logger(debug: bool):
     formatter = ColoredFormatter(LOGFORMAT, datefmt="%Y-%m-%d %H:%M:%S")
     console_handler.setFormatter(formatter)
     playbook_logger.addHandler(console_handler)
-    file_handler = logging.FileHandler("penpal.log", mode='w')
+    file_handler = logging.FileHandler("attackmate.log", mode='w')
     formatter = logging.Formatter(
             '%(asctime)s %(levelname)s - %(message)s',
             datefmt="%Y-%m-%d %H:%M:%S")
@@ -59,12 +59,12 @@ def load_configfile(config_file: str) -> Config:
 
 
 def parse_config(config_file: Optional[str], logger: logging.Logger) -> Config:
-    """ Config-Parser for PenPal
+    """ Config-Parser for AttackMate
 
     This parser reads the configfile and validates the settings.
     If config_file is None, this function will try to load the
-    config from ".penpal.yml", "$HOME/.config/penpal.yml" and
-    "/etc/penpal.yml"
+    config from ".attackmate.yml", "$HOME/.config/attackmate.yml" and
+    "/etc/attackmate.yml"
 
     Parameters
     ----------
@@ -74,13 +74,13 @@ def parse_config(config_file: Optional[str], logger: logging.Logger) -> Config:
     Returns
     -------
     Config
-        The parsed PenPal config object
+        The parsed AttackMate config object
 
     """
     default_cfg_path = [
-                        ".penpal.yml",
-                        os.environ['HOME'] + "/.config/penpal.yml",
-                        "/etc/penpal.yml"]
+                        ".attackmate.yml",
+                        os.environ['HOME'] + "/.config/attackmate.yml",
+                        "/etc/attackmate.yml"]
     try:
         if config_file is None:
             for file in default_cfg_path:
@@ -106,7 +106,7 @@ def parse_config(config_file: Optional[str], logger: logging.Logger) -> Config:
 
 
 def parse_playbook(playbook_file: str, logger: logging.Logger) -> Playbook:
-    """ Playbook-Parser for PenPal
+    """ Playbook-Parser for AttackMate
 
     This parser reads the playbook-file and validates the config-settings.
 
@@ -118,7 +118,7 @@ def parse_playbook(playbook_file: str, logger: logging.Logger) -> Playbook:
     Returns
     -------
     Playbook
-        The parsed PenPal playbook object
+        The parsed AttackMate playbook object
     """
     try:
         with open(playbook_file) as f:
@@ -131,10 +131,10 @@ def parse_playbook(playbook_file: str, logger: logging.Logger) -> Playbook:
 
 
 def parse_args():
-    description = 'PenPal is an attack orchestration tool' \
+    description = 'AttackMate is an attack orchestration tool' \
                   'that executes full attack-chains based on playbooks.'
     parser = argparse.ArgumentParser(
-            prog='penpal',
+            prog='attackmate',
             description=description,
             epilog=__version_string__)
     parser.add_argument(
@@ -159,7 +159,7 @@ def main():
     args = parse_args()
     logger = initialize_logger(args.debug)
     initialize_output_logger(args.debug)
-    hacky = PenPal(parse_playbook(args.playbook, logger), parse_config(args.config, logger))
+    hacky = AttackMate(parse_playbook(args.playbook, logger), parse_config(args.config, logger))
     sys.exit(hacky.main())
 
 

@@ -16,9 +16,9 @@ RUN apt-get update && apt install -y python3-dev libssl-dev git
 RUN python3 -m venv $VIRTUAL_ENV
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 
-ADD . /penpal
-RUN pip install /penpal
-WORKDIR /penpal
+ADD . /attackmate
+RUN pip install /attackmate
+WORKDIR /attackmate
 # Sliver-Workaround
 RUN git clone https://github.com/grpc/grpc \
     && cd grpc \
@@ -30,6 +30,6 @@ RUN git clone https://github.com/grpc/grpc \
     && pip install --no-input grpcio-tools \
     && GRPC_PYTHON_BUILD_SYSTEM_OPENSSL=True pip install --use-pep517 --no-input .
 
-RUN cd /penpal && rm -rf grpc
+RUN cd /attackmate && rm -rf grpc
 
-ENTRYPOINT ["/opt/venv/bin/penpal"]
+ENTRYPOINT ["/opt/venv/bin/attackmate"]

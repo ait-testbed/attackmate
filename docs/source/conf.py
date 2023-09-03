@@ -10,7 +10,7 @@ import os
 import sys
 sys.path.insert(0, os.path.abspath('../..'))
 
-project = 'PenPal'
+project = 'AttackMate'
 copyright = '2023, Wolfgang Hotwagner'
 author = 'Wolfgang Hotwagner'
 release = '0.1.0'

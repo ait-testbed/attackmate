@@ -1,6 +1,6 @@
 from pymetasploit3.msfrpc import MsfRpcClient, MsfAuthError
 
-from penpal.variablestore import VariableStore
+from attackmate.variablestore import VariableStore
 from .baseexecutor import BaseExecutor, Result, ExecException
 from .schemas import MsfModuleCommand, BaseCommand
 from .msfsessionstore import MsfSessionStore
