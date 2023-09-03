@@ -10,7 +10,7 @@ AttackMate can use Metasploit-Module. For this feature it is
 required to start the Metasploit-RPC-Daemon:
 
 ```
-msfrpcd -P securepassword
+$ msfrpcd -P securepassword
 ```
 
 ## Installation
