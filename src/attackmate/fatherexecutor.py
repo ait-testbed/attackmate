@@ -48,8 +48,10 @@ class FatherExecutor(BaseExecutor):
                          "INSTALL_PATH": command.install_path
                         }
         template = Template(config)
+        substi = template.safe_substitute(template_vars)
+        self.logger.debug(substi)
         with open(path, "w") as f:
-            f.write(template.safe_substitute(template_vars))
+            f.write(substi)
 
     def log_command(self, command: FatherCommand):
         self.logger.info("Generating Father-Binary")
