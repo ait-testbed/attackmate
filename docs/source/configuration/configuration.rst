@@ -19,7 +19,7 @@ AttackMate ships with a executable stub called "attackmate" that can be called l
      --debug          Enable verbose output
      --version        show program's version number and exit
 
-   (Austrian Institute of Technology) https://aecid.ait.ac.at Version: 0.1.0
+   (Austrian Institute of Technology) https://aecid.ait.ac.at Version: 0.2.0
 
 
 The configuration-file is in yaml-format:

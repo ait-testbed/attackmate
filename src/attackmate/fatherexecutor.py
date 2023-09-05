@@ -68,7 +68,7 @@ class FatherExecutor(BaseExecutor):
         tar = tarfile.open(data_path)
         tar.extractall(father_path)
         self.set_config(command, os.path.join(father_path, "Father", "src", "config.h"))
-        result = subprocess.run("make",
+        result = subprocess.run(command.build_command,
                                 shell=True,
                                 cwd=os.path.join(father_path, "Father"),
                                 stdout=subprocess.PIPE,
