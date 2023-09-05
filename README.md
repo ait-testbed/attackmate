@@ -45,8 +45,11 @@ Please take a look at our documentation for how to install and use attackmate:
 
 ## Disclaimer
 
-AttackMate is for research and training purposes only. Please respect our philosophy and
-do not damage any computer systems.
+AttackMate is purely for educational and academic purposes. The software is provided "as is"
+and the authors are not responsible for any damage or mishaps that may occur during its use.
+
+Do not attempt to use AttackMate to violate the law. Misuse of the provided software and
+information may result in criminal charges.
 
 ## Security
 

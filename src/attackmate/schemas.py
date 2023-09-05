@@ -60,7 +60,8 @@ class FatherCommand(BaseCommand):
     shell_pass: str = "lobster"
     install_path: str = "/lib/selinux.so.3"
     local_path: Optional[str]
-    arch: Literal['amd64'] = 'amd64'
+    arch: Literal["amd64"] = "amd64"
+    build_command: str = "make"
 
 
 class TempfileCommand(BaseCommand):
