@@ -185,13 +185,15 @@ class BaseExecutor:
                 self.logger.warn(
                         f"Re-run command because loop_if matches: {m.group(0)}"
                         )
-                if self.run_count < command.loop_count:
+                if self.run_count < self.variable_to_int("loop_count", command.loop_count):
                     self.run_count = self.run_count + 1
                     time.sleep(self.cmdconfig.loop_sleep)
                     self.exec(command)
                 else:
                     self.logger.error("Exitting because loop_count exceeded")
                     exit(1)
+            else:
+                self.logger.debug("loop_if does not match")
 
     def loop_if_not(self, command: BaseCommand, result: Result):
         if command.loop_if_not is not None:
@@ -200,13 +202,21 @@ class BaseExecutor:
                 self.logger.warn(
                         "Re-run command because loop_if_not does not match"
                         )
-                if self.run_count < command.loop_count:
+                if self.run_count < self.variable_to_int("loop_count", command.loop_count):
                     self.run_count = self.run_count + 1
                     time.sleep(self.cmdconfig.loop_sleep)
                     self.exec(command)
                 else:
                     self.logger.error("Exitting because loop_count exceeded")
                     exit(1)
+            else:
+                self.logger.debug("loop_if_not does not match")
+
+    def variable_to_int(self, variablename: str, value: str) -> int:
+        if value.isnumeric():
+            return int(value)
+        else:
+            raise ExecException(f"Variable {variablename} has not a numeric value: {value}")
 
     def _exec_cmd(self, command: Any) -> Result:
         return Result(None, None)

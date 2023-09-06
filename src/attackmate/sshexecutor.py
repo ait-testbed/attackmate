@@ -42,7 +42,7 @@ class SSHExecutor(BaseExecutor):
         if command.hostname:
             self.hostname = command.hostname
         if command.port:
-            self.port = command.port
+            self.port = self.variable_to_int("port", command.port)
         if command.username:
             self.username = command.username
         if command.password:
@@ -56,7 +56,7 @@ class SSHExecutor(BaseExecutor):
         if command.jmp_hostname:
             self.jmp_hostname = command.jmp_hostname
         if command.jmp_port:
-            self.jmp_port = command.jmp_port
+            self.jmp_port = self.variable_to_int("jmp_port", command.jmp_port)
         if command.jmp_username:
             self.jmp_username = command.jmp_username
 
@@ -198,7 +198,7 @@ class SSHExecutor(BaseExecutor):
                 if command.interactive:
                     stdin, stdout, stderr = self.exec_interactive_command(command, client)
                     self.set_timer()
-                    while self.check_timer(command.command_timeout):
+                    while self.check_timer(self.variable_to_int("timeout", command.command_timeout)):
                         if stdout.channel.recv_ready():
                             tmp = stdout.channel.recv(1025).decode("utf-8", "ignore")
                             output += tmp
