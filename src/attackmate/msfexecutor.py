@@ -79,7 +79,7 @@ class MsfModuleExecutor(BaseExecutor):
         if exploit.missing_required:
             raise ExecException(f"Missing required exploit options: {exploit.missing_required}")
 
-        exploit.target = command.target
+        exploit.target = self.variable_to_int("target", command.target)
         return exploit
 
     def _exec_cmd(self, command: MsfModuleCommand) -> Result:

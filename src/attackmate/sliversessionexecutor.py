@@ -146,7 +146,7 @@ class SliverSessionExecutor(BaseExecutor):
     async def process_dump(self, command: SliverSessionPROCDUMPCommand):
         session = await self.get_session_by_name(command.session)
         self.logger.debug(session)
-        dump = await session.process_dump(command.pid)
+        dump = await session.process_dump(self.variable_to_int("pid", command.pid))
         with open(command.local_path, "wb") as new_file:
             new_file.write(dump.Data)
 
@@ -203,7 +203,7 @@ class SliverSessionExecutor(BaseExecutor):
     async def terminate(self, command: SliverSessionTERMINATECommand):
         session = await self.get_session_by_name(command.session)
         self.logger.debug(session)
-        term = await session.terminate(command.pid, command.force)
+        term = await session.terminate(self.variable_to_int("pid", command.pid), command.force)
         self.logger.debug(term)
         self.result = Result(f"Terminated process {term.Pid}", 0)
 
