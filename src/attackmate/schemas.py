@@ -1,7 +1,9 @@
 from typing import List, Literal, Union, Optional, Dict
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 # https://stackoverflow.com/questions/71539448/using-different-pydantic-models-depending-on-the-value-of-fields
+
+VAR_PATTERN = r'^\$[$a-zA-Z0-9_]+$|^[0-9]+$'
 
 
 class BaseCommand(BaseModel):
@@ -29,7 +31,7 @@ class BaseCommand(BaseModel):
     error_if_not: Optional[str] = None
     loop_if: Optional[str] = None
     loop_if_not: Optional[str] = None
-    loop_count: int = 3
+    loop_count: str = Field(pattern=VAR_PATTERN, default="3")
     exit_on_error: bool = True
     save: Optional[str] = None
     cmd: str
@@ -37,8 +39,8 @@ class BaseCommand(BaseModel):
 
 class SleepCommand(BaseCommand):
     type: Literal['sleep']
-    min_sec: int = 0
-    seconds: int = 1
+    min_sec: str = Field(pattern=VAR_PATTERN, default="0")
+    seconds: str = Field(pattern=VAR_PATTERN, default="1")
     random: bool = False
     cmd: str = "sleep"
 
@@ -85,7 +87,7 @@ class RegExCommand(BaseCommand):
 
 class SSHBase(BaseCommand):
     hostname: Optional[str]
-    port: Optional[int]
+    port: Optional[str] = Field(pattern=VAR_PATTERN, default=None)
     username: Optional[str]
     password: Optional[str]
     passphrase: Optional[str]
@@ -95,7 +97,7 @@ class SSHBase(BaseCommand):
     clear_cache: bool = False
     timeout: float = 60
     jmp_hostname: Optional[str]
-    jmp_port: Optional[int]
+    jmp_port: Optional[str] = Field(pattern=VAR_PATTERN, default=None)
     jmp_username: Optional[str]
 
 
@@ -103,7 +105,7 @@ class SSHCommand(SSHBase):
     type: Literal['ssh']
     interactive: bool = False
     validate_prompt: bool = True
-    command_timeout: int = 15
+    command_timeout: str = Field(pattern=VAR_PATTERN, default="15")
     prompts: List[str] = ["$ ", "# ", "> "]
 
 
@@ -128,7 +130,7 @@ class MsfSessionCommand(BaseCommand):
 class MsfModuleCommand(BaseCommand):
     cmd: str
     type: Literal['msf-module']
-    target: int = 0
+    target: str = Field(pattern=VAR_PATTERN, default="0")
     creates_session: Optional[str]
     session: Optional[str]
     payload: Optional[str]
@@ -174,16 +176,16 @@ class SliverHttpsListenerCommand(BaseCommand):
     type: Literal['sliver']
     cmd: Literal['start_https_listener']
     host: str = "0.0.0.0"
-    port: int = 443
+    port: str = Field(pattern=VAR_PATTERN, default="443")
     domain: str = ""
     website: str = ""
     acme: bool = False
     persistent: bool = False
     enforce_otp: bool = True
     randomize_jarm: bool = True
-    long_poll_timeout: int = 1
-    long_poll_jitter: int = 2
-    timeout: int = 60
+    long_poll_timeout: str = Field(pattern=VAR_PATTERN, default="1")
+    long_poll_jitter: str = Field(pattern=VAR_PATTERN, default="2")
+    timeout: str = Field(pattern=VAR_PATTERN, default="60")
 
 
 class SliverGenerateCommand(BaseCommand):
@@ -270,7 +272,7 @@ class SliverSessionLSCommand(SliverSessionCommand):
 class SliverSessionPROCDUMPCommand(SliverSessionCommand):
     cmd: Literal['process_dump']
     local_path: str
-    pid: int
+    pid: str = Field(pattern=VAR_PATTERN)
 
 
 class SliverSessionRMCommand(SliverSessionCommand):
@@ -282,7 +284,7 @@ class SliverSessionRMCommand(SliverSessionCommand):
 
 class SliverSessionTERMINATECommand(SliverSessionCommand):
     cmd: Literal['terminate']
-    pid: int
+    pid: str = Field(pattern=VAR_PATTERN)
     force: bool = False
 
 

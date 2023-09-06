@@ -39,7 +39,7 @@ class SliverExecutor(BaseExecutor):
         if self.client is None:
             raise ExecException("SliverClient is not defined")
         listener = await self.client.start_https_listener(command.host,
-                                                          command.port,
+                                                          self.variable_to_int("port", command.port),
                                                           command.website,
                                                           command.domain,
                                                           b"",
@@ -48,9 +48,11 @@ class SliverExecutor(BaseExecutor):
                                                           command.persistent,
                                                           command.enforce_otp,
                                                           command.randomize_jarm,
-                                                          command.long_poll_timeout,
-                                                          command.long_poll_jitter,
-                                                          command.timeout)
+                                                          self.variable_to_int("long_poll_timeout",
+                                                                               command.long_poll_timeout),
+                                                          self.variable_to_int("long_poll_jitter",
+                                                                               command.long_poll_jitter),
+                                                          self.variable_to_int("timeout", command.timeout))
         self.result = Result(f"JobID: {listener.JobID}", 0)
 
     def prepare_implant_config(self, command: SliverGenerateCommand) -> client_pb2.ImplantConfig:
