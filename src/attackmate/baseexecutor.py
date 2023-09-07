@@ -2,6 +2,7 @@ import re
 import time
 import logging
 from .schemas import BaseCommand
+from .conditional import Conditional
 from .variablestore import VariableStore
 from typing import Any
 import copy
@@ -119,6 +120,13 @@ class BaseExecutor:
             The settings for the command to execute
 
         """
+        if command.only_if:
+            if not Conditional.test(self.varstore.substitute(command.only_if, True)):
+                if hasattr(command, "type"):
+                    self.logger.warn(f"Skipping {command.type}: {command.cmd}")
+                else:
+                    self.logger.warn(f"Skipping {command.cmd}")
+                return
         self.run_count = 1
         self.logger.debug(f"Template-Command: '{command.cmd}'")
         self.exec(self.replace_variables(command))
