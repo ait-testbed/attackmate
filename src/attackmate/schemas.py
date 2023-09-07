@@ -208,6 +208,7 @@ class SliverGenerateCommand(BaseCommand):
     name: str
     filepath: Optional[str]
     IsBeacon: bool = False
+    BeaconInterval: str = Field(pattern=VAR_PATTERN, default="120")
     RunAtLoad: bool = False
     Evasion: bool = False
 
