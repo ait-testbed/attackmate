@@ -27,6 +27,7 @@ class BaseCommand(BaseModel):
                 template_vars.append(k)
         return template_vars
 
+    only_if: Optional[str] = None
     error_if: Optional[str] = None
     error_if_not: Optional[str] = None
     loop_if: Optional[str] = None
