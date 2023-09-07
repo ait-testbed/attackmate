@@ -2,6 +2,17 @@ import ast
 from typing import Optional
 
 
+class ConditionalError(Exception):
+    """ Exception during evaluating Conditionals
+
+    This exception is raised if anything
+    goes wrong during the evaluation of
+    Conditionals.
+
+    """
+    pass
+
+
 class Conditional():
     """ Evaluates conditional statements
         Currently supported operations:
@@ -24,7 +35,7 @@ class Conditional():
         elif isinstance(name, ast.Constant):
             return int(name.value)
         else:
-            raise ValueError("part is neither a name nor constant")
+            raise ConditionalError("part is neither a name nor constant")
 
     @classmethod
     def validate_not(cls, expression: ast.UnaryOp) -> bool:
@@ -32,15 +43,15 @@ class Conditional():
             right = cls.compare_value(expression.operand)
             return not right
         else:
-            raise ValueError("Unknown expression operand in 'not'")
+            raise ConditionalError("Unknown expression operand in 'not'")
 
     @classmethod
     def compare(cls, expression: ast.Compare) -> bool:
         if not isinstance(expression.left, ast.Name | ast.Constant):
-            raise ValueError("Unknown left-operand in 'compare'")
+            raise ConditionalError("Unknown left-operand in 'compare'")
         left = cls.compare_value(expression.left)
         if not isinstance(expression.comparators[0], ast.Name | ast.Constant):
-            raise ValueError("Unknown right-operand in 'compare'")
+            raise ConditionalError("Unknown right-operand in 'compare'")
         right = cls.compare_value(expression.comparators[0])
         op = expression.ops[0]
         if isinstance(op, ast.Eq):
@@ -60,14 +71,16 @@ class Conditional():
         elif isinstance(op, ast.IsNot):
             return left is not right
         else:
-            raise ValueError("Unknown compare operation")
+            raise ConditionalError("Unknown compare operation")
 
     @classmethod
     def test(cls, condition: Optional[str]) -> bool:
         if not condition:
             return False
         expr = ast.parse(condition, mode="eval")
-        if isinstance(expr.body, ast.Compare):
+        if isinstance(expr.body, ast.Name):
+            return True
+        elif isinstance(expr.body, ast.Compare):
             return cls.compare(expr.body)
         elif isinstance(expr.body, ast.Name):
             return True
@@ -76,12 +89,10 @@ class Conditional():
                 return True
             else:
                 return False
-        elif isinstance(expr.body, ast.Compare):
-            return True
         elif isinstance(expr.body, ast.UnaryOp):
             if isinstance(expr.body.op, ast.Not):
                 return cls.validate_not(expr.body)
             else:
-                raise ValueError("Unknown unary operation")
+                raise ConditionalError("Unknown unary operation")
         else:
-            raise ValueError(f"Unknown Condition: {condition}")
+            raise ConditionalError(f"Unknown Condition: {condition}")
