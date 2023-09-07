@@ -14,7 +14,9 @@ from paramiko import AutoAddPolicy
 from paramiko.ssh_exception import (BadHostKeyException,
                                     AuthenticationException,
                                     SSHException)
-from .baseexecutor import BaseExecutor, ExecException, Result
+from .baseexecutor import BaseExecutor
+from .execexception import ExecException
+from .result import Result
 from .schemas import SFTPCommand, SSHCommand
 from .variablestore import VariableStore
 

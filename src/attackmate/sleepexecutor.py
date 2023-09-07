@@ -1,6 +1,7 @@
 import time
 from random import randint
-from .baseexecutor import BaseExecutor, Result
+from .baseexecutor import BaseExecutor
+from .result import Result
 from .variablestore import VariableStore
 
 
