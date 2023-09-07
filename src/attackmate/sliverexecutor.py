@@ -80,7 +80,8 @@ class SliverExecutor(BaseExecutor):
         implconfig.C2.extend([c2])
         implconfig.IsBeacon = command.IsBeacon
         if command.IsBeacon:
-            implconfig.BeaconInterval = command.BeaconInterval
+            implconfig.BeaconInterval = self.variable_to_int("BeaconInterval",
+                                                             command.BeaconInterval)
         implconfig.RunAtLoad = command.RunAtLoad
         implconfig.Evasion = command.Evasion
         target = command.target.split("/")
