@@ -96,13 +96,21 @@ class BaseExecutor:
             if isinstance(cmd_member, str):
                 replaced_str = self.varstore.substitute(cmd_member)
                 setattr(template_cmd, member, replaced_str)
-            if isinstance(cmd_member, dict):
+            elif isinstance(cmd_member, dict):
                 # copy the dict to avoid referencing the original dict
                 new_cmd_member = copy.deepcopy(cmd_member)
                 for k, v in new_cmd_member.items():
                     if isinstance(v, str):
                         new_cmd_member[k] = self.varstore.substitute(v)
                 setattr(template_cmd, member, new_cmd_member)
+            elif isinstance(cmd_member, list):
+                # copy the dict to avoid referencing the original list
+                new_list = [i for i in cmd_member]
+                for v in new_list:
+                    if isinstance(v, str):
+                        index = new_list.index(v)
+                        new_list[index] = self.varstore.substitute(v)
+                setattr(template_cmd, member, new_list)
         return template_cmd
 
     def run(self, command: BaseCommand):
