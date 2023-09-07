@@ -10,6 +10,7 @@ import gzip
 import time
 from sliver import SliverClientConfig, SliverClient
 from sliver.session import InteractiveSession
+from sliver.beacon import InteractiveBeacon
 # from sliver.protobuf import client_pb2
 from .variablestore import VariableStore
 from .baseexecutor import BaseExecutor, ExecException, Result
@@ -212,6 +213,30 @@ class SliverSessionExecutor(BaseExecutor):
         loop = asyncio.get_event_loop()
         coro = self.connect()
         loop.run_until_complete(coro)
+
+    async def get_session_or_beacon(self,
+                                    name,
+                                    beacon=False) -> InteractiveBeacon | InteractiveSession:
+        if beacon:
+            return self.get_beacon_by_name(name)
+        else:
+            return self.get_session_by_name(name)
+
+    async def get_beacon_by_name(self, name) -> InteractiveBeacon:
+        # limit polling
+        seconds = 3
+        if self.client is None:
+            raise ExecException("SliverClient is not defined")
+
+        while True:
+            beacons = await self.client.beacons()
+            for beacon in beacons:
+                if beacon.Name == name and not beacon.IsDead:
+                    self.logger.debug(beacon)
+                    ret = await self.client.interact_beacon(beacon.ID)
+                    return ret
+            self.logger.debug(f"Sliver-Session: Beacon not found. Retry in {seconds} sec")
+            time.sleep(seconds)
 
     async def get_session_by_name(self, name) -> InteractiveSession:
         # limit polling

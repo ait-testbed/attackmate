@@ -60,21 +60,25 @@ class SliverExecutor(BaseExecutor):
         c2.URL = command.c2url
         c2.Priority = 0
         outformat = client_pb2.OutputFormat.EXECUTABLE
+        implconfig = client_pb2.ImplantConfig()
+        implconfig.IsService = False
+        implconfig.IsSharedLib = False
+        implconfig.IsShellcode = False
+
         if command.format == "SERVICE":
             outformat = client_pb2.OutputFormat.SERVICE
+            implconfig.IsService = True
 
         if command.format == "SHARED_LIB":
             outformat = client_pb2.OutputFormat.SHARED_LIB
+            implconfig.IsSharedLib = True
 
         if command.format == "SHELLCODE":
             outformat = client_pb2.OutputFormat.SHELLCODE
+            implconfig.IsShellcode = True
 
-        implconfig = client_pb2.ImplantConfig()
         implconfig.C2.extend([c2])
         implconfig.IsBeacon = command.IsBeacon
-        implconfig.IsSharedLib = command.IsSharedLib
-        implconfig.IsService = command.IsService
-        implconfig.IsShellcode = command.IsShellcode
         implconfig.RunAtLoad = command.RunAtLoad
         implconfig.Evasion = command.Evasion
         target = command.target.split("/")
