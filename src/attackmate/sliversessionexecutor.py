@@ -13,7 +13,9 @@ from sliver.session import InteractiveSession
 from sliver.beacon import InteractiveBeacon
 # from sliver.protobuf import client_pb2
 from .variablestore import VariableStore
-from .baseexecutor import BaseExecutor, ExecException, Result
+from .baseexecutor import BaseExecutor
+from .execexception import ExecException
+from .result import Result
 from .schemas import (SliverSessionCDCommand, SliverSessionCommand,
                       SliverSessionDOWNLOADCommand, SliverSessionEXECCommand,
                       SliverSessionLSCommand, SliverSessionNETSTATCommand, SliverSessionPROCDUMPCommand,
