@@ -188,7 +188,7 @@ class SliverSessionExecutor(BaseExecutor):
         self.result = Result(output, 0)
 
     async def execute(self, command: SliverSessionEXECCommand):
-        session = await self.get_session_by_name(command.session)
+        session = await self.get_session_or_beacon(command.session, command.beacon)
         self.logger.debug(session)
         out = await session.execute(command.exe, command.args, command.output)
         self.logger.debug(out)
