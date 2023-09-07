@@ -90,7 +90,7 @@ class BaseExecutor(ExitOnError, CmdVars):
         except ExecException as error:
             result = Result(error, 1)
         self.exit_on_error(command, result)
-        self.set_result(result)
+        self.set_result_vars(result)
         self.output.info(f"Command: {command.cmd}\n{result.stdout}")
         self.save_output(command, result)
         self.error_if_or_not(command, result)

@@ -10,7 +10,7 @@ class CmdVars:
     def __init__(self, variablestore: VariableStore):
         self.varstore = variablestore
 
-    def set_result(self, result: Result):
+    def set_result_vars(self, result: Result):
         self.varstore.set_variable("RESULT_STDOUT", result.stdout)
         self.varstore.set_variable("RESULT_RETURNCODE", str(result.returncode))
 
