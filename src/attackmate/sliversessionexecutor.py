@@ -218,9 +218,9 @@ class SliverSessionExecutor(BaseExecutor):
                                     name,
                                     beacon=False) -> InteractiveBeacon | InteractiveSession:
         if beacon:
-            return self.get_beacon_by_name(name)
+            return await self.get_beacon_by_name(name)
         else:
-            return self.get_session_by_name(name)
+            return await self.get_session_by_name(name)
 
     async def get_beacon_by_name(self, name) -> InteractiveBeacon:
         # limit polling
