@@ -53,7 +53,8 @@ class CmdVars:
                 setattr(template_cmd, member, new_list)
         return template_cmd
 
-    def variable_to_int(self, variablename: str, value: str) -> int:
+    @staticmethod
+    def variable_to_int(variablename: str, value: str) -> int:
         if value.isnumeric():
             return int(value)
         else:
