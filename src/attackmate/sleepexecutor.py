@@ -2,6 +2,7 @@ import time
 from random import randint
 from .baseexecutor import BaseExecutor
 from .result import Result
+from .cmdvars import CmdVars
 from .variablestore import VariableStore
 
 
@@ -12,10 +13,10 @@ class SleepExecutor(BaseExecutor):
 
     def set_sleeptime(self, command):
         if self.sleep_time is None:
-            self.sleep_time = self.variable_to_int("seconds", command.seconds)
+            self.sleep_time = CmdVars.variable_to_int("seconds", command.seconds)
             if command.random:
-                self.sleep_time = randint(self.variable_to_int("min_sec", command.min_sec),
-                                          self.variable_to_int("seconds", command.seconds))
+                self.sleep_time = randint(CmdVars.variable_to_int("min_sec", command.min_sec),
+                                          CmdVars.variable_to_int("seconds", command.seconds))
 
     def log_command(self, command):
         self.set_sleeptime(command)

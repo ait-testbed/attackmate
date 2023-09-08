@@ -114,3 +114,24 @@ class TestBaseExecutor:
             executor.exec(dc)
         dc.error_if = None
         dc.error_if_not = "forward"
+
+    def test_dummy_loop(self):
+        varstore = VariableStore()
+        executor = DummyExecutor(varstore)
+        executor.run_count = 1
+        dc = DummyCommand(cmd="dummy", loop_if="back")
+        with pytest.raises(SystemExit):
+            executor.exec(dc)
+        dc = DummyCommand(cmd="dummy", loop_if="forward")
+        try:
+            executor.exec(dc)
+        except SystemExit:
+            pytest.fail("Unexpected Exit")
+        dc = DummyCommand(cmd="dummy", loop_if_not="forward")
+        with pytest.raises(SystemExit):
+            executor.exec(dc)
+        dc = DummyCommand(cmd="dummy", loop_if_not="back")
+        try:
+            executor.exec(dc)
+        except SystemExit:
+            pytest.fail("Unexpected Exit")

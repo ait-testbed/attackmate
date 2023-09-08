@@ -1,18 +1,17 @@
-import re
-import time
 import logging
 from attackmate.cmdvars import CmdVars
 
 from attackmate.exitonerror import ExitOnError
+from attackmate.looper import Looper
 from .result import Result
 from .execexception import ExecException
-from .schemas import BaseCommand
+from .schemas import BaseCommand, CommandConfig
 from .conditional import Conditional
 from .variablestore import VariableStore
 from typing import Any
 
 
-class BaseExecutor(ExitOnError, CmdVars):
+class BaseExecutor(ExitOnError, CmdVars, Looper):
     """
 
     The BaseExecutor is the base class of all Executors.
@@ -24,7 +23,7 @@ class BaseExecutor(ExitOnError, CmdVars):
     _exec_cmd()
 
     """
-    def __init__(self, variablestore: VariableStore, cmdconfig=None):
+    def __init__(self, variablestore: VariableStore, cmdconfig=CommandConfig()):
         """ Constructor for BaseExecutor
 
         Parameters
@@ -33,11 +32,12 @@ class BaseExecutor(ExitOnError, CmdVars):
             cmd_config settings.
 
         """
+        CmdVars.__init__(self, variablestore)
+        ExitOnError.__init__(self)
+        Looper.__init__(self, cmdconfig)
         self.logger = logging.getLogger('playbook')
         self.cmdconfig = cmdconfig
         self.output = logging.getLogger("output")
-        CmdVars.__init__(self, variablestore)
-        ExitOnError.__init__(self)
 
     def run(self, command: BaseCommand):
         """ Execute the command
@@ -61,7 +61,7 @@ class BaseExecutor(ExitOnError, CmdVars):
                 else:
                     self.logger.warn(f"Skipping {command.cmd}")
                 return
-        self.run_count = 1
+        self.reset_run_count()
         self.logger.debug(f"Template-Command: '{command.cmd}'")
         self.exec(self.replace_variables(command))
 
@@ -97,39 +97,8 @@ class BaseExecutor(ExitOnError, CmdVars):
         self.loop_if(command, result)
         self.loop_if_not(command, result)
 
-    def loop_if(self, command: BaseCommand, result: Result):
-        if command.loop_if is not None:
-            m = re.search(command.loop_if, result.stdout, re.MULTILINE)
-            if m is not None:
-                self.logger.warn(
-                        f"Re-run command because loop_if matches: {m.group(0)}"
-                        )
-                if self.run_count < self.variable_to_int("loop_count", command.loop_count):
-                    self.run_count = self.run_count + 1
-                    time.sleep(self.cmdconfig.loop_sleep)
-                    self.exec(command)
-                else:
-                    self.logger.error("Exitting because loop_count exceeded")
-                    exit(1)
-            else:
-                self.logger.debug("loop_if does not match")
-
-    def loop_if_not(self, command: BaseCommand, result: Result):
-        if command.loop_if_not is not None:
-            m = re.search(command.loop_if_not, result.stdout, re.MULTILINE)
-            if m is None:
-                self.logger.warn(
-                        "Re-run command because loop_if_not does not match"
-                        )
-                if self.run_count < self.variable_to_int("loop_count", command.loop_count):
-                    self.run_count = self.run_count + 1
-                    time.sleep(self.cmdconfig.loop_sleep)
-                    self.exec(command)
-                else:
-                    self.logger.error("Exitting because loop_count exceeded")
-                    exit(1)
-            else:
-                self.logger.debug("loop_if_not does not match")
+    def _loop_exec(self, command: BaseCommand):
+        self.exec(command)
 
     def _exec_cmd(self, command: Any) -> Result:
         return Result(None, None)
