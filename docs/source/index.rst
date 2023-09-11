@@ -13,6 +13,13 @@ Welcome to AttackMate's documentation!
    readme_link
 
 .. toctree::
+   :maxdepth: 1
+   :caption: Getting Started:
+
+   installation/index
+
+
+.. toctree::
    :maxdepth: 4
    :caption: Configuration:
 
