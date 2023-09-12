@@ -50,6 +50,11 @@ class ShellCommand(BaseCommand):
     type: Literal['shell']
 
 
+class SetVarCommand(BaseCommand):
+    type: Literal['setvar']
+    variable: str
+
+
 class FatherCommand(BaseCommand):
     type: Literal['father']
     cmd: Literal['generate']
@@ -306,6 +311,7 @@ class Playbook(BaseModel):
                          FatherCommand,
                          SFTPCommand,
                          DebugCommand,
+                         SetVarCommand,
                          RegExCommand,
                          TempfileCommand,
                          SliverSessionCDCommand,
