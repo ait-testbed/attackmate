@@ -21,7 +21,7 @@ from .schemas import (SliverSessionCDCommand, SliverSessionCommand,
                       SliverSessionLSCommand, SliverSessionNETSTATCommand, SliverSessionPROCDUMPCommand,
                       SliverSessionSimpleCommand, SliverSessionMKDIRCommand, SliverSessionTERMINATECommand,
                       SliverSessionUPLOADCommand, SliverSessionRMCommand)
-from datetime import datetime
+from datetime import datetime, timedelta
 from tabulate import tabulate
 from .cmdvars import CmdVars
 
@@ -225,6 +225,13 @@ class SliverSessionExecutor(BaseExecutor):
         else:
             return await self.get_session_by_name(name)
 
+    def check_beacon_timedelta(self, timestamp: int, maxdelta: int = 10) -> bool:
+        delta = datetime.now() - datetime.fromtimestamp(timestamp)
+        if delta > timedelta(minutes=maxdelta):
+            return False
+        else:
+            return True
+
     async def get_beacon_by_name(self, name) -> InteractiveBeacon:
         # limit polling
         seconds = 3
@@ -234,7 +241,7 @@ class SliverSessionExecutor(BaseExecutor):
         while True:
             beacons = await self.client.beacons()
             for beacon in beacons:
-                if beacon.Name == name and not beacon.IsDead:
+                if beacon.Name == name and self.check_beacon_timedelta(beacon.LastCheckin):
                     self.logger.debug(beacon)
                     ret = await self.client.interact_beacon(beacon.ID)
                     return ret
