@@ -17,6 +17,7 @@ from .msfsessionexecutor import MsfSessionExecutor
 from .msfsessionstore import MsfSessionStore
 from .sliverexecutor import SliverExecutor
 from .fatherexecutor import FatherExecutor
+from .setvarexecutor import SetVarExecutor
 from .sliversessionexecutor import SliverSessionExecutor
 from .tempfileexecutor import TempfileExecutor
 from .debugexecutor import DebugExecutor
@@ -75,6 +76,7 @@ class AttackMate:
                 msfconfig=self.pyconfig.msf_config,
                 msfsessionstore=self.msfsessionstore)
         self.debugger = DebugExecutor(self.varstore, self.pyconfig.cmd_config)
+        self.setvar = SetVarExecutor(self.varstore, self.pyconfig.cmd_config)
         self.mktemp = TempfileExecutor(self.varstore, self.pyconfig.cmd_config)
         self.regex = RegExExecutor(self.varstore, self.pyconfig.cmd_config)
         self.sliver = SliverExecutor(self.pyconfig.cmd_config,
@@ -106,6 +108,8 @@ class AttackMate:
                 self.ssh.run(command)
             if command.type == "debug":
                 self.debugger.run(command)
+            if command.type == "setvar":
+                self.setvar.run(command)
             if command.type == "regex":
                 self.regex.run(command)
             if command.type == "sliver":
