@@ -20,14 +20,15 @@ from .result import Result
 from .cmdvars import CmdVars
 from .schemas import SFTPCommand, SSHCommand
 from .variablestore import VariableStore
+from .processmanager import ProcessManager
 
 
 class SSHExecutor(BaseExecutor):
-    def __init__(self, cmdconfig=None, *, varstore: VariableStore):
+    def __init__(self, pm: ProcessManager, cmdconfig=None, *, varstore: VariableStore):
         self.session_store = self.SessionStore()
         self.set_defaults()
         self.timer = None
-        super().__init__(varstore, cmdconfig)
+        super().__init__(pm, varstore, cmdconfig)
 
     def set_defaults(self):
         self.hostname = None

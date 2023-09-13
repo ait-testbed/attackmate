@@ -10,12 +10,13 @@ from .baseexecutor import BaseExecutor
 from .result import Result
 from .schemas import TempfileCommand
 from .variablestore import VariableStore
+from .processmanager import ProcessManager
 
 
 class TempfileExecutor(BaseExecutor):
-    def __init__(self, varstore: VariableStore, cmdconfig=None):
+    def __init__(self, pm: ProcessManager, varstore: VariableStore, cmdconfig=None):
         self.tempfilestore: dict[str, Any] = {}
-        super().__init__(varstore, cmdconfig)
+        super().__init__(pm, varstore, cmdconfig)
 
     def log_command(self, command: TempfileCommand):
         if command.cmd == "dir":
