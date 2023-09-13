@@ -1,7 +1,9 @@
 import atexit
 
 from attackmate.variablestore import VariableStore
-from .baseexecutor import BaseExecutor, Result, ExecException
+from .baseexecutor import BaseExecutor
+from .execexception import ExecException
+from .result import Result
 from pymetasploit3.msfrpc import MsfRpcClient, MsfAuthError
 from .schemas import MsfSessionCommand, BaseCommand
 from .msfsessionstore import MsfSessionStore

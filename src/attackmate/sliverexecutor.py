@@ -9,7 +9,10 @@ import os
 from sliver import SliverClientConfig, SliverClient
 from sliver.protobuf import client_pb2
 from .variablestore import VariableStore
-from .baseexecutor import BaseExecutor, ExecException, Result
+from .baseexecutor import BaseExecutor
+from .execexception import ExecException
+from .result import Result
+from .cmdvars import CmdVars
 from .schemas import BaseCommand, SliverGenerateCommand, SliverHttpsListenerCommand
 
 
@@ -39,7 +42,7 @@ class SliverExecutor(BaseExecutor):
         if self.client is None:
             raise ExecException("SliverClient is not defined")
         listener = await self.client.start_https_listener(command.host,
-                                                          self.variable_to_int("port", command.port),
+                                                          CmdVars.variable_to_int("port", command.port),
                                                           command.website,
                                                           command.domain,
                                                           b"",
@@ -48,11 +51,11 @@ class SliverExecutor(BaseExecutor):
                                                           command.persistent,
                                                           command.enforce_otp,
                                                           command.randomize_jarm,
-                                                          self.variable_to_int("long_poll_timeout",
-                                                                               command.long_poll_timeout),
-                                                          self.variable_to_int("long_poll_jitter",
-                                                                               command.long_poll_jitter),
-                                                          self.variable_to_int("timeout", command.timeout))
+                                                          CmdVars.variable_to_int("long_poll_timeout",
+                                                                                  command.long_poll_timeout),
+                                                          CmdVars.variable_to_int("long_poll_jitter",
+                                                                                  command.long_poll_jitter),
+                                                          CmdVars.variable_to_int("timeout", command.timeout))
         self.result = Result(f"JobID: {listener.JobID}", 0)
 
     def prepare_implant_config(self, command: SliverGenerateCommand) -> client_pb2.ImplantConfig:
@@ -60,21 +63,28 @@ class SliverExecutor(BaseExecutor):
         c2.URL = command.c2url
         c2.Priority = 0
         outformat = client_pb2.OutputFormat.EXECUTABLE
+        implconfig = client_pb2.ImplantConfig()
+        implconfig.IsService = False
+        implconfig.IsSharedLib = False
+        implconfig.IsShellcode = False
+
         if command.format == "SERVICE":
             outformat = client_pb2.OutputFormat.SERVICE
+            implconfig.IsService = True
 
         if command.format == "SHARED_LIB":
             outformat = client_pb2.OutputFormat.SHARED_LIB
+            implconfig.IsSharedLib = True
 
         if command.format == "SHELLCODE":
             outformat = client_pb2.OutputFormat.SHELLCODE
+            implconfig.IsShellcode = True
 
-        implconfig = client_pb2.ImplantConfig()
         implconfig.C2.extend([c2])
         implconfig.IsBeacon = command.IsBeacon
-        implconfig.IsSharedLib = command.IsSharedLib
-        implconfig.IsService = command.IsService
-        implconfig.IsShellcode = command.IsShellcode
+        if command.IsBeacon:
+            implconfig.BeaconInterval = CmdVars.variable_to_int("BeaconInterval",
+                                                                command.BeaconInterval)
         implconfig.RunAtLoad = command.RunAtLoad
         implconfig.Evasion = command.Evasion
         target = command.target.split("/")

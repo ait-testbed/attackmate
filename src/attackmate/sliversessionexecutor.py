@@ -10,16 +10,20 @@ import gzip
 import time
 from sliver import SliverClientConfig, SliverClient
 from sliver.session import InteractiveSession
+from sliver.beacon import InteractiveBeacon
 # from sliver.protobuf import client_pb2
 from .variablestore import VariableStore
-from .baseexecutor import BaseExecutor, ExecException, Result
+from .baseexecutor import BaseExecutor
+from .execexception import ExecException
+from .result import Result
 from .schemas import (SliverSessionCDCommand, SliverSessionCommand,
                       SliverSessionDOWNLOADCommand, SliverSessionEXECCommand,
                       SliverSessionLSCommand, SliverSessionNETSTATCommand, SliverSessionPROCDUMPCommand,
                       SliverSessionSimpleCommand, SliverSessionMKDIRCommand, SliverSessionTERMINATECommand,
                       SliverSessionUPLOADCommand, SliverSessionRMCommand)
-from datetime import datetime
+from datetime import datetime, timedelta
 from tabulate import tabulate
+from .cmdvars import CmdVars
 
 
 class SliverSessionExecutor(BaseExecutor):
@@ -146,7 +150,7 @@ class SliverSessionExecutor(BaseExecutor):
     async def process_dump(self, command: SliverSessionPROCDUMPCommand):
         session = await self.get_session_by_name(command.session)
         self.logger.debug(session)
-        dump = await session.process_dump(self.variable_to_int("pid", command.pid))
+        dump = await session.process_dump(CmdVars.variable_to_int("pid", command.pid))
         with open(command.local_path, "wb") as new_file:
             new_file.write(dump.Data)
 
@@ -187,7 +191,7 @@ class SliverSessionExecutor(BaseExecutor):
         self.result = Result(output, 0)
 
     async def execute(self, command: SliverSessionEXECCommand):
-        session = await self.get_session_by_name(command.session)
+        session = await self.get_session_or_beacon(command.session, command.beacon)
         self.logger.debug(session)
         out = await session.execute(command.exe, command.args, command.output)
         self.logger.debug(out)
@@ -203,7 +207,7 @@ class SliverSessionExecutor(BaseExecutor):
     async def terminate(self, command: SliverSessionTERMINATECommand):
         session = await self.get_session_by_name(command.session)
         self.logger.debug(session)
-        term = await session.terminate(self.variable_to_int("pid", command.pid), command.force)
+        term = await session.terminate(CmdVars.variable_to_int("pid", command.pid), command.force)
         self.logger.debug(term)
         self.result = Result(f"Terminated process {term.Pid}", 0)
 
@@ -212,6 +216,37 @@ class SliverSessionExecutor(BaseExecutor):
         loop = asyncio.get_event_loop()
         coro = self.connect()
         loop.run_until_complete(coro)
+
+    async def get_session_or_beacon(self,
+                                    name,
+                                    beacon=False) -> InteractiveBeacon | InteractiveSession:
+        if beacon:
+            return await self.get_beacon_by_name(name)
+        else:
+            return await self.get_session_by_name(name)
+
+    def check_beacon_timedelta(self, timestamp: int, maxdelta: int = 10) -> bool:
+        delta = datetime.now() - datetime.fromtimestamp(timestamp)
+        if delta > timedelta(minutes=maxdelta):
+            return False
+        else:
+            return True
+
+    async def get_beacon_by_name(self, name) -> InteractiveBeacon:
+        # limit polling
+        seconds = 3
+        if self.client is None:
+            raise ExecException("SliverClient is not defined")
+
+        while True:
+            beacons = await self.client.beacons()
+            for beacon in beacons:
+                if beacon.Name == name and self.check_beacon_timedelta(beacon.LastCheckin):
+                    self.logger.debug(beacon)
+                    ret = await self.client.interact_beacon(beacon.ID)
+                    return ret
+            self.logger.debug(f"Sliver-Session: Beacon not found. Retry in {seconds} sec")
+            time.sleep(seconds)
 
     async def get_session_by_name(self, name) -> InteractiveSession:
         # limit polling
