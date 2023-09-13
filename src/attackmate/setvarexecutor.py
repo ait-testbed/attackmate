@@ -4,7 +4,8 @@ setvarexecutor.py
 This class allows to set variables.
 """
 
-from .baseexecutor import BaseExecutor, Result
+from .baseexecutor import BaseExecutor
+from .result import Result
 from .schemas import SetVarCommand
 
 
