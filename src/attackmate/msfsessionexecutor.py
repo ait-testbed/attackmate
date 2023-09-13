@@ -7,10 +7,11 @@ from .result import Result
 from pymetasploit3.msfrpc import MsfRpcClient, MsfAuthError
 from .schemas import MsfSessionCommand, BaseCommand
 from .msfsessionstore import MsfSessionStore
+from .processmanager import ProcessManager
 
 
 class MsfSessionExecutor(BaseExecutor):
-    def __init__(self, cmdconfig=None, *,
+    def __init__(self, pm: ProcessManager, cmdconfig=None, *,
                  varstore: VariableStore,
                  msfconfig=None,
                  msfsessionstore: MsfSessionStore):
@@ -18,7 +19,7 @@ class MsfSessionExecutor(BaseExecutor):
         self.sessionstore = msfsessionstore
         self.msf = None
         atexit.register(self.cleanup)
-        super().__init__(varstore, cmdconfig)
+        super().__init__(pm, varstore, cmdconfig)
 
     def cleanup(self):
         self.logger.debug("Killing all Meterpreter-Sessions")

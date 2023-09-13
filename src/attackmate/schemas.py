@@ -36,6 +36,8 @@ class BaseCommand(BaseModel):
     exit_on_error: bool = True
     save: Optional[str] = None
     cmd: str
+    background: bool = False
+    kill_on_exit: bool = True
 
 
 class SleepCommand(BaseCommand):

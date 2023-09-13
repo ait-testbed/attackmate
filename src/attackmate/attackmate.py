@@ -26,6 +26,7 @@ from .includeexecutor import IncludeExecutor
 from .regexexecutor import RegExExecutor
 from .schemas import Config, Playbook, Commands
 from .variablestore import VariableStore
+from .processmanager import ProcessManager
 
 
 class AttackMate:
@@ -41,6 +42,7 @@ class AttackMate:
             The path to a yaml-playbook
         """
         self.logger = logging.getLogger('playbook')
+        self.pm = ProcessManager()
         self.pyconfig = config
         self.playbook = playbook
         self.initialize_variable_parser()
@@ -62,33 +64,34 @@ class AttackMate:
 
         """
         self.msfsessionstore = MsfSessionStore(self.varstore)
-        self.se = ShellExecutor(self.varstore, self.pyconfig.cmd_config)
-        self.sleep = SleepExecutor(self.pyconfig.cmd_config,
+        self.se = ShellExecutor(self.pm, self.varstore, self.pyconfig.cmd_config)
+        self.sleep = SleepExecutor(self.pm, self.pyconfig.cmd_config,
                                    varstore=self.varstore)
-        self.ssh = SSHExecutor(self.pyconfig.cmd_config,
+        self.ssh = SSHExecutor(self.pm, self.pyconfig.cmd_config,
                                varstore=self.varstore)
-        self.father = FatherExecutor(self.varstore, self.pyconfig.cmd_config)
-        self.msfmodule = MsfModuleExecutor(self.pyconfig.cmd_config,
+        self.father = FatherExecutor(self.pm, self.varstore, self.pyconfig.cmd_config)
+        self.msfmodule = MsfModuleExecutor(self.pm, self.pyconfig.cmd_config,
                                            varstore=self.varstore,
                                            msfconfig=self.pyconfig.msf_config,
                                            msfsessionstore=self.msfsessionstore)
         self.msfsession = MsfSessionExecutor(
+                self.pm,
                 self.pyconfig.cmd_config,
                 varstore=self.varstore,
                 msfconfig=self.pyconfig.msf_config,
                 msfsessionstore=self.msfsessionstore)
-        self.debugger = DebugExecutor(self.varstore, self.pyconfig.cmd_config)
-        self.webserv = WebServExecutor(self.varstore, self.pyconfig.cmd_config)
-        self.setvar = SetVarExecutor(self.varstore, self.pyconfig.cmd_config)
-        self.mktemp = TempfileExecutor(self.varstore, self.pyconfig.cmd_config)
-        self.regex = RegExExecutor(self.varstore, self.pyconfig.cmd_config)
-        self.include = IncludeExecutor(self.pyconfig.cmd_config,
+        self.debugger = DebugExecutor(self.pm, self.varstore, self.pyconfig.cmd_config)
+        self.webserv = WebServExecutor(self.pm, self.varstore, self.pyconfig.cmd_config)
+        self.setvar = SetVarExecutor(self.pm, self.varstore, self.pyconfig.cmd_config)
+        self.mktemp = TempfileExecutor(self.pm, self.varstore, self.pyconfig.cmd_config)
+        self.regex = RegExExecutor(self.pm, self.varstore, self.pyconfig.cmd_config)
+        self.include = IncludeExecutor(self.pm, self.pyconfig.cmd_config,
                                        varstore=self.varstore,
                                        runfunc=self.run_commands)
-        self.sliver = SliverExecutor(self.pyconfig.cmd_config,
+        self.sliver = SliverExecutor(self.pm, self.pyconfig.cmd_config,
                                      varstore=self.varstore,
                                      sliver_config=self.pyconfig.sliver_config)
-        self.sliversession = SliverSessionExecutor(self.pyconfig.cmd_config,
+        self.sliversession = SliverSessionExecutor(self.pm, self.pyconfig.cmd_config,
                                                    varstore=self.varstore,
                                                    sliver_config=self.pyconfig.sliver_config)
 
@@ -137,3 +140,4 @@ class AttackMate:
 
         """
         self.run_commands(self.playbook.commands)
+        self.pm.kill_or_wait_processes()
