@@ -14,11 +14,12 @@ from .execexception import ExecException
 from .result import Result
 from .cmdvars import CmdVars
 from .schemas import BaseCommand, SliverGenerateCommand, SliverHttpsListenerCommand
+from .processmanager import ProcessManager
 
 
 class SliverExecutor(BaseExecutor):
 
-    def __init__(self, cmdconfig=None, *,
+    def __init__(self, pm: ProcessManager, cmdconfig=None, *,
                  varstore: VariableStore,
                  sliver_config=None):
         self.sliver_config = sliver_config
@@ -29,7 +30,7 @@ class SliverExecutor(BaseExecutor):
         if self.sliver_config.config_file:
             self.client_config = SliverClientConfig.parse_config_file(sliver_config.config_file)
             self.client = SliverClient(self.client_config)
-        super().__init__(varstore, cmdconfig)
+        super().__init__(pm, varstore, cmdconfig)
 
     async def connect(self) -> None:
         if self.client:

@@ -8,10 +8,12 @@ from .execexception import ExecException
 from .schemas import BaseCommand, CommandConfig
 from .conditional import Conditional
 from .variablestore import VariableStore
+from .processmanager import ProcessManager
+from .background import Background
 from typing import Any
 
 
-class BaseExecutor(ExitOnError, CmdVars, Looper):
+class BaseExecutor(ExitOnError, CmdVars, Looper, Background):
     """
 
     The BaseExecutor is the base class of all Executors.
@@ -23,7 +25,7 @@ class BaseExecutor(ExitOnError, CmdVars, Looper):
     _exec_cmd()
 
     """
-    def __init__(self, variablestore: VariableStore, cmdconfig=CommandConfig()):
+    def __init__(self, pm: ProcessManager, variablestore: VariableStore, cmdconfig=CommandConfig()):
         """ Constructor for BaseExecutor
 
         Parameters
@@ -32,6 +34,7 @@ class BaseExecutor(ExitOnError, CmdVars, Looper):
             cmd_config settings.
 
         """
+        Background.__init__(self, pm)
         CmdVars.__init__(self, variablestore)
         ExitOnError.__init__(self)
         Looper.__init__(self, cmdconfig)
@@ -63,7 +66,10 @@ class BaseExecutor(ExitOnError, CmdVars, Looper):
                 return
         self.reset_run_count()
         self.logger.debug(f"Template-Command: '{command.cmd}'")
-        self.exec(self.replace_variables(command))
+        if command.background:
+            self.exec_background(self.replace_variables(command))
+        else:
+            self.exec(self.replace_variables(command))
 
     def log_command(self, command):
         """ Log starting-status of the command
@@ -89,11 +95,12 @@ class BaseExecutor(ExitOnError, CmdVars, Looper):
             result = self._exec_cmd(command)
         except ExecException as error:
             result = Result(error, 1)
-        self.exit_on_error(command, result)
-        self.set_result_vars(result)
-        self.output.info(f"Command: {command.cmd}\n{result.stdout}")
         self.save_output(command, result)
-        self.error_if_or_not(command, result)
+        if not command.background:
+            self.exit_on_error(command, result)
+            self.set_result_vars(result)
+            self.output.info(f"Command: {command.cmd}\n{result.stdout}")
+            self.error_if_or_not(command, result)
         self.loop_if(command, result)
         self.loop_if_not(command, result)
 
