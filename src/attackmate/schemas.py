@@ -184,6 +184,21 @@ class MsfModuleCommand(BaseCommand):
         return "/".join(self.cmd.split("/")[1:])
 
 
+class HttpClientCommand(BaseCommand):
+    type: Literal['http-client']
+    cmd: Literal['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'HEAD', 'OPTIONS'] = 'GET'
+    url: str
+    output_headers: bool = False
+    headers: Optional[Dict[str, str]]
+    cookies: Optional[Dict[str, str]]
+    data: Optional[Dict[str, str]]
+    local_path: Optional[str]
+    useragent: str = "AttackMate"
+    follow: bool = False
+    verify: bool = False
+    http2: bool = False
+
+
 class CommandConfig(BaseModel):
     loop_sleep: int = 5
 
@@ -335,6 +350,7 @@ Commands = List[Union[
                          TempfileCommand,
                          IncludeCommand,
                          WebServCommand,
+                         HttpClientCommand,
                          SliverSessionCDCommand,
                          SliverSessionLSCommand,
                          SliverSessionNETSTATCommand,
