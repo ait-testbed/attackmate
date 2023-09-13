@@ -1,5 +1,5 @@
 from typing import List, Literal, Union, Optional, Dict
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, validator
 
 # https://stackoverflow.com/questions/71539448/using-different-pydantic-models-depending-on-the-value-of-fields
 
@@ -26,6 +26,12 @@ class BaseCommand(BaseModel):
             if isinstance(tmp, (str, dict, list)) and k != "type":
                 template_vars.append(k)
         return template_vars
+
+    @validator('background')
+    def bg_not_implemented_yet(cls, v):
+        if cls in (SSHCommand, SFTPCommand, MsfModuleCommand):
+            raise ValueError("background mode is unsupported for this command")
+        return v
 
     only_if: Optional[str] = None
     error_if: Optional[str] = None
