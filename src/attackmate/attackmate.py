@@ -21,8 +21,9 @@ from .setvarexecutor import SetVarExecutor
 from .sliversessionexecutor import SliverSessionExecutor
 from .tempfileexecutor import TempfileExecutor
 from .debugexecutor import DebugExecutor
+from .includeexecutor import IncludeExecutor
 from .regexexecutor import RegExExecutor
-from .schemas import Config, Playbook
+from .schemas import Config, Playbook, Commands
 from .variablestore import VariableStore
 
 
@@ -79,6 +80,9 @@ class AttackMate:
         self.setvar = SetVarExecutor(self.varstore, self.pyconfig.cmd_config)
         self.mktemp = TempfileExecutor(self.varstore, self.pyconfig.cmd_config)
         self.regex = RegExExecutor(self.varstore, self.pyconfig.cmd_config)
+        self.include = IncludeExecutor(self.pyconfig.cmd_config,
+                                       varstore=self.varstore,
+                                       runfunc=self.run_commands)
         self.sliver = SliverExecutor(self.pyconfig.cmd_config,
                                      varstore=self.varstore,
                                      sliver_config=self.pyconfig.sliver_config)
@@ -86,14 +90,14 @@ class AttackMate:
                                                    varstore=self.varstore,
                                                    sliver_config=self.pyconfig.sliver_config)
 
-    def main(self):
-        """ The main function
+    def run_commands(self, commands: Commands):
+        """ Pass commands to the executors
 
         This function interates over all configured
         commands and passes them to the executors.
 
         """
-        for command in self.playbook.commands:
+        for command in commands:
             if command.type == "shell":
                 self.se.run(command)
             if command.type == "father":
@@ -118,3 +122,14 @@ class AttackMate:
                 self.sliversession.run(command)
             if command.type == "mktemp":
                 self.mktemp.run(command)
+            if command.type == "include":
+                self.include.run(command)
+
+    def main(self):
+        """ The main function
+
+            Passes the main playbook-commands
+            to run_commands
+
+        """
+        self.run_commands(self.playbook.commands)
