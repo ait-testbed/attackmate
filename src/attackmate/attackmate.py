@@ -20,6 +20,7 @@ from .fatherexecutor import FatherExecutor
 from .setvarexecutor import SetVarExecutor
 from .sliversessionexecutor import SliverSessionExecutor
 from .webservexecutor import WebServExecutor
+from .httpclientexecutor import HttpClientExecutor
 from .tempfileexecutor import TempfileExecutor
 from .debugexecutor import DebugExecutor
 from .includeexecutor import IncludeExecutor
@@ -85,6 +86,7 @@ class AttackMate:
         self.setvar = SetVarExecutor(self.pm, self.varstore, self.pyconfig.cmd_config)
         self.mktemp = TempfileExecutor(self.pm, self.varstore, self.pyconfig.cmd_config)
         self.regex = RegExExecutor(self.pm, self.varstore, self.pyconfig.cmd_config)
+        self.httpclient = HttpClientExecutor(self.pm, self.varstore, self.pyconfig.cmd_config)
         self.include = IncludeExecutor(self.pm, self.pyconfig.cmd_config,
                                        varstore=self.varstore,
                                        runfunc=self.run_commands)
@@ -131,6 +133,8 @@ class AttackMate:
                 self.include.run(command)
             if command.type == "webserv":
                 self.webserv.run(command)
+            if command.type == "http-client":
+                self.httpclient.run(command)
 
     def main(self):
         """ The main function
