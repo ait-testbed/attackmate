@@ -6,7 +6,8 @@ Execute commands from a yaml-file
 
 import yaml
 from typing import Callable
-from .baseexecutor import BaseExecutor, Result
+from .baseexecutor import BaseExecutor
+from .result import Result
 from .schemas import IncludeCommand, Playbook, Commands
 from .variablestore import VariableStore
 from .execexception import ExecException
