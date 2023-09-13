@@ -103,6 +103,7 @@ class DebugCommand(BaseCommand):
     type: Literal['debug']
     varstore: bool = False
     exit: bool = False
+    cmd: str = ""
 
 
 class RegExCommand(BaseCommand):
