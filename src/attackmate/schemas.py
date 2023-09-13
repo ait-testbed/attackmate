@@ -55,6 +55,11 @@ class SetVarCommand(BaseCommand):
     variable: str
 
 
+class IncludeCommand(BaseCommand):
+    type: Literal['include']
+    local_path: str
+
+
 class FatherCommand(BaseCommand):
     type: Literal['father']
     cmd: Literal['generate']
@@ -299,9 +304,7 @@ class Config(BaseModel):
     cmd_config: CommandConfig = CommandConfig(loop_sleep=5)
 
 
-class Playbook(BaseModel):
-    vars: Optional[Dict[str, str]] = None
-    commands: List[Union[
+Commands = List[Union[
                          ShellCommand,
                          MsfModuleCommand,
                          MsfSessionCommand,
@@ -313,6 +316,7 @@ class Playbook(BaseModel):
                          SetVarCommand,
                          RegExCommand,
                          TempfileCommand,
+                         IncludeCommand,
                          SliverSessionCDCommand,
                          SliverSessionLSCommand,
                          SliverSessionNETSTATCommand,
@@ -327,3 +331,8 @@ class Playbook(BaseModel):
                          SliverHttpsListenerCommand,
                          SliverGenerateCommand
                          ]]
+
+
+class Playbook(BaseModel):
+    vars: Optional[Dict[str, str]] = None
+    commands: Commands
