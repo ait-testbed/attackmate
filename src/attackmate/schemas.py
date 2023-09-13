@@ -60,6 +60,14 @@ class IncludeCommand(BaseCommand):
     local_path: str
 
 
+class WebServCommand(BaseCommand):
+    type: Literal['webserv']
+    cmd: str = "HTTP-GET"
+    local_path: str
+    port: str = Field(pattern=VAR_PATTERN, default="8000")
+    address: str = "0.0.0.0"
+
+
 class FatherCommand(BaseCommand):
     type: Literal['father']
     cmd: Literal['generate']
@@ -317,6 +325,7 @@ Commands = List[Union[
                          RegExCommand,
                          TempfileCommand,
                          IncludeCommand,
+                         WebServCommand,
                          SliverSessionCDCommand,
                          SliverSessionLSCommand,
                          SliverSessionNETSTATCommand,

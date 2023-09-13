@@ -15,7 +15,8 @@ dependencies = [
     "pyaml",
     "paramiko",
     "sliver-py",
-    "tabulate"
+    "tabulate",
+    "python-magic"
 ]
 dynamic = ["version"]
 
