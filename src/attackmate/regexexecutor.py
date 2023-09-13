@@ -5,7 +5,8 @@ This class allows to parse variables using
 regular expressions.
 """
 
-from .baseexecutor import BaseExecutor, Result
+from .baseexecutor import BaseExecutor
+from .result import Result
 from .schemas import RegExCommand
 from string import Template
 from typing import Match

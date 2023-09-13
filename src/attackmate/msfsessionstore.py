@@ -2,7 +2,7 @@ import time
 import logging
 from typing import Dict
 from attackmate.variablestore import VariableStore
-from .baseexecutor import ExecException
+from .execexception import ExecException
 
 
 class MsfSessionStore:
