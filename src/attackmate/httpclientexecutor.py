@@ -41,11 +41,11 @@ class HttpClientExecutor(BaseExecutor):
     def request_http2(self, command: HttpClientCommand) -> httpx.Response:
         client = httpx.Client(http2=True,
                               headers=self.generate_headers(command),
-                              content=self.load_content(command.local_path),
                               cookies=command.cookies,
                               verify=command.verify)
         response = client.request(command.cmd,
                                   command.url,
+                                  content=self.load_content(command.local_path),
                                   follow_redirects=command.follow,
                                   data=command.data)
         return response
