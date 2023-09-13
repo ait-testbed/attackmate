@@ -29,7 +29,7 @@ class BaseCommand(BaseModel):
 
     @validator('background')
     def bg_not_implemented_yet(cls, v):
-        if cls in (SSHCommand, SFTPCommand, MsfModuleCommand):
+        if cls in (SSHCommand, SFTPCommand, MsfModuleCommand, IncludeCommand):
             raise ValueError("background mode is unsupported for this command")
         return v
 
