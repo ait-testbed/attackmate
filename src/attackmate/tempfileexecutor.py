@@ -6,7 +6,8 @@ Creates temporary files and directories
 
 import tempfile
 from typing import Any
-from .baseexecutor import BaseExecutor, Result
+from .baseexecutor import BaseExecutor
+from .result import Result
 from .schemas import TempfileCommand
 from .variablestore import VariableStore
 

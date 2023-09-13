@@ -11,7 +11,8 @@ import os
 import tempfile
 from string import Template
 from typing import Any
-from .baseexecutor import BaseExecutor, Result
+from .baseexecutor import BaseExecutor
+from .result import Result
 from .schemas import FatherCommand
 from .variablestore import VariableStore
 
