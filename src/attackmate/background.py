@@ -6,6 +6,15 @@ import logging
 
 
 class Background:
+    def __getstate__(self):
+        """
+        pm contains the states of the processes.
+        This environment must not be in the subprocess!
+        """
+        state = self.__dict__.copy()
+        state['pm'] = None
+        return state
+
     def __init__(self, pm: ProcessManager):
         self.logger = logging.getLogger('playbook')
         self.pm = pm
