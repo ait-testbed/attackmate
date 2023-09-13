@@ -19,6 +19,7 @@ from .sliverexecutor import SliverExecutor
 from .fatherexecutor import FatherExecutor
 from .setvarexecutor import SetVarExecutor
 from .sliversessionexecutor import SliverSessionExecutor
+from .webservexecutor import WebServExecutor
 from .tempfileexecutor import TempfileExecutor
 from .debugexecutor import DebugExecutor
 from .includeexecutor import IncludeExecutor
@@ -77,6 +78,7 @@ class AttackMate:
                 msfconfig=self.pyconfig.msf_config,
                 msfsessionstore=self.msfsessionstore)
         self.debugger = DebugExecutor(self.varstore, self.pyconfig.cmd_config)
+        self.webserv = WebServExecutor(self.varstore, self.pyconfig.cmd_config)
         self.setvar = SetVarExecutor(self.varstore, self.pyconfig.cmd_config)
         self.mktemp = TempfileExecutor(self.varstore, self.pyconfig.cmd_config)
         self.regex = RegExExecutor(self.varstore, self.pyconfig.cmd_config)
@@ -124,6 +126,8 @@ class AttackMate:
                 self.mktemp.run(command)
             if command.type == "include":
                 self.include.run(command)
+            if command.type == "webserv":
+                self.webserv.run(command)
 
     def main(self):
         """ The main function
