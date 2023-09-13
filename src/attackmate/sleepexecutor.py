@@ -4,11 +4,12 @@ from .baseexecutor import BaseExecutor
 from .result import Result
 from .cmdvars import CmdVars
 from .variablestore import VariableStore
+from .processmanager import ProcessManager
 
 
 class SleepExecutor(BaseExecutor):
-    def __init__(self, cmdconfig=None, *, varstore: VariableStore):
-        super().__init__(varstore, cmdconfig)
+    def __init__(self, pm: ProcessManager, cmdconfig=None, *, varstore: VariableStore):
+        super().__init__(pm, varstore, cmdconfig)
         self.sleep_time = None
 
     def set_sleeptime(self, command):

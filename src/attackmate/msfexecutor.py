@@ -7,17 +7,18 @@ from .result import Result
 from .cmdvars import CmdVars
 from .schemas import MsfModuleCommand, BaseCommand
 from .msfsessionstore import MsfSessionStore
+from .processmanager import ProcessManager
 
 
 class MsfModuleExecutor(BaseExecutor):
-    def __init__(self, cmdconfig=None, *,
+    def __init__(self, pm: ProcessManager, cmdconfig=None, *,
                  varstore: VariableStore,
                  msfconfig=None,
                  msfsessionstore: MsfSessionStore):
         self.msfconfig = msfconfig
         self.sessionstore = msfsessionstore
         self.msf = None
-        super().__init__(varstore, cmdconfig)
+        super().__init__(pm, varstore, cmdconfig)
 
     def connect(self, msfconfig=None):
         try:

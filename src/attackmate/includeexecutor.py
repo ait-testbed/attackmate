@@ -11,14 +11,15 @@ from .result import Result
 from .schemas import IncludeCommand, Playbook, Commands
 from .variablestore import VariableStore
 from .execexception import ExecException
+from .processmanager import ProcessManager
 
 
 class IncludeExecutor(BaseExecutor):
-    def __init__(self, cmdconfig=None, *,
+    def __init__(self, pm: ProcessManager, cmdconfig=None, *,
                  varstore: VariableStore,
                  runfunc: Callable[[Commands], None]):
         self.runfunc = runfunc
-        super().__init__(varstore, cmdconfig)
+        super().__init__(pm, varstore, cmdconfig)
 
     def load_file(self, local_path: str) -> Playbook:
         try:
