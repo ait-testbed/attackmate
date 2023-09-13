@@ -6,7 +6,8 @@ commands in AttackMate.
 """
 
 import subprocess
-from .baseexecutor import BaseExecutor, Result
+from .baseexecutor import BaseExecutor
+from .result import Result
 from .schemas import BaseCommand
 
 

@@ -213,9 +213,7 @@ class SliverGenerateCommand(BaseCommand):
     name: str
     filepath: Optional[str]
     IsBeacon: bool = False
-    IsSharedLib: bool = False
-    IsService: bool = False
-    IsShellcode: bool = False
+    BeaconInterval: str = Field(pattern=VAR_PATTERN, default="120")
     RunAtLoad: bool = False
     Evasion: bool = False
 
@@ -223,6 +221,7 @@ class SliverGenerateCommand(BaseCommand):
 class SliverSessionCommand(BaseCommand):
     type: Literal['sliver-session']
     session: str
+    beacon: bool = False
 
 
 class SliverSessionCDCommand(SliverSessionCommand):
