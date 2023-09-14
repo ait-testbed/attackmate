@@ -17,12 +17,17 @@ from .msfsessionexecutor import MsfSessionExecutor
 from .msfsessionstore import MsfSessionStore
 from .sliverexecutor import SliverExecutor
 from .fatherexecutor import FatherExecutor
+from .setvarexecutor import SetVarExecutor
 from .sliversessionexecutor import SliverSessionExecutor
+from .webservexecutor import WebServExecutor
+from .httpclientexecutor import HttpClientExecutor
 from .tempfileexecutor import TempfileExecutor
 from .debugexecutor import DebugExecutor
+from .includeexecutor import IncludeExecutor
 from .regexexecutor import RegExExecutor
-from .schemas import Config, Playbook
+from .schemas import Config, Playbook, Commands
 from .variablestore import VariableStore
+from .processmanager import ProcessManager
 
 
 class AttackMate:
@@ -38,6 +43,7 @@ class AttackMate:
             The path to a yaml-playbook
         """
         self.logger = logging.getLogger('playbook')
+        self.pm = ProcessManager()
         self.pyconfig = config
         self.playbook = playbook
         self.initialize_variable_parser()
@@ -59,39 +65,46 @@ class AttackMate:
 
         """
         self.msfsessionstore = MsfSessionStore(self.varstore)
-        self.se = ShellExecutor(self.varstore, self.pyconfig.cmd_config)
-        self.sleep = SleepExecutor(self.pyconfig.cmd_config,
+        self.se = ShellExecutor(self.pm, self.varstore, self.pyconfig.cmd_config)
+        self.sleep = SleepExecutor(self.pm, self.pyconfig.cmd_config,
                                    varstore=self.varstore)
-        self.ssh = SSHExecutor(self.pyconfig.cmd_config,
+        self.ssh = SSHExecutor(self.pm, self.pyconfig.cmd_config,
                                varstore=self.varstore)
-        self.father = FatherExecutor(self.varstore, self.pyconfig.cmd_config)
-        self.msfmodule = MsfModuleExecutor(self.pyconfig.cmd_config,
+        self.father = FatherExecutor(self.pm, self.varstore, self.pyconfig.cmd_config)
+        self.msfmodule = MsfModuleExecutor(self.pm, self.pyconfig.cmd_config,
                                            varstore=self.varstore,
                                            msfconfig=self.pyconfig.msf_config,
                                            msfsessionstore=self.msfsessionstore)
         self.msfsession = MsfSessionExecutor(
+                self.pm,
                 self.pyconfig.cmd_config,
                 varstore=self.varstore,
                 msfconfig=self.pyconfig.msf_config,
                 msfsessionstore=self.msfsessionstore)
-        self.debugger = DebugExecutor(self.varstore, self.pyconfig.cmd_config)
-        self.mktemp = TempfileExecutor(self.varstore, self.pyconfig.cmd_config)
-        self.regex = RegExExecutor(self.varstore, self.pyconfig.cmd_config)
-        self.sliver = SliverExecutor(self.pyconfig.cmd_config,
+        self.debugger = DebugExecutor(self.pm, self.varstore, self.pyconfig.cmd_config)
+        self.webserv = WebServExecutor(self.pm, self.varstore, self.pyconfig.cmd_config)
+        self.setvar = SetVarExecutor(self.pm, self.varstore, self.pyconfig.cmd_config)
+        self.mktemp = TempfileExecutor(self.pm, self.varstore, self.pyconfig.cmd_config)
+        self.regex = RegExExecutor(self.pm, self.varstore, self.pyconfig.cmd_config)
+        self.httpclient = HttpClientExecutor(self.pm, self.varstore, self.pyconfig.cmd_config)
+        self.include = IncludeExecutor(self.pm, self.pyconfig.cmd_config,
+                                       varstore=self.varstore,
+                                       runfunc=self.run_commands)
+        self.sliver = SliverExecutor(self.pm, self.pyconfig.cmd_config,
                                      varstore=self.varstore,
                                      sliver_config=self.pyconfig.sliver_config)
-        self.sliversession = SliverSessionExecutor(self.pyconfig.cmd_config,
+        self.sliversession = SliverSessionExecutor(self.pm, self.pyconfig.cmd_config,
                                                    varstore=self.varstore,
                                                    sliver_config=self.pyconfig.sliver_config)
 
-    def main(self):
-        """ The main function
+    def run_commands(self, commands: Commands):
+        """ Pass commands to the executors
 
         This function interates over all configured
         commands and passes them to the executors.
 
         """
-        for command in self.playbook.commands:
+        for command in commands:
             if command.type == "shell":
                 self.se.run(command)
             if command.type == "father":
@@ -106,6 +119,8 @@ class AttackMate:
                 self.ssh.run(command)
             if command.type == "debug":
                 self.debugger.run(command)
+            if command.type == "setvar":
+                self.setvar.run(command)
             if command.type == "regex":
                 self.regex.run(command)
             if command.type == "sliver":
@@ -114,3 +129,19 @@ class AttackMate:
                 self.sliversession.run(command)
             if command.type == "mktemp":
                 self.mktemp.run(command)
+            if command.type == "include":
+                self.include.run(command)
+            if command.type == "webserv":
+                self.webserv.run(command)
+            if command.type == "http-client":
+                self.httpclient.run(command)
+
+    def main(self):
+        """ The main function
+
+            Passes the main playbook-commands
+            to run_commands
+
+        """
+        self.run_commands(self.playbook.commands)
+        self.pm.kill_or_wait_processes()

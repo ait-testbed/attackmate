@@ -38,17 +38,20 @@ RUN mkdir -p ~/.msf4/ && touch ~/.msf4/initial_setup_complete \
     &&  su -l sliver -c 'mkdir -p ~/.msf4/ && touch ~/.msf4/initial_setup_complete'
 
 RUN cd /opt && curl -s https://api.github.com/repos/BishopFox/sliver/releases/latest | grep ".*browser_download_url.*_linux\"" | cut -d : -f 2,3 | tr -d \"  | wget -qi -
-RUN mv /opt/sliver-server_linux /opt/sliver-server && mv /opt/sliver-client_linux /opt/sliver-client && chmod +x /opt/sliver*
+RUN mv /opt/sliver-server_linux /opt/sliver-server && mv /opt/sliver-client_linux /opt/sliver-client && chmod +x /opt/sliver* && ln -s /opt/sliver-client /usr/local/bin/sliver \
+       && ln -s /opt/sliver-server /usr/local/bin/server && ln -s /opt/sliver-client /usr/local/bin/client
 
 Add sliverentry.sh /sliverentry.sh
 RUN chmod +x /sliverentry.sh
 
-VOLUME /home/sliver/.sliver-client
-VOLUME /home/sliver/.sliver
-USER sliver
-WORKDIR /home/sliver/
-
+VOLUME /root/.sliver-client
+VOLUME /root/.sliver
 RUN /opt/sliver-server unpack
+
+
+USER root
+WORKDIR /root/
+
 
 EXPOSE 53 80 443 31337
 STOPSIGNAL SIGQUIT

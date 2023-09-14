@@ -1,20 +1,24 @@
 from pymetasploit3.msfrpc import MsfRpcClient, MsfAuthError
 
 from attackmate.variablestore import VariableStore
-from .baseexecutor import BaseExecutor, Result, ExecException
+from .baseexecutor import BaseExecutor
+from .execexception import ExecException
+from .result import Result
+from .cmdvars import CmdVars
 from .schemas import MsfModuleCommand, BaseCommand
 from .msfsessionstore import MsfSessionStore
+from .processmanager import ProcessManager
 
 
 class MsfModuleExecutor(BaseExecutor):
-    def __init__(self, cmdconfig=None, *,
+    def __init__(self, pm: ProcessManager, cmdconfig=None, *,
                  varstore: VariableStore,
                  msfconfig=None,
                  msfsessionstore: MsfSessionStore):
         self.msfconfig = msfconfig
         self.sessionstore = msfsessionstore
         self.msf = None
-        super().__init__(varstore, cmdconfig)
+        super().__init__(pm, varstore, cmdconfig)
 
     def connect(self, msfconfig=None):
         try:
@@ -79,7 +83,7 @@ class MsfModuleExecutor(BaseExecutor):
         if exploit.missing_required:
             raise ExecException(f"Missing required exploit options: {exploit.missing_required}")
 
-        exploit.target = self.variable_to_int("target", command.target)
+        exploit.target = CmdVars.variable_to_int("target", command.target)
         return exploit
 
     def _exec_cmd(self, command: MsfModuleCommand) -> Result:
