@@ -60,6 +60,12 @@ be used with the sftp-command!
    :type: str
    :required: ``True``
 
+.. confval:: mode
+
+   The file permissions on the remote file(e.g. *755*).
+
+   :type: str
+
 
 .. confval:: hostname
 
@@ -91,6 +97,12 @@ be used with the sftp-command!
 
    Use this passphrase to decrypt the key_file. This is only necessary if the
    keyfile is protected by a passphrase.
+
+   :type: str
+
+.. confval:: key_filename
+
+   Path to the keyfile.
 
    :type: str
 

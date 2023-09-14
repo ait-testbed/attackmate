@@ -2,7 +2,7 @@
 sleep
 =====
 
-This command sleeps a certain amount of time.
+Sleep a certain amount of seconds.
 
 .. code-block:: yaml
 

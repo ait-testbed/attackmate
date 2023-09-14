@@ -66,6 +66,7 @@ class SetVarCommand(BaseCommand):
 class IncludeCommand(BaseCommand):
     type: Literal['include']
     local_path: str
+    cmd: str = "include commands"
 
 
 class WebServCommand(BaseCommand):
@@ -78,7 +79,7 @@ class WebServCommand(BaseCommand):
 
 class FatherCommand(BaseCommand):
     type: Literal['father']
-    cmd: Literal['generate']
+    cmd: Literal['generate'] = 'generate'
     gid: str = "1337"
     srcport: str = "54321"
     epochtime: str = "0000000000"
