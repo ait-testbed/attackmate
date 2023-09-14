@@ -4,7 +4,7 @@
 msf-session
 ===========
 
-This command allowes to read and write commands to (Meterpreter)sessions that
+This command allows to read and write commands to (Meterpreter)sessions that
 have previously created by msf-modules(see :ref:`msf-module`).
 
 
