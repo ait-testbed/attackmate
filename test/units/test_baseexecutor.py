@@ -1,10 +1,23 @@
-from attackmate.baseexecutor import BaseExecutor
+import pytest
+from attackmate.baseexecutor import BaseExecutor, ExecException, Result
 from attackmate.variablestore import VariableStore
 from attackmate.schemas import BaseCommand, RegExCommand, SliverSessionEXECCommand
 
 
-class TestBaseExecutor:
+class DummyCommand(BaseCommand):
+    return_val: int = 0
+    return_str: str = "back"
+    return_except: bool = False
 
+
+class DummyExecutor(BaseExecutor):
+    def _exec_cmd(self, command: DummyCommand):
+        if command.return_except:
+            raise ExecException("Failed")
+        return Result(command.return_str, command.return_val)
+
+
+class TestBaseExecutor:
     def test_replace_variables_in_strings(self):
         varstore = VariableStore()
         varstore.set_variable("foo", "bar")
@@ -59,3 +72,66 @@ class TestBaseExecutor:
         assert sl.output is False
         assert sl.args[0] == "woo $wonder"
         assert sl.args[1] == "hoo $foo"
+
+    def test_variable_to_int(self):
+        varstore = VariableStore()
+        be = BaseExecutor(varstore)
+        assert be.variable_to_int("foo", "1") == 1
+        with pytest.raises(ExecException):
+            be.variable_to_int("foo", "$var")
+
+    def test_dummy__exec(self):
+        varstore = VariableStore()
+        executor = DummyExecutor(varstore)
+        dc = DummyCommand(cmd="dummy")
+        assert dc.return_str == "back"
+        assert dc.return_val == 0
+        result = executor._exec_cmd(dc)
+        assert result.returncode == dc.return_val
+        assert result.stdout == dc.return_str
+        dc.return_except = True
+        with pytest.raises(ExecException):
+            executor._exec_cmd(dc)
+
+    def test_dummy_set_variables(self):
+        varstore = VariableStore()
+        executor = DummyExecutor(varstore)
+        dc = DummyCommand(cmd="dummy")
+        executor.exec(dc)
+        assert varstore.get_variable("RESULT_STDOUT") == dc.return_str
+        assert varstore.get_variable("RESULT_RETURNCODE") == str(dc.return_val)
+
+    def test_dummy_exit_on_error(self):
+        varstore = VariableStore()
+        executor = DummyExecutor(varstore)
+        dc = DummyCommand(cmd="dummy")
+        dc.error_if = ".*back.*"
+        with pytest.raises(SystemExit):
+            executor.exec(dc)
+        dc.error_if = None
+        dc.error_if_not = "forward"
+        with pytest.raises(SystemExit):
+            executor.exec(dc)
+        dc.error_if = None
+        dc.error_if_not = "forward"
+
+    def test_dummy_loop(self):
+        varstore = VariableStore()
+        executor = DummyExecutor(varstore)
+        executor.run_count = 1
+        dc = DummyCommand(cmd="dummy", loop_if="back")
+        with pytest.raises(SystemExit):
+            executor.exec(dc)
+        dc = DummyCommand(cmd="dummy", loop_if="forward")
+        try:
+            executor.exec(dc)
+        except SystemExit:
+            pytest.fail("Unexpected Exit")
+        dc = DummyCommand(cmd="dummy", loop_if_not="forward")
+        with pytest.raises(SystemExit):
+            executor.exec(dc)
+        dc = DummyCommand(cmd="dummy", loop_if_not="back")
+        try:
+            executor.exec(dc)
+        except SystemExit:
+            pytest.fail("Unexpected Exit")

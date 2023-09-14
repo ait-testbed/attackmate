@@ -8,10 +8,6 @@ purposes only.
    .. code-block:: yaml
 
       ###
-      msf_config:
-        password: top-secret
-        server: 10.18.3.86
-
       vars:
         $SERVER_ADDRESS: 192.42.0.254
         $NMAP: /usr/bin/nmap
@@ -20,6 +16,13 @@ purposes only.
         - type: debug
           cmd: "$NMAP $SERVER_ADDRESS"
           varstore: True
+
+.. confval:: cmd
+
+   A message to print on the screen.
+
+   :type: str
+   :default: ``empty_string``
 
 
 .. confval:: varstore

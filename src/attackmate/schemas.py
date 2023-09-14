@@ -1,5 +1,5 @@
 from typing import List, Literal, Union, Optional, Dict
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, validator
 
 # https://stackoverflow.com/questions/71539448/using-different-pydantic-models-depending-on-the-value-of-fields
 
@@ -27,6 +27,12 @@ class BaseCommand(BaseModel):
                 template_vars.append(k)
         return template_vars
 
+    @validator('background')
+    def bg_not_implemented_yet(cls, v):
+        if cls in (SSHCommand, SFTPCommand, MsfModuleCommand, IncludeCommand):
+            raise ValueError("background mode is unsupported for this command")
+        return v
+
     only_if: Optional[str] = None
     error_if: Optional[str] = None
     error_if_not: Optional[str] = None
@@ -36,6 +42,8 @@ class BaseCommand(BaseModel):
     exit_on_error: bool = True
     save: Optional[str] = None
     cmd: str
+    background: bool = False
+    kill_on_exit: bool = True
 
 
 class SleepCommand(BaseCommand):
@@ -50,9 +58,28 @@ class ShellCommand(BaseCommand):
     type: Literal['shell']
 
 
+class SetVarCommand(BaseCommand):
+    type: Literal['setvar']
+    variable: str
+
+
+class IncludeCommand(BaseCommand):
+    type: Literal['include']
+    local_path: str
+    cmd: str = "include commands"
+
+
+class WebServCommand(BaseCommand):
+    type: Literal['webserv']
+    cmd: str = "HTTP-GET"
+    local_path: str
+    port: str = Field(pattern=VAR_PATTERN, default="8000")
+    address: str = "0.0.0.0"
+
+
 class FatherCommand(BaseCommand):
     type: Literal['father']
-    cmd: Literal['generate']
+    cmd: Literal['generate'] = 'generate'
     gid: str = "1337"
     srcport: str = "54321"
     epochtime: str = "0000000000"
@@ -77,6 +104,7 @@ class DebugCommand(BaseCommand):
     type: Literal['debug']
     varstore: bool = False
     exit: bool = False
+    cmd: str = ""
 
 
 class RegExCommand(BaseCommand):
@@ -157,6 +185,21 @@ class MsfModuleCommand(BaseCommand):
         return "/".join(self.cmd.split("/")[1:])
 
 
+class HttpClientCommand(BaseCommand):
+    type: Literal['http-client']
+    cmd: Literal['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'HEAD', 'OPTIONS'] = 'GET'
+    url: str
+    output_headers: bool = False
+    headers: Optional[Dict[str, str]]
+    cookies: Optional[Dict[str, str]]
+    data: Optional[Dict[str, str]]
+    local_path: Optional[str]
+    useragent: str = "AttackMate"
+    follow: bool = False
+    verify: bool = False
+    http2: bool = False
+
+
 class CommandConfig(BaseModel):
     loop_sleep: int = 5
 
@@ -208,9 +251,7 @@ class SliverGenerateCommand(BaseCommand):
     name: str
     filepath: Optional[str]
     IsBeacon: bool = False
-    IsSharedLib: bool = False
-    IsService: bool = False
-    IsShellcode: bool = False
+    BeaconInterval: str = Field(pattern=VAR_PATTERN, default="120")
     RunAtLoad: bool = False
     Evasion: bool = False
 
@@ -218,6 +259,7 @@ class SliverGenerateCommand(BaseCommand):
 class SliverSessionCommand(BaseCommand):
     type: Literal['sliver-session']
     session: str
+    beacon: bool = False
 
 
 class SliverSessionCDCommand(SliverSessionCommand):
@@ -295,9 +337,7 @@ class Config(BaseModel):
     cmd_config: CommandConfig = CommandConfig(loop_sleep=5)
 
 
-class Playbook(BaseModel):
-    vars: Optional[Dict[str, str]] = None
-    commands: List[Union[
+Commands = List[Union[
                          ShellCommand,
                          MsfModuleCommand,
                          MsfSessionCommand,
@@ -306,8 +346,12 @@ class Playbook(BaseModel):
                          FatherCommand,
                          SFTPCommand,
                          DebugCommand,
+                         SetVarCommand,
                          RegExCommand,
                          TempfileCommand,
+                         IncludeCommand,
+                         WebServCommand,
+                         HttpClientCommand,
                          SliverSessionCDCommand,
                          SliverSessionLSCommand,
                          SliverSessionNETSTATCommand,
@@ -322,3 +366,8 @@ class Playbook(BaseModel):
                          SliverHttpsListenerCommand,
                          SliverGenerateCommand
                          ]]
+
+
+class Playbook(BaseModel):
+    vars: Optional[Dict[str, str]] = None
+    commands: Commands

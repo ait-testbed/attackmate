@@ -15,7 +15,10 @@ dependencies = [
     "pyaml",
     "paramiko",
     "sliver-py",
-    "tabulate"
+    "tabulate",
+    "python-magic",
+    "httpx",
+    "httpx[http2]"
 ]
 dynamic = ["version"]
 

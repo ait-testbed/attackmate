@@ -66,6 +66,13 @@ Execute commands on a remote server via SSH.
 
    :type: str
 
+.. confval:: key_filename
+
+   Path to the keyfile.
+
+   :type: str
+
+
 .. confval:: timeout
 
    The timeout to drop a connection attempt in seconds.

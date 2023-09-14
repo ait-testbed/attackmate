@@ -11,15 +11,17 @@ import os
 import tempfile
 from string import Template
 from typing import Any
-from .baseexecutor import BaseExecutor, Result
+from .baseexecutor import BaseExecutor
+from .result import Result
 from .schemas import FatherCommand
 from .variablestore import VariableStore
+from .processmanager import ProcessManager
 
 
 class FatherExecutor(BaseExecutor):
-    def __init__(self, varstore: VariableStore, cmdconfig=None):
+    def __init__(self, pm: ProcessManager, varstore: VariableStore, cmdconfig=None):
         self.tempfilestore: list[Any] = []
-        super().__init__(varstore, cmdconfig)
+        super().__init__(pm, varstore, cmdconfig)
 
     def set_config(self, command: FatherCommand, path: str):
         config = """
