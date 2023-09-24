@@ -13,6 +13,7 @@ Execute local shell-commands.
 
 
    .. code-block:: yaml
+
       ###
       vars:
         $SERVER_ADDRESS: 192.42.0.254
