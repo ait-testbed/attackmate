@@ -1,8 +1,13 @@
+.. _manual:
+
 =========================
 Installation from sources
 =========================
 
-AttackMate is written in python language. In order to prepare your system for AttackMate install the following tools:
+AttackMate is written in python language. It can execute various pentesting and hacking tools.
+Therefore, it is recommended to install AttackMate under Kali Linux. However, it should also
+work on other Linux distributions. In order to prepare your system for AttackMate install the
+following tools:
 
 ::
 
@@ -31,3 +36,8 @@ Finally install attackmate and it's dependencies:
 ::
 
   $ pip3 install .
+
+.. warning::
+
+   Please note that you need to :ref:`sliver-fix` if you want
+   to use the sliver commands!

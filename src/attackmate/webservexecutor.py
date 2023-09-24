@@ -44,8 +44,11 @@ class WebServe(HTTPServer):
         super().__init__(server_address, RequestHandlerClass, bind_and_activate)
 
     def finish_request(self, request, client_address):
-        self.RequestHandlerClass(request, client_address, self,
-                                 local_path=self.local_path)
+        try:
+            self.RequestHandlerClass(request, client_address, self,
+                                     local_path=self.local_path)
+        except ConnectionResetError:
+            pass
 
 
 class WebServExecutor(BaseExecutor):

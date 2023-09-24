@@ -2,8 +2,7 @@
 cmd_config
 ==========
 
-cmd_config stores global variables for command options. This means that these settings
-affect all commands.
+Stores global variables for command options. These are settings for **all** commands.
 
 .. code-block:: yaml
 
