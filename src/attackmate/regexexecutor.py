@@ -50,6 +50,7 @@ class RegExExecutor(BaseExecutor):
             self.varstore.set_variable(k, temp.safe_substitute(matches))
 
     def _exec_cmd(self, command: RegExCommand) -> Result:
+        self.setoutuptvars = False
         if command.mode == 'findall':
             m = re.findall(command.cmd, self.varstore.get_variable(command.input))
             matches = self.forge_variables(m)
