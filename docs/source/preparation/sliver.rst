@@ -1,3 +1,5 @@
+.. _prep_sliver:
+
 ==============
 Prepare Sliver
 ==============

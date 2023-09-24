@@ -3,7 +3,9 @@ Preparation
 ===========
 
 Even though AttackMate can be used out of the box, for some commands
-it is necessary to install and set up the corresponding tools.
+it is necessary to install and set up the corresponding tools. The following
+pages are going to explain how to setup and install :ref:`Sliver <prep_sliver>`
+and :ref:`Metasploit <prep_msf>`
 
 .. toctree::
    :maxdepth: 1
