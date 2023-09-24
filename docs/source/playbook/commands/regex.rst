@@ -62,6 +62,7 @@ By using the mode "split", strings that are seperated by whitespaces can be toke
    match is stored in a list or in a list of tuples the variablename will be
    numbered by the index. For examle: "$MATCH_0_0" for the first element in the
    first occurance.
+   If the regex-command does not match, no output variable will be set!
 
    .. note::
 
