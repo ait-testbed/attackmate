@@ -41,6 +41,10 @@ class RegExExecutor(BaseExecutor):
         self.logger.warn(f"RegEx: '{command.cmd}'")
 
     def register_outputvars(self, outputvars: dict, matches):
+        if not matches:
+            self.logger.debug("no match!")
+            return
+
         for k, v in outputvars.items():
             temp = Template(v)
             self.varstore.set_variable(k, temp.safe_substitute(matches))
