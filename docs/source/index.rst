@@ -17,17 +17,11 @@ Welcome to AttackMate's documentation!
    :caption: Getting Started:
 
    installation/index
+   preparation/index
+   configuration/index
+   basic
 
 
-.. toctree::
-   :maxdepth: 4
-   :caption: Configuration:
-
-   configuration/configuration
-   configuration/config_vars
-   configuration/command_config
-   configuration/msf_config
-   configuration/sliver_config
 
 .. toctree::
    :maxdepth: 4
