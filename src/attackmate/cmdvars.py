@@ -9,10 +9,12 @@ from .execexception import ExecException
 class CmdVars:
     def __init__(self, variablestore: VariableStore):
         self.varstore = variablestore
+        self.setoutuptvars = True
 
     def set_result_vars(self, result: Result):
-        self.varstore.set_variable("RESULT_STDOUT", result.stdout)
-        self.varstore.set_variable("RESULT_RETURNCODE", str(result.returncode))
+        if self.setoutuptvars:
+            self.varstore.set_variable("RESULT_STDOUT", result.stdout)
+            self.varstore.set_variable("RESULT_RETURNCODE", str(result.returncode))
 
     def replace_variables(self, command: BaseCommand) -> BaseCommand:
         """ Replace variables using the VariableStore

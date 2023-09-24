@@ -15,6 +15,7 @@ class SetVarExecutor(BaseExecutor):
         self.logger.warn(f"Setting Variable: '{command.variable}'")
 
     def _exec_cmd(self, command: SetVarCommand) -> Result:
+        self.setoutuptvars = False
         self.varstore.set_variable(command.variable, command.cmd)
 
         return Result("", 0)
