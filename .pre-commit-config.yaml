@@ -31,3 +31,8 @@ repos:
     rev: '1.7.5'
     hooks:
     -   id: bandit
+
+-   repo: https://github.com/PyCQA/prospector
+    rev: 1.10.0 # The version of Prospector to use, if not 'master' for latest
+    hooks:
+    -   id: prospector
