@@ -36,12 +36,13 @@ repos:
     hooks:
     -   id: bandit
 
--   repo: https://github.com/PyCQA/prospector
-    rev: 1.10.0 # The version of Prospector to use, if not 'master' for latest
-    hooks:
-    -   id: prospector
+      # PROBLEMS WITH IMPORTS IN PYLINT!!!
+      #-   repo: https://github.com/PyCQA/prospector
+      #    rev: 1.10.0 # The version of Prospector to use, if not 'master' for latest
+      #    hooks:
+      #    -   id: prospector
 
--   repo: https://github.com/PyCQA/pylint
-    rev: ''
-    hooks:
-    -   id: pylint
+      # -   repo: https://github.com/PyCQA/pylint
+      #     rev: ''
+      #     hooks:
+      #     -   id: pylint
