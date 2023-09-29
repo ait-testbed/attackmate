@@ -40,3 +40,8 @@ repos:
     rev: 1.10.0 # The version of Prospector to use, if not 'master' for latest
     hooks:
     -   id: prospector
+
+-   repo: https://github.com/PyCQA/pylint
+    rev: ''
+    hooks:
+    -   id: pylint
