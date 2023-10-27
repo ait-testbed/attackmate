@@ -8,6 +8,7 @@ from .cmdvars import CmdVars
 from .schemas import MsfModuleCommand, BaseCommand
 from .msfsessionstore import MsfSessionStore
 from .processmanager import ProcessManager
+from multiprocessing import Queue, Manager
 
 
 class MsfModuleExecutor(BaseExecutor):
@@ -19,6 +20,15 @@ class MsfModuleExecutor(BaseExecutor):
         self.sessionstore = msfsessionstore
         self.msf = None
         super().__init__(pm, varstore, cmdconfig)
+
+    def _create_queue(self) -> Queue:
+        if self.sessionstore.queue:
+            return self.sessionstore.queue
+        else:
+            if not self.manager:
+                self.manager = Manager()
+            self.sessionstore.queue = self.manager.Queue()
+            return self.sessionstore.queue
 
     def connect(self, msfconfig=None):
         try:
@@ -97,7 +107,7 @@ class MsfModuleExecutor(BaseExecutor):
             self.logger.debug("Command creates a msf-session")
             result = exploit.execute(payload=payload)
             self.logger.debug(result)
-            self.sessionstore.wait_for_session(command.creates_session, result['uuid'], self.msf.sessions)
+            self.sessionstore.wait_for_session(command.creates_session, result['uuid'], self.msf.sessions, self.child_queue)
             return Result("", 0)
         cid = self.msf.consoles.console().cid
         output = self.msf.consoles.console(cid).run_module_with_output(exploit, payload=payload)
