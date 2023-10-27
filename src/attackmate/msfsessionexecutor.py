@@ -8,6 +8,7 @@ from .result import Result
 from .schemas import MsfSessionCommand, BaseCommand
 from .msfsessionstore import MsfSessionStore
 from .processmanager import ProcessManager
+import time
 
 
 class MsfSessionExecutor(BaseExecutor):
@@ -48,6 +49,7 @@ class MsfSessionExecutor(BaseExecutor):
             raise ExecException('ConnectionError')
 
         session_id = self.sessionstore.get_session_by_name(command.session, self.msf.sessions)
+        time.sleep(10)
         self.logger.debug(f'Using session-id: {session_id}')
         return_empty = False
 
