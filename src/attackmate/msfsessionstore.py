@@ -12,6 +12,7 @@ class MsfSessionStore:
         self.logger = logging.getLogger('playbook')
         self.varstore = varstore
         self.queue = None
+        self.get_session_wait_time = 5
 
     def add_session(self, name: str, uuid: str) -> None:
         self.sessions[name] = uuid
@@ -24,6 +25,7 @@ class MsfSessionStore:
                     self.logger.debug(f"Read {item[0]} {item[1]} from queue")
                     self.add_session(item[0], item[1])
                     self.queue.task_done()
+                    time.sleep(self.get_session_wait_time)
             for k, v in msfsessions.list.items():
                 if name in self.sessions:
                     if v['exploit_uuid'] == self.sessions[name]:
