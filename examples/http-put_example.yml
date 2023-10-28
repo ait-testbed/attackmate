@@ -51,6 +51,10 @@ commands:
     background: true
     kill_on_exit: false
 
+  # wait two seconds
+  - type: sleep
+    seconds: 2
+
   # execute command in reverse-shell
   - type: msf-session
     stdapi: True
