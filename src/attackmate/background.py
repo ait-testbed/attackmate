@@ -42,6 +42,7 @@ class Background:
             p = self.pm.ctx.Process(target=self._exec_bg_cmd,
                                     args=(command,))
         p.start()
+        p.join(5)
         self.pm.add_process(p, command.kill_on_exit)
 
     def _exec_bg_cmd(self, command: Any, queue: Queue = None):
