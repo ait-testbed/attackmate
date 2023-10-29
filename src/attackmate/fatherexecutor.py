@@ -11,15 +11,17 @@ import os
 import tempfile
 from string import Template
 from typing import Any
-from .baseexecutor import BaseExecutor, Result
+from .baseexecutor import BaseExecutor
+from .result import Result
 from .schemas import FatherCommand
 from .variablestore import VariableStore
+from .processmanager import ProcessManager
 
 
 class FatherExecutor(BaseExecutor):
-    def __init__(self, varstore: VariableStore, cmdconfig=None):
+    def __init__(self, pm: ProcessManager, varstore: VariableStore, cmdconfig=None):
         self.tempfilestore: list[Any] = []
-        super().__init__(varstore, cmdconfig)
+        super().__init__(pm, varstore, cmdconfig)
 
     def set_config(self, command: FatherCommand, path: str):
         config = """
@@ -48,8 +50,10 @@ class FatherExecutor(BaseExecutor):
                          "INSTALL_PATH": command.install_path
                         }
         template = Template(config)
+        substi = template.safe_substitute(template_vars)
+        self.logger.debug(substi)
         with open(path, "w") as f:
-            f.write(template.safe_substitute(template_vars))
+            f.write(substi)
 
     def log_command(self, command: FatherCommand):
         self.logger.info("Generating Father-Binary")
@@ -68,7 +72,7 @@ class FatherExecutor(BaseExecutor):
         tar = tarfile.open(data_path)
         tar.extractall(father_path)
         self.set_config(command, os.path.join(father_path, "Father", "src", "config.h"))
-        result = subprocess.run("make",
+        result = subprocess.run(command.build_command,
                                 shell=True,
                                 cwd=os.path.join(father_path, "Father"),
                                 stdout=subprocess.PIPE,

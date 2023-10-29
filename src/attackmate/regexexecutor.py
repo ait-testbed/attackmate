@@ -5,7 +5,8 @@ This class allows to parse variables using
 regular expressions.
 """
 
-from .baseexecutor import BaseExecutor, Result
+from .baseexecutor import BaseExecutor
+from .result import Result
 from .schemas import RegExCommand
 from string import Template
 from typing import Match
@@ -40,11 +41,16 @@ class RegExExecutor(BaseExecutor):
         self.logger.warn(f"RegEx: '{command.cmd}'")
 
     def register_outputvars(self, outputvars: dict, matches):
+        if not matches:
+            self.logger.debug("no match!")
+            return
+
         for k, v in outputvars.items():
             temp = Template(v)
             self.varstore.set_variable(k, temp.safe_substitute(matches))
 
     def _exec_cmd(self, command: RegExCommand) -> Result:
+        self.setoutuptvars = False
         if command.mode == 'findall':
             m = re.findall(command.cmd, self.varstore.get_variable(command.input))
             matches = self.forge_variables(m)

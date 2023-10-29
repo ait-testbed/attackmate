@@ -9,13 +9,17 @@ import os
 from sliver import SliverClientConfig, SliverClient
 from sliver.protobuf import client_pb2
 from .variablestore import VariableStore
-from .baseexecutor import BaseExecutor, ExecException, Result
+from .baseexecutor import BaseExecutor
+from .execexception import ExecException
+from .result import Result
+from .cmdvars import CmdVars
 from .schemas import BaseCommand, SliverGenerateCommand, SliverHttpsListenerCommand
+from .processmanager import ProcessManager
 
 
 class SliverExecutor(BaseExecutor):
 
-    def __init__(self, cmdconfig=None, *,
+    def __init__(self, pm: ProcessManager, cmdconfig=None, *,
                  varstore: VariableStore,
                  sliver_config=None):
         self.sliver_config = sliver_config
@@ -26,7 +30,7 @@ class SliverExecutor(BaseExecutor):
         if self.sliver_config.config_file:
             self.client_config = SliverClientConfig.parse_config_file(sliver_config.config_file)
             self.client = SliverClient(self.client_config)
-        super().__init__(varstore, cmdconfig)
+        super().__init__(pm, varstore, cmdconfig)
 
     async def connect(self) -> None:
         if self.client:
@@ -39,7 +43,7 @@ class SliverExecutor(BaseExecutor):
         if self.client is None:
             raise ExecException("SliverClient is not defined")
         listener = await self.client.start_https_listener(command.host,
-                                                          command.port,
+                                                          CmdVars.variable_to_int("port", command.port),
                                                           command.website,
                                                           command.domain,
                                                           b"",
@@ -48,9 +52,11 @@ class SliverExecutor(BaseExecutor):
                                                           command.persistent,
                                                           command.enforce_otp,
                                                           command.randomize_jarm,
-                                                          command.long_poll_timeout,
-                                                          command.long_poll_jitter,
-                                                          command.timeout)
+                                                          CmdVars.variable_to_int("long_poll_timeout",
+                                                                                  command.long_poll_timeout),
+                                                          CmdVars.variable_to_int("long_poll_jitter",
+                                                                                  command.long_poll_jitter),
+                                                          CmdVars.variable_to_int("timeout", command.timeout))
         self.result = Result(f"JobID: {listener.JobID}", 0)
 
     def prepare_implant_config(self, command: SliverGenerateCommand) -> client_pb2.ImplantConfig:
@@ -58,21 +64,28 @@ class SliverExecutor(BaseExecutor):
         c2.URL = command.c2url
         c2.Priority = 0
         outformat = client_pb2.OutputFormat.EXECUTABLE
+        implconfig = client_pb2.ImplantConfig()
+        implconfig.IsService = False
+        implconfig.IsSharedLib = False
+        implconfig.IsShellcode = False
+
         if command.format == "SERVICE":
             outformat = client_pb2.OutputFormat.SERVICE
+            implconfig.IsService = True
 
         if command.format == "SHARED_LIB":
             outformat = client_pb2.OutputFormat.SHARED_LIB
+            implconfig.IsSharedLib = True
 
         if command.format == "SHELLCODE":
             outformat = client_pb2.OutputFormat.SHELLCODE
+            implconfig.IsShellcode = True
 
-        implconfig = client_pb2.ImplantConfig()
         implconfig.C2.extend([c2])
         implconfig.IsBeacon = command.IsBeacon
-        implconfig.IsSharedLib = command.IsSharedLib
-        implconfig.IsService = command.IsService
-        implconfig.IsShellcode = command.IsShellcode
+        if command.IsBeacon:
+            implconfig.BeaconInterval = CmdVars.variable_to_int("BeaconInterval",
+                                                                command.BeaconInterval)
         implconfig.RunAtLoad = command.RunAtLoad
         implconfig.Evasion = command.Evasion
         target = command.target.split("/")

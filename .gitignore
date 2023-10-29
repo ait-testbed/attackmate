@@ -153,7 +153,7 @@ dmypy.json
 cython_debug/
 
 # VIM
-.vim
+.vim/
 .swp
 
 # PyCharm
@@ -164,3 +164,4 @@ cython_debug/
 #.idea/
 playbooks/
 .penpal.yml
+.attackmate.yml

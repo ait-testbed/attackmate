@@ -1,0 +1,39 @@
+#
+# Author: Wolfgang Hotwagner
+# Description:
+#     This playbook perfoms the following attack-steps:
+#     1. Scan the metasploitable-vm using nmap
+#     2. Parse the output of the scan to get the http-port
+#     6. Execute nikto-scan only if http-port is port 80
+#
+# Requirements:
+#     1. Run this on kali-linux
+#     2. Metasploit installed and msfrpd executed
+#     3. Install nmap, nikto
+#     4. Target a Metasploitable2-VM
+#
+vars:
+  NMAP: /usr/bin/nmap
+  METASPLOITABLE: 172.17.0.106
+
+commands:
+  # Perform nmap scan
+  - type: shell
+    cmd: $NMAP -p 80 $METASPLOITABLE
+  
+  # Parse output of nmap-scan to
+  # grep the port-number of the http service
+  - type: regex
+    cmd: (\d+)/tcp open  http
+    input: RESULT_STDOUT
+    output:
+      PORT: $MATCH_0
+  
+  # Print port for debugging purposes
+  - type: debug
+    cmd: $PORT
+  
+  # Run nikto only if http-port is port 80
+  - type: shell
+    cmd: nikto -host $METASPLOITABLE -port $PORT
+    only_if: $PORT == 80

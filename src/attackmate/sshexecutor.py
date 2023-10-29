@@ -14,17 +14,21 @@ from paramiko import AutoAddPolicy
 from paramiko.ssh_exception import (BadHostKeyException,
                                     AuthenticationException,
                                     SSHException)
-from .baseexecutor import BaseExecutor, ExecException, Result
+from .baseexecutor import BaseExecutor
+from .execexception import ExecException
+from .result import Result
+from .cmdvars import CmdVars
 from .schemas import SFTPCommand, SSHCommand
 from .variablestore import VariableStore
+from .processmanager import ProcessManager
 
 
 class SSHExecutor(BaseExecutor):
-    def __init__(self, cmdconfig=None, *, varstore: VariableStore):
+    def __init__(self, pm: ProcessManager, cmdconfig=None, *, varstore: VariableStore):
         self.session_store = self.SessionStore()
         self.set_defaults()
         self.timer = None
-        super().__init__(varstore, cmdconfig)
+        super().__init__(pm, varstore, cmdconfig)
 
     def set_defaults(self):
         self.hostname = None
@@ -42,7 +46,7 @@ class SSHExecutor(BaseExecutor):
         if command.hostname:
             self.hostname = command.hostname
         if command.port:
-            self.port = command.port
+            self.port = CmdVars.variable_to_int("port", command.port)
         if command.username:
             self.username = command.username
         if command.password:
@@ -56,7 +60,7 @@ class SSHExecutor(BaseExecutor):
         if command.jmp_hostname:
             self.jmp_hostname = command.jmp_hostname
         if command.jmp_port:
-            self.jmp_port = command.jmp_port
+            self.jmp_port = CmdVars.variable_to_int("jmp_port", command.jmp_port)
         if command.jmp_username:
             self.jmp_username = command.jmp_username
 
@@ -198,7 +202,7 @@ class SSHExecutor(BaseExecutor):
                 if command.interactive:
                     stdin, stdout, stderr = self.exec_interactive_command(command, client)
                     self.set_timer()
-                    while self.check_timer(command.command_timeout):
+                    while self.check_timer(CmdVars.variable_to_int("timeout", command.command_timeout)):
                         if stdout.channel.recv_ready():
                             tmp = stdout.channel.recv(1025).decode("utf-8", "ignore")
                             output += tmp

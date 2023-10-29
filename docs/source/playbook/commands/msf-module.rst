@@ -14,10 +14,6 @@ Some Metasploit-Modules return output. Like the Auxilary-Modules:
 
 .. code-block:: yaml
 
-   msf_config:
-     password: hackhelfer
-     server: 10.18.3.86
-
    commands:
      - type: msf-module
        cmd: auxiliary/scanner/portscan/tcp
@@ -28,10 +24,6 @@ Most Exploit-Modules don't create output but instead they create
 sessions(see :ref:`msf-session`)
 
 .. code-block:: yaml
-
-   msf_config:
-     password: hackhelfer
-     server: 10.18.3.86
 
    commands:
      - type: msf-module

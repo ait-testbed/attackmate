@@ -1,7 +1,9 @@
 from typing import List, Literal, Union, Optional, Dict
-from pydantic import BaseModel
+from pydantic import BaseModel, Field, validator
 
 # https://stackoverflow.com/questions/71539448/using-different-pydantic-models-depending-on-the-value-of-fields
+
+VAR_PATTERN = r'^\$[$a-zA-Z0-9_]+$|^[0-9]+$'
 
 
 class BaseCommand(BaseModel):
@@ -21,24 +23,33 @@ class BaseCommand(BaseModel):
         template_vars: List[str] = []
         for k in self.__dict__.keys():
             tmp = getattr(self, k)
-            if isinstance(tmp, (str, dict)) and k != "type":
+            if isinstance(tmp, (str, dict, list)) and k != "type":
                 template_vars.append(k)
         return template_vars
 
+    @validator('background')
+    def bg_not_implemented_yet(cls, v):
+        if cls in (SSHCommand, SFTPCommand, MsfSessionCommand, IncludeCommand):
+            raise ValueError("background mode is unsupported for this command")
+        return v
+
+    only_if: Optional[str] = None
     error_if: Optional[str] = None
     error_if_not: Optional[str] = None
     loop_if: Optional[str] = None
     loop_if_not: Optional[str] = None
-    loop_count: int = 3
+    loop_count: str = Field(pattern=VAR_PATTERN, default="3")
     exit_on_error: bool = True
     save: Optional[str] = None
     cmd: str
+    background: bool = False
+    kill_on_exit: bool = True
 
 
 class SleepCommand(BaseCommand):
     type: Literal['sleep']
-    min_sec: int = 0
-    seconds: int = 1
+    min_sec: str = Field(pattern=VAR_PATTERN, default="0")
+    seconds: str = Field(pattern=VAR_PATTERN, default="1")
     random: bool = False
     cmd: str = "sleep"
 
@@ -47,9 +58,28 @@ class ShellCommand(BaseCommand):
     type: Literal['shell']
 
 
+class SetVarCommand(BaseCommand):
+    type: Literal['setvar']
+    variable: str
+
+
+class IncludeCommand(BaseCommand):
+    type: Literal['include']
+    local_path: str
+    cmd: str = "include commands"
+
+
+class WebServCommand(BaseCommand):
+    type: Literal['webserv']
+    cmd: str = "HTTP-GET"
+    local_path: str
+    port: str = Field(pattern=VAR_PATTERN, default="8000")
+    address: str = "0.0.0.0"
+
+
 class FatherCommand(BaseCommand):
     type: Literal['father']
-    cmd: Literal['generate']
+    cmd: Literal['generate'] = 'generate'
     gid: str = "1337"
     srcport: str = "54321"
     epochtime: str = "0000000000"
@@ -60,7 +90,8 @@ class FatherCommand(BaseCommand):
     shell_pass: str = "lobster"
     install_path: str = "/lib/selinux.so.3"
     local_path: Optional[str]
-    arch: Literal['amd64'] = 'amd64'
+    arch: Literal["amd64"] = "amd64"
+    build_command: str = "make"
 
 
 class TempfileCommand(BaseCommand):
@@ -73,6 +104,7 @@ class DebugCommand(BaseCommand):
     type: Literal['debug']
     varstore: bool = False
     exit: bool = False
+    cmd: str = ""
 
 
 class RegExCommand(BaseCommand):
@@ -84,7 +116,7 @@ class RegExCommand(BaseCommand):
 
 class SSHBase(BaseCommand):
     hostname: Optional[str]
-    port: Optional[int]
+    port: Optional[str] = Field(pattern=VAR_PATTERN, default=None)
     username: Optional[str]
     password: Optional[str]
     passphrase: Optional[str]
@@ -94,7 +126,7 @@ class SSHBase(BaseCommand):
     clear_cache: bool = False
     timeout: float = 60
     jmp_hostname: Optional[str]
-    jmp_port: Optional[int]
+    jmp_port: Optional[str] = Field(pattern=VAR_PATTERN, default=None)
     jmp_username: Optional[str]
 
 
@@ -102,7 +134,7 @@ class SSHCommand(SSHBase):
     type: Literal['ssh']
     interactive: bool = False
     validate_prompt: bool = True
-    command_timeout: int = 15
+    command_timeout: str = Field(pattern=VAR_PATTERN, default="15")
     prompts: List[str] = ["$ ", "# ", "> "]
 
 
@@ -127,7 +159,7 @@ class MsfSessionCommand(BaseCommand):
 class MsfModuleCommand(BaseCommand):
     cmd: str
     type: Literal['msf-module']
-    target: int = 0
+    target: str = Field(pattern=VAR_PATTERN, default="0")
     creates_session: Optional[str]
     session: Optional[str]
     payload: Optional[str]
@@ -153,6 +185,21 @@ class MsfModuleCommand(BaseCommand):
         return "/".join(self.cmd.split("/")[1:])
 
 
+class HttpClientCommand(BaseCommand):
+    type: Literal['http-client']
+    cmd: Literal['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'HEAD', 'OPTIONS'] = 'GET'
+    url: str
+    output_headers: bool = False
+    headers: Optional[Dict[str, str]]
+    cookies: Optional[Dict[str, str]]
+    data: Optional[Dict[str, str]]
+    local_path: Optional[str]
+    useragent: str = "AttackMate"
+    follow: bool = False
+    verify: bool = False
+    http2: bool = False
+
+
 class CommandConfig(BaseModel):
     loop_sleep: int = 5
 
@@ -173,16 +220,16 @@ class SliverHttpsListenerCommand(BaseCommand):
     type: Literal['sliver']
     cmd: Literal['start_https_listener']
     host: str = "0.0.0.0"
-    port: int = 443
+    port: str = Field(pattern=VAR_PATTERN, default="443")
     domain: str = ""
     website: str = ""
     acme: bool = False
     persistent: bool = False
     enforce_otp: bool = True
     randomize_jarm: bool = True
-    long_poll_timeout: int = 1
-    long_poll_jitter: int = 2
-    timeout: int = 60
+    long_poll_timeout: str = Field(pattern=VAR_PATTERN, default="1")
+    long_poll_jitter: str = Field(pattern=VAR_PATTERN, default="2")
+    timeout: str = Field(pattern=VAR_PATTERN, default="60")
 
 
 class SliverGenerateCommand(BaseCommand):
@@ -204,9 +251,7 @@ class SliverGenerateCommand(BaseCommand):
     name: str
     filepath: Optional[str]
     IsBeacon: bool = False
-    IsSharedLib: bool = False
-    IsService: bool = False
-    IsShellcode: bool = False
+    BeaconInterval: str = Field(pattern=VAR_PATTERN, default="120")
     RunAtLoad: bool = False
     Evasion: bool = False
 
@@ -214,6 +259,7 @@ class SliverGenerateCommand(BaseCommand):
 class SliverSessionCommand(BaseCommand):
     type: Literal['sliver-session']
     session: str
+    beacon: bool = False
 
 
 class SliverSessionCDCommand(SliverSessionCommand):
@@ -269,7 +315,7 @@ class SliverSessionLSCommand(SliverSessionCommand):
 class SliverSessionPROCDUMPCommand(SliverSessionCommand):
     cmd: Literal['process_dump']
     local_path: str
-    pid: int
+    pid: str = Field(pattern=VAR_PATTERN)
 
 
 class SliverSessionRMCommand(SliverSessionCommand):
@@ -281,7 +327,7 @@ class SliverSessionRMCommand(SliverSessionCommand):
 
 class SliverSessionTERMINATECommand(SliverSessionCommand):
     cmd: Literal['terminate']
-    pid: int
+    pid: str = Field(pattern=VAR_PATTERN)
     force: bool = False
 
 
@@ -291,9 +337,7 @@ class Config(BaseModel):
     cmd_config: CommandConfig = CommandConfig(loop_sleep=5)
 
 
-class Playbook(BaseModel):
-    vars: Optional[Dict[str, str]] = None
-    commands: List[Union[
+Commands = List[Union[
                          ShellCommand,
                          MsfModuleCommand,
                          MsfSessionCommand,
@@ -302,8 +346,12 @@ class Playbook(BaseModel):
                          FatherCommand,
                          SFTPCommand,
                          DebugCommand,
+                         SetVarCommand,
                          RegExCommand,
                          TempfileCommand,
+                         IncludeCommand,
+                         WebServCommand,
+                         HttpClientCommand,
                          SliverSessionCDCommand,
                          SliverSessionLSCommand,
                          SliverSessionNETSTATCommand,
@@ -318,3 +366,8 @@ class Playbook(BaseModel):
                          SliverHttpsListenerCommand,
                          SliverGenerateCommand
                          ]]
+
+
+class Playbook(BaseModel):
+    vars: Optional[Dict[str, str]] = None
+    commands: Commands

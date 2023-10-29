@@ -1,20 +1,34 @@
 from pymetasploit3.msfrpc import MsfRpcClient, MsfAuthError
 
 from attackmate.variablestore import VariableStore
-from .baseexecutor import BaseExecutor, Result, ExecException
+from .baseexecutor import BaseExecutor
+from .execexception import ExecException
+from .result import Result
+from .cmdvars import CmdVars
 from .schemas import MsfModuleCommand, BaseCommand
 from .msfsessionstore import MsfSessionStore
+from .processmanager import ProcessManager
+from multiprocessing import Queue, Manager
 
 
 class MsfModuleExecutor(BaseExecutor):
-    def __init__(self, cmdconfig=None, *,
+    def __init__(self, pm: ProcessManager, cmdconfig=None, *,
                  varstore: VariableStore,
                  msfconfig=None,
                  msfsessionstore: MsfSessionStore):
         self.msfconfig = msfconfig
         self.sessionstore = msfsessionstore
         self.msf = None
-        super().__init__(varstore, cmdconfig)
+        super().__init__(pm, varstore, cmdconfig)
+
+    def _create_queue(self) -> Queue:
+        if self.sessionstore.queue:
+            return self.sessionstore.queue
+        else:
+            if not self.manager:
+                self.manager = Manager()
+            self.sessionstore.queue = self.manager.Queue()
+            return self.sessionstore.queue
 
     def connect(self, msfconfig=None):
         try:
@@ -79,7 +93,7 @@ class MsfModuleExecutor(BaseExecutor):
         if exploit.missing_required:
             raise ExecException(f"Missing required exploit options: {exploit.missing_required}")
 
-        exploit.target = command.target
+        exploit.target = CmdVars.variable_to_int("target", command.target)
         return exploit
 
     def _exec_cmd(self, command: MsfModuleCommand) -> Result:
@@ -93,7 +107,12 @@ class MsfModuleExecutor(BaseExecutor):
             self.logger.debug("Command creates a msf-session")
             result = exploit.execute(payload=payload)
             self.logger.debug(result)
-            self.sessionstore.wait_for_session(command.creates_session, result['uuid'], self.msf.sessions)
+            self.logger.debug(command.module_path())
+            if command.module_path() == 'multi/manage/shell_to_meterpreter':
+                self.logger.debug("Waiting for increased session..")
+                self.sessionstore.wait_for_increased_session(command.creates_session, result['uuid'], self.msf.sessions, self.child_queue)
+            else:
+                self.sessionstore.wait_for_session(command.creates_session, result['uuid'], self.msf.sessions, self.child_queue)
             return Result("", 0)
         cid = self.msf.consoles.console().cid
         output = self.msf.consoles.console(cid).run_module_with_output(exploit, payload=payload)

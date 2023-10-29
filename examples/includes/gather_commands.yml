@@ -1,0 +1,26 @@
+commands:
+  - type: msf-module
+    cmd: post/linux/gather/checkvm
+    options:
+      SESSION: $GATHER_SESSION
+
+  - type: msf-module
+    cmd: post/linux/gather/checkcontainer
+    options:
+      SESSION: $GATHER_SESSION
+
+  - type: msf-module
+    cmd: post/linux/gather/enum_network
+    options:
+      SESSION: $GATHER_SESSION
+
+  - type: msf-module
+    cmd: post/linux/gather/enum_users_history
+    options:
+      SESSION: $GATHER_SESSION
+
+  - type: msf-module
+    cmd: post/linux/gather/enum_protections
+    options:
+      SESSION: $GATHER_SESSION
+

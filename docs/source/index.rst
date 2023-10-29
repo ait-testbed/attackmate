@@ -13,21 +13,24 @@ Welcome to AttackMate's documentation!
    readme_link
 
 .. toctree::
-   :maxdepth: 4
-   :caption: Configuration:
+   :maxdepth: 1
+   :caption: Getting Started:
 
-   configuration/configuration
-   configuration/config_vars
-   configuration/command_config
-   configuration/msf_config
-   configuration/sliver_config
+   installation/index
+   preparation/index
+   configuration/index
+   basic
+
+
 
 .. toctree::
    :maxdepth: 4
    :caption: Playbook:
 
+   playbook/structure
    playbook/vars
    playbook/commands/index
+   playbook/examples
 
 .. toctree::
    :maxdepth: 1

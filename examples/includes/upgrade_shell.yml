@@ -1,0 +1,23 @@
+commands:
+  - type: debug
+    varstore: True
+
+  - type: msf-session
+    cmd: python -c "import pty;pty.spawn(\"/bin/bash\")";
+    session: $UPGRADESESSION
+
+  - type: msf-session
+    cmd: export SHELL=bash
+    session: $UPGRADESESSION
+
+  - type: msf-session
+    cmd: export TERM=xterm256-color
+    session: $UPGRADESESSION
+
+  - type: msf-session
+    cmd: stty rows 38 columns 116
+    session: $UPGRADESESSION
+
+  - type: msf-session
+    cmd: 'export PS1=" >"'
+    session: $UPGRADESESSION

@@ -21,9 +21,15 @@ class VariableStore:
         else:
             return name
 
-    def substitute_str(self, template_str: str) -> str:
+    def substitute_str(self, template_str: str, blank: bool = False) -> str:
         temp = Template(template_str)
-        return temp.safe_substitute(self.variables)
+        if blank:
+            try:
+                return temp.substitute(self.variables)
+            except KeyError:
+                return ""
+        else:
+            return temp.safe_substitute(self.variables)
 
     def set_variable(self, variable: str, value: str):
         self.variables[self.remove_sign(variable)] = value
@@ -31,8 +37,8 @@ class VariableStore:
     def get_variable(self, variable: str):
         return self.variables[variable]
 
-    def substitute(self, data: Any) -> Any:
+    def substitute(self, data: Any, blank: bool = False) -> Any:
         if isinstance(data, str):
-            return self.substitute_str(data)
+            return self.substitute_str(data, blank)
         else:
             return data
