@@ -49,7 +49,7 @@ commands:
     cmd: GET
     url: http://$METASPLOITABLE/dav/shell.php
     background: true
-    kill_on_exit: false
+    kill_on_exit: true
 
   # wait two seconds
   - type: sleep
