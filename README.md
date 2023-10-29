@@ -31,8 +31,9 @@ $ attackmate playbook.yml
 Please take a look at our documentation for how to install and use attackmate:
 
 * [Installation](https://aeciddocs.ait.ac.at/attackmate/current/installation/index.html)
-* [Documentation](https://aeciddocs.ait.ac.at/attackmate)
-* [Command Reference](https://aeciddocs.ait.ac.at/attackmate/playbook/commands/index.html)
+* [Documentation](https://aeciddocs.ait.ac.at/attackmate/current)
+* [Command Reference](https://aeciddocs.ait.ac.at/attackmate/current/playbook/commands/index.html)
+* [Example Playbooks](https://aeciddocs.ait.ac.at/attackmate/current/playbook/examples.html)
 
 ## Disclaimer
 
