@@ -17,7 +17,7 @@ Playbooks
 ---------
 
 * `HTTP-client example <https://github.com/ait-aecid/attackmate/blob/main/examples/http-put_example.yml>`_
-* `Include command example <https://github.com/ait-aecid/attackmate/blob/main/examples/http-put_example.yml>`_
+* `Include command example <https://github.com/ait-aecid/attackmate/blob/main/examples/include.yml>`_
 * `Only If example <https://github.com/ait-aecid/attackmate/blob/main/examples/only_if.yml>`_
 * `SSH/SFTP example <https://github.com/ait-aecid/attackmate/blob/main/examples/ssh_example.yml>`_
 * `Upgrade meterpreter shell <https://github.com/ait-aecid/attackmate/blob/main/examples/upgrade_to_meterpreter.yml>`_
