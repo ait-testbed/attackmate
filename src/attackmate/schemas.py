@@ -23,14 +23,14 @@ class BaseCommand(BaseModel):
         template_vars: List[str] = []
         for k in self.__dict__.keys():
             tmp = getattr(self, k)
-            if isinstance(tmp, (str, dict, list)) and k != "type":
+            if isinstance(tmp, (str, dict, list)) and k != 'type':
                 template_vars.append(k)
         return template_vars
 
     @validator('background')
     def bg_not_implemented_yet(cls, v):
         if cls in (SSHCommand, SFTPCommand, MsfSessionCommand, IncludeCommand):
-            raise ValueError("background mode is unsupported for this command")
+            raise ValueError('background mode is unsupported for this command')
         return v
 
     only_if: Optional[str] = None
@@ -38,7 +38,7 @@ class BaseCommand(BaseModel):
     error_if_not: Optional[str] = None
     loop_if: Optional[str] = None
     loop_if_not: Optional[str] = None
-    loop_count: str = Field(pattern=VAR_PATTERN, default="3")
+    loop_count: str = Field(pattern=VAR_PATTERN, default='3')
     exit_on_error: bool = True
     save: Optional[str] = None
     cmd: str
@@ -48,10 +48,10 @@ class BaseCommand(BaseModel):
 
 class SleepCommand(BaseCommand):
     type: Literal['sleep']
-    min_sec: str = Field(pattern=VAR_PATTERN, default="0")
-    seconds: str = Field(pattern=VAR_PATTERN, default="1")
+    min_sec: str = Field(pattern=VAR_PATTERN, default='0')
+    seconds: str = Field(pattern=VAR_PATTERN, default='1')
     random: bool = False
-    cmd: str = "sleep"
+    cmd: str = 'sleep'
 
 
 class ShellCommand(BaseCommand):
@@ -66,32 +66,32 @@ class SetVarCommand(BaseCommand):
 class IncludeCommand(BaseCommand):
     type: Literal['include']
     local_path: str
-    cmd: str = "include commands"
+    cmd: str = 'include commands'
 
 
 class WebServCommand(BaseCommand):
     type: Literal['webserv']
-    cmd: str = "HTTP-GET"
+    cmd: str = 'HTTP-GET'
     local_path: str
-    port: str = Field(pattern=VAR_PATTERN, default="8000")
-    address: str = "0.0.0.0"
+    port: str = Field(pattern=VAR_PATTERN, default='8000')
+    address: str = '0.0.0.0'  # nosec
 
 
 class FatherCommand(BaseCommand):
     type: Literal['father']
     cmd: Literal['generate'] = 'generate'
-    gid: str = "1337"
-    srcport: str = "54321"
-    epochtime: str = "0000000000"
-    env_var: str = "lobster"
-    file_prefix: str = "lobster"
-    preload_file: str = "ld.so.preload"
-    hiddenport: str = "D431"
-    shell_pass: str = "lobster"
-    install_path: str = "/lib/selinux.so.3"
+    gid: str = '1337'
+    srcport: str = '54321'
+    epochtime: str = '0000000000'
+    env_var: str = 'lobster'
+    file_prefix: str = 'lobster'
+    preload_file: str = 'ld.so.preload'
+    hiddenport: str = 'D431'
+    shell_pass: str = 'lobster'
+    install_path: str = '/lib/selinux.so.3'
     local_path: Optional[str]
-    arch: Literal["amd64"] = "amd64"
-    build_command: str = "make"
+    arch: Literal['amd64'] = 'amd64'
+    build_command: str = 'make'
 
 
 class TempfileCommand(BaseCommand):
@@ -104,7 +104,7 @@ class DebugCommand(BaseCommand):
     type: Literal['debug']
     varstore: bool = False
     exit: bool = False
-    cmd: str = ""
+    cmd: str = ''
 
 
 class RegExCommand(BaseCommand):
@@ -134,8 +134,8 @@ class SSHCommand(SSHBase):
     type: Literal['ssh']
     interactive: bool = False
     validate_prompt: bool = True
-    command_timeout: str = Field(pattern=VAR_PATTERN, default="15")
-    prompts: List[str] = ["$ ", "# ", "> "]
+    command_timeout: str = Field(pattern=VAR_PATTERN, default='15')
+    prompts: List[str] = ['$ ', '# ', '> ']
 
 
 class SFTPCommand(SSHBase):
@@ -156,10 +156,26 @@ class MsfSessionCommand(BaseCommand):
     end_str: Optional[str]
 
 
+class MsfPayloadCommand(BaseCommand):
+    type: Literal['msf-payload']
+    cmd: str
+    format: str = 'raw'
+    badchars: str = ''
+    force_encode: bool = False
+    encoder: str = ''
+    template: Optional[str] = None
+    platform: Optional[str] = None
+    keep_template_working: bool = False
+    nopsled_size: str = Field(pattern=VAR_PATTERN, default='0')
+    iter: str = Field(pattern=VAR_PATTERN, default='0')
+    payload_options: Dict[str, str] = {}
+    local_path: Optional[str]
+
+
 class MsfModuleCommand(BaseCommand):
     cmd: str
     type: Literal['msf-module']
-    target: str = Field(pattern=VAR_PATTERN, default="0")
+    target: str = Field(pattern=VAR_PATTERN, default='0')
     creates_session: Optional[str]
     session: Optional[str]
     payload: Optional[str]
@@ -169,7 +185,7 @@ class MsfModuleCommand(BaseCommand):
     def is_interactive(self):
         if self.interactive is not None:
             return self.interactive
-        if self.module_type() == "exploit":
+        if self.module_type() == 'exploit':
             return True
         else:
             return False
@@ -177,12 +193,12 @@ class MsfModuleCommand(BaseCommand):
     def module_type(self):
         if self.cmd is None:
             return None
-        return self.cmd.split("/")[0]
+        return self.cmd.split('/')[0]
 
     def module_path(self):
         if self.cmd is None:
             return None
-        return "/".join(self.cmd.split("/")[1:])
+        return '/'.join(self.cmd.split('/')[1:])
 
 
 class HttpClientCommand(BaseCommand):
@@ -194,7 +210,7 @@ class HttpClientCommand(BaseCommand):
     cookies: Optional[Dict[str, str]]
     data: Optional[Dict[str, str]]
     local_path: Optional[str]
-    useragent: str = "AttackMate"
+    useragent: str = 'AttackMate'
     follow: bool = False
     verify: bool = False
     http2: bool = False
@@ -212,24 +228,24 @@ class MsfConfig(BaseModel):
     password: Optional[str] = None
     ssl: bool = True
     port: int = 55553
-    server: Optional[str] = "127.0.0.1"
-    uri: Optional[str] = "/api/"
+    server: Optional[str] = '127.0.0.1'
+    uri: Optional[str] = '/api/'
 
 
 class SliverHttpsListenerCommand(BaseCommand):
     type: Literal['sliver']
     cmd: Literal['start_https_listener']
-    host: str = "0.0.0.0"
-    port: str = Field(pattern=VAR_PATTERN, default="443")
-    domain: str = ""
-    website: str = ""
+    host: str = '0.0.0.0'  # nosec
+    port: str = Field(pattern=VAR_PATTERN, default='443')
+    domain: str = ''
+    website: str = ''
     acme: bool = False
     persistent: bool = False
     enforce_otp: bool = True
     randomize_jarm: bool = True
-    long_poll_timeout: str = Field(pattern=VAR_PATTERN, default="1")
-    long_poll_jitter: str = Field(pattern=VAR_PATTERN, default="2")
-    timeout: str = Field(pattern=VAR_PATTERN, default="60")
+    long_poll_timeout: str = Field(pattern=VAR_PATTERN, default='1')
+    long_poll_jitter: str = Field(pattern=VAR_PATTERN, default='2')
+    timeout: str = Field(pattern=VAR_PATTERN, default='60')
 
 
 class SliverGenerateCommand(BaseCommand):
@@ -251,7 +267,7 @@ class SliverGenerateCommand(BaseCommand):
     name: str
     filepath: Optional[str]
     IsBeacon: bool = False
-    BeaconInterval: str = Field(pattern=VAR_PATTERN, default="120")
+    BeaconInterval: str = Field(pattern=VAR_PATTERN, default='120')
     RunAtLoad: bool = False
     Evasion: bool = False
 
@@ -275,14 +291,14 @@ class SliverSessionMKDIRCommand(SliverSessionCommand):
 class SliverSessionDOWNLOADCommand(SliverSessionCommand):
     cmd: Literal['download']
     remote_path: str
-    local_path: str = "."
+    local_path: str = '.'
     recurse: bool = False
 
 
 class SliverSessionUPLOADCommand(SliverSessionCommand):
     cmd: Literal['upload']
     remote_path: str
-    local_path: str = "."
+    local_path: str = '.'
     recurse: bool = False
     is_ioc: bool = False
 
@@ -341,6 +357,7 @@ Commands = List[Union[
                          ShellCommand,
                          MsfModuleCommand,
                          MsfSessionCommand,
+                         MsfPayloadCommand,
                          SleepCommand,
                          SSHCommand,
                          FatherCommand,
