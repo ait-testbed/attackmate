@@ -2,7 +2,7 @@ from .schemas import BaseCommand
 from .processmanager import ProcessManager
 from multiprocessing import Queue
 from .result import Result
-from typing import Any
+from typing import Any, Optional
 import logging
 
 
@@ -21,23 +21,23 @@ class Background:
         self.logger = logging.getLogger('playbook')
         self.pm = pm
         self.is_child_proc = False
-        self.child_queue = None
+        self.child_queue: Optional[Queue] = None
         self.manager = None
 
-    def _create_queue(self) -> Queue:
+    def _create_queue(self) -> Optional[Queue]:
         return None
 
     def exec_background(self, command: BaseCommand):
-        if hasattr(command, "type"):
-            self.logger.info(f"Run in background: {command.type}({command.cmd})")
+        if hasattr(command, 'type'):
+            self.logger.info(f'Run in background: {command.type}({command.cmd})')
         else:
-            self.logger.info(f"Run in background: {command.cmd}")
+            self.logger.info(f'Run in background: {command.cmd}')
 
         queue = self._create_queue()
 
         if queue:
             p = self.pm.ctx.Process(target=self._exec_bg_cmd,
-                                    args=(command,queue))
+                                    args=(command, queue))
         else:
             p = self.pm.ctx.Process(target=self._exec_bg_cmd,
                                     args=(command,))
@@ -45,7 +45,7 @@ class Background:
         p.join(5)
         self.pm.add_process(p, command.kill_on_exit)
 
-    def _exec_bg_cmd(self, command: Any, queue: Queue = None):
+    def _exec_bg_cmd(self, command: Any, queue: Optional[Queue] = None):
         self.is_child_proc = True
         if queue:
             self.child_queue = queue
