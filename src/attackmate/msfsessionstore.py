@@ -1,6 +1,6 @@
 import time
 import logging
-from typing import Dict
+from typing import Dict, Optional
 from multiprocessing import Queue
 from attackmate.variablestore import VariableStore
 from .execexception import ExecException
@@ -15,7 +15,7 @@ class MsfSessionStore:
         self.get_session_wait_time = 5
 
     def add_session(self, name: str, uuid: str) -> None:
-        self.logger.debug(f"Set MSF-Session: {name} = {uuid}")
+        self.logger.debug(f'Set MSF-Session: {name} = {uuid}')
         self.sessions[name] = uuid
 
     def get_session_by_name(self, name: str, msfsessions, block: bool = True) -> str:
@@ -23,8 +23,10 @@ class MsfSessionStore:
             if self.queue:
                 while not self.queue.empty():
                     item = self.queue.get()
-                    self.logger.debug(f"Session from Queue: {item[0]} = {item[1]}")
+                    self.logger.debug(f'Session from Queue: {item[0]} = {item[1]}')
                     self.add_session(item[0], item[1])
+                    self.logger.debug(f'Set LAST_MSF_SESSION to {item[2]}')
+                    self.varstore.set_variable('LAST_MSF_SESSION', item[2])
                     self.queue.task_done()
                     time.sleep(self.get_session_wait_time)
             for k, v in msfsessions.list.items():
@@ -32,24 +34,24 @@ class MsfSessionStore:
                     if v['exploit_uuid'] == self.sessions[name]:
                         return k
             if not block:
-                raise ExecException(f"Session ({name}) not found")
+                raise ExecException(f'Session ({name}) not found')
             else:
                 time.sleep(3)
 
-    def add_or_queue_session(self, name: str, uuid: str, queue: Queue = None, session_id: int = None):
+    def add_or_queue_session(self, name: str, uuid: str, queue: Optional[Queue] = None,
+                             session_id: Optional[int] = None):
         seconds = 30
         if queue:
-            queue.put((name, uuid))
+            queue.put((name, uuid, session_id))
         else:
             self.add_session(name, uuid)
-            self.logger.debug(f"Set LAST_MSF_SESSION: {session_id}")
-            self.varstore.set_variable("LAST_MSF_SESSION", session_id)
-            self.logger.debug(f"Waiting {seconds} seconds for session to get ready")
+            self.logger.debug(f'Set LAST_MSF_SESSION: {session_id}')
+            self.varstore.set_variable('LAST_MSF_SESSION', str(session_id))
+            self.logger.debug(f'Waiting {seconds} seconds for session to get ready')
             time.sleep(seconds)
 
-
-    def wait_for_session(self, name: str, uuid: str, msfsessions, queue: Queue = None):
-        self.logger.debug(f"Sessions: {msfsessions.list}")
+    def wait_for_session(self, name: str, uuid: str, msfsessions, queue: Optional[Queue] = None):
+        self.logger.debug(f'Sessions: {msfsessions.list}')
         while True:
             if len(list(msfsessions.list.keys())) > 0:
                 for session_id, v in msfsessions.list.items():
@@ -57,7 +59,8 @@ class MsfSessionStore:
                         self.add_or_queue_session(name, uuid, queue, session_id)
                         return
 
-    def wait_for_increased_session(self, name: str, uuid: str, msfsessions, queue: Queue = None):
+    def wait_for_increased_session(self, name: str, uuid: str, msfsessions,
+                                   queue: Optional[Queue] = None):
         stored_list_len = len(list(msfsessions.list.keys()))
         sessions = list(msfsessions.list.keys())
         while True:
@@ -65,6 +68,5 @@ class MsfSessionStore:
                 for session_id, v in msfsessions.list.items():
                     if session_id not in sessions:
                         self.add_or_queue_session(name, v['exploit_uuid'], queue, session_id)
-                        self.logger.debug(f"Sessions: {msfsessions.list}")
+                        self.logger.debug(f'Sessions: {msfsessions.list}')
                         return
-
