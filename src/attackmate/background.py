@@ -1,6 +1,7 @@
 from .schemas import BaseCommand
 from .processmanager import ProcessManager
 from multiprocessing import Queue
+from multiprocessing.managers import SyncManager
 from .result import Result
 from typing import Any, Optional
 import logging
@@ -22,7 +23,7 @@ class Background:
         self.pm = pm
         self.is_child_proc = False
         self.child_queue: Optional[Queue] = None
-        self.manager = None
+        self.manager: Optional[SyncManager] = None
 
     def _create_queue(self) -> Optional[Queue]:
         return None

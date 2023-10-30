@@ -1,7 +1,7 @@
 import time
 import logging
 from typing import Dict, Optional
-from multiprocessing import Queue
+from multiprocessing import JoinableQueue
 from attackmate.variablestore import VariableStore
 from .execexception import ExecException
 
@@ -11,7 +11,7 @@ class MsfSessionStore:
         self.sessions: Dict[str, str] = {}
         self.logger = logging.getLogger('playbook')
         self.varstore = varstore
-        self.queue = None
+        self.queue: Optional[JoinableQueue] = None
         self.get_session_wait_time = 5
 
     def add_session(self, name: str, uuid: str) -> None:
@@ -38,7 +38,7 @@ class MsfSessionStore:
             else:
                 time.sleep(3)
 
-    def add_or_queue_session(self, name: str, uuid: str, queue: Optional[Queue] = None,
+    def add_or_queue_session(self, name: str, uuid: str, queue: Optional[JoinableQueue] = None,
                              session_id: Optional[int] = None):
         seconds = 30
         if queue:
@@ -50,7 +50,7 @@ class MsfSessionStore:
             self.logger.debug(f'Waiting {seconds} seconds for session to get ready')
             time.sleep(seconds)
 
-    def wait_for_session(self, name: str, uuid: str, msfsessions, queue: Optional[Queue] = None):
+    def wait_for_session(self, name: str, uuid: str, msfsessions, queue: Optional[JoinableQueue] = None):
         self.logger.debug(f'Sessions: {msfsessions.list}')
         while True:
             if len(list(msfsessions.list.keys())) > 0:
@@ -60,7 +60,7 @@ class MsfSessionStore:
                         return
 
     def wait_for_increased_session(self, name: str, uuid: str, msfsessions,
-                                   queue: Optional[Queue] = None):
+                                   queue: Optional[JoinableQueue] = None):
         stored_list_len = len(list(msfsessions.list.keys()))
         sessions = list(msfsessions.list.keys())
         while True:
