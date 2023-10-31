@@ -30,3 +30,9 @@ copying variables.
 
    :type: str
    :required: ``True``
+
+.. confval:: encoder
+
+   If encoder is set, the command in cmd will be encoded before stored in ``variable``.
+
+   :type: str['base64-encoder', 'base64-decoder', 'rot13', 'urlencoder', 'urldecoder']
