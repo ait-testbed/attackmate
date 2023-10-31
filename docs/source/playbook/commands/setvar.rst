@@ -39,61 +39,61 @@ copying variables.
 
   :type: str['base64-encoder', 'base64-decoder', 'rot13', 'urlencoder', 'urldecoder']
 
-.. code-block:: yaml
+  .. code-block:: yaml
 
-   commands:
-     - type: setvar
-       variable: TEST
-       cmd: Hello World
-       encoder: base64-encoder
+     commands:
+       - type: setvar
+         variable: TEST
+         cmd: Hello World
+         encoder: base64-encoder
 
-     - type: debug
-       cmd: $TEST
+       - type: debug
+         cmd: $TEST
 
-     - type: setvar
-       variable: TEST
-       cmd: $TEST
-       encoder: base64-decoder
+       - type: setvar
+         variable: TEST
+         cmd: $TEST
+         encoder: base64-decoder
 
-     - type: debug
-       cmd: $TEST
+       - type: debug
+         cmd: $TEST
 
-     - type: setvar
-       variable: TEST
-       cmd: $TEST
-       encoder: rot13
+       - type: setvar
+         variable: TEST
+         cmd: $TEST
+         encoder: rot13
 
-     - type: debug
-       cmd: $TEST
+       - type: debug
+         cmd: $TEST
 
-     - type: setvar
-       variable: TEST
-       cmd: $TEST
-       encoder: rot13
+       - type: setvar
+         variable: TEST
+         cmd: $TEST
+         encoder: rot13
 
-     - type: debug
-       cmd: $TEST
+       - type: debug
+         cmd: $TEST
 
-     - type: setvar
-       variable: TEST
-       cmd: $TEST
-       encoder: urlencoder
+       - type: setvar
+         variable: TEST
+         cmd: $TEST
+         encoder: urlencoder
 
-     - type: debug
-       cmd: $TEST
+       - type: debug
+         cmd: $TEST
 
-     - type: setvar
-       variable: TEST
-       cmd: $TEST
-       encoder: urldecoder
+       - type: setvar
+         variable: TEST
+         cmd: $TEST
+         encoder: urldecoder
 
-     - type: debug
-       cmd: $TEST
+       - type: debug
+         cmd: $TEST
 
-     - type: setvar
-       variable: TEST
-       cmd: $TEST
-       encoder: base64-decoder
+       - type: setvar
+         variable: TEST
+         cmd: $TEST
+         encoder: base64-decoder
 
-     - type: debug
-       cmd: $TEST
+       - type: debug
+         cmd: $TEST
