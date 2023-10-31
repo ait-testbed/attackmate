@@ -61,6 +61,7 @@ class ShellCommand(BaseCommand):
 class SetVarCommand(BaseCommand):
     type: Literal['setvar']
     variable: str
+    encoder: Optional[str] = None
 
 
 class IncludeCommand(BaseCommand):
