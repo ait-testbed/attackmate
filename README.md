@@ -4,6 +4,11 @@ AttackMate is an attack orchestration tool that executes full attack-chains base
 
 ![AttackMate Schema](images/attackmate-schema.png "AttackMate Schema")
 
+## Requirements
+
+* python >= 3.10
+* libmagic
+
 ## Installation
 
 Manually:

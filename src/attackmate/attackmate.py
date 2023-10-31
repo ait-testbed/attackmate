@@ -14,6 +14,7 @@ from .sleepexecutor import SleepExecutor
 from .sshexecutor import SSHExecutor
 from .msfexecutor import MsfModuleExecutor
 from .msfsessionexecutor import MsfSessionExecutor
+from attackmate.executors.metasploit.msfpayloadexecutor import MsfPayloadExecutor
 from .msfsessionstore import MsfSessionStore
 from .sliverexecutor import SliverExecutor
 from .fatherexecutor import FatherExecutor
@@ -75,6 +76,9 @@ class AttackMate:
                                            varstore=self.varstore,
                                            msfconfig=self.pyconfig.msf_config,
                                            msfsessionstore=self.msfsessionstore)
+        self.msfpayload = MsfPayloadExecutor(self.pm, self.varstore,
+                                             self.pyconfig.cmd_config,
+                                             msfconfig=self.pyconfig.msf_config)
         self.msfsession = MsfSessionExecutor(
                 self.pm,
                 self.pyconfig.cmd_config,
@@ -105,35 +109,37 @@ class AttackMate:
 
         """
         for command in commands:
-            if command.type == "shell":
+            if command.type == 'shell':
                 self.se.run(command)
-            if command.type == "father":
+            if command.type == 'father':
                 self.father.run(command)
-            if command.type == "sleep":
+            if command.type == 'sleep':
                 self.sleep.run(command)
-            if command.type == "msf-module":
+            if command.type == 'msf-module':
                 self.msfmodule.run(command)
-            if command.type == "msf-session":
+            if command.type == 'msf-session':
                 self.msfsession.run(command)
-            if command.type in ["ssh", "sftp"]:
+            if command.type == 'msf-payload':
+                self.msfpayload.run(command)
+            if command.type in ['ssh', 'sftp']:
                 self.ssh.run(command)
-            if command.type == "debug":
+            if command.type == 'debug':
                 self.debugger.run(command)
-            if command.type == "setvar":
+            if command.type == 'setvar':
                 self.setvar.run(command)
-            if command.type == "regex":
+            if command.type == 'regex':
                 self.regex.run(command)
-            if command.type == "sliver":
+            if command.type == 'sliver':
                 self.sliver.run(command)
-            if command.type == "sliver-session":
+            if command.type == 'sliver-session':
                 self.sliversession.run(command)
-            if command.type == "mktemp":
+            if command.type == 'mktemp':
                 self.mktemp.run(command)
-            if command.type == "include":
+            if command.type == 'include':
                 self.include.run(command)
-            if command.type == "webserv":
+            if command.type == 'webserv':
                 self.webserv.run(command)
-            if command.type == "http-client":
+            if command.type == 'http-client':
                 self.httpclient.run(command)
 
     def main(self):
