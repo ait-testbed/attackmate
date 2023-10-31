@@ -37,6 +37,8 @@ copying variables.
    Please note that if encoding fails, this command will fallback to plain cmd and will
    print out a warning.
 
+  :type: str['base64-encoder', 'base64-decoder', 'rot13', 'urlencoder', 'urldecoder']
+
 .. code-block:: yaml
 
    commands:
@@ -95,6 +97,3 @@ copying variables.
 
      - type: debug
        cmd: $TEST
-
-
-   :type: str['base64-encoder', 'base64-decoder', 'rot13', 'urlencoder', 'urldecoder']
