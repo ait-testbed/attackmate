@@ -188,6 +188,7 @@ The next pages will describe all possible commands in detail.
    sftp
    msf-module
    msf-session
+   payload
    regex
    debug
    setvar
