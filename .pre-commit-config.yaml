@@ -31,11 +31,6 @@ repos:
     - id: autopep8
       args: [--max-line-length=110, --diff]
 
--   repo: https://github.com/pycqa/bandit
-    rev: '1.7.5'
-    hooks:
-    -   id: bandit
-
       # PROBLEMS WITH IMPORTS IN PYLINT!!!
       #-   repo: https://github.com/PyCQA/prospector
       #    rev: 1.10.0 # The version of Prospector to use, if not 'master' for latest

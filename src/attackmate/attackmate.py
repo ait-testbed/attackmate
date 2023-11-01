@@ -18,7 +18,7 @@ from attackmate.executors.metasploit.msfsessionstore import MsfSessionStore
 from attackmate.executors.metasploit.msfexecutor import MsfModuleExecutor
 from attackmate.executors.sliver.sliverexecutor import SliverExecutor
 from attackmate.executors.sliver.sliversessionexecutor import SliverSessionExecutor
-from .fatherexecutor import FatherExecutor
+from attackmate.executors.father.fatherexecutor import FatherExecutor
 from .setvarexecutor import SetVarExecutor
 from attackmate.executors.http.webservexecutor import WebServExecutor
 from attackmate.executors.http.httpclientexecutor import HttpClientExecutor
