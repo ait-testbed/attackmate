@@ -14,7 +14,7 @@ from paramiko import AutoAddPolicy
 from paramiko.ssh_exception import (BadHostKeyException,
                                     AuthenticationException,
                                     SSHException)
-from attackmate.baseexecutor import BaseExecutor
+from attackmate.executors.baseexecutor import BaseExecutor
 from attackmate.execexception import ExecException
 from attackmate.result import Result
 from attackmate.cmdvars import CmdVars

@@ -5,9 +5,9 @@ This class allows to parse variables using
 regular expressions.
 """
 
-from .baseexecutor import BaseExecutor
-from .result import Result
-from .schemas import RegExCommand
+from attackmate.executors.baseexecutor import BaseExecutor
+from attackmate.result import Result
+from attackmate.schemas import RegExCommand
 from string import Template
 from typing import Match
 import re
@@ -15,7 +15,7 @@ import re
 
 class RegExExecutor(BaseExecutor):
 
-    def forge_variables(self, data, variable_name="MATCH"):
+    def forge_variables(self, data, variable_name='MATCH'):
         result = {}
         if data is None:
             return None
@@ -24,13 +24,13 @@ class RegExExecutor(BaseExecutor):
         elif isinstance(data, list) or isinstance(data, tuple):
             i = 0
             for item in data:
-                tmpvar = f"{variable_name}_{str(i)}"
+                tmpvar = f'{variable_name}_{str(i)}'
                 if isinstance(item, str):
                     result[tmpvar] = item
                 elif isinstance(item, list) or isinstance(item, tuple):
                     j = 0
                     for level2 in item:
-                        tmpvar2 = f"{tmpvar}_{str(j)}"
+                        tmpvar2 = f'{tmpvar}_{str(j)}'
                         if isinstance(level2, str):
                             result[tmpvar2] = level2
                         j += 1
@@ -42,7 +42,7 @@ class RegExExecutor(BaseExecutor):
 
     def register_outputvars(self, outputvars: dict, matches):
         if not matches:
-            self.logger.debug("no match!")
+            self.logger.debug('no match!')
             return
 
         for k, v in outputvars.items():
@@ -68,4 +68,4 @@ class RegExExecutor(BaseExecutor):
                 self.logger.debug(matches)
                 self.register_outputvars(command.output, matches)
 
-        return Result("", 0)
+        return Result('', 0)

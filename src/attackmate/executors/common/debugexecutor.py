@@ -4,9 +4,9 @@ debugexecutor.py
 This class allows to print out variables.
 """
 
-from .baseexecutor import BaseExecutor
-from .result import Result
-from .schemas import DebugCommand
+from attackmate.executors.baseexecutor import BaseExecutor
+from attackmate.result import Result
+from attackmate.schemas import DebugCommand
 
 
 class DebugExecutor(BaseExecutor):
@@ -22,4 +22,4 @@ class DebugExecutor(BaseExecutor):
         if command.exit:
             ret = 1
 
-        return Result("", ret)
+        return Result('', ret)

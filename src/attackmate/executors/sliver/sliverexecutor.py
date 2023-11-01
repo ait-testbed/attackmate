@@ -11,7 +11,7 @@ from typing import Any
 from sliver import SliverClientConfig, SliverClient
 from sliver.protobuf import client_pb2
 from attackmate.variablestore import VariableStore
-from attackmate.baseexecutor import BaseExecutor
+from attackmate.executors.baseexecutor import BaseExecutor
 from attackmate.execexception import ExecException
 from attackmate.result import Result
 from attackmate.cmdvars import CmdVars

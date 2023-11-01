@@ -4,7 +4,7 @@ webservexecutor.py
 Serves files via HTTP
 """
 
-from attackmate.baseexecutor import BaseExecutor
+from attackmate.executors.baseexecutor import BaseExecutor
 from attackmate.result import Result
 from attackmate.execexception import ExecException
 from attackmate.schemas import WebServCommand

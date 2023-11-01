@@ -6,12 +6,12 @@ Execute commands from a yaml-file
 
 import yaml
 from typing import Callable
-from .baseexecutor import BaseExecutor
-from .result import Result
-from .schemas import IncludeCommand, Playbook, Commands
-from .variablestore import VariableStore
-from .execexception import ExecException
-from .processmanager import ProcessManager
+from attackmate.executors.baseexecutor import BaseExecutor
+from attackmate.result import Result
+from attackmate.schemas import IncludeCommand, Playbook, Commands
+from attackmate.variablestore import VariableStore
+from attackmate.execexception import ExecException
+from attackmate.processmanager import ProcessManager
 
 
 class IncludeExecutor(BaseExecutor):
@@ -35,4 +35,4 @@ class IncludeExecutor(BaseExecutor):
     def _exec_cmd(self, command: IncludeCommand) -> Result:
         playbook = self.load_file(command.local_path)
         self.runfunc(playbook.commands)
-        return Result("", 0)
+        return Result('', 0)

@@ -8,7 +8,7 @@ payloads in AttackMate.
 import tempfile
 from typing import Any
 from pymetasploit3.msfrpc import MsfRpcClient, MsfAuthError
-from attackmate.baseexecutor import BaseExecutor
+from attackmate.executors.baseexecutor import BaseExecutor
 from attackmate.result import Result
 from attackmate.execexception import ExecException
 from attackmate.processmanager import ProcessManager

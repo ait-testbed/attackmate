@@ -2,7 +2,7 @@ from pymetasploit3.msfrpc import MsfRpcClient, MsfAuthError
 
 from typing import Optional
 from attackmate.variablestore import VariableStore
-from attackmate.baseexecutor import BaseExecutor
+from attackmate.executors.baseexecutor import BaseExecutor
 from attackmate.execexception import ExecException
 from attackmate.result import Result
 from attackmate.cmdvars import CmdVars

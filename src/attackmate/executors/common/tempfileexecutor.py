@@ -6,11 +6,11 @@ Creates temporary files and directories
 
 import tempfile
 from typing import Any
-from .baseexecutor import BaseExecutor
-from .result import Result
-from .schemas import TempfileCommand
-from .variablestore import VariableStore
-from .processmanager import ProcessManager
+from attackmate.executors.baseexecutor import BaseExecutor
+from attackmate.result import Result
+from attackmate.schemas import TempfileCommand
+from attackmate.variablestore import VariableStore
+from attackmate.processmanager import ProcessManager
 
 
 class TempfileExecutor(BaseExecutor):
@@ -19,15 +19,15 @@ class TempfileExecutor(BaseExecutor):
         super().__init__(pm, varstore, cmdconfig)
 
     def log_command(self, command: TempfileCommand):
-        if command.cmd == "dir":
-            self.logger.warn("Creating temporary directory..")
+        if command.cmd == 'dir':
+            self.logger.warn('Creating temporary directory..')
         else:
-            self.logger.warn("Creating temporary file..")
+            self.logger.warn('Creating temporary file..')
 
     def _exec_cmd(self, command: TempfileCommand) -> Result:
         ret = 0
-        fullpath = ""
-        if command.cmd == "dir":
+        fullpath = ''
+        if command.cmd == 'dir':
             tmpfile = tempfile.TemporaryDirectory()
             self.tempfilestore[command.variable] = tmpfile
             fullpath = tmpfile.name

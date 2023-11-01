@@ -13,7 +13,7 @@ from sliver.session import InteractiveSession
 from sliver.beacon import InteractiveBeacon
 # from sliver.protobuf import client_pb2
 from attackmate.variablestore import VariableStore
-from attackmate.baseexecutor import BaseExecutor
+from attackmate.executors.baseexecutor import BaseExecutor
 from attackmate.execexception import ExecException
 from attackmate.result import Result
 from attackmate.schemas import (SliverSessionCDCommand, SliverSessionCommand,

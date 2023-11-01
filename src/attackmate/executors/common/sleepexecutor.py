@@ -1,10 +1,10 @@
 import time
 from random import randint
-from .baseexecutor import BaseExecutor
-from .result import Result
-from .cmdvars import CmdVars
-from .variablestore import VariableStore
-from .processmanager import ProcessManager
+from attackmate.executors.baseexecutor import BaseExecutor
+from attackmate.result import Result
+from attackmate.cmdvars import CmdVars
+from attackmate.variablestore import VariableStore
+from attackmate.processmanager import ProcessManager
 
 
 class SleepExecutor(BaseExecutor):

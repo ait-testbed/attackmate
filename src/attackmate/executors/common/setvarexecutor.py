@@ -4,9 +4,9 @@ setvarexecutor.py
 This class allows to set variables.
 """
 
-from .baseexecutor import BaseExecutor
-from .result import Result
-from .schemas import SetVarCommand
+from attackmate.executors.baseexecutor import BaseExecutor
+from attackmate.result import Result
+from attackmate.schemas import SetVarCommand
 import base64
 import codecs
 import urllib.parse

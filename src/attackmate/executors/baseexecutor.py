@@ -3,13 +3,13 @@ from attackmate.cmdvars import CmdVars
 
 from attackmate.exitonerror import ExitOnError
 from attackmate.looper import Looper
-from .result import Result
-from .execexception import ExecException
-from .schemas import BaseCommand, CommandConfig
-from .conditional import Conditional
-from .variablestore import VariableStore
-from .processmanager import ProcessManager
-from .background import Background
+from attackmate.result import Result
+from attackmate.execexception import ExecException
+from attackmate.schemas import BaseCommand, CommandConfig
+from attackmate.conditional import Conditional
+from attackmate.variablestore import VariableStore
+from attackmate.processmanager import ProcessManager
+from attackmate.background import Background
 from typing import Any
 
 
@@ -40,7 +40,7 @@ class BaseExecutor(ExitOnError, CmdVars, Looper, Background):
         Looper.__init__(self, cmdconfig)
         self.logger = logging.getLogger('playbook')
         self.cmdconfig = cmdconfig
-        self.output = logging.getLogger("output")
+        self.output = logging.getLogger('output')
 
     def run(self, command: BaseCommand):
         """ Execute the command
@@ -59,10 +59,10 @@ class BaseExecutor(ExitOnError, CmdVars, Looper, Background):
         """
         if command.only_if:
             if not Conditional.test(self.varstore.substitute(command.only_if, True)):
-                if hasattr(command, "type"):
-                    self.logger.warn(f"Skipping {command.type}: {command.cmd}")
+                if hasattr(command, 'type'):
+                    self.logger.warn(f'Skipping {command.type}: {command.cmd}')
                 else:
-                    self.logger.warn(f"Skipping {command.cmd}")
+                    self.logger.warn(f'Skipping {command.cmd}')
                 return
         self.reset_run_count()
         self.logger.debug(f"Template-Command: '{command.cmd}'")
@@ -84,10 +84,10 @@ class BaseExecutor(ExitOnError, CmdVars, Looper, Background):
         """
         if command.save:
             try:
-                with open(command.save, "w") as outfile:
+                with open(command.save, 'w') as outfile:
                     outfile.write(result.stdout)
             except Exception as e:
-                self.logger.warn(f"Unable to write output to file {command.save}: {e}")
+                self.logger.warn(f'Unable to write output to file {command.save}: {e}')
 
     def exec(self, command: BaseCommand):
         try:
@@ -99,7 +99,7 @@ class BaseExecutor(ExitOnError, CmdVars, Looper, Background):
         if not command.background:
             self.exit_on_error(command, result)
             self.set_result_vars(result)
-            self.output.info(f"Command: {command.cmd}\n{result.stdout}")
+            self.output.info(f'Command: {command.cmd}\n{result.stdout}')
             self.error_if_or_not(command, result)
         self.loop_if(command, result)
         self.loop_if_not(command, result)
