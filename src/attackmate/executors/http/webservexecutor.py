@@ -4,11 +4,11 @@ webservexecutor.py
 Serves files via HTTP
 """
 
-from .baseexecutor import BaseExecutor
-from .result import Result
-from .execexception import ExecException
-from .schemas import WebServCommand
-from .cmdvars import CmdVars
+from attackmate.baseexecutor import BaseExecutor
+from attackmate.result import Result
+from attackmate.execexception import ExecException
+from attackmate.schemas import WebServCommand
+from attackmate.cmdvars import CmdVars
 from http.server import HTTPServer, BaseHTTPRequestHandler
 import magic
 
@@ -31,9 +31,9 @@ class WebRequestHandler(BaseHTTPRequestHandler):
     def do_GET(self):
         msg = self.load_file()
         self.send_response(200)
-        self.protocol_version = "HTTP/1.1"
-        self.send_header("Content-length", len(msg))
-        self.send_header("Content-Type", self.get_contenttype_from_file())
+        self.protocol_version = 'HTTP/1.1'
+        self.send_header('Content-length', len(msg))
+        self.send_header('Content-Type', self.get_contenttype_from_file())
         self.end_headers()
         self.wfile.write(msg)
 
@@ -54,14 +54,14 @@ class WebServe(HTTPServer):
 class WebServExecutor(BaseExecutor):
 
     def log_command(self, command: WebServCommand):
-        self.logger.info(f"Serving {command.local_path} via HTTP on Port {command.port}")
+        self.logger.info(f'Serving {command.local_path} via HTTP on Port {command.port}')
 
     def _exec_cmd(self, command: WebServCommand) -> Result:
-        address = (command.address, CmdVars.variable_to_int("Port", command.port))
+        address = (command.address, CmdVars.variable_to_int('Port', command.port))
         try:
             server = WebServe(address, WebRequestHandler, local_path=command.local_path)
             server.handle_request()
         except Exception as e:
             raise ExecException(e)
 
-        return Result(f"Delivered {command.local_path}", 0)
+        return Result(f'Delivered {command.local_path}', 0)

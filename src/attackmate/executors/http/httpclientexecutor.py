@@ -6,15 +6,15 @@ Execute web-requests
 
 import httpx
 from typing import Optional
-from .baseexecutor import BaseExecutor
-from .result import Result
-from .schemas import HttpClientCommand
-from .execexception import ExecException
+from attackmate.baseexecutor import BaseExecutor
+from attackmate.result import Result
+from attackmate.schemas import HttpClientCommand
+from attackmate.execexception import ExecException
 
 
 class HttpClientExecutor(BaseExecutor):
     def log_command(self, command: HttpClientCommand):
-        self.logger.info(f"Performing HTTP[{command.cmd}] to {command.url}")
+        self.logger.info(f'Performing HTTP[{command.cmd}] to {command.url}')
 
     def generate_headers(self, command: HttpClientCommand) -> dict[str, str]:
         if not command.headers:
@@ -25,10 +25,10 @@ class HttpClientExecutor(BaseExecutor):
         return command.headers
 
     def output_headers(self, headers: httpx.Headers) -> str:
-        output = ""
+        output = ''
         for header_key, header_value in headers.items():
-            output += f"{header_key}: {header_value}\n"
-        output += "\n"
+            output += f'{header_key}: {header_value}\n'
+        output += '\n'
         return output
 
     def load_content(self, local_path: Optional[str]) -> bytes | None:
@@ -71,9 +71,9 @@ class HttpClientExecutor(BaseExecutor):
         if command.output_headers:
             output = self.output_headers(response.headers)
         else:
-            output = ""
+            output = ''
         output += response.text
-        self.logger.debug(f"Status-Code: {response.status_code}")
-        self.logger.debug(f"HTTP-Version: {response.http_version}")
-        self.varstore.set_variable("LAST_HTTP_STATUS", response.status_code)
+        self.logger.debug(f'Status-Code: {response.status_code}')
+        self.logger.debug(f'HTTP-Version: {response.http_version}')
+        self.varstore.set_variable('LAST_HTTP_STATUS', response.status_code)
         return Result(output, 0)

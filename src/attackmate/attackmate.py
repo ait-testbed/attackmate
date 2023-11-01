@@ -20,8 +20,8 @@ from attackmate.executors.sliver.sliverexecutor import SliverExecutor
 from attackmate.executors.sliver.sliversessionexecutor import SliverSessionExecutor
 from .fatherexecutor import FatherExecutor
 from .setvarexecutor import SetVarExecutor
-from .webservexecutor import WebServExecutor
-from .httpclientexecutor import HttpClientExecutor
+from attackmate.executors.http.webservexecutor import WebServExecutor
+from attackmate.executors.http.httpclientexecutor import HttpClientExecutor
 from .tempfileexecutor import TempfileExecutor
 from .debugexecutor import DebugExecutor
 from .includeexecutor import IncludeExecutor
