@@ -113,6 +113,8 @@ class SliverExecutor(BaseExecutor):
         with open(implant_path, 'wb') as new_file:
             new_file.write(implant.File.Data)
 
+        self.varstore.set_variable('LAST_SLIVER_IMPLANT', implant_path)
+
         return implant_path
 
     async def generate_implant(self, command: SliverGenerateCommand):
