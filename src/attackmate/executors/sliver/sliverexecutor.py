@@ -6,15 +6,17 @@ Execute Sliver Commands
 
 import asyncio
 import os
+import tempfile
+from typing import Any
 from sliver import SliverClientConfig, SliverClient
 from sliver.protobuf import client_pb2
-from .variablestore import VariableStore
-from .baseexecutor import BaseExecutor
-from .execexception import ExecException
-from .result import Result
-from .cmdvars import CmdVars
-from .schemas import BaseCommand, SliverGenerateCommand, SliverHttpsListenerCommand
-from .processmanager import ProcessManager
+from attackmate.variablestore import VariableStore
+from attackmate.baseexecutor import BaseExecutor
+from attackmate.execexception import ExecException
+from attackmate.result import Result
+from attackmate.cmdvars import CmdVars
+from attackmate.schemas import BaseCommand, SliverGenerateCommand, SliverHttpsListenerCommand
+from attackmate.processmanager import ProcessManager
 
 
 class SliverExecutor(BaseExecutor):
@@ -24,8 +26,9 @@ class SliverExecutor(BaseExecutor):
                  sliver_config=None):
         self.sliver_config = sliver_config
         self.client = None
+        self.tempfilestore: list[Any] = []
         self.client_config = None
-        self.result = Result("", 1)
+        self.result = Result('', 1)
 
         if self.sliver_config.config_file:
             self.client_config = SliverClientConfig.parse_config_file(sliver_config.config_file)
@@ -39,25 +42,25 @@ class SliverExecutor(BaseExecutor):
             self.logger.debug(version)
 
     async def start_https_listener(self, command: SliverHttpsListenerCommand):
-        self.logger.debug(f"{command.host=}")
+        self.logger.debug(f'{command.host=}')
         if self.client is None:
-            raise ExecException("SliverClient is not defined")
+            raise ExecException('SliverClient is not defined')
         listener = await self.client.start_https_listener(command.host,
-                                                          CmdVars.variable_to_int("port", command.port),
+                                                          CmdVars.variable_to_int('port', command.port),
                                                           command.website,
                                                           command.domain,
-                                                          b"",
-                                                          b"",
+                                                          b'',
+                                                          b'',
                                                           command.acme,
                                                           command.persistent,
                                                           command.enforce_otp,
                                                           command.randomize_jarm,
-                                                          CmdVars.variable_to_int("long_poll_timeout",
+                                                          CmdVars.variable_to_int('long_poll_timeout',
                                                                                   command.long_poll_timeout),
-                                                          CmdVars.variable_to_int("long_poll_jitter",
+                                                          CmdVars.variable_to_int('long_poll_jitter',
                                                                                   command.long_poll_jitter),
-                                                          CmdVars.variable_to_int("timeout", command.timeout))
-        self.result = Result(f"JobID: {listener.JobID}", 0)
+                                                          CmdVars.variable_to_int('timeout', command.timeout))
+        self.result = Result(f'JobID: {listener.JobID}', 0)
 
     def prepare_implant_config(self, command: SliverGenerateCommand) -> client_pb2.ImplantConfig:
         c2 = client_pb2.ImplantC2()
@@ -69,43 +72,45 @@ class SliverExecutor(BaseExecutor):
         implconfig.IsSharedLib = False
         implconfig.IsShellcode = False
 
-        if command.format == "SERVICE":
+        if command.format == 'SERVICE':
             outformat = client_pb2.OutputFormat.SERVICE
             implconfig.IsService = True
 
-        if command.format == "SHARED_LIB":
+        if command.format == 'SHARED_LIB':
             outformat = client_pb2.OutputFormat.SHARED_LIB
             implconfig.IsSharedLib = True
 
-        if command.format == "SHELLCODE":
+        if command.format == 'SHELLCODE':
             outformat = client_pb2.OutputFormat.SHELLCODE
             implconfig.IsShellcode = True
 
         implconfig.C2.extend([c2])
         implconfig.IsBeacon = command.IsBeacon
         if command.IsBeacon:
-            implconfig.BeaconInterval = CmdVars.variable_to_int("BeaconInterval",
+            implconfig.BeaconInterval = CmdVars.variable_to_int('BeaconInterval',
                                                                 command.BeaconInterval)
         implconfig.RunAtLoad = command.RunAtLoad
         implconfig.Evasion = command.Evasion
-        target = command.target.split("/")
+        target = command.target.split('/')
         implconfig.GOOS = target[0]
         implconfig.GOARCH = target[1]
         implconfig.Name = command.name
         implconfig.Format = outformat
-        implconfig.FileName = "linux_implant"
+        implconfig.FileName = 'linux_implant'
         return implconfig
 
     def save_implant(self, implant: client_pb2.Generate) -> str:
-        if hasattr(implant, "filepath"):
+        if hasattr(implant, 'filepath'):
             implant_path = implant.filepath
         else:
-            implant_path = os.path.join("/tmp/", implant.File.Name)
+            tmpfile = tempfile.NamedTemporaryFile()
+            self.tempfilestore.append(tmpfile)
+            implant_path = tmpfile.name
 
         if os.path.exists(implant_path):
             os.remove(implant_path)
 
-        with open(implant_path, "wb") as new_file:
+        with open(implant_path, 'wb') as new_file:
             new_file.write(implant.File.Data)
 
         return implant_path
@@ -114,18 +119,18 @@ class SliverExecutor(BaseExecutor):
         implconfig = self.prepare_implant_config(command)
 
         if self.client is None:
-            raise ExecException("SliverClient is not defined")
+            raise ExecException('SliverClient is not defined')
 
         builds = await self.client.implant_builds()
         if command.name in builds.keys():
-            self.logger.debug("Implant found. Delete it")
+            self.logger.debug('Implant found. Delete it')
             await self.client.delete_implant_build(command.name)
 
         implant = await self.client.generate_implant(implconfig)
         length = len(implant.File.Data)
-        self.result.stdout = f"Created Sliver-Implant: {implant.File.Name}. with {length} bytes"
+        self.result.stdout = f'Created Sliver-Implant: {implant.File.Name}. with {length} bytes'
         implant_path = self.save_implant(implant)
-        self.logger.debug(f"Saved {implant.File.Name} to {implant_path}")
+        self.logger.debug(f'Saved {implant.File.Name} to {implant_path}')
         self.result.returncode = 0
 
     def log_command(self, command: BaseCommand):
@@ -137,12 +142,12 @@ class SliverExecutor(BaseExecutor):
     def _exec_cmd(self, command: BaseCommand) -> Result:
         loop = asyncio.get_event_loop()
 
-        if command.cmd == "start_https_listener" and isinstance(command, SliverHttpsListenerCommand):
+        if command.cmd == 'start_https_listener' and isinstance(command, SliverHttpsListenerCommand):
             coro = self.start_https_listener(command)
-        elif command.cmd == "generate_implant" and isinstance(command, SliverGenerateCommand):
+        elif command.cmd == 'generate_implant' and isinstance(command, SliverGenerateCommand):
             coro = self.generate_implant(command)
         else:
-            raise ExecException("Sliver Command unknown or faulty Command-config")
+            raise ExecException('Sliver Command unknown or faulty Command-config')
         try:
             loop.run_until_complete(coro)
         except Exception as e:

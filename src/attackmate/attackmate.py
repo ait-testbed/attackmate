@@ -16,10 +16,10 @@ from attackmate.executors.metasploit.msfsessionexecutor import MsfSessionExecuto
 from attackmate.executors.metasploit.msfpayloadexecutor import MsfPayloadExecutor
 from attackmate.executors.metasploit.msfsessionstore import MsfSessionStore
 from attackmate.executors.metasploit.msfexecutor import MsfModuleExecutor
-from .sliverexecutor import SliverExecutor
+from attackmate.executors.sliver.sliverexecutor import SliverExecutor
+from attackmate.executors.sliver.sliversessionexecutor import SliverSessionExecutor
 from .fatherexecutor import FatherExecutor
 from .setvarexecutor import SetVarExecutor
-from .sliversessionexecutor import SliverSessionExecutor
 from .webservexecutor import WebServExecutor
 from .httpclientexecutor import HttpClientExecutor
 from .tempfileexecutor import TempfileExecutor
