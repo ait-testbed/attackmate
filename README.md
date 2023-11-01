@@ -31,6 +31,9 @@ $ pip3 install attackmate
 $ attackmate playbook.yml
 ```
 
+
+![AttackMate Demo](docs/source/images/Demo.gif "AttackMate Demo")
+
 ## Documentation
 
 Please take a look at our documentation for how to install and use attackmate:
