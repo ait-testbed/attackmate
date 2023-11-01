@@ -3,7 +3,7 @@ import logging
 from typing import Dict, Optional
 from multiprocessing import JoinableQueue
 from attackmate.variablestore import VariableStore
-from .execexception import ExecException
+from attackmate.execexception import ExecException
 
 
 class MsfSessionStore:

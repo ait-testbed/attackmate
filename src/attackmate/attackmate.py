@@ -12,10 +12,10 @@ import logging
 from .shellexecutor import ShellExecutor
 from .sleepexecutor import SleepExecutor
 from .sshexecutor import SSHExecutor
-from .msfexecutor import MsfModuleExecutor
-from .msfsessionexecutor import MsfSessionExecutor
+from attackmate.executors.metasploit.msfsessionexecutor import MsfSessionExecutor
 from attackmate.executors.metasploit.msfpayloadexecutor import MsfPayloadExecutor
-from .msfsessionstore import MsfSessionStore
+from attackmate.executors.metasploit.msfsessionstore import MsfSessionStore
+from attackmate.executors.metasploit.msfexecutor import MsfModuleExecutor
 from .sliverexecutor import SliverExecutor
 from .fatherexecutor import FatherExecutor
 from .setvarexecutor import SetVarExecutor

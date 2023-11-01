@@ -2,13 +2,13 @@ from pymetasploit3.msfrpc import MsfRpcClient, MsfAuthError
 
 from typing import Optional
 from attackmate.variablestore import VariableStore
-from .baseexecutor import BaseExecutor
-from .execexception import ExecException
-from .result import Result
-from .cmdvars import CmdVars
-from .schemas import MsfModuleCommand, BaseCommand
-from .msfsessionstore import MsfSessionStore
-from .processmanager import ProcessManager
+from attackmate.baseexecutor import BaseExecutor
+from attackmate.execexception import ExecException
+from attackmate.result import Result
+from attackmate.cmdvars import CmdVars
+from attackmate.schemas import MsfModuleCommand, BaseCommand
+from attackmate.executors.metasploit.msfsessionstore import MsfSessionStore
+from attackmate.processmanager import ProcessManager
 from multiprocessing import Manager
 from multiprocessing.queues import JoinableQueue
 

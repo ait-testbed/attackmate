@@ -2,13 +2,12 @@ import atexit
 
 from pymetasploit3.msfrpc import MsfRpcClient, MsfAuthError
 from attackmate.variablestore import VariableStore
-from .baseexecutor import BaseExecutor
-from .execexception import ExecException
-from .result import Result
-from .schemas import MsfSessionCommand, BaseCommand
-from .msfsessionstore import MsfSessionStore
-from .processmanager import ProcessManager
-import time
+from attackmate.executors.metasploit.msfsessionstore import MsfSessionStore
+from attackmate.baseexecutor import BaseExecutor
+from attackmate.execexception import ExecException
+from attackmate.result import Result
+from attackmate.schemas import MsfSessionCommand, BaseCommand
+from attackmate.processmanager import ProcessManager
 
 
 class MsfSessionExecutor(BaseExecutor):
