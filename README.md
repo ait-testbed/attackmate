@@ -2,7 +2,7 @@
 
 AttackMate is an attack orchestration tool that executes full attack-chains based on playbooks.
 
-![AttackMate Schema](images/attackmate-schema.png "AttackMate Schema")
+![AttackMate Schema](docs/source/images/attackmate-schema.png "AttackMate Schema")
 
 ## Requirements
 
