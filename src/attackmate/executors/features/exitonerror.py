@@ -1,7 +1,7 @@
 import re
 import logging
-from .result import Result
-from .schemas import BaseCommand
+from attackmate.result import Result
+from attackmate.schemas import BaseCommand
 
 
 class ExitOnError:
@@ -11,7 +11,7 @@ class ExitOnError:
     def exit_on_error(self, command: BaseCommand, result: Result):
         if result.returncode != 0 and command.exit_on_error:
             self.logger.error(result.stdout)
-            self.logger.debug("Exiting because return-code is not 0")
+            self.logger.debug('Exiting because return-code is not 0')
             exit(1)
 
     def error_if_or_not(self, command: BaseCommand, result: Result):
@@ -23,7 +23,7 @@ class ExitOnError:
             m = re.search(command.error_if, result.stdout, re.MULTILINE)
             if m is not None:
                 self.logger.error(
-                        f"Exitting because error_if matches: {m.group(0)}"
+                        f'Exitting because error_if matches: {m.group(0)}'
                         )
                 exit(1)
 
@@ -32,6 +32,6 @@ class ExitOnError:
             m = re.search(command.error_if_not, result.stdout, re.MULTILINE)
             if m is None:
                 self.logger.error(
-                        "Exitting because error_if_not does not match"
+                        'Exitting because error_if_not does not match'
                         )
                 exit(1)

@@ -8,7 +8,7 @@ from attackmate.executors.baseexecutor import BaseExecutor
 from attackmate.result import Result
 from attackmate.execexception import ExecException
 from attackmate.schemas import WebServCommand
-from attackmate.cmdvars import CmdVars
+from attackmate.executors.features.cmdvars import CmdVars
 from http.server import HTTPServer, BaseHTTPRequestHandler
 import magic
 

@@ -1,8 +1,8 @@
-from .schemas import BaseCommand
-from .processmanager import ProcessManager
+from attackmate.schemas import BaseCommand
+from attackmate.processmanager import ProcessManager
+from attackmate.result import Result
 from multiprocessing import Queue
 from multiprocessing.managers import SyncManager
-from .result import Result
 from typing import Any, Optional
 import logging
 

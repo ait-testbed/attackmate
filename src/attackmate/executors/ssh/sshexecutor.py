@@ -17,7 +17,7 @@ from paramiko.ssh_exception import (BadHostKeyException,
 from attackmate.executors.baseexecutor import BaseExecutor
 from attackmate.execexception import ExecException
 from attackmate.result import Result
-from attackmate.cmdvars import CmdVars
+from attackmate.executors.features.cmdvars import CmdVars
 from attackmate.schemas import SFTPCommand, SSHCommand
 from attackmate.variablestore import VariableStore
 from attackmate.processmanager import ProcessManager

@@ -1,9 +1,9 @@
 import copy
 
 from attackmate.result import Result
-from .schemas import BaseCommand
-from .variablestore import VariableStore
-from .execexception import ExecException
+from attackmate.schemas import BaseCommand
+from attackmate.variablestore import VariableStore
+from attackmate.execexception import ExecException
 
 
 class CmdVars:
@@ -13,8 +13,8 @@ class CmdVars:
 
     def set_result_vars(self, result: Result):
         if self.setoutuptvars:
-            self.varstore.set_variable("RESULT_STDOUT", result.stdout)
-            self.varstore.set_variable("RESULT_RETURNCODE", str(result.returncode))
+            self.varstore.set_variable('RESULT_STDOUT', result.stdout)
+            self.varstore.set_variable('RESULT_RETURNCODE', str(result.returncode))
 
     def replace_variables(self, command: BaseCommand) -> BaseCommand:
         """ Replace variables using the VariableStore
@@ -60,4 +60,4 @@ class CmdVars:
         if value.isnumeric():
             return int(value)
         else:
-            raise ExecException(f"Variable {variablename} has not a numeric value: {value}")
+            raise ExecException(f'Variable {variablename} has not a numeric value: {value}')

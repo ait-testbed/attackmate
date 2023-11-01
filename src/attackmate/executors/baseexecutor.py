@@ -1,15 +1,14 @@
 import logging
-from attackmate.cmdvars import CmdVars
-
-from attackmate.exitonerror import ExitOnError
-from attackmate.looper import Looper
+from attackmate.executors.features.cmdvars import CmdVars
+from attackmate.executors.features.exitonerror import ExitOnError
+from attackmate.executors.features.looper import Looper
+from attackmate.executors.features.background import Background
 from attackmate.result import Result
 from attackmate.execexception import ExecException
 from attackmate.schemas import BaseCommand, CommandConfig
 from attackmate.conditional import Conditional
 from attackmate.variablestore import VariableStore
 from attackmate.processmanager import ProcessManager
-from attackmate.background import Background
 from typing import Any
 
 

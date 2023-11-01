@@ -2,7 +2,7 @@ import time
 from random import randint
 from attackmate.executors.baseexecutor import BaseExecutor
 from attackmate.result import Result
-from attackmate.cmdvars import CmdVars
+from attackmate.executors.features.cmdvars import CmdVars
 from attackmate.variablestore import VariableStore
 from attackmate.processmanager import ProcessManager
 

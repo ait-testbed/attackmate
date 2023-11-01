@@ -24,7 +24,7 @@ from attackmate.schemas import (SliverSessionCDCommand, SliverSessionCommand,
                                 SliverSessionUPLOADCommand, SliverSessionRMCommand)
 from datetime import datetime, timedelta
 from tabulate import tabulate
-from attackmate.cmdvars import CmdVars
+from attackmate.executors.features.cmdvars import CmdVars
 from attackmate.processmanager import ProcessManager
 
 

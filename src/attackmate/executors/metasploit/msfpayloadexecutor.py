@@ -13,7 +13,7 @@ from attackmate.result import Result
 from attackmate.execexception import ExecException
 from attackmate.processmanager import ProcessManager
 from attackmate.variablestore import VariableStore
-from attackmate.cmdvars import CmdVars
+from attackmate.executors.features.cmdvars import CmdVars
 from attackmate.schemas import MsfPayloadCommand, CommandConfig
 
 
