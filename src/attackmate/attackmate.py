@@ -11,7 +11,7 @@ configuration.
 import logging
 from .shellexecutor import ShellExecutor
 from .sleepexecutor import SleepExecutor
-from .sshexecutor import SSHExecutor
+from attackmate.executors.ssh.sshexecutor import SSHExecutor
 from attackmate.executors.metasploit.msfsessionexecutor import MsfSessionExecutor
 from attackmate.executors.metasploit.msfpayloadexecutor import MsfPayloadExecutor
 from attackmate.executors.metasploit.msfsessionstore import MsfSessionStore

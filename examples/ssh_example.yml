@@ -16,7 +16,7 @@
 #     4. Target a Metasploitable2-VM
 #
 vars:
-  METASPLOITABLE: 192.168.10.225
+  METASPLOITABLE: 172.17.0.106
   PASSWDLIST: /usr/share/seclists/Passwords/darkweb2017-top1000.txt
 
 commands:
