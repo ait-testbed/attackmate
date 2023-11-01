@@ -32,7 +32,7 @@ $ attackmate playbook.yml
 ```
 
 
-![AttackMate Demo](docs/source/images/Demo.mp4 "AttackMate Demo")
+![AttackMate Demo](docs/source/images/Demo.gif "AttackMate Demo")
 
 ## Documentation
 
