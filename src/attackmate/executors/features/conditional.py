@@ -35,7 +35,7 @@ class Conditional():
         elif isinstance(name, ast.Constant):
             return int(name.value)
         else:
-            raise ConditionalError("part is neither a name nor constant")
+            raise ConditionalError('part is neither a name nor constant')
 
     @classmethod
     def validate_not(cls, expression: ast.UnaryOp) -> bool:
@@ -71,13 +71,13 @@ class Conditional():
         elif isinstance(op, ast.IsNot):
             return left is not right
         else:
-            raise ConditionalError("Unknown compare operation")
+            raise ConditionalError('Unknown compare operation')
 
     @classmethod
     def test(cls, condition: Optional[str]) -> bool:
         if not condition:
             return False
-        expr = ast.parse(condition, mode="eval")
+        expr = ast.parse(condition, mode='eval')
         if isinstance(expr.body, ast.Name):
             return True
         elif isinstance(expr.body, ast.Compare):
@@ -93,6 +93,6 @@ class Conditional():
             if isinstance(expr.body.op, ast.Not):
                 return cls.validate_not(expr.body)
             else:
-                raise ConditionalError("Unknown unary operation")
+                raise ConditionalError('Unknown unary operation')
         else:
-            raise ConditionalError(f"Unknown Condition: {condition}")
+            raise ConditionalError(f'Unknown Condition: {condition}')

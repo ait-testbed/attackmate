@@ -3,10 +3,10 @@ from attackmate.executors.features.cmdvars import CmdVars
 from attackmate.executors.features.exitonerror import ExitOnError
 from attackmate.executors.features.looper import Looper
 from attackmate.executors.features.background import Background
+from attackmate.executors.features.conditional import Conditional
 from attackmate.result import Result
 from attackmate.execexception import ExecException
 from attackmate.schemas import BaseCommand, CommandConfig
-from attackmate.conditional import Conditional
 from attackmate.variablestore import VariableStore
 from attackmate.processmanager import ProcessManager
 from typing import Any

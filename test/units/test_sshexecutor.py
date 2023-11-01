@@ -1,6 +1,7 @@
 from paramiko.client import SSHClient
 from attackmate.schemas import SSHCommand
 from attackmate.variablestore import VariableStore
+from attackmate.processmanager import ProcessManager
 from attackmate.executors.ssh.sshexecutor import SSHExecutor
 
 
@@ -8,7 +9,7 @@ class TestSSHExecutor:
     def test_ssh_connection(self, mocker):
         varstore = VariableStore()
         cmd = SSHCommand(hostname='192.168.22.10', username='root', cmd='id', type='ssh')
-        ssh = SSHExecutor(varstore=varstore)
+        ssh = SSHExecutor(ProcessManager(), varstore=varstore)
         ssh.cache_settings(cmd)
         mocker.patch(
             'paramiko.SSHClient.connect',
