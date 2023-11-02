@@ -89,3 +89,4 @@ commands:
   - type: msf-session
     cmd: cat /etc/shadow
     session: root
+

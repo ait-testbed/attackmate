@@ -88,6 +88,7 @@ class TestBaseExecutor:
         executor = DummyExecutor(ProcessManager(), varstore)
         dc = DummyCommand(cmd='dummy')
         assert dc.return_str == 'back'
+
         assert dc.return_val == 0
         result = executor._exec_cmd(dc)
         assert result.returncode == dc.return_val

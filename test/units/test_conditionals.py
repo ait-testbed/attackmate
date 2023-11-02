@@ -54,6 +54,7 @@ class TestConditionals:
         assert Conditional.test('1 is True')
         assert Conditional.test('0 is True') is False
 
+
     def test_exceptions(self):
         with pytest.raises(ConditionalError, match='Unknown Condition:'):
             Conditional.test('{"a":1, **d}')
