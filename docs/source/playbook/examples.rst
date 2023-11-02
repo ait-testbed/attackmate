@@ -22,3 +22,4 @@ Playbooks
 * `SSH/SFTP example <https://github.com/ait-aecid/attackmate/blob/main/examples/ssh_example.yml>`_
 * `Upgrade meterpreter shell <https://github.com/ait-aecid/attackmate/blob/main/examples/upgrade_to_meterpreter.yml>`_
 * `Fileshare via webserv example <https://github.com/ait-aecid/attackmate/blob/main/examples/webserv.yml>`_
+* `Command injection and MSF multi handler example <https://github.com/ait-aecid/attackmate/blob/main/examples/webdemo.yml>`_
