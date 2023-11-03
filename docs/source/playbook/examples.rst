@@ -12,6 +12,16 @@ a `Kali Linux <https://www.kali.org/>`_ with some packages installed:
 * nikto
 * curl
 
+.. note::
+
+   It is advised to copy the example playbooks to the directory "./playbooks"
+
+Prepare Kali-Linux:
+
+::
+
+  $ sudo apt install nikto nmap curl seclists hydra
+  $ cp -r examples playbooks
 
 Playbooks
 ---------

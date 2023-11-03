@@ -10,7 +10,7 @@ If you run Kali Linux, you could also install it from the Kali Linux repositorie
 
 ::
 
-  $ sudo apt update && apt install metasploit-framework
+  $ sudo apt update && sudo apt install metasploit-framework
 
 
 AttackMate needs the RPC-daemon(msfrpcd) for communication with Metasploit.

