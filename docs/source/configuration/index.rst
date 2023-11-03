@@ -27,8 +27,8 @@ sliver and metasploit:
      loop_sleep: 5
 
    msf_config:
-     password: hackhelfer
-     server: 10.18.3.86
+     password: securepassword
+     server: 127.0.0.1
 
    sliver_config:
      config_file: /home/attacker/.sliver-client/configs/attacker_localhost.cfg

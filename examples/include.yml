@@ -22,7 +22,7 @@ vars:
 
 commands:
   - type: debug
-    cmd: "Please note that 'exploit/unix/ftp/vsftpd_234_backdoor' might not always work"
+    cmd: "Please note that 'exploit/unix/ftp/vsftpd_234_backdoor' takes a while and might not always work"
 
   # Exploit backdoor in vsftpd
   - type: msf-module
@@ -65,6 +65,3 @@ commands:
   # include commands and gather/loot information
   - type: include
     local_path: $INCLUDE_PATH/gather_commands.yml
-
-
-

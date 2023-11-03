@@ -1,8 +1,10 @@
 # AttackMate
 
-AttackMate is an attack orchestration tool that executes full attack-chains based on playbooks.
+AttackMate is a tool to automate cyber attack scenarios that supports scripting of attack techniques across all phases of the MITRE attack chain. AttackMate's design principles aim to integrate with penetration testing and attack emulation frameworks such as Metasploit and Sliver Framework and enables simple execution of commands via shell or ssh. For example, AttackMate enables to execute Metasploit modules or generate payloads and run commands in Metasploit sessions. Moreover, it is able to generate Sliver implants, automatize Sliver to send C2 commands, and configure and compile ld_preload_rootkits. AttackMate also offers a simple interface to automate shell or ssh interaction, run commands in background mode, transfer files via sftp, and start http clients or servers. All attack steps may be scheduled, chained, and repeatedly executed using a simple configuration file that supports variable declarations and conditional workflows.
 
-![AttackMate Schema](images/attackmate-schema.png "AttackMate Schema")
+
+![AttackMate Schema](docs/source/images/attackmate-schema.png "AttackMate Schema")
+
 
 ## Requirements
 
@@ -31,6 +33,8 @@ $ pip3 install attackmate
 $ attackmate playbook.yml
 ```
 
+![AttackMate Demo](docs/source/images/Demo.gif "AttackMate Demo")
+
 ## Documentation
 
 Please take a look at our documentation for how to install and use attackmate:
@@ -54,7 +58,7 @@ AttackMate should only be executed against own test or training systems.
 For this reason, every software bug is treated equally, regardless of
 whether it is security relevant or not.
 
-*Please note that AttackMate could easily executed in a dangerous way. For example by
+*Please note that AttackMate could easily be executed in a dangerous way. For example, by
 parsing the RESULT_STDOUT of a malicious server. The server response could lead to
 a command injection. Keep that in mind!
 

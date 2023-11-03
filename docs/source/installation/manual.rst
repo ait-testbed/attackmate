@@ -11,7 +11,7 @@ following tools:
 
 ::
 
-  $ sudo apt install python3 python3-pip git python3-venv
+  $ sudo apt install python3 python3-pip git python3-venv libmagic1
 
 .. note::
 

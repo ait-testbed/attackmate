@@ -11,7 +11,7 @@ Most of these settings control the Metsaploit RPC connection.
 
    ###
    msf_config:
-     password: top-secret
+     password: securepassword
      server: 10.18.3.86
 
 .. confval:: server

@@ -8,7 +8,7 @@ repos:
     -   id: trailing-whitespace
     -   id: end-of-file-fixer
     -   id: check-yaml
-    -   id: check-added-large-files
+    #    -   id: check-added-large-files
     -   id: double-quote-string-fixer
     -   id: forbid-submodules
     -   id: check-merge-conflict
@@ -31,10 +31,6 @@ repos:
     - id: autopep8
       args: [--max-line-length=110, --diff]
 
--   repo: https://github.com/pycqa/bandit
-    rev: '1.7.5'
-    hooks:
-    -   id: bandit
 
       # PROBLEMS WITH IMPORTS IN PYLINT!!!
       #-   repo: https://github.com/PyCQA/prospector

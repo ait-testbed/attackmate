@@ -20,7 +20,7 @@ commands:
   # Perform nmap scan
   - type: shell
     cmd: $NMAP -p 80 $METASPLOITABLE
-  
+
   # Parse output of nmap-scan to
   # grep the port-number of the http service
   - type: regex
@@ -28,12 +28,13 @@ commands:
     input: RESULT_STDOUT
     output:
       PORT: $MATCH_0
-  
+
   # Print port for debugging purposes
   - type: debug
     cmd: $PORT
-  
+
   # Run nikto only if http-port is port 80
   - type: shell
     cmd: nikto -host $METASPLOITABLE -port $PORT
     only_if: $PORT == 80
+    exit_on_error: False

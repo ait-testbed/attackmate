@@ -9,23 +9,23 @@ configuration.
 """
 
 import logging
-from .shellexecutor import ShellExecutor
-from .sleepexecutor import SleepExecutor
-from .sshexecutor import SSHExecutor
-from .msfexecutor import MsfModuleExecutor
-from .msfsessionexecutor import MsfSessionExecutor
+from attackmate.executors.shell.shellexecutor import ShellExecutor
+from attackmate.executors.ssh.sshexecutor import SSHExecutor
+from attackmate.executors.metasploit.msfsessionexecutor import MsfSessionExecutor
 from attackmate.executors.metasploit.msfpayloadexecutor import MsfPayloadExecutor
-from .msfsessionstore import MsfSessionStore
-from .sliverexecutor import SliverExecutor
-from .fatherexecutor import FatherExecutor
-from .setvarexecutor import SetVarExecutor
-from .sliversessionexecutor import SliverSessionExecutor
-from .webservexecutor import WebServExecutor
-from .httpclientexecutor import HttpClientExecutor
-from .tempfileexecutor import TempfileExecutor
-from .debugexecutor import DebugExecutor
-from .includeexecutor import IncludeExecutor
-from .regexexecutor import RegExExecutor
+from attackmate.executors.metasploit.msfsessionstore import MsfSessionStore
+from attackmate.executors.metasploit.msfexecutor import MsfModuleExecutor
+from attackmate.executors.sliver.sliverexecutor import SliverExecutor
+from attackmate.executors.sliver.sliversessionexecutor import SliverSessionExecutor
+from attackmate.executors.father.fatherexecutor import FatherExecutor
+from attackmate.executors.http.webservexecutor import WebServExecutor
+from attackmate.executors.http.httpclientexecutor import HttpClientExecutor
+from attackmate.executors.common.setvarexecutor import SetVarExecutor
+from attackmate.executors.common.sleepexecutor import SleepExecutor
+from attackmate.executors.common.tempfileexecutor import TempfileExecutor
+from attackmate.executors.common.debugexecutor import DebugExecutor
+from attackmate.executors.common.includeexecutor import IncludeExecutor
+from attackmate.executors.common.regexexecutor import RegExExecutor
 from .schemas import Config, Playbook, Commands
 from .variablestore import VariableStore
 from .processmanager import ProcessManager

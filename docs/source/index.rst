@@ -16,6 +16,8 @@ Welcome to AttackMate's documentation!
    :maxdepth: 1
    :caption: Getting Started:
 
+   about
+   how
    installation/index
    preparation/index
    configuration/index
