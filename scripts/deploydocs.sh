@@ -27,7 +27,7 @@ case $BRANCH in
 		    test -e $DEST/current && unlink $DEST/current
 		    ln -s $DEST/$VERSION $DEST/current
 		else
-			echo "Unable to identify the aminer-version!"
+			echo "Unable to identify the version!"
 			exit 1
 		fi
 		;;

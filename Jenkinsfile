@@ -16,9 +16,9 @@ pipeline {
         stage("Build Documentation") {
                 agent {
                         dockerfile {
-                                     dir 'docs'
-                                     args '-u root -v $PWD:/docs'
-                                     reuseNode true
+                                dir 'docs'
+                                args '-u root -v $PWD:/docs'
+                                reuseNode true
                         }
                 }
         	when {

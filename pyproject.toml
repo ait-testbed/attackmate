@@ -40,3 +40,6 @@ where = ["src"]
 
 [tool.setuptools.package-data]
 "attackmate.data" = ["*.tar.gz"]
+
+[tool.setuptools.dynamic]
+version = {attr = "attackmate.metadata.__version__"}
