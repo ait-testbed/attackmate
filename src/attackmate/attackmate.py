@@ -149,5 +149,10 @@ class AttackMate:
             to run_commands
 
         """
-        self.run_commands(self.playbook.commands)
-        self.pm.kill_or_wait_processes()
+        try:
+            self.run_commands(self.playbook.commands)
+            self.pm.kill_or_wait_processes()
+        except KeyboardInterrupt:
+            self.logger.warn('Program stopped manually')
+
+        return 0
