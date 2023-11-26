@@ -5,10 +5,6 @@ This class enables executing commands via
 ssh.
 """
 
-import os
-from datetime import datetime
-from typing import Optional
-from paramiko.channel import Channel
 from paramiko.client import SSHClient
 from paramiko import AutoAddPolicy
 from paramiko.ssh_exception import (BadHostKeyException,
@@ -16,18 +12,20 @@ from paramiko.ssh_exception import (BadHostKeyException,
                                     SSHException)
 from attackmate.executors.baseexecutor import BaseExecutor
 from attackmate.execexception import ExecException
+from attackmate.executors.ssh.interactfeature import Interactive
 from attackmate.result import Result
 from attackmate.executors.features.cmdvars import CmdVars
 from attackmate.schemas import SFTPCommand, SSHCommand
 from attackmate.variablestore import VariableStore
 from attackmate.processmanager import ProcessManager
+from attackmate.executors.ssh.sessionstore import SessionStore
+from attackmate.executors.ssh.sftpfeature import SFTPFeature
 
 
-class SSHExecutor(BaseExecutor):
+class SSHExecutor(BaseExecutor, SFTPFeature, Interactive):
     def __init__(self, pm: ProcessManager, cmdconfig=None, *, varstore: VariableStore):
-        self.session_store = self.SessionStore()
+        self.session_store = SessionStore()
         self.set_defaults()
-        self.timer = None
         super().__init__(pm, varstore, cmdconfig)
 
     def set_defaults(self):
@@ -123,67 +121,6 @@ class SSHExecutor(BaseExecutor):
             self.session_store.set_session(command.creates_session, client)
         return client
 
-    def exec_sftp(self, client: SSHClient, command: SFTPCommand) -> str:
-        output = ''
-        if command.cmd == 'put':
-            client.open_sftp().put(command.local_path, command.remote_path)
-            output = f'Uploaded to {command.remote_path}'
-            if command.mode:
-                client.open_sftp().chmod(command.remote_path, int(command.mode, 8))
-        elif command.cmd == 'get':
-            client.open_sftp().get(command.remote_path, command.local_path)
-            output = f'Downloaded from {command.remote_path}'
-            if command.mode:
-                os.chmod(command.local_path, int(command.mode, 8))
-        return output
-
-    def check_prompt(self, output: str, prompts: list[str], validate_prompt: bool = True) -> bool:
-        if output and validate_prompt:
-            for p in prompts:
-                if output.endswith(p):
-                    self.logger.debug('found prompt!')
-                    return True
-        return False
-
-    def check_timer(self, seconds: int) -> bool:
-        if not self.timer:
-            return False
-
-        if seconds <= 0:
-            return True
-
-        delta = datetime.now() - self.timer
-        if delta.total_seconds() > seconds:
-            return False
-        else:
-            return True
-
-    def set_timer(self):
-        self.timer = datetime.now()
-
-    def exec_interactive_command(self, command: SSHCommand, client: SSHClient):
-        channel = None
-
-        if command.session and self.session_store.has_session(command.session):
-            channel = self.session_store.get_channel_by_session(command.session)
-
-        if not channel:
-            channel = client.invoke_shell()
-            if command.session:
-                self.session_store.set_existing_session(command.session, client, channel)
-            elif command.creates_session:
-                self.session_store.set_existing_session(command.creates_session, client, channel)
-
-        stdin = channel.makefile('wb')
-        stdout = channel.makefile('rb')
-        stderr = channel.makefile_stderr('rb')
-
-        if stdin.channel.send_ready():
-            stdin.write(str.encode(command.cmd))
-            stdin.flush()
-
-        return (None, stdout, stderr)
-
     def _exec_cmd(self, command: SSHCommand) -> Result:
         error = None
         output = ''
@@ -200,16 +137,13 @@ class SSHExecutor(BaseExecutor):
                 return Result(ret, 0)
             else:
                 if command.interactive:
-                    stdin, stdout, stderr = self.exec_interactive_command(command, client)
+                    stdin, stdout, stderr = self.exec_interactive_command(command, client, self.session_store)
                     self.set_timer()
                     while self.check_timer(CmdVars.variable_to_int('timeout', command.command_timeout)):
                         if stdout.channel.recv_ready():
                             tmp = stdout.channel.recv(1025).decode('utf-8', 'ignore')
                             output += tmp
-                            if self.check_prompt(output, command.prompts, command.validate_prompt):
-                                self.timer = None
-                            else:
-                                self.set_timer()
+                            self.check_prompt(output, command.prompts, command.validate_prompt)
                 else:
                     stdin, stdout, stderr = client.exec_command(command.cmd)
                     output = stdout.read().decode('utf-8', 'ignore')
@@ -229,39 +163,3 @@ class SSHExecutor(BaseExecutor):
             return Result(error, 1)
 
         return Result(output, 0)
-
-    class SessionStore:
-        def __init__(self):
-            self.store: dict[str, tuple[SSHClient, Optional[Channel]]] = {}
-
-        def has_session(self, session_name: str) -> bool:
-            if session_name in self.store:
-                return True
-            else:
-                return False
-
-        def get_client_by_session(self, session_name: str) -> SSHClient:
-            if session_name in self.store:
-                return self.store[session_name][0]
-            else:
-                raise KeyError('Session not found in Sessionstore')
-
-        def get_channel_by_session(self, session_name: str) -> Optional[Channel]:
-            if session_name in self.store:
-                return self.store[session_name][1]
-            else:
-                raise KeyError('Session not found in Sessionstore')
-
-        def get_session(self, session_name: str) -> tuple[SSHClient, Channel | None]:
-            if session_name in self.store:
-                return self.store[session_name]
-            else:
-                raise KeyError('Session not found in Sessionstore')
-
-        def set_session(self, session_name: str, client: SSHClient, channel: Optional[Channel] = None):
-            self.store[session_name] = (client, channel)
-
-        def set_existing_session(self, session_name: str,
-                                 client: SSHClient, channel: Optional[Channel] = None):
-            if self.has_session(session_name):
-                self.set_session(session_name, client, channel)
