@@ -7,6 +7,15 @@ class SessionStore:
     def __init__(self):
         self.store: dict[str, tuple[SSHClient, Optional[Channel]]] = {}
 
+    def __getstate__(self):
+        """
+        store contains the states of the ssh connections. they are not
+        serializable.
+        """
+        state = self.__dict__.copy()
+        state['store'] = None
+        return state
+
     def has_session(self, session_name: str) -> bool:
         if session_name in self.store:
             return True

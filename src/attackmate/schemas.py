@@ -29,7 +29,7 @@ class BaseCommand(BaseModel):
 
     @validator('background')
     def bg_not_implemented_yet(cls, v):
-        if cls in (SSHCommand, SFTPCommand, MsfSessionCommand, IncludeCommand):
+        if cls in (MsfSessionCommand, IncludeCommand):
             raise ValueError('background mode is unsupported for this command')
         return v
 
@@ -116,6 +116,18 @@ class RegExCommand(BaseCommand):
 
 
 class SSHBase(BaseCommand):
+    @validator('session')
+    def session_and_background_unsupported(cls, v, values, **kwargs):
+        if 'background' in values and values['background']:
+            raise ValueError('background mode combined with session is unsupported for SSH')
+        return v
+
+    @validator('creates_session')
+    def creates_session_and_background_unsupported(cls, v, values, **kwargs):
+        if 'background' in values and values['background']:
+            raise ValueError('background mode combined with session is unsupported for SSH')
+        return v
+
     hostname: Optional[str]
     port: Optional[str] = Field(pattern=VAR_PATTERN, default=None)
     username: Optional[str]
