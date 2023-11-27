@@ -1,5 +1,5 @@
 import os
-from attackmate.schemas import SFTPCommand
+from attackmate.schemas.ssh import SFTPCommand
 from paramiko.client import SSHClient
 
 

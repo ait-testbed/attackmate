@@ -8,7 +8,7 @@ commands in AttackMate.
 import subprocess
 from attackmate.executors.baseexecutor import BaseExecutor
 from attackmate.result import Result
-from attackmate.schemas import BaseCommand
+from attackmate.schemas.base import BaseCommand
 
 
 class ShellExecutor(BaseExecutor):

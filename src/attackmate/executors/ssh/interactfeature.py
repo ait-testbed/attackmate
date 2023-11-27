@@ -1,7 +1,7 @@
 import logging
 from datetime import datetime
 from paramiko.client import SSHClient
-from attackmate.schemas import SSHCommand
+from attackmate.schemas.ssh import SSHCommand
 from attackmate.executors.ssh.sessionstore import SessionStore
 
 

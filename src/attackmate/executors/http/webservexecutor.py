@@ -7,7 +7,7 @@ Serves files via HTTP
 from attackmate.executors.baseexecutor import BaseExecutor
 from attackmate.result import Result
 from attackmate.execexception import ExecException
-from attackmate.schemas import WebServCommand
+from attackmate.schemas.http import WebServCommand
 from attackmate.executors.features.cmdvars import CmdVars
 from http.server import HTTPServer, BaseHTTPRequestHandler
 import magic

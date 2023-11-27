@@ -8,7 +8,8 @@ import yaml
 from typing import Callable
 from attackmate.executors.baseexecutor import BaseExecutor
 from attackmate.result import Result
-from attackmate.schemas import IncludeCommand, Playbook, Commands
+from attackmate.schemas.include import IncludeCommand
+from attackmate.schemas.playbook import Playbook, Commands
 from attackmate.variablestore import VariableStore
 from attackmate.execexception import ExecException
 from attackmate.processmanager import ProcessManager

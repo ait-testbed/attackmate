@@ -15,7 +15,7 @@ from attackmate.execexception import ExecException
 from attackmate.executors.ssh.interactfeature import Interactive
 from attackmate.result import Result
 from attackmate.executors.features.cmdvars import CmdVars
-from attackmate.schemas import SFTPCommand, SSHCommand
+from attackmate.schemas.ssh import SFTPCommand, SSHCommand
 from attackmate.variablestore import VariableStore
 from attackmate.processmanager import ProcessManager
 from attackmate.executors.ssh.sessionstore import SessionStore

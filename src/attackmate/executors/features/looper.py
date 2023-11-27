@@ -3,7 +3,8 @@ import time
 import logging
 from attackmate.executors.features.cmdvars import CmdVars
 from attackmate.result import Result
-from attackmate.schemas import BaseCommand, CommandConfig
+from attackmate.schemas.base import BaseCommand
+from attackmate.schemas.config import CommandConfig
 
 
 class Looper:

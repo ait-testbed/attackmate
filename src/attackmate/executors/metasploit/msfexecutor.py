@@ -6,7 +6,8 @@ from attackmate.executors.baseexecutor import BaseExecutor
 from attackmate.execexception import ExecException
 from attackmate.result import Result
 from attackmate.executors.features.cmdvars import CmdVars
-from attackmate.schemas import MsfModuleCommand, BaseCommand
+from attackmate.schemas.base import BaseCommand
+from attackmate.schemas.metasploit import MsfModuleCommand
 from attackmate.executors.metasploit.msfsessionstore import MsfSessionStore
 from attackmate.processmanager import ProcessManager
 from multiprocessing import Manager

@@ -1,4 +1,4 @@
-from attackmate.schemas import BaseCommand
+from attackmate.schemas.base import BaseCommand
 from attackmate.processmanager import ProcessManager
 from attackmate.result import Result
 from multiprocessing import Queue
