@@ -6,19 +6,103 @@ commands in AttackMate.
 """
 
 import subprocess
+from subprocess import TimeoutExpired
+from datetime import datetime
+from queue import Queue, Empty
+from threading import Thread
+from attackmate.execexception import ExecException
 from attackmate.executors.baseexecutor import BaseExecutor
 from attackmate.result import Result
 from attackmate.schemas.base import BaseCommand
+from attackmate.schemas.shell import ShellCommand
+from attackmate.schemas.config import CommandConfig
+from attackmate.variablestore import VariableStore
+from attackmate.processmanager import ProcessManager
+from attackmate.executors.shell.sessionstore import SessionStore
+from attackmate.executors.features.cmdvars import CmdVars
 
 
 class ShellExecutor(BaseExecutor):
+    def __init__(self, pm: ProcessManager, varstore: VariableStore, cmdconfig=CommandConfig()):
+        self.session_store = SessionStore()
+        super().__init__(pm, varstore, cmdconfig)
 
     def log_command(self, command: BaseCommand):
         self.logger.info(f"Executing Shell-Command: '{command.cmd}'")
 
-    def _exec_cmd(self, command: BaseCommand) -> Result:
-        result = subprocess.run(command.cmd,
-                                shell=True,
-                                stdout=subprocess.PIPE,
-                                stderr=subprocess.STDOUT)
-        return Result(result.stdout.decode('utf-8', 'ignore'), result.returncode)
+    def open_proc(self, command: ShellCommand) -> subprocess.Popen:
+        if command.session:
+            return self.session_store.get_handle_by_session(command.session)
+
+        proc = subprocess.Popen(["/bin/bash"], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+        if command.creates_session:
+            self.session_store.set_session(command.creates_session, proc, command.cmd)
+
+        return proc
+
+    def popen_close(self, proc):
+        self.logger.debug("Closing popen process")
+        proc.terminate()
+        proc.wait(timeout=10)
+
+    @staticmethod
+    def enqueue_output(stdout, queue):
+        for line in iter(stdout.readline, b''):
+            queue.put(line)
+
+    def popen_noninteractive(self, proc: subprocess.Popen, cmd: bytes, timeout=None) -> str:
+        self.logger.debug("Running non interactive command")
+        try:
+            output, error = proc.communicate(cmd, timeout=timeout)
+        except TimeoutExpired:
+            self.logger.info("Timeout of noninteractive shell command expired")
+            proc.kill()
+            output, error = proc.communicate()
+        output += error
+        return output.decode()
+
+    def popen_interactive(self, proc: subprocess.Popen, cmd: bytes, timeout: int=5, read: bool=True) -> str:
+        self.logger.debug("Running interactive command")
+        q = Queue()
+
+        self.logger.debug(f"Sending command: {cmd}")
+        if proc.stdin:
+            proc.stdin.write(cmd)
+            proc.stdin.flush()
+
+        t = Thread(target=ShellExecutor.enqueue_output, args=(proc.stdout, q))
+        t.daemon = True
+        t.start()
+
+        line = b''
+        if read:
+            begin = datetime.now()
+            while (datetime.now() - begin ).total_seconds() < timeout:
+                if q.qsize() > 0:
+                    line += q.get_nowait()
+                    begin = datetime.now() # reset timer when data comes
+
+        return line.decode()
+
+
+    def _exec_cmd(self, command: ShellCommand) -> Result:
+        try:
+            proc = self.open_proc(command)
+        except KeyError as e:
+            raise ExecException(e)
+
+        cmd = command.cmd.encode('utf-8')
+        timeout = CmdVars.variable_to_int("timeout", command.command_timeout )
+        output = ''
+
+        if command.interactive:
+            output = self.popen_interactive(proc, cmd, timeout, read=command.read)
+            if not command.session and not command.creates_session:
+                self.popen_close(proc)
+        else:
+            output = self.popen_noninteractive(proc, cmd)
+            self.popen_close(proc)
+
+
+        return Result(output, 0)
