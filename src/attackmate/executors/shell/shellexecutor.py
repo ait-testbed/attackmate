@@ -34,7 +34,7 @@ class ShellExecutor(BaseExecutor):
         if command.session:
             return self.session_store.get_handle_by_session(command.session)
 
-        proc = subprocess.Popen(["/bin/bash"], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        proc = subprocess.Popen([command.command_shell], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
         if command.creates_session:
             self.session_store.set_session(command.creates_session, proc, command.cmd)

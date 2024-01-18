@@ -18,3 +18,4 @@ class ShellCommand(BaseCommand):
     session: Optional[str] = None
     command_timeout: StringNumber = '10'
     read: bool = True
+    command_shell: str = '/bin/sh'
