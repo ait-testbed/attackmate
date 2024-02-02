@@ -1,7 +1,7 @@
 import re
 import logging
 from attackmate.result import Result
-from attackmate.schemas import BaseCommand
+from attackmate.schemas.base import BaseCommand
 
 
 class ExitOnError:

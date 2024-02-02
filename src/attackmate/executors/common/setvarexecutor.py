@@ -6,7 +6,7 @@ This class allows to set variables.
 
 from attackmate.executors.baseexecutor import BaseExecutor
 from attackmate.result import Result
-from attackmate.schemas import SetVarCommand
+from attackmate.schemas.setvar import SetVarCommand
 import base64
 import codecs
 import urllib.parse

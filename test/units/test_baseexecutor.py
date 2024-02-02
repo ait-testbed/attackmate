@@ -4,7 +4,9 @@ from attackmate.execexception import ExecException
 from attackmate.result import Result
 from attackmate.variablestore import VariableStore
 from attackmate.processmanager import ProcessManager
-from attackmate.schemas import BaseCommand, RegExCommand, SliverSessionEXECCommand
+from attackmate.schemas.base import BaseCommand
+from attackmate.schemas.regex import RegExCommand
+from attackmate.schemas.sliver import SliverSessionEXECCommand
 
 
 class DummyCommand(BaseCommand):

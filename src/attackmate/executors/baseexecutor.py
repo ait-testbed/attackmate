@@ -6,7 +6,8 @@ from attackmate.executors.features.background import Background
 from attackmate.executors.features.conditional import Conditional
 from attackmate.result import Result
 from attackmate.execexception import ExecException
-from attackmate.schemas import BaseCommand, CommandConfig
+from attackmate.schemas.base import BaseCommand
+from attackmate.schemas.config import CommandConfig
 from attackmate.variablestore import VariableStore
 from attackmate.processmanager import ProcessManager
 from typing import Any

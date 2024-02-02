@@ -1,7 +1,7 @@
 import copy
 
 from attackmate.result import Result
-from attackmate.schemas import BaseCommand
+from attackmate.schemas.base import BaseCommand, StringNumber
 from attackmate.variablestore import VariableStore
 from attackmate.execexception import ExecException
 
@@ -56,7 +56,13 @@ class CmdVars:
         return template_cmd
 
     @staticmethod
-    def variable_to_int(variablename: str, value: str) -> int:
+    def variable_to_int(variablename: str, value: StringNumber) -> int:
+        if not value:
+            raise ExecException(f'Variable {variablename} has not a numeric value: {value}')
+
+        if isinstance(value, int):
+            return value
+
         if value.isnumeric():
             return int(value)
         else:

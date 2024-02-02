@@ -14,7 +14,8 @@ from attackmate.execexception import ExecException
 from attackmate.processmanager import ProcessManager
 from attackmate.variablestore import VariableStore
 from attackmate.executors.features.cmdvars import CmdVars
-from attackmate.schemas import MsfPayloadCommand, CommandConfig
+from attackmate.schemas.metasploit import MsfPayloadCommand
+from attackmate.schemas.config import CommandConfig
 
 
 class MsfPayloadExecutor(BaseExecutor):

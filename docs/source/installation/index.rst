@@ -15,4 +15,5 @@ and :ref:`Sliver <prep_sliver>`.
 
    manual
    sliverfix
+   ansible
    docker

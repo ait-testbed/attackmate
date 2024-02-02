@@ -1,6 +1,6 @@
 from attackmate.variablestore import VariableStore
 from attackmate.executors.common.setvarexecutor import SetVarExecutor
-from attackmate.schemas import SetVarCommand
+from attackmate.schemas.setvar import SetVarCommand
 from attackmate.processmanager import ProcessManager
 
 

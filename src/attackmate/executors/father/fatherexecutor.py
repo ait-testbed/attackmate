@@ -13,7 +13,7 @@ from string import Template
 from typing import Any
 from attackmate.executors.baseexecutor import BaseExecutor
 from attackmate.result import Result
-from attackmate.schemas import FatherCommand
+from attackmate.schemas.father import FatherCommand
 from attackmate.variablestore import VariableStore
 from attackmate.processmanager import ProcessManager
 

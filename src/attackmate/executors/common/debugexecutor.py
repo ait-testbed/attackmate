@@ -6,7 +6,7 @@ This class allows to print out variables.
 
 from attackmate.executors.baseexecutor import BaseExecutor
 from attackmate.result import Result
-from attackmate.schemas import DebugCommand
+from attackmate.schemas.debug import DebugCommand
 
 
 class DebugExecutor(BaseExecutor):

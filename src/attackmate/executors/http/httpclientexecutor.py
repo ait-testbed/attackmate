@@ -8,7 +8,7 @@ import httpx
 from typing import Optional
 from attackmate.executors.baseexecutor import BaseExecutor
 from attackmate.result import Result
-from attackmate.schemas import HttpClientCommand
+from attackmate.schemas.http import HttpClientCommand
 from attackmate.execexception import ExecException
 
 

@@ -8,7 +8,7 @@ import tempfile
 from typing import Any
 from attackmate.executors.baseexecutor import BaseExecutor
 from attackmate.result import Result
-from attackmate.schemas import TempfileCommand
+from attackmate.schemas.tempfile import TempfileCommand
 from attackmate.variablestore import VariableStore
 from attackmate.processmanager import ProcessManager
 

@@ -15,7 +15,8 @@ from attackmate.executors.baseexecutor import BaseExecutor
 from attackmate.execexception import ExecException
 from attackmate.result import Result
 from attackmate.executors.features.cmdvars import CmdVars
-from attackmate.schemas import BaseCommand, SliverGenerateCommand, SliverHttpsListenerCommand
+from attackmate.schemas.base import BaseCommand
+from attackmate.schemas.sliver import SliverGenerateCommand, SliverHttpsListenerCommand
 from attackmate.processmanager import ProcessManager
 
 

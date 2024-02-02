@@ -26,7 +26,8 @@ from attackmate.executors.common.tempfileexecutor import TempfileExecutor
 from attackmate.executors.common.debugexecutor import DebugExecutor
 from attackmate.executors.common.includeexecutor import IncludeExecutor
 from attackmate.executors.common.regexexecutor import RegExExecutor
-from .schemas import Config, Playbook, Commands
+from attackmate.schemas.config import Config
+from attackmate.schemas.playbook import Playbook, Commands
 from .variablestore import VariableStore
 from .processmanager import ProcessManager
 

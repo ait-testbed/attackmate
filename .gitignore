@@ -155,6 +155,9 @@ cython_debug/
 # VIM
 .vim/
 .swp
+.swo
+.swn
+.swm
 
 # PyCharm
 #  JetBrains specific template is maintained in a separate JetBrains.gitignore that can

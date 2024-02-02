@@ -16,12 +16,12 @@ from attackmate.variablestore import VariableStore
 from attackmate.executors.baseexecutor import BaseExecutor
 from attackmate.execexception import ExecException
 from attackmate.result import Result
-from attackmate.schemas import (SliverSessionCDCommand, SliverSessionCommand,
-                                SliverSessionDOWNLOADCommand, SliverSessionEXECCommand,
-                                SliverSessionLSCommand, SliverSessionNETSTATCommand,
-                                SliverSessionPROCDUMPCommand, SliverSessionSimpleCommand,
-                                SliverSessionMKDIRCommand, SliverSessionTERMINATECommand,
-                                SliverSessionUPLOADCommand, SliverSessionRMCommand)
+from attackmate.schemas.sliver import (SliverSessionCDCommand, SliverSessionCommand,
+                                       SliverSessionDOWNLOADCommand, SliverSessionEXECCommand,
+                                       SliverSessionLSCommand, SliverSessionNETSTATCommand,
+                                       SliverSessionPROCDUMPCommand, SliverSessionSimpleCommand,
+                                       SliverSessionMKDIRCommand, SliverSessionTERMINATECommand,
+                                       SliverSessionUPLOADCommand, SliverSessionRMCommand)
 from datetime import datetime, timedelta
 from tabulate import tabulate
 from attackmate.executors.features.cmdvars import CmdVars

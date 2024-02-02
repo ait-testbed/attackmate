@@ -7,7 +7,7 @@ regular expressions.
 
 from attackmate.executors.baseexecutor import BaseExecutor
 from attackmate.result import Result
-from attackmate.schemas import RegExCommand
+from attackmate.schemas.regex import RegExCommand
 from string import Template
 from typing import Match
 import re

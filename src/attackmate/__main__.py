@@ -13,7 +13,8 @@ import logging
 from typing import Optional
 from colorlog import ColoredFormatter
 from .attackmate import AttackMate
-from .schemas import Config, Playbook
+from attackmate.schemas.config import Config
+from attackmate.schemas.playbook import Playbook
 from .metadata import __version_string__
 
 
@@ -23,10 +24,10 @@ def initialize_output_logger(debug: bool):
         output_logger.setLevel(logging.DEBUG)
     else:
         output_logger.setLevel(logging.INFO)
-    file_handler = logging.FileHandler("output.log", mode='w')
+    file_handler = logging.FileHandler('output.log', mode='w')
     formatter = logging.Formatter(
             '--- %(asctime)s %(levelname)s: ---\n\n%(message)s',
-            datefmt="%Y-%m-%d %H:%M:%S")
+            datefmt='%Y-%m-%d %H:%M:%S')
     file_handler.setFormatter(formatter)
     output_logger.addHandler(file_handler)
 
@@ -38,15 +39,15 @@ def initialize_logger(debug: bool):
     else:
         playbook_logger.setLevel(logging.INFO)
     console_handler = logging.StreamHandler()
-    LOGFORMAT = ("  %(asctime)s %(log_color)s%(levelname)-8s%(reset)s"
-                 "| %(log_color)s%(message)s%(reset)s")
-    formatter = ColoredFormatter(LOGFORMAT, datefmt="%Y-%m-%d %H:%M:%S")
+    LOGFORMAT = ('  %(asctime)s %(log_color)s%(levelname)-8s%(reset)s'
+                 '| %(log_color)s%(message)s%(reset)s')
+    formatter = ColoredFormatter(LOGFORMAT, datefmt='%Y-%m-%d %H:%M:%S')
     console_handler.setFormatter(formatter)
     playbook_logger.addHandler(console_handler)
-    file_handler = logging.FileHandler("attackmate.log", mode='w')
+    file_handler = logging.FileHandler('attackmate.log', mode='w')
     formatter = logging.Formatter(
             '%(asctime)s %(levelname)s - %(message)s',
-            datefmt="%Y-%m-%d %H:%M:%S")
+            datefmt='%Y-%m-%d %H:%M:%S')
     file_handler.setFormatter(formatter)
     playbook_logger.addHandler(file_handler)
     return playbook_logger
@@ -78,9 +79,9 @@ def parse_config(config_file: Optional[str], logger: logging.Logger) -> Config:
 
     """
     default_cfg_path = [
-                        ".attackmate.yml",
-                        os.environ['HOME'] + "/.config/attackmate.yml",
-                        "/etc/attackmate.yml"]
+                        '.attackmate.yml',
+                        os.environ['HOME'] + '/.config/attackmate.yml',
+                        '/etc/attackmate.yml']
     try:
         if config_file is None:
             for file in default_cfg_path:
@@ -90,15 +91,15 @@ def parse_config(config_file: Optional[str], logger: logging.Logger) -> Config:
                 except OSError:
                     pass
                 if cfg is not None:
-                    logger.debug(f"Cfgfile {file} loaded")
+                    logger.debug(f'Cfgfile {file} loaded')
                     return cfg
-            logger.debug("No config-file found. Using empty default-config")
+            logger.debug('No config-file found. Using empty default-config')
             return Config()
         else:
-            logger.debug(f"Cfgfile {config_file} loaded")
+            logger.debug(f'Cfgfile {config_file} loaded')
             return load_configfile(config_file)
     except OSError:
-        logger.error(f"Error: Could not open file {config_file}")
+        logger.error(f'Error: Could not open file {config_file}')
         exit(1)
     except yaml.parser.ParserError as e:
         logger.error(e)
@@ -126,7 +127,7 @@ def parse_playbook(playbook_file: str, logger: logging.Logger) -> Playbook:
             playbook_object = Playbook.parse_obj(pb_yaml)
             return playbook_object
     except OSError:
-        logger.error(f"Error: Could not open playbook file {playbook_file}")
+        logger.error(f'Error: Could not open playbook file {playbook_file}')
         exit(1)
 
 
@@ -151,7 +152,7 @@ def parse_args():
             version=__version_string__)
     parser.add_argument(
             'playbook',
-            help="Playbook in yaml-format")
+            help='Playbook in yaml-format')
     return parser.parse_args()
 
 

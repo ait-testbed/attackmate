@@ -6,7 +6,8 @@ from attackmate.executors.metasploit.msfsessionstore import MsfSessionStore
 from attackmate.executors.baseexecutor import BaseExecutor
 from attackmate.execexception import ExecException
 from attackmate.result import Result
-from attackmate.schemas import MsfSessionCommand, BaseCommand
+from attackmate.schemas.base import BaseCommand
+from attackmate.schemas.metasploit import MsfSessionCommand
 from attackmate.processmanager import ProcessManager
 
 

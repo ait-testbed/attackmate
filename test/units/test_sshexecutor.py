@@ -1,5 +1,5 @@
 from paramiko.client import SSHClient
-from attackmate.schemas import SSHCommand
+from attackmate.schemas.ssh import SSHCommand
 from attackmate.variablestore import VariableStore
 from attackmate.processmanager import ProcessManager
 from attackmate.executors.ssh.sshexecutor import SSHExecutor
