@@ -32,6 +32,7 @@ class SSHCommand(SSHBase):
     validate_prompt: bool = True
     command_timeout: StringNumber = '15'
     prompts: List[str] = ['$ ', '# ', '> ']
+    bin: bool = False
 
 
 class SFTPCommand(SSHBase):
