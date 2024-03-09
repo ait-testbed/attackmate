@@ -83,3 +83,10 @@ Execute local shell-commands.
 
    :type: bool
    :default: ``True``
+
+.. convval:: command_shell
+
+   Use this shell when executing commands.
+
+   :type: str
+   :default: ``/bin/sh``
