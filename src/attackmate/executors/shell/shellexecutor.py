@@ -75,15 +75,15 @@ class ShellExecutor(BaseExecutor):
         t.daemon = True
         t.start()
 
-        line = b''
+        outline = b''
         if read:
             begin = datetime.now()
             while (datetime.now() - begin ).total_seconds() < timeout:
                 if q.qsize() > 0:
-                    line += q.get_nowait()
+                    outline += q.get_nowait()
                     begin = datetime.now() # reset timer when data comes
 
-        return line.decode()
+        return outline.decode()
 
 
     def _exec_cmd(self, command: ShellCommand) -> Result:
