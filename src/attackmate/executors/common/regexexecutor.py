@@ -73,5 +73,4 @@ class RegExExecutor(BaseExecutor):
                 matches = self.forge_variables(replaced)
                 self.register_outputvars(command.output, matches)
 
-
         return Result('', 0)
