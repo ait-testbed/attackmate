@@ -86,7 +86,7 @@ Execute local shell-commands.
    :type: bool
    :default: ``True``
 
-.. convval:: command_shell
+.. confval:: command_shell
 
    Use this shell when executing commands.
 
