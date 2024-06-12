@@ -29,14 +29,14 @@ In our first example we use the following playbook.yml:
    vars:
      NMAP: /usr/bin/nmap
      TARGET: localhost
-     WEBPORT: 8000
+     WEBPORT: "8000"
 
    commands:
      - type: shell
        cmd: $NMAP -sC -p $WEBPORT $TARGET
 
      - type: regex
-       cmd: (\d+)/tcp open   http
+       cmd: (\d+)/tcp open\s+http
        input: RESULT_STDOUT
        output:
          PORT: $MATCH_0
@@ -82,7 +82,7 @@ the web-port to attack is *8000*.
   vars:
     NMAP: /usr/bin/nmap
     TARGET: localhost
-    WEBPORT: 8000
+    WEBPORT: "8000"
 
 The first command executes an nmap-script-scan on port *8000* at *localhost*. This command illustrates
 how to use variables:
