@@ -30,10 +30,10 @@ Installation Steps
 
      $ mkdir my-attackmate
      $ cd my-attackmate
-     $ touch playbook.yml
+     $ touch install_attackmate.yml
 
-Open the `playbook.yml` file and fill it with this sample playbook (which also can be found on README-page of the
-`github-repository <https://github.com/ait-aecid/attackmate-ansible>`_):
+Open the `install_attackmate.yml` file and fill it with this sample playbook (it also can be found on the README-page
+of the `github-repository <https://github.com/ait-aecid/attackmate-ansible>`_), which installs AttackMate on localhost:
 
 ::
 
@@ -77,9 +77,17 @@ Open the `playbook.yml` file and fill it with this sample playbook (which also c
 
 ::
 
-  $ ansible-playbook -i hosts playbook.yml
+  $ ansible-playbook -i hosts install_attackmate.yml
 
 .. note::
 
-  If you dont have SSH keys set up for passwordless access, you might need to use the `--ask-become-pass` flag if
+  If you don't have an SSH key set up for passwordless access, you might need to use the `--ask-become-pass` flag, as
   Ansible requires a password for `sudo` operations.
+
+To verify that the installation was successful, run:
+
+::
+
+  $ attackm8 -h
+
+This should display the usage of AttackMate.
