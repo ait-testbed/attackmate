@@ -65,7 +65,8 @@ def parse_config(config_file: Optional[str], logger: logging.Logger) -> Config:
     This parser reads the configfile and validates the settings.
     If config_file is None, this function will try to load the
     config from ".attackmate.yml", "$HOME/.config/attackmate.yml" and
-    "/etc/attackmate.yml"
+    "/etc/attackmate.yml". If no files are found or the files are empty,
+    it uses default config variables.
 
     Parameters
     ----------
@@ -87,16 +88,22 @@ def parse_config(config_file: Optional[str], logger: logging.Logger) -> Config:
             for file in default_cfg_path:
                 cfg = None
                 try:
+                    if os.path.getsize(file) == 0:
+                        logger.debug(f'Config file {file} is empty. Using default config.')
+                        return Config()
                     cfg = load_configfile(file)
                 except OSError:
                     pass
                 if cfg is not None:
-                    logger.debug(f'Cfgfile {file} loaded')
+                    logger.debug(f'Config file {file} loaded')
                     return cfg
-            logger.debug('No config-file found. Using empty default-config')
+            logger.debug('No config-file found. Using default-config')
             return Config()
         else:
-            logger.debug(f'Cfgfile {config_file} loaded')
+            if os.path.getsize(config_file) == 0:
+                logger.debug(f'Config file {config_file} is empty. Using default config.')
+                return Config()
+            logger.debug(f'Config file {config_file} loaded')
             return load_configfile(config_file)
     except OSError:
         logger.error(f'Error: Could not open file {config_file}')
