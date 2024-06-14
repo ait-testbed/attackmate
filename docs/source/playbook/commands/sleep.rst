@@ -53,6 +53,7 @@ Sleep a certain amount of seconds.
        - type: sleep
          seconds: 60
          min_sec: 30
+         random: True
 
 
 .. confval:: cmd
