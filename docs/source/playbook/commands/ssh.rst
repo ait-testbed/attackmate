@@ -204,3 +204,26 @@ Execute commands on a remote server via SSH.
           username: aecid
           key_filename: "/home/alice/.ssh/id_rsa"
           creates_session: "attacker"
+
+
+.. confval:: bin
+
+   Enable binary mode. In this mode only hex-characters are allowed.
+
+   :type: bool
+   :default: ``False``
+
+   .. code-block:: yaml
+
+      vars: 
+        $SERVER_ADDRESS: 192.42.0.254
+        $SSH_SERVER: 10.10.10.19
+
+      commands:
+        - type: ssh
+          # hex-code for "id"
+          cmd: "6964"
+          bin: True
+          hostname: 10.10.10.19
+          username: aecid
+          key_filename: "/home/alice/.ssh/id_rsa"

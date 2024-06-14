@@ -67,3 +67,9 @@ class CmdVars:
             return int(value)
         else:
             raise ExecException(f'Variable {variablename} has not a numeric value: {value}')
+
+    @staticmethod
+    def variable_to_bool(variablename: str, value: str) -> bool:
+        if str(value).lower() in ("yes", "y", "true",  "t", "1"): return True
+        if str(value).lower() in ("no",  "n", "false", "f", "0", "0.0", "", "none", "[]", "{}"): return False
+        raise ExecException(f'Invalid value for boolean conversion of {variablename}: {value}')

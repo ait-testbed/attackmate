@@ -4,7 +4,7 @@
 Install sliver-fix
 ==================
 
-Currently there is a `nasty bug with grpcclient and TLS1.3 <https://github.com/moloch--/sliver-py/issues/28`_
+Currently there is a `nasty bug with grpcclient and TLS1.3 <https://github.com/moloch--/sliver-py/issues/28>`_
 that breaks the communication between Sliver-API and AttackMate. In order to make
 AttackMate work with the Sliver-API it is necessary to manually compile grpc with
 the environment variable ``GRPC_PYTHON_BUILD_SYSTEM_OPENSSL=True``

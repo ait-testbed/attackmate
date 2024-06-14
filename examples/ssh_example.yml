@@ -59,7 +59,7 @@ commands:
     local_path: $LINPEAS
     remote_path: /tmp/linpeas.sh
     session: "foothold"
-    mode: 777
+    mode: "777"
 
   - type: debug
     cmd: "Executing LinPeas. This will take a while. Please be patient"

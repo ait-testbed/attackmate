@@ -32,6 +32,7 @@ Welcome to AttackMate's documentation!
    playbook/structure
    playbook/vars
    playbook/commands/index
+   playbook/session/index
    playbook/examples
 
 .. toctree::

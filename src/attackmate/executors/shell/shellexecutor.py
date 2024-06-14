@@ -5,6 +5,7 @@ This class enables executing shell
 commands in AttackMate.
 """
 
+import os
 import subprocess
 from subprocess import TimeoutExpired
 from datetime import datetime
@@ -47,9 +48,18 @@ class ShellExecutor(BaseExecutor):
         proc.wait(timeout=10)
 
     @staticmethod
-    def enqueue_output(stdout, queue):
-        for line in iter(stdout.readline, b''):
-            queue.put(line)
+    def non_block_read(stdout):
+        fd = stdout.fileno()
+        try:
+            import fcntl
+            fl = fcntl.fcntl(fd, fcntl.F_GETFL)
+            fcntl.fcntl(fd, fcntl.F_SETFL, fl | os.O_NONBLOCK)
+        except ImportError:
+            raise ExecException("The 'fcntl' module is not available. This functionality requires a Unix-like operating system.")
+        try:
+            return stdout.read()
+        except:
+            return b""
 
     def popen_noninteractive(self, proc: subprocess.Popen, cmd: bytes, timeout=None) -> str:
         self.logger.debug("Running non interactive command")
@@ -71,19 +81,16 @@ class ShellExecutor(BaseExecutor):
             proc.stdin.write(cmd)
             proc.stdin.flush()
 
-        t = Thread(target=ShellExecutor.enqueue_output, args=(proc.stdout, q))
-        t.daemon = True
-        t.start()
-
-        line = b''
+        outline = b''
         if read:
             begin = datetime.now()
             while (datetime.now() - begin ).total_seconds() < timeout:
-                if q.qsize() > 0:
-                    line += q.get_nowait()
+                tmp = self.non_block_read(proc.stdout)
+                if tmp:
+                    outline += tmp
                     begin = datetime.now() # reset timer when data comes
 
-        return line.decode()
+        return outline.decode()
 
 
     def _exec_cmd(self, command: ShellCommand) -> Result:

@@ -42,10 +42,36 @@ By using the mode "split", strings that are seperated by whitespaces can be toke
 
 .. confval:: mode
 
-   Specifies the python regex-function. One of: ``search``, ``split`` or ``findall``.
+   Specifies the python regex-function. One of: ``search``, ``split``, ``sub`` or ``findall``.
 
    :type: str
    :default: ``findall``
+
+.. confval:: replace
+
+   This variable must be set for sub mode. It holds the replacement-string for the substitution.
+
+   :type: str
+   :default: ``None``
+
+   .. code-block:: yaml
+
+      commands:
+        - type: setvar
+          cmd: "hello world"
+          variable: FOO
+
+        - type: regex
+          cmd: hello
+          mode: sub
+          replace: whaat
+          input: FOO
+          output:
+            BAR: $MATCH
+      
+        - type: debug
+          cmd: $BAR
+
 
 .. confval:: input
 

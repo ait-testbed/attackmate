@@ -67,5 +67,10 @@ class RegExExecutor(BaseExecutor):
                 matches = self.forge_variables(m3.groups())
                 self.logger.debug(matches)
                 self.register_outputvars(command.output, matches)
+        if command.mode == 'sub':
+            if command.replace:
+                replaced = re.sub(command.cmd, command.replace, self.varstore.get_variable(command.input))
+                matches = self.forge_variables(replaced)
+                self.register_outputvars(command.output, matches)
 
         return Result('', 0)

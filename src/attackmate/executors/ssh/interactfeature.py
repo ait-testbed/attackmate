@@ -1,7 +1,9 @@
 import logging
+import binascii
 from datetime import datetime
 from paramiko.client import SSHClient
 from attackmate.schemas.ssh import SSHCommand
+from attackmate.execexception import ExecException
 from attackmate.executors.ssh.sessionstore import SessionStore
 
 
@@ -17,7 +19,8 @@ class Interactive():
                     self.logger.debug('found prompt!')
                     self.timer = None
                     return True
-        self.set_timer()
+        else:
+            self.set_timer()
         return False
 
     def check_timer(self, seconds: int) -> bool:
@@ -54,7 +57,13 @@ class Interactive():
         stderr = channel.makefile_stderr('rb')
 
         if stdin.channel.send_ready():
-            stdin.write(str.encode(command.cmd))
+            if command.bin:
+                try:
+                    stdin.write(binascii.unhexlify(command.cmd))
+                except binascii.Error:
+                    raise ExecException(f"only hex characters are allowed in binary mode: \"{command.cmd}\"")
+            else:
+                stdin.write(str.encode(command.cmd))
             stdin.flush()
 
         return (None, stdout, stderr)

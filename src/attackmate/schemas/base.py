@@ -21,6 +21,8 @@ StringNumber = Annotated[Optional[str | int],
                          BeforeValidator(transform_int_to_str),
                          AfterValidator(check_var_pattern)]
 
+# Like StringNumber but without checks for valid $variable
+StrInt = Annotated[Optional[str | int], BeforeValidator(transform_int_to_str)]
 
 class BaseCommand(BaseModel):
     def list_template_vars(self) -> List[str]:
