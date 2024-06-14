@@ -27,6 +27,7 @@ from .father import FatherCommand
 from .tempfile import TempfileCommand
 from .debug import DebugCommand
 from .regex import RegExCommand
+from .base import StrInt
 
 
 Commands = List[Union[
@@ -62,5 +63,5 @@ Commands = List[Union[
 
 
 class Playbook(BaseModel):
-    vars: Optional[Dict[str, str]] = None
+    vars: Optional[Dict[str, StrInt]] = None
     commands: Commands
