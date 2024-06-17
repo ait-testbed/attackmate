@@ -1,6 +1,7 @@
 # Install the local package in editable mode
--e .. .
+# comment out the following line if you only want to run the tests locally
+#-e .. .
 
-# Other dependencies
+# Dependencies for tests
 pytest
 pytest-mock
