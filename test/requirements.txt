@@ -1,2 +1,6 @@
+# Install the local package in editable mode
+-e .. .
+
+# Other dependencies
 pytest
 pytest-mock
