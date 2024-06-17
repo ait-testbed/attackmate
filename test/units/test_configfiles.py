@@ -27,7 +27,7 @@ def config_content(mock_config):
 
 @pytest.fixture
 def mock_config_class(mock_config):
-    return Config.parse_obj(mock_config)
+    return Config.model_validate(mock_config)
 
 
 @patch("os.path.getsize")
@@ -35,7 +35,7 @@ def mock_config_class(mock_config):
 @patch("attackmate.schemas.config.Config")
 def test_parse_config_no_file(mock_config, mock_open, mock_getsize, mock_logger, mock_config_class):
     mock_getsize.return_value = 10
-    mock_config.parse_obj.return_value = mock_config_class
+    mock_config.model_validate.return_value = mock_config_class
 
     cfg = parse_config(None, mock_logger)
 
@@ -49,7 +49,7 @@ def test_parse_config_no_file(mock_config, mock_open, mock_getsize, mock_logger,
 def test_parse_config_specified_file(mock_config, mock_open, mock_getsize, mock_logger, mock_config_class):
     config_file = '/path/to/config.yml'
     mock_getsize.return_value = 10
-    mock_config.parse_obj.return_value = mock_config_class
+    mock_config.model_validate.return_value = mock_config_class
 
     cfg = parse_config(config_file, mock_logger)
 

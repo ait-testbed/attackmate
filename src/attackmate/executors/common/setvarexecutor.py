@@ -28,7 +28,7 @@ class SetVarExecutor(BaseExecutor):
             return cmd
 
     def log_command(self, command: SetVarCommand):
-        self.logger.warn(f"Setting Variable: '{command.variable}'")
+        self.logger.warning(f"Setting Variable: '{command.variable}'")
 
     def _exec_cmd(self, command: SetVarCommand) -> Result:
         self.setoutuptvars = False
@@ -37,7 +37,7 @@ class SetVarExecutor(BaseExecutor):
             try:
                 content = self.encode(command.encoder, command.cmd)
             except Exception as e:
-                self.logger.warn(f'Encoding failed. Fallback to plain: {e}')
+                self.logger.warning(f'Encoding failed. Fallback to plain: {e}')
         self.varstore.set_variable(command.variable, content)
 
         return Result('', 0)

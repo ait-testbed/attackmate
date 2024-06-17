@@ -28,7 +28,7 @@ class Looper:
         if command.loop_if is not None:
             m = re.search(command.loop_if, result.stdout, re.MULTILINE)
             if m is not None:
-                self.logger.warn(
+                self.logger.warning(
                         f'Re-run command because loop_if matches: {m.group(0)}'
                         )
                 if self.run_count < CmdVars.variable_to_int('loop_count', command.loop_count):
@@ -45,7 +45,7 @@ class Looper:
         if command.loop_if_not is not None:
             m = re.search(command.loop_if_not, result.stdout, re.MULTILINE)
             if m is None:
-                self.logger.warn(
+                self.logger.warning(
                         'Re-run command because loop_if_not does not match'
                         )
                 if self.run_count < CmdVars.variable_to_int('loop_count', command.loop_count):

@@ -56,7 +56,7 @@ def initialize_logger(debug: bool):
 def load_configfile(config_file: str) -> Config:
     with open(config_file) as f:
         config = yaml.safe_load(f)
-        return Config.parse_obj(config)
+        return Config.model_validate(config)
 
 
 def parse_config(config_file: Optional[str], logger: logging.Logger) -> Config:
@@ -131,7 +131,7 @@ def parse_playbook(playbook_file: str, logger: logging.Logger) -> Playbook:
     try:
         with open(playbook_file) as f:
             pb_yaml = yaml.safe_load(f)
-            playbook_object = Playbook.parse_obj(pb_yaml)
+            playbook_object = Playbook.model_validate(pb_yaml)
             return playbook_object
     except OSError:
         logger.error(f'Error: Could not open playbook file {playbook_file}')
