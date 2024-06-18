@@ -106,6 +106,9 @@ class SSHExecutor(BaseExecutor, SFTPFeature, Interactive):
         if self.jmp_hostname is not None:
             jmp_sock = self.connect_jmphost(command)
 
+        if self.hostname is None:
+            raise ExecException('No hostname set for SSH-Connection')
+
         kwargs = dict(
             hostname=self.hostname,
             port=self.port,
@@ -149,6 +152,8 @@ class SSHExecutor(BaseExecutor, SFTPFeature, Interactive):
                     output = stdout.read().decode('utf-8', 'ignore')
                     error = stderr.read().decode('utf-8', 'ignore')
         except ValueError as e:
+            raise ExecException(e)
+        except AttributeError as e:
             raise ExecException(e)
         except BadHostKeyException as e:
             raise ExecException(e)
