@@ -4,7 +4,7 @@
 sliver_config
 =============
 
-sliver_config stores all setttings to controll the connection to the sliver-API.
+sliver_config stores all settings to controll the connection to the sliver-API.
 
 .. code-block:: yaml
 
