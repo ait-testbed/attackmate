@@ -89,15 +89,14 @@ def parse_config(config_file: Optional[str], logger: logging.Logger) -> Config:
                 cfg = None
                 try:
                     if os.path.getsize(file) == 0:
-                        logger.debug(f'Config file {file} is empty. Using default config.')
-                        return Config()
+                        continue
                     cfg = load_configfile(file)
                 except OSError:
                     pass
                 if cfg is not None:
                     logger.debug(f'Config file {file} loaded')
                     return cfg
-            logger.debug('No config-file found. Using default-config')
+            logger.debug('No config-file found or the default attackmate.yml was empty. Using default-config')
             return Config()
         else:
             if os.path.getsize(config_file) == 0:
