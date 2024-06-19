@@ -59,6 +59,16 @@ def load_configfile(config_file: str) -> Config:
         return Config.model_validate(config)
 
 
+def is_effectively_empty(file_path: str) -> bool:
+    """strip the contents of the file from comments and whitespace to determine if it is truly empty"""
+    with open(file_path, 'r') as file:
+        for line in file:
+            stripped_line = line.strip()
+            if stripped_line and not stripped_line.startswith('#'):
+                return False
+    return True
+
+
 def parse_config(config_file: Optional[str], logger: logging.Logger) -> Config:
     """ Config-Parser for AttackMate
 
@@ -88,7 +98,7 @@ def parse_config(config_file: Optional[str], logger: logging.Logger) -> Config:
             for file in default_cfg_path:
                 cfg = None
                 try:
-                    if os.path.getsize(file) == 0:
+                    if os.path.getsize(file) == 0 or is_effectively_empty(file):
                         continue
                     cfg = load_configfile(file)
                 except OSError:
@@ -99,7 +109,7 @@ def parse_config(config_file: Optional[str], logger: logging.Logger) -> Config:
             logger.debug('No config-file found or the default attackmate.yml was empty. Using default-config')
             return Config()
         else:
-            if os.path.getsize(config_file) == 0:
+            if os.path.getsize(config_file) == 0 or is_effectively_empty(config_file):
                 logger.debug(f'Config file {config_file} is empty. Using default config.')
                 return Config()
             logger.debug(f'Config file {config_file} loaded')
