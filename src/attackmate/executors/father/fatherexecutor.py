@@ -64,6 +64,7 @@ class FatherExecutor(BaseExecutor):
             return Result('Compiling Father only works for Linux!', 1)
 
         data_path = os.path.join(Path(__file__).parents[2], 'data', 'Father.tar.gz')
+        
         if command.local_path:
             father_path = command.local_path
         else:
