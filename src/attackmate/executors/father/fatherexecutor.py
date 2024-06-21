@@ -9,6 +9,7 @@ import subprocess
 import tarfile
 import os
 import tempfile
+from pathlib import Path
 from string import Template
 from typing import Any
 from attackmate.executors.baseexecutor import BaseExecutor
@@ -62,7 +63,8 @@ class FatherExecutor(BaseExecutor):
         if platform.system() != 'Linux':
             return Result('Compiling Father only works for Linux!', 1)
 
-        data_path = os.path.join(os.path.dirname(__file__), 'data', 'Father.tar.gz')
+        data_path = os.path.join(Path(__file__).parents[2], 'data', 'Father.tar.gz')
+        
         if command.local_path:
             father_path = command.local_path
         else:

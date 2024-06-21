@@ -19,7 +19,7 @@ Execute commands on a remote server via SSH.
      # creates new ssh-connection and session
      - type: ssh
        cmd: nmap $SERVER_ADDRESS
-       hostname: 10.10.10.19
+       hostname: $SSH_SERVER
        username: aecid
        key_filename: "/home/alice/.ssh/id_rsa"
        creates_session: "attacker"
@@ -157,7 +157,7 @@ Execute commands on a remote server via SSH.
         - type: ssh
           cmd: "nmap --interactive\n"
           interactive: True
-          hostname: 10.10.10.19
+          hostname: $SSH_SERVER
           username: aecid
           key_filename: "/home/alice/.ssh/id_rsa"
           creates_session: "attacker"
@@ -200,7 +200,7 @@ Execute commands on a remote server via SSH.
             - "# "
             - "> "
             - "% "
-          hostname: 10.10.10.19
+          hostname: $SSH_SERVER
           username: aecid
           key_filename: "/home/alice/.ssh/id_rsa"
           creates_session: "attacker"
@@ -224,6 +224,6 @@ Execute commands on a remote server via SSH.
           # hex-code for "id"
           cmd: "6964"
           bin: True
-          hostname: 10.10.10.19
+          hostname: $SSH_SERVER
           username: aecid
           key_filename: "/home/alice/.ssh/id_rsa"
