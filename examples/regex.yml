@@ -1,0 +1,64 @@
+# Author: Thorina Boenke
+# Description:
+#     This playbook demonstrates different modes of the regex command:
+#     1. Sets a variable as input string for the regex commands
+#     2. runs different regex commands
+#     3. displays the Outputvariable of the regex command with debug sommand
+#
+
+commands:
+
+  - type: setvar
+    variable: $INPUT
+    cmd: "6667/tcp open  irc UnrealIRCd"
+
+  # MODE FINDALL
+  - type: regex
+    input: INPUT
+    cmd: "666"
+    mode: findall
+    output:
+        # {'MATCH_0': '6', 'MATCH_1': '6', 'MATCH_2': '6'}
+        FIRST_MATCH: "$MATCH_0"
+
+  - type: debug
+    cmd: "Match: $FIRST_MATCH"
+
+  # MODE SPLIT
+  - type: regex
+    input: INPUT
+    cmd: "\ +"
+    mode: split
+    output:
+        # {'MATCH_0': '6667/tcp', 'MATCH_1': 'open', 'MATCH_2': 'irc', 'MATCH_3': 'UnrealIRCd\n'}
+        UNREALPORT: "$MATCH_0"
+
+  - type: debug
+    cmd: "Port: $UNREALPORT"
+
+  # MODE SEARCH
+  - type: regex
+    input: INPUT
+    cmd: tcp
+    mode: search
+    output:
+        # {'MATCH_0': 'tcp'}
+        SEARCH: "$MATCH_0"
+
+  - type: debug
+    cmd: "Search Result: $SEARCH"
+
+    # MODE SUB
+  - type: regex
+    input: INPUT
+    cmd: tcp
+    mode: sub
+    output:
+        # {'MATCH_0': '6667/hello open  irc UnrealIRCd'}
+        SUBSTITUTED: "$MATCH_0"
+
+  - type: debug
+    cmd: "Result string: $SUBSTITUTED"
+
+  
+
