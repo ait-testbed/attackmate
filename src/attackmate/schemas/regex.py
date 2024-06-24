@@ -6,8 +6,9 @@ import logging
 
 logger = logging.getLogger('playbook')
 
+
 class RegExCommand(BaseCommand):
-    
+ 
     @field_validator('mode')
     @classmethod
     def sub_needs_replace(cls, v, info: ValidationInfo) -> str:
@@ -17,9 +18,8 @@ class RegExCommand(BaseCommand):
             pprint(info)
             logger.error('Error parsing playbook. regex command mode: sub must be preceded by the replace setting!')
             raise ValueError('Regex sub mode needs replace-setting!')
-        
+
         return v
-            
 
     type: Literal['regex']
     # replace is a dependency for mode, therefore it must be placed BEFORE mode!

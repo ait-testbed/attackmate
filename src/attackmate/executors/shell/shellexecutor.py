@@ -9,8 +9,6 @@ import os
 import subprocess
 from subprocess import TimeoutExpired
 from datetime import datetime
-from queue import Queue, Empty
-from threading import Thread
 from attackmate.execexception import ExecException
 from attackmate.executors.baseexecutor import BaseExecutor
 from attackmate.result import Result
@@ -72,9 +70,8 @@ class ShellExecutor(BaseExecutor):
         output += error
         return output.decode()
 
-    def popen_interactive(self, proc: subprocess.Popen, cmd: bytes, timeout: int=5, read: bool=True) -> str:
+    def popen_interactive(self, proc: subprocess.Popen, cmd: bytes, timeout: int = 5, read: bool = True) -> str:
         self.logger.debug("Running interactive command")
-        q = Queue()
 
         self.logger.debug(f"Sending command: {cmd}")
         if proc.stdin:
@@ -84,14 +81,13 @@ class ShellExecutor(BaseExecutor):
         outline = b''
         if read:
             begin = datetime.now()
-            while (datetime.now() - begin ).total_seconds() < timeout:
+            while (datetime.now() - begin).total_seconds() < timeout:
                 tmp = self.non_block_read(proc.stdout)
                 if tmp:
                     outline += tmp
                     begin = datetime.now() # reset timer when data comes
 
         return outline.decode()
-
 
     def _exec_cmd(self, command: ShellCommand) -> Result:
         try:
@@ -100,7 +96,7 @@ class ShellExecutor(BaseExecutor):
             raise ExecException(e)
 
         cmd = command.cmd.encode('utf-8')
-        timeout = CmdVars.variable_to_int("timeout", command.command_timeout )
+        timeout = CmdVars.variable_to_int("timeout", command.command_timeout)
         output = ''
 
         if command.interactive:
@@ -110,6 +106,5 @@ class ShellExecutor(BaseExecutor):
         else:
             output = self.popen_noninteractive(proc, cmd)
             self.popen_close(proc)
-
 
         return Result(output, 0)

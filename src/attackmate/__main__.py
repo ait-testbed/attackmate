@@ -151,7 +151,7 @@ def parse_playbook(playbook_file: str, logger: logging.Logger) -> Playbook:
         logger.error(f'A Validation error occured when parsing playbook file {playbook_file}')
         logger.error(traceback.format_exc())  
         exit(1)
-    
+
 
 def parse_args():
     description = 'AttackMate is an attack orchestration tool' \
