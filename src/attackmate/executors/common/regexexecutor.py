@@ -14,11 +14,10 @@ import re
 
 
 class RegExExecutor(BaseExecutor):
-    
+
     def log_command(self, command: RegExCommand):
         self.logger.warn(f"RegEx: '{command.cmd}', Mode: '{command.mode}'")
 
-    
     def forge_variables(self, data, variable_name='MATCH'):
         result = {}
         if data is None:
@@ -38,7 +37,6 @@ class RegExExecutor(BaseExecutor):
 
         return result
 
-    
     def register_outputvars(self, outputvars: dict, matches):
         if not matches:
             self.logger.debug('no match!')
@@ -48,7 +46,7 @@ class RegExExecutor(BaseExecutor):
             temp = Template(v)
             self.varstore.set_variable(k, temp.safe_substitute(matches))
 
-    def forge_and_register_variables(self, output: dict, data) -> dict:
+    def forge_and_register_variables(self, output: dict, data):
         matches = self.forge_variables(data)
         self.logger.debug(matches)
         self.register_outputvars(output, matches)
