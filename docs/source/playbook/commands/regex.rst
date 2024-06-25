@@ -63,12 +63,12 @@ By using the mode "split", strings that are seperated by whitespaces can be toke
 
         - type: regex
           cmd: hello
-          mode: sub
           replace: whaat
+          mode: sub
           input: FOO
           output:
-            BAR: $MATCH
-      
+            BAR: $MATCH_0
+
         - type: debug
           cmd: $BAR
 
@@ -86,8 +86,8 @@ By using the mode "split", strings that are seperated by whitespaces can be toke
    must be a list of key-value pairs("variable-name": "$MATCH"). The matches
    of the regular expressions are stored in temporary variables $MATCH. If the
    match is stored in a list or in a list of tuples the variablename will be
-   numbered by the index. For examle: "$MATCH_0_0" for the first element in the
-   first occurance.
+   numbered by the index. For example: "$MATCH_0_0" for the first element in the
+   first occurance. The first match (even if there is only one) is indexed MATCH_0.
    If the regex-command does not match, no output variable will be set!
 
    .. note::
