@@ -70,6 +70,8 @@ class CmdVars:
 
     @staticmethod
     def variable_to_bool(variablename: str, value: str) -> bool:
-        if str(value).lower() in ("yes", "y", "true",  "t", "1"): return True
-        if str(value).lower() in ("no",  "n", "false", "f", "0", "0.0", "", "none", "[]", "{}"): return False
+        if str(value).lower() in ('yes', 'y', 'true',  't', '1'):
+            return True
+        if str(value).lower() in ('no',  'n', 'false', 'f', '0', '0.0', '', 'none', '[]', '{}'):
+            return False
         raise ExecException(f'Invalid value for boolean conversion of {variablename}: {value}')

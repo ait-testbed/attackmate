@@ -27,7 +27,7 @@ class VariableStore:
             try:
                 return temp.substitute(self.variables)
             except KeyError:
-                return ""
+                return ''
         else:
             return temp.safe_substitute(self.variables)
 
