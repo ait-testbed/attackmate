@@ -148,19 +148,23 @@ def parse_playbook(playbook_file: str, logger: logging.Logger) -> Playbook:
     # Construct the path to the playbooks directory relative to the venv root
     default_playbook_location = os.path.join(venv_root.parent, 'playbooks')
 
-    file_path = Path(playbook_file)
+    playbook_file_path = Path(playbook_file)
 
-    if file_path.exists():
-        target_file = file_path
+    # Check provided path
+    if playbook_file_path.exists():
+        target_file = playbook_file_path
     else:
-        # Try to load from default playbooks location + filename only
-        filename_only = file_path.name
-        target_file = default_playbook_location / filename_only
+        # Check default location + provided path
+        target_file = default_playbook_location / playbook_file_path
         if not target_file.exists():
-            logger.error(
-                f"Error: Playbook file '{filename_only}' does not exist in both the specified and default location."
-            )
-            exit(1)
+            # Check default location + filename only
+            filename_only = playbook_file_path.name
+            target_file = default_playbook_location / filename_only
+            if not target_file.exists():
+                logger.error(
+                    f"Error: Playbook file '{filename_only}' does not exist in both the specified and default locations."
+                )
+                exit(1)
 
     try:
         with open(target_file) as f:
