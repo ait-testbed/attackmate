@@ -11,6 +11,7 @@ import argparse
 import yaml
 import logging
 from typing import Optional
+from pathlib import Path
 from colorlog import ColoredFormatter
 from .attackmate import AttackMate
 from attackmate.schemas.config import Config
@@ -26,8 +27,8 @@ def initialize_output_logger(debug: bool):
         output_logger.setLevel(logging.INFO)
     file_handler = logging.FileHandler('output.log', mode='w')
     formatter = logging.Formatter(
-            '--- %(asctime)s %(levelname)s: ---\n\n%(message)s',
-            datefmt='%Y-%m-%d %H:%M:%S')
+        '--- %(asctime)s %(levelname)s: ---\n\n%(message)s', datefmt='%Y-%m-%d %H:%M:%S'
+    )
     file_handler.setFormatter(formatter)
     output_logger.addHandler(file_handler)
 
@@ -39,15 +40,12 @@ def initialize_logger(debug: bool):
     else:
         playbook_logger.setLevel(logging.INFO)
     console_handler = logging.StreamHandler()
-    LOGFORMAT = ('  %(asctime)s %(log_color)s%(levelname)-8s%(reset)s'
-                 '| %(log_color)s%(message)s%(reset)s')
+    LOGFORMAT = '  %(asctime)s %(log_color)s%(levelname)-8s%(reset)s' '| %(log_color)s%(message)s%(reset)s'
     formatter = ColoredFormatter(LOGFORMAT, datefmt='%Y-%m-%d %H:%M:%S')
     console_handler.setFormatter(formatter)
     playbook_logger.addHandler(console_handler)
     file_handler = logging.FileHandler('attackmate.log', mode='w')
-    formatter = logging.Formatter(
-            '%(asctime)s %(levelname)s - %(message)s',
-            datefmt='%Y-%m-%d %H:%M:%S')
+    formatter = logging.Formatter('%(asctime)s %(levelname)s - %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
     file_handler.setFormatter(formatter)
     playbook_logger.addHandler(file_handler)
     return playbook_logger
@@ -70,7 +68,7 @@ def is_effectively_empty(file_path: str) -> bool:
 
 
 def parse_config(config_file: Optional[str], logger: logging.Logger) -> Config:
-    """ Config-Parser for AttackMate
+    """Config-Parser for AttackMate
 
     This parser reads the configfile and validates the settings.
     If config_file is None, this function will try to load the
@@ -90,9 +88,10 @@ def parse_config(config_file: Optional[str], logger: logging.Logger) -> Config:
 
     """
     default_cfg_path = [
-                        '.attackmate.yml',
-                        os.environ['HOME'] + '/.config/attackmate.yml',
-                        '/etc/attackmate.yml']
+        '.attackmate.yml',
+        os.environ['HOME'] + '/.config/attackmate.yml',
+        '/etc/attackmate.yml',
+    ]
     try:
         if config_file is None:
             for file in default_cfg_path:
@@ -123,7 +122,7 @@ def parse_config(config_file: Optional[str], logger: logging.Logger) -> Config:
 
 
 def parse_playbook(playbook_file: str, logger: logging.Logger) -> Playbook:
-    """ Playbook-Parser for AttackMate
+    """Playbook-Parser for AttackMate
 
     This parser reads the playbook-file and validates the config-settings.
 
@@ -137,38 +136,44 @@ def parse_playbook(playbook_file: str, logger: logging.Logger) -> Playbook:
     Playbook
         The parsed AttackMate playbook object
     """
+
+    # Get the path of the current script or module
+    current_file = Path(__file__).resolve()
+
+    # Navigate up the directory tree until venv directory
+    venv_root = current_file
+    while not (venv_root / 'bin' / 'activate').exists():
+        venv_root = venv_root.parent
+
+    # Construct the path to the playbooks directory relative to the venv root
+    default_playbook_location = os.path.join(venv_root.parent, 'playbooks')
+
+    file_path = Path(playbook_file)
+
+    if file_path.exists():
+        target_file = file_path
+    else:
+        target_file = Path(default_playbook_location) / playbook_file
+
     try:
-        with open(playbook_file) as f:
+        with open(target_file) as f:
             pb_yaml = yaml.safe_load(f)
             playbook_object = Playbook.model_validate(pb_yaml)
             return playbook_object
     except OSError:
-        logger.error(f'Error: Could not open playbook file {playbook_file}')
+        logger.error(f'Error: Could not open playbook file {target_file}')
         exit(1)
 
 
 def parse_args():
-    description = 'AttackMate is an attack orchestration tool' \
-                  ' to execute full attack-chains based on playbooks.'
-    parser = argparse.ArgumentParser(
-            prog='attackmate',
-            description=description,
-            epilog=__version_string__)
-    parser.add_argument(
-            '--config',
-            help='Configfile in yaml-format')
-    parser.add_argument(
-            '--debug',
-            action='store_true',
-            default=False,
-            help='Enable verbose output')
-    parser.add_argument(
-            '--version',
-            action='version',
-            version=__version_string__)
-    parser.add_argument(
-            'playbook',
-            help='Playbook in yaml-format')
+    description = (
+        'AttackMate is an attack orchestration tool' ' to execute full attack-chains based on playbooks.'
+    )
+    parser = argparse.ArgumentParser(prog='attackmate', description=description, epilog=__version_string__)
+    parser.add_argument('--config', help='Configfile in yaml-format')
+    parser.add_argument('--debug', action='store_true', default=False, help='Enable verbose output')
+    parser.add_argument('--version', action='version', version=__version_string__)
+    parser.add_argument('playbook', help='Playbook in yaml-format')
     return parser.parse_args()
 
 
