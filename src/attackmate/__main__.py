@@ -153,7 +153,14 @@ def parse_playbook(playbook_file: str, logger: logging.Logger) -> Playbook:
     if file_path.exists():
         target_file = file_path
     else:
-        target_file = Path(default_playbook_location) / playbook_file
+        # Try to load from default playbooks location + filename only
+        filename_only = file_path.name
+        target_file = default_playbook_location / filename_only
+        if not target_file.exists():
+            logger.error(
+                f"Error: Playbook file '{filename_only}' does not exist in both the specified and default location."
+            )
+            exit(1)
 
     try:
         with open(target_file) as f:
@@ -163,6 +170,8 @@ def parse_playbook(playbook_file: str, logger: logging.Logger) -> Playbook:
     except OSError:
         logger.error(f'Error: Could not open playbook file {target_file}')
         exit(1)
+
+    # if this fails, also try extracting the filename only from the supplied path and try playbooks
 
 
 def parse_args():
