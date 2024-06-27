@@ -158,7 +158,7 @@ def parse_playbook(playbook_file: str, logger: logging.Logger) -> Playbook:
         target_file = default_playbook_location / playbook_file_path
         if not target_file.exists():
             # Check default location + filename only
-            filename_only = playbook_file_path.name
+            filename_only = Path(playbook_file_path.name)
             target_file = default_playbook_location / filename_only
             if not target_file.exists():
                 logger.error(
