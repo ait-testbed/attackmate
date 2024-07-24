@@ -57,8 +57,7 @@ First Run
 =========
 
 Now we can run the playbook using the following command:
-(if no full path to a playbook file is given in the attackm8 command, attackmate will try to find the file in the directory attackmate/playbooks. 
-The playbooks directory is in .gitignore per default)
+(We can supply the full path to the playbook, otherwise the parser tries to find it in the current working directory or in the folder /etc/attackmate/playbooks)
 
 ::
 
