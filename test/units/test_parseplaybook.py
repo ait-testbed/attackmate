@@ -56,5 +56,5 @@ def test_parse_playbook_nonexistent_file(mock_logger):
     with pytest.raises(SystemExit):
         parse_playbook(str(non_existent_file), mock_logger)
     mock_logger.error.assert_called_with(
-        f"Error: Playbook file not found under '{non_existent_file}' or in the current directory or in '/etc/attackmate/playbooks'"
+        f"Error: Playbook file not found under '{non_existent_file}' or in the current directory or in /etc/attackmate/playbooks"
     )
