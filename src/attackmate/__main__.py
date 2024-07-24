@@ -137,34 +137,31 @@ def parse_playbook(playbook_file: str, logger: logging.Logger) -> Playbook:
         The parsed AttackMate playbook object
     """
 
-    # Get the path of the current script or module
-    current_file = Path(__file__).resolve()
+    # Get the path of the current working directory
+    current_working_directory = Path.cwd()
 
-    # Navigate up the directory tree until venv directory
-    venv_root = current_file
-    while not (venv_root / 'bin' / 'activate').exists():
-        venv_root = venv_root.parent
-
-    # Construct the path to the playbooks directory relative to the venv root
-    default_playbook_location = os.path.join(venv_root.parent, 'playbooks')
+    # Construct the path to the default playbooks directory
+    default_playbook_location = Path('/etc/attackmate/playbooks')
 
     playbook_file_path = Path(playbook_file)
 
-    # Check provided path
+    # 1 # Check provided path
     if playbook_file_path.exists():
         target_file = playbook_file_path
-    else:
-        # Check default location + provided path
+
+    # 2 # Check current working directory
+    elif (current_working_directory / playbook_file_path).exists():
+        target_file = current_working_directory / playbook_file_path
+
+    # 3 # Check default playbook directory
+    elif (default_playbook_location / playbook_file_path).exists():
         target_file = default_playbook_location / playbook_file_path
-        if not target_file.exists():
-            # Check default location + filename only
-            filename_only = Path(playbook_file_path.name)
-            target_file = default_playbook_location / filename_only
-            if not target_file.exists():
-                logger.error(
-                    f"Error: Playbook file '{filename_only}' does not exist in both the specified and default locations."
-                )
-                exit(1)
+
+    else:
+        logger.error(
+            f"Error: Playbook file not found under '{playbook_file_path}' or in the current directory or in '/etc/attackmate/playbooks'"
+        )
+        exit(1)
 
     try:
         with open(target_file) as f:
