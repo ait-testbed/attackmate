@@ -159,8 +159,7 @@ def parse_playbook(playbook_file: str, logger: logging.Logger) -> Playbook:
 
     else:
         logger.error(
-            f"Error: Playbook file not found under '{playbook_file_path}' 
-            or in the current directory or in '/etc/attackmate/playbooks'"
+            f"Error: Playbook file not found under '{playbook_file_path}' or in the current directory or in /etc/attackmate/playbooks"
         )
         exit(1)
 
@@ -172,7 +171,6 @@ def parse_playbook(playbook_file: str, logger: logging.Logger) -> Playbook:
     except OSError:
         logger.error(f'Error: Could not open playbook file {target_file}')
         exit(1)
-
 
 
 def parse_args():
