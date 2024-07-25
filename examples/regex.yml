@@ -18,7 +18,7 @@ commands:
     cmd: "666"
     mode: findall
     output:
-        # {'MATCH_0': '6', 'MATCH_1': '6', 'MATCH_2': '6'}
+        # {'MATCH_0': '666'}
         FIRST_MATCH: "$MATCH_0"
 
   - type: debug
@@ -55,7 +55,7 @@ commands:
     cmd: tcp
     mode: sub
     output:
-        # {'MATCH_0': '6667/hello open  irc UnrealIRCd'}
+        # {'MATCH_0': '6667/SUBSTITUTION open  irc UnrealIRCd'}
         SUBSTITUTED: "$MATCH_0"
 
   - type: debug
