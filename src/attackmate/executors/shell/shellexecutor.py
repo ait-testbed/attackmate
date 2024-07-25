@@ -107,8 +107,13 @@ class ShellExecutor(BaseExecutor):
         if command.bin:
             try:
                 cmd = binascii.unhexlify(command.cmd)
+                self.logger.info(
+                    f"Shell-Command: Hex {command.cmd} to ascii: {bytes.fromhex(command.cmd).decode('ascii')}"
+                )
             except binascii.Error:
-                raise ExecException(f"only hex characters are allowed in binary mode: \"{command.cmd}\"")
+                raise ExecException(
+                    f"only hex characters are allowed in binary mode. Command: '{command.cmd}'"
+                )
         else:
             cmd = command.cmd.encode('utf-8')
 
