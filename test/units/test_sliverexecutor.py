@@ -47,7 +47,6 @@ def test_save_implant_without_filepath(setup_executor):
     implant = client_pb2.Generate()
     implant.File.Data = b'Test data'
 
-    # Mock tempfile.NamedTemporaryFile
     with patch('tempfile.NamedTemporaryFile') as mock_tempfile:
         # Create a mock file object
         mock_tempfile_instance = MagicMock()
