@@ -12,7 +12,10 @@ class TestRegExCommand:
 
     def test_sub_needs_replace_invalid(self):
         # Test when mode is 'sub' but replace is not provided
-        with pytest.raises(ValueError, match='Regex sub mode needs replace-setting!'):
+        with pytest.raises(
+            ValueError,
+            match='Error parsing playbook. regex command mode: sub must be preceded by replace setting!',
+        ):
             RegExCommand(type='regex', cmd='test', mode='sub', output={})
 
     def test_default_values(self):
