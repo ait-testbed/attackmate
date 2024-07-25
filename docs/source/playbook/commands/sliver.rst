@@ -152,7 +152,7 @@ Generate a new sliver binary and saves the implant to a given path or to /tmp/<n
 
 .. confval:: name
 
-   Name of the implant. 
+   Name of the implant.
    This name is the session used by the attackmate command 'sliver-session'.
 
    :type: str
@@ -160,7 +160,7 @@ Generate a new sliver binary and saves the implant to a given path or to /tmp/<n
 
 .. confval:: filepath
 
-   The local filepath to save the implant to. If none is given the implant is saven in /tmp.
+   The local filepath to save the implant to. If none is given the implant is saved in /tmp.
    The <name> will be random and have the format ^tmp[a-z0-9]{8}$.
 
 
