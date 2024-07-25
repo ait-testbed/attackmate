@@ -110,8 +110,10 @@ Generate a new sliver binary and saves the implant to a given path or to /tmp/<n
    commands:
      - type: sliver
        cmd: generate_implant
+       c2url: "https://myC2url.com"
        name: "linux_implant"
        target: linux/amd64
+       filepath: /path/to/implant/my_implant
 
 
 .. confval:: target
@@ -150,14 +152,17 @@ Generate a new sliver binary and saves the implant to a given path or to /tmp/<n
 
 .. confval:: name
 
-   Name of the Implant
+   Name of the implant. 
+   This name is the session used by the attackmate command 'sliver-session'.
 
    :type: str
    :required: True
 
 .. confval:: filepath
 
-   The local filepath to save the implant to.
+   The local filepath to save the implant to. If none is given the implant is saven in /tmp.
+   The <name> will be random and have the format ^tmp[a-z0-9]{8}$.
+
 
    :type: str
    :default: ``/tmp/<name>``
