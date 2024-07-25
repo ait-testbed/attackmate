@@ -102,7 +102,8 @@ Start an HTTPS-Listener
 generate_implant
 ----------------
 
-Generate a new sliver binary and saves the implant to a given path or to /tmp/<name>.
+Generates a new sliver binary and saves the implant to a given path or to /tmp/<name>.
+The path to the implant is saved and can be retrieved from the variable store as $LAST_SLIVER_IMPLANT.
 
 .. code-block:: yaml
 
