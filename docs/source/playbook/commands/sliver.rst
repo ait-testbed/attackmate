@@ -109,11 +109,6 @@ Generate a new sliver binary and saves the implant to a given path or to /tmp/<n
    ###
    commands:
      - type: sliver
-       cmd: start_https_listener
-       host: 0.0.0.0
-       port: 443
-
-     - type: sliver
        cmd: generate_implant
        name: "linux_implant"
        target: linux/amd64
