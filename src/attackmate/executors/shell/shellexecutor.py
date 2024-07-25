@@ -9,8 +9,7 @@ import os
 import subprocess
 from subprocess import TimeoutExpired
 from datetime import datetime
-from queue import Queue, Empty
-from threading import Thread
+import binascii
 from attackmate.execexception import ExecException
 from attackmate.executors.baseexecutor import BaseExecutor
 from attackmate.result import Result
@@ -35,7 +34,9 @@ class ShellExecutor(BaseExecutor):
         if command.session:
             return self.session_store.get_handle_by_session(command.session)
 
-        proc = subprocess.Popen([command.command_shell], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        proc = subprocess.Popen(
+            [command.command_shell], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE
+        )
 
         if command.creates_session:
             self.session_store.set_session(command.creates_session, proc, command.cmd)
@@ -43,7 +44,7 @@ class ShellExecutor(BaseExecutor):
         return proc
 
     def popen_close(self, proc):
-        self.logger.debug("Closing popen process")
+        self.logger.debug('Closing popen process')
         proc.terminate()
         proc.wait(timeout=10)
 
@@ -52,31 +53,36 @@ class ShellExecutor(BaseExecutor):
         fd = stdout.fileno()
         try:
             import fcntl
+
             fl = fcntl.fcntl(fd, fcntl.F_GETFL)
             fcntl.fcntl(fd, fcntl.F_SETFL, fl | os.O_NONBLOCK)
         except ImportError:
-            raise ExecException("The 'fcntl' module is not available. This functionality requires a Unix-like operating system.")
+            raise ExecException(
+                "The 'fcntl' module is not available."
+                'This functionality requires a Unix-like operating system.'
+            )
         try:
             return stdout.read()
-        except:
-            return b""
+        except Exception:
+            return b''
 
     def popen_noninteractive(self, proc: subprocess.Popen, cmd: bytes, timeout=None) -> str:
-        self.logger.debug("Running non interactive command")
+        self.logger.debug('Running non interactive command')
         try:
             output, error = proc.communicate(cmd, timeout=timeout)
         except TimeoutExpired:
-            self.logger.info("Timeout of noninteractive shell command expired")
+            self.logger.info('Timeout of noninteractive shell command expired')
             proc.kill()
             output, error = proc.communicate()
         output += error
         return output.decode()
 
-    def popen_interactive(self, proc: subprocess.Popen, cmd: bytes, timeout: int=5, read: bool=True) -> str:
-        self.logger.debug("Running interactive command")
-        q = Queue()
+    def popen_interactive(
+        self, proc: subprocess.Popen, cmd: bytes, timeout: int = 5, read: bool = True
+    ) -> str:
+        self.logger.debug('Running interactive command')
 
-        self.logger.debug(f"Sending command: {cmd}")
+        self.logger.debug(f'Sending command: {cmd.decode("utf-8")}')
         if proc.stdin:
             proc.stdin.write(cmd)
             proc.stdin.flush()
@@ -84,14 +90,13 @@ class ShellExecutor(BaseExecutor):
         outline = b''
         if read:
             begin = datetime.now()
-            while (datetime.now() - begin ).total_seconds() < timeout:
+            while (datetime.now() - begin).total_seconds() < timeout:
                 tmp = self.non_block_read(proc.stdout)
                 if tmp:
                     outline += tmp
-                    begin = datetime.now() # reset timer when data comes
+                    begin = datetime.now()  # reset timer when data comes
 
         return outline.decode()
-
 
     def _exec_cmd(self, command: ShellCommand) -> Result:
         try:
@@ -99,8 +104,15 @@ class ShellExecutor(BaseExecutor):
         except KeyError as e:
             raise ExecException(e)
 
-        cmd = command.cmd.encode('utf-8')
-        timeout = CmdVars.variable_to_int("timeout", command.command_timeout )
+        if command.bin:
+            try:
+                cmd = binascii.unhexlify(command.cmd)
+            except binascii.Error:
+                raise ExecException(f"only hex characters are allowed in binary mode: \"{command.cmd}\"")
+        else:
+            cmd = command.cmd.encode('utf-8')
+
+        timeout = CmdVars.variable_to_int('timeout', command.command_timeout)
         output = ''
 
         if command.interactive:
@@ -110,6 +122,5 @@ class ShellExecutor(BaseExecutor):
         else:
             output = self.popen_noninteractive(proc, cmd)
             self.popen_close(proc)
-
 
         return Result(output, 0)
