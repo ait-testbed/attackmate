@@ -1,10 +1,6 @@
 from typing import Literal, Optional
 from pydantic import ValidationInfo, field_validator
 from .base import BaseCommand
-from pprint import pprint
-import logging
-
-logger = logging.getLogger('playbook')
 
 
 class RegExCommand(BaseCommand):
@@ -14,10 +10,9 @@ class RegExCommand(BaseCommand):
     def sub_needs_replace(cls, v, info: ValidationInfo) -> str:
 
         if v == 'sub' and not info.data.get('replace'):
-            print(info.data)
-            pprint(info)
-            logger.error('Error parsing playbook. command mode: sub must be preceded by replace setting!')
-            raise ValueError('Regex sub mode needs replace-setting!')
+            raise ValueError(
+                'Error parsing playbook. regex command mode: sub must be preceded by replace setting!'
+            )
 
         return v
 
