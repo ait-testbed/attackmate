@@ -10,18 +10,30 @@ is unnecessary to begin variable names with a $-sign when defined in the
 vars-section. However, when variables are placed in the commands section,
 they always must start with a $-sign.
 
+
+Environmental Variables
+=======================
+
+Variables names used in the format $SOME_VARIABLE in the commands-section that have NOT been defined in the vars-section will be replaced with 
+environmental variables loaded with os.environ(). Parsing the playbook will fail if the environmental variable can not be loaded.
+Variable names in the var-section take precedence, they will never be replaced with environmental variables.
+
+
 .. code-block:: yaml
 
    ###
    vars:
      $SERVER_ADDRESS: 192.42.0.254
      # the $-sign is not necessary here:
-     $NMAP: /usr/bin/nmap
+     NMAP: /usr/bin/nmap
 
    commands:
      - type: shell
        # the $-sign is required when using the variable:
        cmd: $NMAP $SERVER_ADDRESS
+    - type: shell
+       # This variable will be replaced by environmental variable:
+       cmd: echo $SOME_ENV_VAR
 
 .. note::
 
