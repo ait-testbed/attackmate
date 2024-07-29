@@ -35,7 +35,7 @@ def replace_env_variables_in_playbook(content: str) -> str:
     # Regex to find variables in the format $SOME_VARIABLE
     var_pattern = re.compile(r'\$([A-Z_]+)')
     # Regex to find variable names in the vars section, with or without the leading $
-    vars_section_var_pattern = re.compile(r'^\s*\$?([A-Z_]+):', re.MULTILINE)
+    vars_section_var_pattern = re.compile(r'^\s*\$?([A-Z_]+)(?=:)', re.MULTILINE)
 
     # find the vars section
     vars_section_match = playbook_vars_section_pattern.search(content)
