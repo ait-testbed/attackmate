@@ -40,16 +40,16 @@ class FatherExecutor(BaseExecutor):
 #endif
 """
         template_vars = {
-                         'GID': command.gid,
-                         'SOURCEPORT': command.srcport,
-                         'EPOCH_TIME': command.epochtime,
-                         'ENV_VAR': command.env_var,
-                         'FILE_PREFIX': command.file_prefix,
-                         'PRELOAD_FILE': command.preload_file,
-                         'HIDDENPORT': command.hiddenport,
-                         'SHELL_PASS': command.shell_pass,
-                         'INSTALL_PATH': command.install_path
-                        }
+            'GID': command.gid,
+            'SOURCEPORT': command.srcport,
+            'EPOCH_TIME': command.epochtime,
+            'ENV_VAR': command.env_var,
+            'FILE_PREFIX': command.file_prefix,
+            'PRELOAD_FILE': command.preload_file,
+            'HIDDENPORT': command.hiddenport,
+            'SHELL_PASS': command.shell_pass,
+            'INSTALL_PATH': command.install_path,
+        }
         template = Template(config)
         substi = template.safe_substitute(template_vars)
         self.logger.debug(substi)
@@ -57,14 +57,14 @@ class FatherExecutor(BaseExecutor):
             f.write(substi)
 
     def log_command(self, command: FatherCommand):
-        self.logger.info('Generating Father-Binary')
+        self.logger.info('Generating Father-Binary', extra={'metadata': command.metadata})
 
     def _exec_cmd(self, command: FatherCommand) -> Result:
         if platform.system() != 'Linux':
             return Result('Compiling Father only works for Linux!', 1)
 
         data_path = os.path.join(Path(__file__).parents[2], 'data', 'Father.tar.gz')
-        
+
         if command.local_path:
             father_path = command.local_path
         else:
@@ -74,11 +74,13 @@ class FatherExecutor(BaseExecutor):
         tar = tarfile.open(data_path)
         tar.extractall(father_path)
         self.set_config(command, os.path.join(father_path, 'Father', 'src', 'config.h'))
-        result = subprocess.run(command.build_command,
-                                shell=True,
-                                cwd=os.path.join(father_path, 'Father'),
-                                stdout=subprocess.PIPE,
-                                stderr=subprocess.STDOUT)
+        result = subprocess.run(
+            command.build_command,
+            shell=True,
+            cwd=os.path.join(father_path, 'Father'),
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+        )
         output = result.stdout.decode('utf-8', 'ignore')
 
         if result.returncode != 0:

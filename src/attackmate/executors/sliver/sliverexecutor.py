@@ -22,9 +22,7 @@ from attackmate.processmanager import ProcessManager
 
 class SliverExecutor(BaseExecutor):
 
-    def __init__(self, pm: ProcessManager, cmdconfig=None, *,
-                 varstore: VariableStore,
-                 sliver_config=None):
+    def __init__(self, pm: ProcessManager, cmdconfig=None, *, varstore: VariableStore, sliver_config=None):
         self.sliver_config = sliver_config
         self.client = None
         self.tempfilestore: list[Any] = []
@@ -46,21 +44,21 @@ class SliverExecutor(BaseExecutor):
         self.logger.debug(f'{command.host=}')
         if self.client is None:
             raise ExecException('SliverClient is not defined')
-        listener = await self.client.start_https_listener(command.host,
-                                                          CmdVars.variable_to_int('port', command.port),
-                                                          command.website,
-                                                          command.domain,
-                                                          b'',
-                                                          b'',
-                                                          command.acme,
-                                                          command.persistent,
-                                                          command.enforce_otp,
-                                                          command.randomize_jarm,
-                                                          CmdVars.variable_to_int('long_poll_timeout',
-                                                                                  command.long_poll_timeout),
-                                                          CmdVars.variable_to_int('long_poll_jitter',
-                                                                                  command.long_poll_jitter),
-                                                          CmdVars.variable_to_int('timeout', command.timeout))
+        listener = await self.client.start_https_listener(
+            command.host,
+            CmdVars.variable_to_int('port', command.port),
+            command.website,
+            command.domain,
+            b'',
+            b'',
+            command.acme,
+            command.persistent,
+            command.enforce_otp,
+            command.randomize_jarm,
+            CmdVars.variable_to_int('long_poll_timeout', command.long_poll_timeout),
+            CmdVars.variable_to_int('long_poll_jitter', command.long_poll_jitter),
+            CmdVars.variable_to_int('timeout', command.timeout),
+        )
         self.result = Result(f'JobID: {listener.JobID}', 0)
 
     def prepare_implant_config(self, command: SliverGenerateCommand) -> client_pb2.ImplantConfig:
@@ -88,8 +86,7 @@ class SliverExecutor(BaseExecutor):
         implconfig.C2.extend([c2])
         implconfig.IsBeacon = command.IsBeacon
         if command.IsBeacon:
-            implconfig.BeaconInterval = CmdVars.variable_to_int('BeaconInterval',
-                                                                command.BeaconInterval)
+            implconfig.BeaconInterval = CmdVars.variable_to_int('BeaconInterval', command.BeaconInterval)
         implconfig.RunAtLoad = command.RunAtLoad
         implconfig.Evasion = command.Evasion
         target = command.target.split('/')
@@ -137,7 +134,7 @@ class SliverExecutor(BaseExecutor):
         self.result.returncode = 0
 
     def log_command(self, command: BaseCommand):
-        self.logger.info(f"Executing Sliver-command: '{command.cmd}'")
+        self.logger.info(f"Executing Sliver-command: '{command.cmd}'", extra={'metadata': command.metadata})
         loop = asyncio.get_event_loop()
         coro = self.connect()
         loop.run_until_complete(coro)

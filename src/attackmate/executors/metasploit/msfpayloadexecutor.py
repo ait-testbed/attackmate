@@ -19,9 +19,9 @@ from attackmate.schemas.config import CommandConfig
 
 
 class MsfPayloadExecutor(BaseExecutor):
-    def __init__(self, pm: ProcessManager, varstore: VariableStore,
-                 cmdconfig=CommandConfig(), *,
-                 msfconfig=None):
+    def __init__(
+        self, pm: ProcessManager, varstore: VariableStore, cmdconfig=CommandConfig(), *, msfconfig=None
+    ):
         self.msfconfig = msfconfig
         self.msf = None
         self.tempfilestore: list[Any] = []
@@ -41,7 +41,7 @@ class MsfPayloadExecutor(BaseExecutor):
         if self.msf is None:
             self.logger.debug('Connecting to msf-server...')
             self.connect(self.msfconfig)
-        self.logger.info(f"Generating Msf-Payload: '{command.cmd}'")
+        self.logger.info(f"Generating Msf-Payload: '{command.cmd}'", extra={'metadata': command.metadata})
 
     def prepare_payload(self, command: MsfPayloadCommand):
         if not self.msf:

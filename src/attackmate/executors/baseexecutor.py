@@ -25,8 +25,9 @@ class BaseExecutor(ExitOnError, CmdVars, Looper, Background):
     _exec_cmd()
 
     """
+
     def __init__(self, pm: ProcessManager, variablestore: VariableStore, cmdconfig=CommandConfig()):
-        """ Constructor for BaseExecutor
+        """Constructor for BaseExecutor
 
         Parameters
         ----------
@@ -43,7 +44,7 @@ class BaseExecutor(ExitOnError, CmdVars, Looper, Background):
         self.output = logging.getLogger('output')
 
     def run(self, command: BaseCommand):
-        """ Execute the command
+        """Execute the command
 
         This method is executed by AttackMate and
         executes the given command. This method sets the
@@ -72,15 +73,13 @@ class BaseExecutor(ExitOnError, CmdVars, Looper, Background):
             self.exec(self.replace_variables(command))
 
     def log_command(self, command):
-        """ Log starting-status of the command
-
-        """
-        self.logger.info(f"Executing '{command}'")
+        """Log starting-status of the command"""
+        self.logger.info(f"Executing '{command}'", extra={'metadata': command.metadata})
 
     def save_output(self, command: BaseCommand, result: Result):
-        """ Save output of command to a file. This method will
-            ignore all exceptions and won't stop the programm
-            on error.
+        """Save output of command to a file. This method will
+        ignore all exceptions and won't stop the programm
+        on error.
         """
         if command.save:
             try:

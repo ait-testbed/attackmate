@@ -12,7 +12,7 @@ from attackmate.schemas.debug import DebugCommand
 class DebugExecutor(BaseExecutor):
 
     def log_command(self, command: DebugCommand):
-        self.logger.warn(f"Debug: '{command.cmd}'")
+        self.logger.warn(f"Debug: '{command.cmd}'", extra={'metadata': command.metadata})
         if command.varstore:
             self.logger.warn(self.varstore.variables)
 

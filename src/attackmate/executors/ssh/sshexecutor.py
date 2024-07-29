@@ -7,9 +7,7 @@ ssh.
 
 from paramiko.client import SSHClient
 from paramiko import AutoAddPolicy
-from paramiko.ssh_exception import (BadHostKeyException,
-                                    AuthenticationException,
-                                    SSHException)
+from paramiko.ssh_exception import BadHostKeyException, AuthenticationException, SSHException
 from attackmate.executors.baseexecutor import BaseExecutor
 from attackmate.execexception import ExecException
 from attackmate.executors.ssh.interactfeature import Interactive
@@ -64,7 +62,7 @@ class SSHExecutor(BaseExecutor, SFTPFeature, Interactive):
 
     def log_command(self, command: SSHCommand):
         self.cache_settings(command)
-        self.logger.info(f"Executing SSH-Command: '{command.cmd}'")
+        self.logger.info(f"Executing SSH-Command: '{command.cmd}'", extra={'metadata': command.metadata})
 
     def connect_jmphost(self, command: SSHCommand):
         jmp = SSHClient()
@@ -84,9 +82,7 @@ class SSHExecutor(BaseExecutor, SFTPFeature, Interactive):
         jmp.connect(**kwargs)
         transport = jmp.get_transport()
         if transport:
-            sock = transport.open_channel(
-                    'direct-tcpip', (self.hostname, self.port), ('', 0)
-            )
+            sock = transport.open_channel('direct-tcpip', (self.hostname, self.port), ('', 0))
         else:
             raise ExecException(f'Could not get transport of SSH-Jumphost {self.jmp_hostname}')
         return sock
@@ -117,7 +113,7 @@ class SSHExecutor(BaseExecutor, SFTPFeature, Interactive):
             passphrase=self.passphrase,
             key_filename=self.key_filename,
             timeout=self.timeout,
-            sock=jmp_sock
+            sock=jmp_sock,
         )
         client.connect(**kwargs)
         if command.creates_session is not None:
