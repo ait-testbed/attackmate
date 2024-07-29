@@ -47,13 +47,17 @@ def test_no_vars_section():
 commands:
     - type: debug
       cmd: echo $ENVIRONMENT_VAR
+    - type: debug
+      cmd: echo $ENVIRONMENT_VAR_2
 """
-    env_vars = {'ENVIRONMENT_VAR': 'bar'}
+    env_vars = {'ENVIRONMENT_VAR': 'bar', 'ENVIRONMENT_VAR_2': 'bar_2'}
     with patch.dict(os.environ, env_vars):
         expected_result = """\
 commands:
     - type: debug
       cmd: echo bar
+    - type: debug
+      cmd: echo bar_2
 """
         assert replace_env_variables_in_playbook(playbook_without_vars) == expected_result
 
@@ -63,11 +67,14 @@ def test_no_replacement_needed():
 vars:
     PLAYBOOK_VAR: 102.49.20.00
     $PLAYBOOK_VAR_WITH_LEADING_DOLLAR_SIGN: foo
+    $PLAYBOOK_VAR_WITH_NUMBER_1: bar
 commands:
     - type: debug
       cmd: echo $PLAYBOOK_VAR
     - type: debug
       cmd: echo $PLAYBOOK_VAR_WITH_LEADING_DOLLAR_SIGN
+    - type: debug
+      cmd: echo $PLAYBOOK_VAR_WITH_NUMBER_1
 """
     assert (
         replace_env_variables_in_playbook(playbook_without_env_vars_to_replace)
@@ -124,11 +131,4 @@ commands:
 """
     env_vars = {'FOO': 'SHOULD_NOT_REPLACE', 'PLAYBOOK_VAR': 'SHOULD_NOT_REPLACE'}
     with patch.dict(os.environ, env_vars):
-        expected_result = """\
-vars:
-    PLAYBOOK_VAR: FOO
-commands:
-    - type: debug
-      cmd: echo $PLAYBOOK_VAR
-"""
-        assert replace_env_variables_in_playbook(playbook_with_env_var_value) == expected_result
+        assert replace_env_variables_in_playbook(playbook_with_env_var_value) == playbook_with_env_var_value
