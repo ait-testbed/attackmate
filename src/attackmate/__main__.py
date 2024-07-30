@@ -144,27 +144,32 @@ def parse_playbook(playbook_file: str, logger: logging.Logger) -> Playbook:
     default_playbook_location = Path('/etc/attackmate/playbooks')
 
     playbook_file_path = Path(playbook_file)
-    target_file = ''
+    target_file = None
 
-    # 1 # Check provided path
-    if playbook_file_path.exists():
-        target_file = playbook_file_path
+    try:
+        # 1 # Check provided path
+        if playbook_file_path.exists():
+            target_file = playbook_file_path
 
-    # 2 # Check current working directory
-    elif (current_working_directory / playbook_file_path).exists():
-        target_file = current_working_directory / playbook_file_path
+        # 2 # Check current working directory
+        elif (current_working_directory / playbook_file_path).exists():
+            target_file = current_working_directory / playbook_file_path
 
-    # 3 # Check default playbook directory
-    elif (default_playbook_location / playbook_file_path).exists():
-        target_file = default_playbook_location / playbook_file_path
-    
-    logger.debug(f"Loading playbook file {target_file}")
+        # 3 # Check default playbook directory
+        elif (default_playbook_location / playbook_file_path).exists():
+            target_file = default_playbook_location / playbook_file_path
 
-    else:
-        logger.error(
-            f"Error: Playbook file not found under '{playbook_file_path}' or in the current directory or in /etc/attackmate/playbooks"
-        )
-        exit(1)
+        else:
+            logger.error(
+                f"Error: Playbook file not found under '{playbook_file_path}' or in the current directory or in /etc/attackmate/playbooks"
+            )
+            exit(1)
+
+    finally:
+        if target_file:
+            logger.debug(f'Playbook target filepath is set to: {target_file}')
+        else:
+            logger.debug('Playbook target filepath is not set')
 
     try:
         with open(target_file) as f:
