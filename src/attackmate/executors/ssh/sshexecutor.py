@@ -7,9 +7,7 @@ ssh.
 
 from paramiko.client import SSHClient
 from paramiko import AutoAddPolicy
-from paramiko.ssh_exception import (BadHostKeyException,
-                                    AuthenticationException,
-                                    SSHException)
+from paramiko.ssh_exception import BadHostKeyException, AuthenticationException, SSHException
 from attackmate.executors.baseexecutor import BaseExecutor
 from attackmate.execexception import ExecException
 from attackmate.executors.ssh.interactfeature import Interactive
@@ -84,9 +82,7 @@ class SSHExecutor(BaseExecutor, SFTPFeature, Interactive):
         jmp.connect(**kwargs)
         transport = jmp.get_transport()
         if transport:
-            sock = transport.open_channel(
-                    'direct-tcpip', (self.hostname, self.port), ('', 0)
-            )
+            sock = transport.open_channel('direct-tcpip', (self.hostname, self.port), ('', 0))
         else:
             raise ExecException(f'Could not get transport of SSH-Jumphost {self.jmp_hostname}')
         return sock
@@ -117,7 +113,7 @@ class SSHExecutor(BaseExecutor, SFTPFeature, Interactive):
             passphrase=self.passphrase,
             key_filename=self.key_filename,
             timeout=self.timeout,
-            sock=jmp_sock
+            sock=jmp_sock,
         )
         client.connect(**kwargs)
         if command.creates_session is not None:
@@ -146,7 +142,7 @@ class SSHExecutor(BaseExecutor, SFTPFeature, Interactive):
                         if stdout.channel.recv_ready():
                             tmp = stdout.channel.recv(1025).decode('utf-8', 'ignore')
                             output += tmp
-                            self.check_prompt(output, command.prompts, command.validate_prompt)
+                            self.check_prompt(output, command.prompts)
                 else:
                     stdin, stdout, stderr = client.exec_command(command.cmd)
                     output = stdout.read().decode('utf-8', 'ignore')

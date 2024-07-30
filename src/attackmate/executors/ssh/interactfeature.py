@@ -7,13 +7,13 @@ from attackmate.execexception import ExecException
 from attackmate.executors.ssh.sessionstore import SessionStore
 
 
-class Interactive():
+class Interactive:
     def __init__(self):
         self.timer = None
         self.logger = logging.getLogger('playbook')
 
-    def check_prompt(self, output: str, prompts: list[str], validate_prompt: bool = True) -> bool:
-        if output and validate_prompt:
+    def check_prompt(self, output: str, prompts: list[str]) -> bool:
+        if output and prompts:
             for p in prompts:
                 if output.endswith(p):
                     self.logger.debug('found prompt!')
