@@ -10,10 +10,12 @@ import sys
 import argparse
 import yaml
 import logging
+import traceback
 from typing import Optional
 from colorlog import ColoredFormatter
 from attackmate.playbook_env_var_replacer import replace_env_variables_in_playbook
 from attackmate.attackmate import AttackMate
+from pydantic import ValidationError
 from attackmate.schemas.config import Config
 from attackmate.schemas.playbook import Playbook
 from attackmate.metadata import __version_string__
@@ -152,6 +154,10 @@ def parse_playbook(playbook_file: str, logger: logging.Logger) -> Playbook:
             exit(1)
     except OSError:
         logger.error(f'Error: Could not open playbook file {playbook_file}')
+        exit(1)
+    except ValidationError:
+        logger.error(f'A Validation error occured when parsing playbook file {playbook_file}')
+        logger.error(traceback.format_exc())
         exit(1)
 
 

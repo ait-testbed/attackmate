@@ -7,7 +7,7 @@ Execute Sliver Commands
 import asyncio
 import os
 import tempfile
-from typing import Any
+from typing import Any, Optional
 from sliver import SliverClientConfig, SliverClient
 from sliver.protobuf import client_pb2
 from attackmate.variablestore import VariableStore
@@ -22,9 +22,7 @@ from attackmate.processmanager import ProcessManager
 
 class SliverExecutor(BaseExecutor):
 
-    def __init__(self, pm: ProcessManager, cmdconfig=None, *,
-                 varstore: VariableStore,
-                 sliver_config=None):
+    def __init__(self, pm: ProcessManager, cmdconfig=None, *, varstore: VariableStore, sliver_config=None):
         self.sliver_config = sliver_config
         self.client = None
         self.tempfilestore: list[Any] = []
@@ -46,21 +44,21 @@ class SliverExecutor(BaseExecutor):
         self.logger.debug(f'{command.host=}')
         if self.client is None:
             raise ExecException('SliverClient is not defined')
-        listener = await self.client.start_https_listener(command.host,
-                                                          CmdVars.variable_to_int('port', command.port),
-                                                          command.website,
-                                                          command.domain,
-                                                          b'',
-                                                          b'',
-                                                          command.acme,
-                                                          command.persistent,
-                                                          command.enforce_otp,
-                                                          command.randomize_jarm,
-                                                          CmdVars.variable_to_int('long_poll_timeout',
-                                                                                  command.long_poll_timeout),
-                                                          CmdVars.variable_to_int('long_poll_jitter',
-                                                                                  command.long_poll_jitter),
-                                                          CmdVars.variable_to_int('timeout', command.timeout))
+        listener = await self.client.start_https_listener(
+            command.host,
+            CmdVars.variable_to_int('port', command.port),
+            command.website,
+            command.domain,
+            b'',
+            b'',
+            command.acme,
+            command.persistent,
+            command.enforce_otp,
+            command.randomize_jarm,
+            CmdVars.variable_to_int('long_poll_timeout', command.long_poll_timeout),
+            CmdVars.variable_to_int('long_poll_jitter', command.long_poll_jitter),
+            CmdVars.variable_to_int('timeout', command.timeout),
+        )
         self.result = Result(f'JobID: {listener.JobID}', 0)
 
     def prepare_implant_config(self, command: SliverGenerateCommand) -> client_pb2.ImplantConfig:
@@ -88,8 +86,7 @@ class SliverExecutor(BaseExecutor):
         implconfig.C2.extend([c2])
         implconfig.IsBeacon = command.IsBeacon
         if command.IsBeacon:
-            implconfig.BeaconInterval = CmdVars.variable_to_int('BeaconInterval',
-                                                                command.BeaconInterval)
+            implconfig.BeaconInterval = CmdVars.variable_to_int('BeaconInterval', command.BeaconInterval)
         implconfig.RunAtLoad = command.RunAtLoad
         implconfig.Evasion = command.Evasion
         target = command.target.split('/')
@@ -100,9 +97,9 @@ class SliverExecutor(BaseExecutor):
         implconfig.FileName = 'linux_implant'
         return implconfig
 
-    def save_implant(self, implant: client_pb2.Generate) -> str:
-        if hasattr(implant, 'filepath'):
-            implant_path = implant.filepath
+    def save_implant(self, implant: client_pb2.Generate, filepath: Optional[str] = None) -> str:
+        if filepath is not None:
+            implant_path = filepath
         else:
             tmpfile = tempfile.NamedTemporaryFile()
             self.tempfilestore.append(tmpfile)
@@ -132,7 +129,7 @@ class SliverExecutor(BaseExecutor):
         implant = await self.client.generate_implant(implconfig)
         length = len(implant.File.Data)
         self.result.stdout = f'Created Sliver-Implant: {implant.File.Name}. with {length} bytes'
-        implant_path = self.save_implant(implant)
+        implant_path = self.save_implant(implant, command.filepath)
         self.logger.debug(f'Saved {implant.File.Name} to {implant_path}')
         self.result.returncode = 0
 
