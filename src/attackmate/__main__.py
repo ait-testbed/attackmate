@@ -144,6 +144,7 @@ def parse_playbook(playbook_file: str, logger: logging.Logger) -> Playbook:
     default_playbook_location = Path('/etc/attackmate/playbooks')
 
     playbook_file_path = Path(playbook_file)
+    target_file = ''
 
     # 1 # Check provided path
     if playbook_file_path.exists():
@@ -156,6 +157,8 @@ def parse_playbook(playbook_file: str, logger: logging.Logger) -> Playbook:
     # 3 # Check default playbook directory
     elif (default_playbook_location / playbook_file_path).exists():
         target_file = default_playbook_location / playbook_file_path
+    
+    logger.debug(f"Loading playbook file {target_file}")
 
     else:
         logger.error(
