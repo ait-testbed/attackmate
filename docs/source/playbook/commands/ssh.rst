@@ -180,7 +180,6 @@ Execute commands on a remote server via SSH.
 
    In interactive-mode the command will try reading the output for a certain amount of seconds. If the output
    ends with any string found in ``prompts``, the command will stop immediately.
-   If ``prompts`` is an empty list, no prompt checking will be performed. 
 
    :type: list[str]
    :default: ``["$ ", "# ", "> "]``
@@ -188,7 +187,6 @@ Execute commands on a remote server via SSH.
    .. code-block:: yaml
 
       vars:
-        $SERVER_ADDRESS: 192.42.0.254
         $SSH_SERVER: 10.10.10.19
 
       commands:
@@ -207,6 +205,25 @@ Execute commands on a remote server via SSH.
           creates_session: "attacker"
 
 
+   If ``prompts`` is an empty list, no prompt checking will be performed.
+
+   .. code-block:: yaml
+
+      vars:
+        $SSH_SERVER: 10.10.10.19
+
+      commands:
+        # creates new ssh-connection and session
+        - type: ssh
+          cmd: "id\n"
+          interactive: True
+          prompts: []
+          hostname: $SSH_SERVER
+          username: aecid
+          password: password
+          creates_session: "attacker"
+
+
 .. confval:: bin
 
    Enable binary mode. In this mode only hex-characters are allowed.
@@ -216,7 +233,7 @@ Execute commands on a remote server via SSH.
 
    .. code-block:: yaml
 
-      vars: 
+      vars:
         $SERVER_ADDRESS: 192.42.0.254
         $SSH_SERVER: 10.10.10.19
 
