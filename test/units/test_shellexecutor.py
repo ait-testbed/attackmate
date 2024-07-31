@@ -83,3 +83,15 @@ def test_exec_cmd_invalid_hex(mock_popen, shell_executor):
             shell_executor._exec_cmd(command)
             mock_open_proc.assert_called_once_with(command)
             mock_popen_instance.communicate.assert_not_called()
+
+
+def test_execution_of_hex_command(shell_executor):
+
+    command = ShellCommand(
+        type='shell',
+        cmd='6563686f206964',
+        bin=True,
+    )
+
+    result = shell_executor._exec_cmd(command)
+    assert result.stdout == 'id\n'
