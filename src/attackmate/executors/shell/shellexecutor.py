@@ -57,10 +57,7 @@ class ShellExecutor(BaseExecutor):
             fl = fcntl.fcntl(fd, fcntl.F_GETFL)
             fcntl.fcntl(fd, fcntl.F_SETFL, fl | os.O_NONBLOCK)
         except ImportError:
-            raise ExecException(
-                "The 'fcntl' module is not available."
-                'This functionality requires a Unix-like operating system.'
-            )
+            raise ExecException("The 'fcntl' module is not available. This module requires a Unix-like OS.")
         try:
             return stdout.read()
         except Exception:
@@ -83,6 +80,7 @@ class ShellExecutor(BaseExecutor):
         self.logger.debug('Running interactive command')
 
         self.logger.debug(f'Sending command: {cmd.decode("utf-8")}')
+
         if proc.stdin:
             proc.stdin.write(cmd)
             proc.stdin.flush()

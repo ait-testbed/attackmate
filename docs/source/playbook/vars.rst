@@ -38,4 +38,6 @@ The following variables are set by the system:
 
 ``LAST_MSF_SESSION`` is set every time after a new metasploit session was created and contains the session number.
 
+``LAST_SLIVER_IMPLANT`` is set every time after a new sliver implant was created and contains the path to the implant file.
+
 ``LAST_FATHER_PATH`` is set every time when a father-rootkit was generated.
