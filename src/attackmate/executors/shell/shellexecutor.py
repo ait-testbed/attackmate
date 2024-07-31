@@ -9,6 +9,7 @@ import os
 import subprocess
 from subprocess import TimeoutExpired
 from datetime import datetime
+import binascii
 from attackmate.execexception import ExecException
 from attackmate.executors.baseexecutor import BaseExecutor
 from attackmate.result import Result
@@ -33,10 +34,9 @@ class ShellExecutor(BaseExecutor):
         if command.session:
             return self.session_store.get_handle_by_session(command.session)
 
-        proc = subprocess.Popen([command.command_shell],
-                                stdin=subprocess.PIPE,
-                                stdout=subprocess.PIPE,
-                                stderr=subprocess.PIPE)
+        proc = subprocess.Popen(
+            [command.command_shell], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE
+        )
 
         if command.creates_session:
             self.session_store.set_session(command.creates_session, proc, command.cmd)
@@ -53,6 +53,7 @@ class ShellExecutor(BaseExecutor):
         fd = stdout.fileno()
         try:
             import fcntl
+
             fl = fcntl.fcntl(fd, fcntl.F_GETFL)
             fcntl.fcntl(fd, fcntl.F_SETFL, fl | os.O_NONBLOCK)
         except ImportError:
@@ -73,14 +74,13 @@ class ShellExecutor(BaseExecutor):
         output += error
         return output.decode()
 
-    def popen_interactive(self,
-                          proc: subprocess.Popen,
-                          cmd: bytes,
-                          timeout: int = 5,
-                          read: bool = True) -> str:
+    def popen_interactive(
+        self, proc: subprocess.Popen, cmd: bytes, timeout: int = 5, read: bool = True
+    ) -> str:
         self.logger.debug('Running interactive command')
 
-        self.logger.debug(f"Sending command: {cmd.decode('utf-8')}")
+        self.logger.debug(f'Sending command: {cmd.decode("utf-8")}')
+
         if proc.stdin:
             proc.stdin.write(cmd)
             proc.stdin.flush()
@@ -102,7 +102,19 @@ class ShellExecutor(BaseExecutor):
         except KeyError as e:
             raise ExecException(e)
 
-        cmd = command.cmd.encode('utf-8')
+        if command.bin:
+            try:
+                cmd = binascii.unhexlify(command.cmd)
+                self.logger.info(
+                    f"Shell-Command: Hex {command.cmd} to ascii: {bytes.fromhex(command.cmd).decode('ascii')}"
+                )
+            except binascii.Error:
+                raise ExecException(
+                    f"only hex characters are allowed in binary mode. Command: '{command.cmd}'"
+                )
+        else:
+            cmd = command.cmd.encode('utf-8')
+
         timeout = CmdVars.variable_to_int('timeout', command.command_timeout)
         output = ''
 
