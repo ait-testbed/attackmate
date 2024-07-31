@@ -122,11 +122,16 @@ Every command, regardless of the type has the following general options:
    * var1 <= var2
    * var1 > var2
    * var1 >= var2
+   * string !~ pattern
+   * string =~ pattern
    * not var
    * var
    * None
 
    :type: str(condition)
+
+   The =~ operator is used to check if a string matches a regular expression pattern.
+   The !~ operator is used to check if a string does not match a regular expression pattern.
 
    .. code-block:: yaml
 
@@ -145,6 +150,12 @@ Every command, regardless of the type has the following general options:
         - type: shell
           cmd: kill $KILLPID
           only_if: $KILLPID > 1
+
+        # Execute this command only if the regex pattern is found
+        - type: shell
+          cmd: echo "regex match found"
+          only_if: some_string =~ some[_]?string
+
 
 .. confval:: background
 
