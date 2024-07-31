@@ -12,6 +12,7 @@ import yaml
 import logging
 import traceback
 from typing import Optional
+from pathlib import Path
 from colorlog import ColoredFormatter
 from attackmate.playbook_env_var_replacer import replace_env_variables_in_playbook
 from attackmate.attackmate import AttackMate
@@ -138,6 +139,41 @@ def parse_playbook(playbook_file: str, logger: logging.Logger) -> Playbook:
     Playbook
         The parsed AttackMate playbook object
     """
+
+    # Get the path of the current working directory
+    current_working_directory = Path.cwd()
+
+    # Construct the path to the default playbooks directory
+    default_playbook_location = Path('/etc/attackmate/playbooks')
+
+    playbook_file_path = Path(playbook_file)
+    target_file = None
+
+    try:
+        # 1 # Check provided path
+        if playbook_file_path.exists():
+            target_file = playbook_file_path
+
+        # 2 # Check current working directory
+        elif (current_working_directory / playbook_file_path).exists():
+            target_file = current_working_directory / playbook_file_path
+
+        # 3 # Check default playbook directory
+        elif (default_playbook_location / playbook_file_path).exists():
+            target_file = default_playbook_location / playbook_file_path
+
+        else:
+            logger.error(
+                f"Error: Playbook file not found under '{playbook_file_path}' or in the current directory or in /etc/attackmate/playbooks"
+            )
+            exit(1)
+
+    finally:
+        if target_file:
+            logger.debug(f'Playbook target filepath is set to: {target_file}')
+        else:
+            logger.debug('Playbook target filepath is not set')
+
     try:
         with open(playbook_file, 'r') as f:
             content = f.read()
@@ -153,7 +189,7 @@ def parse_playbook(playbook_file: str, logger: logging.Logger) -> Playbook:
             logger.error(f'YAML parsing error: {e}')
             exit(1)
     except OSError:
-        logger.error(f'Error: Could not open playbook file {playbook_file}')
+        logger.error(f'Error: Could not open playbook file {target_file}')
         exit(1)
     except ValidationError:
         logger.error(f'A Validation error occured when parsing playbook file {playbook_file}')
