@@ -1,33 +1,38 @@
 import ast
+import re
 from typing import Optional
 
 
 class ConditionalError(Exception):
-    """ Exception during evaluating Conditionals
+    """Exception during evaluating Conditionals
 
     This exception is raised if anything
     goes wrong during the evaluation of
     Conditionals.
 
     """
+
     pass
 
 
-class Conditional():
-    """ Evaluates conditional statements
-        Currently supported operations:
-            * not var
-            * var
-            * None
-            * var1 == var2
-            * var1 != var2
-            * var1 is var2
-            * var1 is not var2
-            * var1 < var2
-            * var1 <= var2
-            * var1 > var2
-            * var1 >= var2
+class Conditional:
+    """Evaluates conditional statements
+    Currently supported operations:
+        * not var
+        * var
+        * None
+        * var1 == var2
+        * var1 != var2
+        * var1 is var2
+        * var1 is not var2
+        * var1 < var2
+        * var1 <= var2
+        * var1 > var2
+        * var1 >= var2
+        * string =~ pattern
+        * string !~ pattern
     """
+
     @classmethod
     def compare_value(cls, name: ast.Constant | ast.Name):
         if isinstance(name, ast.Name):
@@ -74,9 +79,24 @@ class Conditional():
             raise ConditionalError('Unknown compare operation')
 
     @classmethod
+    def handle_regex(cls, string: str, pattern: str, operator: str) -> bool:
+        if operator == '=~':
+            return bool(re.search(pattern, string))
+        elif operator == '!~':
+            return not bool(re.search(pattern, string))
+        else:
+            raise ConditionalError('Unknown regex operation')
+
+    @classmethod
     def test(cls, condition: Optional[str]) -> bool:
         if not condition:
             return False
+
+        match = re.match(r'^(.+?)\s*(=~|!~)\s*(.+?)$', condition)
+        if match:
+            string, operator, pattern = match.groups()
+            return cls.handle_regex(string.strip(), pattern.strip(), operator)
+
         expr = ast.parse(condition, mode='eval')
         if isinstance(expr.body, ast.Name):
             return True
