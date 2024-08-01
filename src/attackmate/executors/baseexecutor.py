@@ -1,4 +1,6 @@
 import logging
+import json
+from typing import Any
 from attackmate.executors.features.cmdvars import CmdVars
 from attackmate.executors.features.exitonerror import ExitOnError
 from attackmate.executors.features.looper import Looper
@@ -10,7 +12,6 @@ from attackmate.schemas.base import BaseCommand
 from attackmate.schemas.config import CommandConfig
 from attackmate.variablestore import VariableStore
 from attackmate.processmanager import ProcessManager
-from typing import Any
 
 
 class BaseExecutor(ExitOnError, CmdVars, Looper, Background):
@@ -25,8 +26,9 @@ class BaseExecutor(ExitOnError, CmdVars, Looper, Background):
     _exec_cmd()
 
     """
+
     def __init__(self, pm: ProcessManager, variablestore: VariableStore, cmdconfig=CommandConfig()):
-        """ Constructor for BaseExecutor
+        """Constructor for BaseExecutor
 
         Parameters
         ----------
@@ -43,7 +45,7 @@ class BaseExecutor(ExitOnError, CmdVars, Looper, Background):
         self.output = logging.getLogger('output')
 
     def run(self, command: BaseCommand):
-        """ Execute the command
+        """Execute the command
 
         This method is executed by AttackMate and
         executes the given command. This method sets the
@@ -72,15 +74,18 @@ class BaseExecutor(ExitOnError, CmdVars, Looper, Background):
             self.exec(self.replace_variables(command))
 
     def log_command(self, command):
-        """ Log starting-status of the command
-
-        """
+        """Log starting-status of the command"""
         self.logger.info(f"Executing '{command}'")
 
+    def log_metadata(self, logger, command):
+        """Log metadata of the command"""
+        if command.metadata:
+            logger.info(f'Metadata: {json.dumps(command.metadata)}')
+
     def save_output(self, command: BaseCommand, result: Result):
-        """ Save output of command to a file. This method will
-            ignore all exceptions and won't stop the programm
-            on error.
+        """Save output of command to a file. This method will
+        ignore all exceptions and won't stop the programm
+        on error.
         """
         if command.save:
             try:
