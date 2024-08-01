@@ -15,6 +15,7 @@ class DebugExecutor(BaseExecutor):
         self.logger.warn(f"Debug: '{command.cmd}'")
         if command.varstore:
             self.logger.warn(self.varstore.variables)
+        self.log_metadata(self.logger, command)
 
     def _exec_cmd(self, command: DebugCommand) -> Result:
         self.setoutuptvars = False

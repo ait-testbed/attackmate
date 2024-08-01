@@ -15,10 +15,15 @@ from multiprocessing.queues import JoinableQueue
 
 
 class MsfModuleExecutor(BaseExecutor):
-    def __init__(self, pm: ProcessManager, cmdconfig=None, *,
-                 varstore: VariableStore,
-                 msfconfig=None,
-                 msfsessionstore: MsfSessionStore):
+    def __init__(
+        self,
+        pm: ProcessManager,
+        cmdconfig=None,
+        *,
+        varstore: VariableStore,
+        msfconfig=None,
+        msfsessionstore: MsfSessionStore,
+    ):
         self.msfconfig = msfconfig
         self.sessionstore = msfsessionstore
         self.msf = None
@@ -47,6 +52,7 @@ class MsfModuleExecutor(BaseExecutor):
             self.logger.debug('Connecting to msf-server...')
             self.connect(self.msfconfig)
         self.logger.info(f"Executing Msf-Module: '{command.cmd}'")
+        self.log_metadata(self.logger, command)
 
     def prepare_payload(self, command: MsfModuleCommand):
         self.logger.debug(f'Using payload: {command.payload}')
@@ -74,8 +80,7 @@ class MsfModuleExecutor(BaseExecutor):
             self.logger.debug(f'module_type: {command.module_type()}')
             self.logger.debug(f'module_path: {command.module_path()}')
             if self.msf is not None:
-                exploit = self.msf.modules.use(command.module_type(),
-                                               command.module_path())
+                exploit = self.msf.modules.use(command.module_type(), command.module_path())
             else:
                 raise ExecException('Problems with the metasploit connection')
             self.logger.debug(exploit.description)
@@ -114,14 +119,13 @@ class MsfModuleExecutor(BaseExecutor):
             self.logger.debug(command.module_path())
             if command.module_path() == 'multi/manage/shell_to_meterpreter':
                 self.logger.debug('Waiting for increased session..')
-                self.sessionstore.wait_for_increased_session(command.creates_session,
-                                                             result['uuid'],
-                                                             self.msf.sessions,
-                                                             self.child_queue)
+                self.sessionstore.wait_for_increased_session(
+                    command.creates_session, result['uuid'], self.msf.sessions, self.child_queue
+                )
             else:
-                self.sessionstore.wait_for_session(command.creates_session,
-                                                   result['uuid'],
-                                                   self.msf.sessions, self.child_queue)
+                self.sessionstore.wait_for_session(
+                    command.creates_session, result['uuid'], self.msf.sessions, self.child_queue
+                )
             return Result('', 0)
         cid = self.msf.consoles.console().cid
         output = self.msf.consoles.console(cid).run_module_with_output(exploit, payload=payload)

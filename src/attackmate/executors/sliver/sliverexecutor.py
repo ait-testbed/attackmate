@@ -135,6 +135,7 @@ class SliverExecutor(BaseExecutor):
 
     def log_command(self, command: BaseCommand):
         self.logger.info(f"Executing Sliver-command: '{command.cmd}'")
+        self.log_metadata(self.logger, command)
         loop = asyncio.get_event_loop()
         coro = self.connect()
         loop.run_until_complete(coro)

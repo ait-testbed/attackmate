@@ -16,9 +16,14 @@ from attackmate.processmanager import ProcessManager
 
 
 class IncludeExecutor(BaseExecutor):
-    def __init__(self, pm: ProcessManager, cmdconfig=None, *,
-                 varstore: VariableStore,
-                 runfunc: Callable[[Commands], None]):
+    def __init__(
+        self,
+        pm: ProcessManager,
+        cmdconfig=None,
+        *,
+        varstore: VariableStore,
+        runfunc: Callable[[Commands], None],
+    ):
         self.runfunc = runfunc
         super().__init__(pm, varstore, cmdconfig)
 
@@ -32,6 +37,7 @@ class IncludeExecutor(BaseExecutor):
 
     def log_command(self, command: IncludeCommand):
         self.logger.info(f"Executing commands from '{command.local_path}'")
+        self.log_metadata(self.logger, command)
 
     def _exec_cmd(self, command: IncludeCommand) -> Result:
         playbook = self.load_file(command.local_path)

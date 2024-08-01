@@ -45,8 +45,7 @@ class WebServe(HTTPServer):
 
     def finish_request(self, request, client_address):
         try:
-            self.RequestHandlerClass(request, client_address, self,
-                                     local_path=self.local_path)
+            self.RequestHandlerClass(request, client_address, self, local_path=self.local_path)
         except ConnectionResetError:
             pass
 
@@ -55,6 +54,7 @@ class WebServExecutor(BaseExecutor):
 
     def log_command(self, command: WebServCommand):
         self.logger.info(f'Serving {command.local_path} via HTTP on Port {command.port}')
+        self.log_metadata(self.logger, command)
 
     def _exec_cmd(self, command: WebServCommand) -> Result:
         address = (command.address, CmdVars.variable_to_int('Port', command.port))

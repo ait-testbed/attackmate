@@ -29,6 +29,7 @@ class ShellExecutor(BaseExecutor):
 
     def log_command(self, command: BaseCommand):
         self.logger.info(f"Executing Shell-Command: '{command.cmd}'")
+        self.log_metadata(self.logger, command)
 
     def open_proc(self, command: ShellCommand) -> subprocess.Popen:
         if command.session:

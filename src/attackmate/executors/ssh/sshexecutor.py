@@ -63,6 +63,7 @@ class SSHExecutor(BaseExecutor, SFTPFeature, Interactive):
     def log_command(self, command: SSHCommand):
         self.cache_settings(command)
         self.logger.info(f"Executing SSH-Command: '{command.cmd}'")
+        self.log_metadata(self.logger, command)
 
     def connect_jmphost(self, command: SSHCommand):
         jmp = SSHClient()
