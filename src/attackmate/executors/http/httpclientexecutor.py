@@ -15,7 +15,6 @@ from attackmate.execexception import ExecException
 class HttpClientExecutor(BaseExecutor):
     def log_command(self, command: HttpClientCommand):
         self.logger.info(f'Performing HTTP[{command.cmd}] to {command.url}')
-        self.log_metadata(self.logger, command)
 
     def generate_headers(self, command: HttpClientCommand) -> dict[str, str]:
         if not command.headers:

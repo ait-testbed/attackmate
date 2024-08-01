@@ -58,7 +58,6 @@ class FatherExecutor(BaseExecutor):
 
     def log_command(self, command: FatherCommand):
         self.logger.info('Generating Father-Binary')
-        self.log_metadata(self.logger, command)
 
     def _exec_cmd(self, command: FatherCommand) -> Result:
         if platform.system() != 'Linux':

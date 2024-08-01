@@ -97,6 +97,7 @@ class BaseExecutor(ExitOnError, CmdVars, Looper, Background):
     def exec(self, command: BaseCommand):
         try:
             self.log_command(command)
+            self.log_metadata(self.logger, command)
             result = self._exec_cmd(command)
         except ExecException as error:
             result = Result(error, 1)

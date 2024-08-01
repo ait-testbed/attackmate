@@ -48,7 +48,6 @@ class MsfSessionExecutor(BaseExecutor):
             self.logger.debug('Connecting to msf-server...')
             self.connect(self.msfconfig)
         self.logger.info(f"Executing Msf-Session-Command: '{command.cmd}'")
-        self.log_metadata(self.logger, command)
 
     def _exec_cmd(self, command: MsfSessionCommand) -> Result:
         if self.msf is None:

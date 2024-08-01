@@ -52,7 +52,6 @@ class MsfModuleExecutor(BaseExecutor):
             self.logger.debug('Connecting to msf-server...')
             self.connect(self.msfconfig)
         self.logger.info(f"Executing Msf-Module: '{command.cmd}'")
-        self.log_metadata(self.logger, command)
 
     def prepare_payload(self, command: MsfModuleCommand):
         self.logger.debug(f'Using payload: {command.payload}')
