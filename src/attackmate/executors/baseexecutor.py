@@ -41,6 +41,7 @@ class BaseExecutor(ExitOnError, CmdVars, Looper, Background):
         ExitOnError.__init__(self)
         Looper.__init__(self, cmdconfig)
         self.logger = logging.getLogger('playbook')
+        self.json_logger = logging.getLogger('json')
         self.cmdconfig = cmdconfig
         self.output = logging.getLogger('output')
 
@@ -82,6 +83,12 @@ class BaseExecutor(ExitOnError, CmdVars, Looper, Background):
         if command.metadata:
             logger.info(f'Metadata: {json.dumps(command.metadata)}')
 
+    def log_json(self, logger, command, result):
+        """Log metadata of the command"""
+        logger.info(command)
+
+        return  # Exit after logging to avoid unnecessary checks
+
     def save_output(self, command: BaseCommand, result: Result):
         """Save output of command to a file. This method will
         ignore all exceptions and won't stop the programm
@@ -97,6 +104,7 @@ class BaseExecutor(ExitOnError, CmdVars, Looper, Background):
     def exec(self, command: BaseCommand):
         try:
             self.log_command(command)
+            self.log_metadata(self.logger, command)
             result = self._exec_cmd(command)
         except ExecException as error:
             result = Result(error, 1)

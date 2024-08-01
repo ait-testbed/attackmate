@@ -54,7 +54,6 @@ class WebServExecutor(BaseExecutor):
 
     def log_command(self, command: WebServCommand):
         self.logger.info(f'Serving {command.local_path} via HTTP on Port {command.port}')
-        self.log_metadata(self.logger, command)
 
     def _exec_cmd(self, command: WebServCommand) -> Result:
         address = (command.address, CmdVars.variable_to_int('Port', command.port))

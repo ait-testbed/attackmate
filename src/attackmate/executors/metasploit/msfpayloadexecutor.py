@@ -42,7 +42,6 @@ class MsfPayloadExecutor(BaseExecutor):
             self.logger.debug('Connecting to msf-server...')
             self.connect(self.msfconfig)
         self.logger.info(f"Generating Msf-Payload: '{command.cmd}'")
-        self.log_metadata(self.logger, command)
 
     def prepare_payload(self, command: MsfPayloadCommand):
         if not self.msf:

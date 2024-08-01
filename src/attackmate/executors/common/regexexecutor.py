@@ -17,7 +17,6 @@ class RegExExecutor(BaseExecutor):
 
     def log_command(self, command: RegExCommand):
         self.logger.warn(f"RegEx: '{command.cmd}', Mode: '{command.mode}'")
-        self.log_metadata(self.logger, command)
 
     def forge_variables(self, data, variable_name='MATCH'):
         result = {}
