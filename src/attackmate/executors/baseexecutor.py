@@ -1,6 +1,8 @@
 import logging
 import json
+from datetime import datetime
 from typing import Any
+from collections import OrderedDict
 from attackmate.executors.features.cmdvars import CmdVars
 from attackmate.executors.features.exitonerror import ExitOnError
 from attackmate.executors.features.looper import Looper
@@ -12,6 +14,7 @@ from attackmate.schemas.base import BaseCommand
 from attackmate.schemas.config import CommandConfig
 from attackmate.variablestore import VariableStore
 from attackmate.processmanager import ProcessManager
+from attackmate.helper import deep_merge
 
 
 class BaseExecutor(ExitOnError, CmdVars, Looper, Background):
@@ -78,16 +81,23 @@ class BaseExecutor(ExitOnError, CmdVars, Looper, Background):
         """Log starting-status of the command"""
         self.logger.info(f"Executing '{command}'")
 
-    def log_metadata(self, logger, command):
+    def log_metadata(self, logger: logging.Logger, command: BaseCommand):
         """Log metadata of the command"""
         if command.metadata:
             logger.info(f'Metadata: {json.dumps(command.metadata)}')
 
-    def log_json(self, logger, command, result):
+    def log_json(self, logger: logging.Logger, command, time):
         """Log metadata of the command"""
-        logger.info(command)
+        command_dict = OrderedDict()
+        command_dict['start-datetime'] = time
+        command_dict['type'] = command.type
+        command_dict['cmd'] = command.cmd
+        command_dict['parameters'] = {}
 
-        return  # Exit after logging to avoid unnecessary checks
+        for key, value in command.__dict__.items():
+            if key not in command_dict:
+                command_dict['parameters'][key] = deep_merge(value)
+        logger.info(json.dumps(command_dict))
 
     def save_output(self, command: BaseCommand, result: Result):
         """Save output of command to a file. This method will
@@ -105,11 +115,12 @@ class BaseExecutor(ExitOnError, CmdVars, Looper, Background):
         try:
             self.log_command(command)
             self.log_metadata(self.logger, command)
+            time_of_execution = datetime.now().isoformat()
             result = self._exec_cmd(command)
         except ExecException as error:
             result = Result(error, 1)
+        self.log_json(self.json_logger, command, time_of_execution)
         self.save_output(command, result)
-        self.log_json(self.json_logger, command, result)
         if not command.background:
             self.exit_on_error(command, result)
             self.set_result_vars(result)
