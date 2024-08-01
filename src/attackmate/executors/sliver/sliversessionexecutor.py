@@ -227,7 +227,6 @@ class SliverSessionExecutor(BaseExecutor):
 
     def log_command(self, command: SliverSessionCommand):
         self.logger.info(f"Executing Sliver-Session-command: '{command.cmd}'")
-        self.log_metadata(self.logger, command)
         loop = asyncio.get_event_loop()
         coro = self.connect()
         loop.run_until_complete(coro)
