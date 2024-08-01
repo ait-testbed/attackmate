@@ -1,4 +1,5 @@
-from typing import Annotated, List, Optional
+from typing import Annotated, List, Optional, Dict
+from dataclasses import field
 from pydantic import AfterValidator, BeforeValidator, BaseModel, ValidationInfo
 import re
 
@@ -17,16 +18,17 @@ def check_var_pattern(value: str, info: ValidationInfo) -> str:
     return value
 
 
-StringNumber = Annotated[Optional[str | int],
-                         BeforeValidator(transform_int_to_str),
-                         AfterValidator(check_var_pattern)]
+StringNumber = Annotated[
+    Optional[str | int], BeforeValidator(transform_int_to_str), AfterValidator(check_var_pattern)
+]
 
 # Like StringNumber but without checks for valid $variable
 StrInt = Annotated[Optional[str | int], BeforeValidator(transform_int_to_str)]
 
+
 class BaseCommand(BaseModel):
     def list_template_vars(self) -> List[str]:
-        """ Get a list of all variables that can be used as templates
+        """Get a list of all variables that can be used as templates
 
         Returns a List with all member-names that can be used as
         templates for the VariableStore. Basically all members
@@ -56,3 +58,4 @@ class BaseCommand(BaseModel):
     cmd: str
     background: bool = False
     kill_on_exit: bool = True
+    metadata: Optional[Dict[str, str]] = field(default=None)
