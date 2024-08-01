@@ -1,6 +1,7 @@
 # logging_setup.py
 
 import logging
+from pythonjsonlogger import jsonlogger
 from colorlog import ColoredFormatter
 
 
@@ -24,13 +25,29 @@ def initialize_logger(debug: bool):
         playbook_logger.setLevel(logging.DEBUG)
     else:
         playbook_logger.setLevel(logging.INFO)
+
+    # output to console
     console_handler = logging.StreamHandler()
     LOGFORMAT = '  %(asctime)s %(log_color)s%(levelname)-8s%(reset)s' '| %(log_color)s%(message)s%(reset)s'
     formatter = ColoredFormatter(LOGFORMAT, datefmt='%Y-%m-%d %H:%M:%S')
     console_handler.setFormatter(formatter)
+
+    # plain text output
     playbook_logger.addHandler(console_handler)
     file_handler = logging.FileHandler('attackmate.log', mode='w')
     formatter = logging.Formatter('%(asctime)s %(levelname)s - %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
     file_handler.setFormatter(formatter)
     playbook_logger.addHandler(file_handler)
+
     return playbook_logger
+
+
+def initialize_json_logger():
+    json_logger = logging.getLogger('json')
+    json_logger.setLevel(logging.DEBUG)
+    file_handler = logging.FileHandler('attackmate.json', mode='w')
+    formatter = jsonlogger.JsonFormatter()
+    file_handler.setFormatter(formatter)
+    json_logger.addHandler(file_handler)
+
+    return json_logger

@@ -109,6 +109,7 @@ class BaseExecutor(ExitOnError, CmdVars, Looper, Background):
         except ExecException as error:
             result = Result(error, 1)
         self.save_output(command, result)
+        self.log_json(self.json_logger, command, result)
         if not command.background:
             self.exit_on_error(command, result)
             self.set_result_vars(result)
