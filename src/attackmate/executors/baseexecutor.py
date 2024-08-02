@@ -27,7 +27,7 @@ class BaseExecutor(ExitOnError, CmdVars, Looper, Background):
 
     """
 
-    def __init__(self, pm: ProcessManager, variablestore: VariableStore, cmdconfig=CommandConfig()):
+    def __init__(self, pm: ProcessManager, varstore: VariableStore, cmdconfig=CommandConfig()):
         """Constructor for BaseExecutor
 
         Parameters
@@ -37,7 +37,7 @@ class BaseExecutor(ExitOnError, CmdVars, Looper, Background):
 
         """
         Background.__init__(self, pm)
-        CmdVars.__init__(self, variablestore)
+        CmdVars.__init__(self, varstore)
         ExitOnError.__init__(self)
         Looper.__init__(self, cmdconfig)
         self.logger = logging.getLogger('playbook')
