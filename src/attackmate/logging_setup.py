@@ -41,7 +41,9 @@ def initialize_logger(debug: bool):
     return playbook_logger
 
 
-def initialize_json_logger():
+def initialize_json_logger(json: bool):
+    if not json:
+        return None
     json_logger = logging.getLogger('json')
     json_logger.setLevel(logging.DEBUG)
     file_handler = logging.FileHandler('attackmate.json', mode='w')
