@@ -80,6 +80,7 @@ class AttackMate:
             'debug': executors.DebugExecutor(**init_args),
             'include': executors.IncludeExecutor(**init_args, runfunc=self.run_commands),
             'regex': executors.RegExExecutor(**init_args),
+            'vnc': executors.VncExecutor(**init_args),
         }
 
     def run_commands(self, commands: Commands):
