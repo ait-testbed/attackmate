@@ -13,44 +13,12 @@ import logging
 import traceback
 from typing import Optional
 from pathlib import Path
-from colorlog import ColoredFormatter
 from pydantic import ValidationError
-from .attackmate import AttackMate
+from attackmate.attackmate import AttackMate
 from attackmate.schemas.config import Config
 from attackmate.schemas.playbook import Playbook
-from .metadata import __version_string__
-
-
-def initialize_output_logger(debug: bool):
-    output_logger = logging.getLogger('output')
-    if debug:
-        output_logger.setLevel(logging.DEBUG)
-    else:
-        output_logger.setLevel(logging.INFO)
-    file_handler = logging.FileHandler('output.log', mode='w')
-    formatter = logging.Formatter(
-        '--- %(asctime)s %(levelname)s: ---\n\n%(message)s', datefmt='%Y-%m-%d %H:%M:%S'
-    )
-    file_handler.setFormatter(formatter)
-    output_logger.addHandler(file_handler)
-
-
-def initialize_logger(debug: bool):
-    playbook_logger = logging.getLogger('playbook')
-    if debug:
-        playbook_logger.setLevel(logging.DEBUG)
-    else:
-        playbook_logger.setLevel(logging.INFO)
-    console_handler = logging.StreamHandler()
-    LOGFORMAT = '  %(asctime)s %(log_color)s%(levelname)-8s%(reset)s' '| %(log_color)s%(message)s%(reset)s'
-    formatter = ColoredFormatter(LOGFORMAT, datefmt='%Y-%m-%d %H:%M:%S')
-    console_handler.setFormatter(formatter)
-    playbook_logger.addHandler(console_handler)
-    file_handler = logging.FileHandler('attackmate.log', mode='w')
-    formatter = logging.Formatter('%(asctime)s %(levelname)s - %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
-    file_handler.setFormatter(formatter)
-    playbook_logger.addHandler(file_handler)
-    return playbook_logger
+from attackmate.metadata import __version_string__
+from attackmate.logging_setup import initialize_logger, initialize_output_logger, initialize_json_logger
 
 
 def load_configfile(config_file: str) -> Config:
@@ -194,6 +162,7 @@ def parse_args():
     parser = argparse.ArgumentParser(prog='attackmate', description=description, epilog=__version_string__)
     parser.add_argument('--config', help='Configfile in yaml-format')
     parser.add_argument('--debug', action='store_true', default=False, help='Enable verbose output')
+    parser.add_argument('--json', action='store_true', default=False, help='log commands to attackmate.json')
     parser.add_argument('--version', action='version', version=__version_string__)
     parser.add_argument('playbook', help='Playbook in yaml-format')
     return parser.parse_args()
@@ -203,6 +172,7 @@ def main():
     args = parse_args()
     logger = initialize_logger(args.debug)
     initialize_output_logger(args.debug)
+    initialize_json_logger(args.json)
     hacky = AttackMate(parse_playbook(args.playbook, logger), parse_config(args.config, logger))
     sys.exit(hacky.main())
 
