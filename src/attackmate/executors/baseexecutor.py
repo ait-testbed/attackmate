@@ -80,7 +80,7 @@ class BaseExecutor(ExitOnError, CmdVars, Looper, Background):
         """Log starting-status of the command"""
         self.logger.info(f"Executing '{command}'")
 
-    def log_metadata(self, logger: logging.Logger, command: BaseCommand):
+    def log_metadata(self, logger: logging.Logger, command):
         """Log metadata of the command"""
         if command.metadata:
             logger.info(f'Metadata: {json.dumps(command.metadata)}')

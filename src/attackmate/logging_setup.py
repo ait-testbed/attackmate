@@ -1,7 +1,6 @@
 # logging_setup.py
 
 import logging
-from pythonjsonlogger import jsonlogger
 from colorlog import ColoredFormatter
 
 
