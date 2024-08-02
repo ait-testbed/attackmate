@@ -9,25 +9,7 @@ configuration.
 """
 
 import logging
-from attackmate.executors import (
-    ShellExecutor,
-    SSHExecutor,
-    MsfSessionExecutor,
-    MsfPayloadExecutor,
-    MsfSessionStore,
-    MsfModuleExecutor,
-    SliverExecutor,
-    SliverSessionExecutor,
-    FatherExecutor,
-    WebServExecutor,
-    HttpClientExecutor,
-    SetVarExecutor,
-    SleepExecutor,
-    TempfileExecutor,
-    DebugExecutor,
-    IncludeExecutor,
-    RegExExecutor,
-)
+import attackmate.executors as executors
 from attackmate.schemas.config import Config
 from attackmate.schemas.playbook import Playbook, Commands
 from .variablestore import VariableStore
@@ -68,36 +50,36 @@ class AttackMate:
         all possible executors.
 
         """
-        self.msfsessionstore = MsfSessionStore(self.varstore)
-        executor_classes = {
-            'shell': ShellExecutor,
-            'sleep': SleepExecutor,
-            'ssh': SSHExecutor,
-            'father': FatherExecutor,
-            'msf-module': MsfModuleExecutor,
-            'msf-payload': MsfPayloadExecutor,
-            'msf-session': MsfSessionExecutor,
-            'debug': DebugExecutor,
-            'webserv': WebServExecutor,
-            'setvar': SetVarExecutor,
-            'regex': RegExExecutor,
-            'sliver': SliverExecutor,
-            'sliver-session': SliverSessionExecutor,
-            'mktemp': TempfileExecutor,
-            'include': IncludeExecutor,
-            'http-client': HttpClientExecutor,
+        self.msfsessionstore = executors.MsfSessionStore(self.varstore)
+        init_args = {
+            'pm': self.pm,
+            'varstore': self.varstore,
+            'cmdconfig': self.pyconfig.cmd_config,
         }
+
         self.executors = {
-            key: cls(
-                self.pm,
-                self.pyconfig.cmd_config,
-                varstore=self.varstore,
-                msfconfig=self.pyconfig.msf_config if 'msf' in key else None,
-                msfsessionstore=self.msfsessionstore if key == 'msf-session' else None,
-                sliver_config=self.pyconfig.sliver_config if 'sliver' in key else None,
-                runfunc=self.run_commands if key == 'include' else None,
-            )
-            for key, cls in executor_classes.items()
+            'shell': executors.ShellExecutor(**init_args),
+            'ssh': executors.SSHExecutor(**init_args),
+            'msf-session': executors.MsfSessionExecutor(
+                **init_args, msfconfig=self.pyconfig.msf_config, msfsessionstore=self.msfsessionstore
+            ),
+            'msf-payload': executors.MsfPayloadExecutor(**init_args, msfconfig=self.pyconfig.msf_config),
+            'msf-module': executors.MsfModuleExecutor(
+                **init_args, msfconfig=self.pyconfig.msf_config, msfsessionstore=self.msfsessionstore
+            ),
+            'sliver': executors.SliverExecutor(**init_args, sliver_config=self.pyconfig.sliver_config),
+            'sliver-session': executors.SliverSessionExecutor(
+                **init_args, sliver_config=self.pyconfig.sliver_config
+            ),
+            'father': executors.FatherExecutor(**init_args),
+            'webserv': executors.WebServExecutor(**init_args),
+            'http-client': executors.HttpClientExecutor(**init_args),
+            'setvar': executors.SetVarExecutor(**init_args),
+            'sleep': executors.SleepExecutor(**init_args),
+            'mktemp': executors.TempfileExecutor(**init_args),
+            'debug': executors.DebugExecutor(**init_args),
+            'include': executors.IncludeExecutor(**init_args, runfunc=self.run_commands),
+            'regex': executors.RegExExecutor(**init_args),
         }
 
     def run_commands(self, commands: Commands):
