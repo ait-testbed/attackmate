@@ -88,7 +88,7 @@ class BaseExecutor(ExitOnError, CmdVars, Looper, Background):
     def log_json(self, logger: logging.Logger, command, time):
         command_dict = OrderedDict()
         command_dict['start-datetime'] = time
-        if command.type:
+        if hasattr(command, 'type'):
             command_dict['type'] = command.type
         command_dict['cmd'] = command.cmd
 
