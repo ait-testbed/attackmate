@@ -180,12 +180,30 @@ Every command, regardless of the type has the following general options:
 
 .. confval:: kill_on_exit
 
-   If this command runs in background-mode, the option *kill_on_exit* controlls
+   If this command runs in background-mode, the option *kill_on_exit* controls
    if the main process will wait for this subprocess before exitting or if the
    main process will simply kill the subprocess.
 
    :type: bool
    :default: ``True``
+
+.. confval:: metadata
+
+   The option *metadata* can be used to pass a dictionary of key value pairs.
+   These are not used in command execution but are logged together with the command.
+
+   :type: Dict
+   :default: None
+
+   .. code-block:: yaml
+
+      commands:
+        - type: debug
+          cmd: Come on, Cat
+          metadata:
+            version: 1
+            author: Ellen Ripley
+
 
 The next pages will describe all possible commands in detail.
 
