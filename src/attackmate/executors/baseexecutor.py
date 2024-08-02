@@ -14,7 +14,6 @@ from attackmate.schemas.base import BaseCommand
 from attackmate.schemas.config import CommandConfig
 from attackmate.variablestore import VariableStore
 from attackmate.processmanager import ProcessManager
-from attackmate.helper import deep_merge
 
 
 class BaseExecutor(ExitOnError, CmdVars, Looper, Background):
@@ -87,16 +86,16 @@ class BaseExecutor(ExitOnError, CmdVars, Looper, Background):
             logger.info(f'Metadata: {json.dumps(command.metadata)}')
 
     def log_json(self, logger: logging.Logger, command, time):
-        """Log metadata of the command"""
         command_dict = OrderedDict()
         command_dict['start-datetime'] = time
         command_dict['type'] = command.type
         command_dict['cmd'] = command.cmd
-        command_dict['parameters'] = {}
 
+        command_dict['parameters'] = dict()
         for key, value in command.__dict__.items():
             if key not in command_dict:
-                command_dict['parameters'][key] = deep_merge(value)
+                command_dict['parameters'][key] = value
+
         logger.info(json.dumps(command_dict))
 
     def save_output(self, command: BaseCommand, result: Result):
