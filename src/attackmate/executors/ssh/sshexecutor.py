@@ -38,7 +38,7 @@ class SSHExecutor(BaseExecutor, SFTPFeature, Interactive):
         self.jmp_port = 22
         self.jmp_username = self.username
 
-    def cache_settings(self, command: SSHCommand):
+    def cache_settings(self, command: SFTPCommand | SSHCommand):
         if command.hostname:
             self.hostname = command.hostname
         if command.port:
@@ -64,7 +64,7 @@ class SSHExecutor(BaseExecutor, SFTPFeature, Interactive):
         self.cache_settings(command)
         self.logger.info(f"Executing SSH-Command: '{command.cmd}'")
 
-    def connect_jmphost(self, command: SSHCommand):
+    def connect_jmphost(self, command: SFTPCommand | SSHCommand):
         jmp = SSHClient()
         jmp.load_system_host_keys()
         jmp.set_missing_host_key_policy(AutoAddPolicy())
@@ -87,7 +87,7 @@ class SSHExecutor(BaseExecutor, SFTPFeature, Interactive):
             raise ExecException(f'Could not get transport of SSH-Jumphost {self.jmp_hostname}')
         return sock
 
-    def connect_use_session(self, command: SSHCommand) -> SSHClient:
+    def connect_use_session(self, command: SFTPCommand | SSHCommand) -> SSHClient:
         if command.session is not None:
             if not self.session_store.has_session(command.session):
                 raise ExecException(f'SSH-Session not in Session-Store: {command.session}')
@@ -120,7 +120,7 @@ class SSHExecutor(BaseExecutor, SFTPFeature, Interactive):
             self.session_store.set_session(command.creates_session, client)
         return client
 
-    def _exec_cmd(self, command) -> Result:
+    def _exec_cmd(self, command: SFTPCommand | SSHCommand) -> Result:
         error = None
         output = ''
 
