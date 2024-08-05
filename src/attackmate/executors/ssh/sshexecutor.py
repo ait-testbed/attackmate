@@ -120,7 +120,7 @@ class SSHExecutor(BaseExecutor, SFTPFeature, Interactive):
             self.session_store.set_session(command.creates_session, client)
         return client
 
-    def _exec_cmd(self, command: SSHCommand) -> Result:
+    def _exec_cmd(self, command) -> Result:
         error = None
         output = ''
 
