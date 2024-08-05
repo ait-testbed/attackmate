@@ -60,6 +60,7 @@ class AttackMate:
         self.executors = {
             'shell': executors.ShellExecutor(**init_args),
             'ssh': executors.SSHExecutor(**init_args),
+            'sftp': executors.SSHExecutor(**init_args),
             'msf-session': executors.MsfSessionExecutor(
                 **init_args, msfconfig=self.pyconfig.msf_config, msfsessionstore=self.msfsessionstore
             ),
