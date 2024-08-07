@@ -57,9 +57,13 @@ class AttackMate:
             'cmdconfig': self.pyconfig.cmd_config,
         }
 
+        # same executor instance for ssh and sftp commands
+        ssh_executor = executors.SSHExecutor(**init_args)
+
         self.executors = {
             'shell': executors.ShellExecutor(**init_args),
-            'ssh': executors.SSHExecutor(**init_args),
+            'ssh': ssh_executor,
+            'sftp': ssh_executor,
             'msf-session': executors.MsfSessionExecutor(
                 **init_args, msfconfig=self.pyconfig.msf_config, msfsessionstore=self.msfsessionstore
             ),
