@@ -35,12 +35,12 @@ class AttackMate:
         self.pm = ProcessManager()
         self.pyconfig = config
         self.playbook = playbook
-        self.initialize_variable_parser()
+        self._initialize_variable_parser()
         self.msfsessionstore = executors.MsfSessionStore(self.varstore)
-        self.executor_config = self.get_executor_config()
+        self.executor_config = self._get_executor_config()
         self.executors: Dict[str, BaseExecutor] = {}
 
-    def initialize_variable_parser(self):
+    def _initialize_variable_parser(self):
         """Initializes the variable-parser
 
         The variablestore stores and replaces variables with values in certain strings
@@ -48,7 +48,7 @@ class AttackMate:
         self.varstore = VariableStore()
         self.varstore.from_dict(self.playbook.vars)
 
-    def get_executor_config(self) -> dict:
+    def _get_executor_config(self) -> dict:
         config = {
             'pm': self.pm,
             'varstore': self.varstore,
@@ -59,7 +59,7 @@ class AttackMate:
         }
         return config
 
-    def get_executor(self, command_type: str) -> BaseExecutor:
+    def _get_executor(self, command_type: str) -> BaseExecutor:
         if command_type not in self.executors:
             self.executors[command_type] = executor_factory.create_executor(
                 command_type, **self.executor_config
@@ -67,12 +67,10 @@ class AttackMate:
 
         return self.executors[command_type]
 
-    def run_commands(self, commands: Commands):
+    def _run_commands(self, commands: Commands):
         for command in commands:
-            if command.type == 'sftp':
-                executor = self.get_executor('ssh')
-            else:
-                executor = self.get_executor(command.type)
+            command_type = 'ssh' if command.type == 'sftp' else command.type
+            executor = self._get_executor(command_type)
             if executor:
                 executor.run(command)
 
@@ -84,7 +82,7 @@ class AttackMate:
 
         """
         try:
-            self.run_commands(self.playbook.commands)
+            self._run_commands(self.playbook.commands)
             self.pm.kill_or_wait_processes()
         except KeyboardInterrupt:
             self.logger.warn('Program stopped manually')
