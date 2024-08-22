@@ -1,7 +1,8 @@
-from attackmate.variablestore import VariableStore
+from attackmate.variablestore import VariableStore, ListParseException
+import unittest
 
 
-class TestVariableStore:
+class TestVariableStore(unittest.TestCase):
 
     def test_set_and_get_variable(self):
         var_store = VariableStore()
@@ -48,3 +49,23 @@ class TestVariableStore:
         assert len(var_store.variables) == 1
         var_store.clear()
         assert len(var_store.variables) == 0
+
+    def test_is_list(self):
+        assert VariableStore.is_list('blah') is False
+        assert VariableStore.is_list('blah][') is False
+        assert VariableStore.is_list('blah]') is False
+        assert VariableStore.is_list('blah[]') is True
+        assert VariableStore.is_list('blah["hello"]') is True
+        assert VariableStore.is_list('blah[1]') is True
+        assert VariableStore.is_list('$blah[1]') is True
+
+    def test_parse_list(self):
+        result = VariableStore.parse_list('$blah["hello"]')
+        assert result[0] == '$blah'
+        assert result[1] == 'hello'
+        self.assertRaises(ListParseException, VariableStore.parse_list, 'blah["hello]')
+        self.assertRaises(ListParseException, VariableStore.parse_list, 'blah[\'hello]')
+        self.assertRaises(ListParseException, VariableStore.parse_list, 'blah[hello"]')
+        self.assertRaises(ListParseException, VariableStore.parse_list, 'blah[hello\']')
+        self.assertRaises(ListParseException, VariableStore.parse_list, 'blah[\'hello"]')
+        self.assertRaises(ListParseException, VariableStore.parse_list, 'blah["hello\']')

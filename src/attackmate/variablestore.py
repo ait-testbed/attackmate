@@ -1,5 +1,15 @@
 from string import Template
+import re
 from typing import Any, Optional
+
+
+class ListParseException(Exception):
+    """ Exception for all List-Parser
+
+    This exception is raised by parse_list if anything
+    goes wrong.
+    """
+    pass
 
 
 class VariableStore:
@@ -7,7 +17,49 @@ class VariableStore:
         self.clear()
 
     def clear(self):
+        self.lists = {}
         self.variables = {}
+
+    @classmethod
+    def is_list(cls, variable: str) -> bool:
+        if re.search(r'\[[^\[]*\]\Z', variable):
+            return True
+        else:
+            return False
+
+    @classmethod
+    def parse_list(cls, variable: str) -> tuple[str, str]:
+        parsed = re.search(r'\A([^\[\]]+)\[([^\[]*)\]\Z', variable)
+
+        if parsed is None:
+            raise ListParseException('List could not be parsed')
+
+        if parsed.group(2) is None:
+            raise ListParseException('List-value is None')
+        else:
+            value = parsed.group(2)
+
+        if value.startswith('"'):
+            if value.endswith('"'):
+                value = value[1:-1]
+            else:
+                raise ListParseException('List-value does not end with character "')
+
+        if value.endswith('"'):
+            if not value.startswith('"'):
+                raise ListParseException('List-value does not start with character "')
+
+        if value.startswith('\''):
+            if value.endswith('\''):
+                value = value[1:-1]
+            else:
+                raise ListParseException('List-value does not end with character \'')
+
+        if value.endswith('\''):
+            if not value.startswith('\''):
+                raise ListParseException('List-value does not start with character \'')
+
+        return (parsed.group(1), value)
 
     def from_dict(self, variables: Optional[dict]):
         if isinstance(variables, dict):
