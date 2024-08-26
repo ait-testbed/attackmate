@@ -10,6 +10,12 @@ class TestVariableStore(unittest.TestCase):
         var_store.set_variable('foo', 'bar')
         assert len(var_store.variables) == old_len + 1
         assert var_store.get_variable('foo') == 'bar'
+        var_store.set_variable('hello', ['world', 'mundo'])
+        assert len(var_store.lists['hello']) == 2
+        assert var_store.lists['hello'][0] == 'world'
+        assert var_store.lists['hello'][1] == 'mundo'
+        var_store.set_variable('hello[1]', 'lala')
+        assert var_store.lists['hello'][1] == 'lala'
 
     def test_substitute_variable(self):
         var_store = VariableStore()
@@ -55,14 +61,14 @@ class TestVariableStore(unittest.TestCase):
         assert VariableStore.is_list('blah][') is False
         assert VariableStore.is_list('blah]') is False
         assert VariableStore.is_list('blah[]') is False
-        assert VariableStore.is_list('blah["hello"]') is True
+        assert VariableStore.is_list('blah["one"]') is False
         assert VariableStore.is_list('blah[1]') is True
         assert VariableStore.is_list('$blah[1]') is True
 
     def test_parse_list(self):
-        result = VariableStore.parse_list('$blah["hello"]')
+        result = VariableStore.parse_list('$blah[0]')
         assert result[0] == '$blah'
-        assert result[1] == 'hello'
+        assert result[1] == 0
         self.assertRaises(ListParseException, VariableStore.parse_list, 'blah["hello]')
         self.assertRaises(ListParseException, VariableStore.parse_list, 'blah[\'hello]')
         self.assertRaises(ListParseException, VariableStore.parse_list, 'blah[hello"]')

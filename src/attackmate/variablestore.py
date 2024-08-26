@@ -17,19 +17,19 @@ class VariableStore:
         self.clear()
 
     def clear(self):
-        self.lists = {}
+        self.lists: dict[str, list[str]] = {}
         self.variables = {}
 
     @classmethod
     def is_list(cls, variable: str) -> bool:
-        if re.search(r'\[[^\[]+\]\Z', variable):
+        if re.search(r'\[[0-9]+\]\Z', variable):
             return True
         else:
             return False
 
     @classmethod
-    def parse_list(cls, variable: str) -> tuple[str, str]:
-        parsed = re.search(r'\A([^\[\]]+)\[([^\[]+)\]\Z', variable)
+    def parse_list(cls, variable: str) -> tuple[str, int]:
+        parsed = re.search(r'\A([^\[\]]+)\[([0-9]+)\]\Z', variable)
 
         if parsed is None:
             raise ListParseException('List could not be parsed')
@@ -39,27 +39,7 @@ class VariableStore:
         else:
             value = parsed.group(2)
 
-        if value.startswith('"'):
-            if value.endswith('"'):
-                value = value[1:-1]
-            else:
-                raise ListParseException('List-value does not end with character "')
-
-        if value.endswith('"'):
-            if not value.startswith('"'):
-                raise ListParseException('List-value does not start with character "')
-
-        if value.startswith('\''):
-            if value.endswith('\''):
-                value = value[1:-1]
-            else:
-                raise ListParseException('List-value does not end with character \'')
-
-        if value.endswith('\''):
-            if not value.startswith('\''):
-                raise ListParseException('List-value does not start with character \'')
-
-        return (parsed.group(1), value)
+        return (parsed.group(1), int(value))
 
     def from_dict(self, variables: Optional[dict]):
         if isinstance(variables, dict):
@@ -83,8 +63,17 @@ class VariableStore:
         else:
             return temp.safe_substitute(self.variables)
 
-    def set_variable(self, variable: str, value: str):
-        self.variables[self.remove_sign(variable)] = value
+    def set_variable(self, variable: str, value: str | list[str]):
+        if isinstance(variable, str):
+            varname = self.remove_sign(variable)
+            if isinstance(value, str):
+                if self.is_list(varname):
+                    parsed = self.parse_list(varname)
+                    self.lists[parsed[0]][parsed[1]] = value
+                else:
+                    self.variables[varname] = value
+            if isinstance(value, list):
+                self.lists[varname] = value
 
     def get_variable(self, variable: str):
         return self.variables[variable]
