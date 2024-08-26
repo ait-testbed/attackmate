@@ -29,12 +29,14 @@ class TestVariableStore(unittest.TestCase):
         assert var_store.substitute('hello foo $foo', True) == 'hello foo bar'
         assert var_store.substitute('hello foo $bar') == 'hello foo $bar'
         assert var_store.substitute('hello foo $$foo') == 'hello foo $foo'
+        assert var_store.substitute('hello foo $$foo') == 'hello foo $foo'
         assert var_store.substitute('hello foo $bar', True) == ''
         assert var_store.substitute(None) is None
         assert var_store.substitute(None, True) is None
         assert var_store.substitute(list['a', 'b']) == list['a', 'b']
         var_store.set_variable('first', ['one', 'two'])
         assert var_store.substitute('hello $first[0] $foo') == 'hello one bar'
+        assert var_store.substitute('hello $$first[0] $foo') == 'hello $first[0] bar'
         assert var_store.substitute('hello $first[1] $foo') == 'hello two bar'
 
     def test_remove_sign(self):
