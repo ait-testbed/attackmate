@@ -65,8 +65,7 @@ class VariableStore:
     def from_dict(self, variables: Optional[dict]):
         if isinstance(variables, dict):
             for k, v in variables.items():
-                name = self.remove_sign(k)
-                self.variables[name] = v
+                self.set_variable(k, v)
 
     def remove_sign(self, name: str, sign: str = '$') -> str:
         if name.startswith(sign):

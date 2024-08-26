@@ -46,11 +46,13 @@ class TestVariableStore(unittest.TestCase):
     def test_from_dict(self):
         var_store = VariableStore()
         var_store.set_variable('hello', 'world')
-        var_blah = {'a': 'foo', 'b': 'bar'}
+        var_blah = {'a': 'foo', 'b': 'bar', 'lista': ['one', 'two']}
         var_store.from_dict(var_blah)
         assert var_store.get_variable('hello') == 'world'
         assert var_store.get_variable('a') == 'foo'
         assert var_store.get_variable('b') == 'bar'
+        assert var_store.get_variable('lista')[0] == 'one'
+        assert var_store.get_variable('lista')[1] == 'two'
         assert len(var_store.variables) == 3
         var_store.from_dict(['a'])
         assert len(var_store.variables) == 3
