@@ -22,14 +22,14 @@ class VariableStore:
 
     @classmethod
     def is_list(cls, variable: str) -> bool:
-        if re.search(r'\[[^\[]*\]\Z', variable):
+        if re.search(r'\[[^\[]+\]\Z', variable):
             return True
         else:
             return False
 
     @classmethod
     def parse_list(cls, variable: str) -> tuple[str, str]:
-        parsed = re.search(r'\A([^\[\]]+)\[([^\[]*)\]\Z', variable)
+        parsed = re.search(r'\A([^\[\]]+)\[([^\[]+)\]\Z', variable)
 
         if parsed is None:
             raise ListParseException('List could not be parsed')

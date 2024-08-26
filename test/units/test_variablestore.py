@@ -54,7 +54,7 @@ class TestVariableStore(unittest.TestCase):
         assert VariableStore.is_list('blah') is False
         assert VariableStore.is_list('blah][') is False
         assert VariableStore.is_list('blah]') is False
-        assert VariableStore.is_list('blah[]') is True
+        assert VariableStore.is_list('blah[]') is False
         assert VariableStore.is_list('blah["hello"]') is True
         assert VariableStore.is_list('blah[1]') is True
         assert VariableStore.is_list('$blah[1]') is True
@@ -69,3 +69,4 @@ class TestVariableStore(unittest.TestCase):
         self.assertRaises(ListParseException, VariableStore.parse_list, 'blah[hello\']')
         self.assertRaises(ListParseException, VariableStore.parse_list, 'blah[\'hello"]')
         self.assertRaises(ListParseException, VariableStore.parse_list, 'blah["hello\']')
+        self.assertRaises(ListParseException, VariableStore.parse_list, 'blah[]')
