@@ -1,4 +1,4 @@
-from attackmate.variablestore import VariableStore, ListParseException
+from attackmate.variablestore import VariableNotFound, VariableStore, ListParseException
 import unittest
 
 
@@ -11,11 +11,16 @@ class TestVariableStore(unittest.TestCase):
         assert len(var_store.variables) == old_len + 1
         assert var_store.get_variable('foo') == 'bar'
         var_store.set_variable('hello', ['world', 'mundo'])
-        assert len(var_store.lists['hello']) == 2
-        assert var_store.lists['hello'][0] == 'world'
-        assert var_store.lists['hello'][1] == 'mundo'
+        assert len(var_store.get_variable('hello')) == 2
+        assert var_store.get_variable('hello')[0] == 'world'
+        assert var_store.get_variable('hello')[1] == 'mundo'
         var_store.set_variable('hello[1]', 'lala')
-        assert var_store.lists['hello'][1] == 'lala'
+        assert var_store.get_variable('hello')[1] == 'lala'
+        tmp = 'hello'
+        var_store.set_variable('hello[1]', tmp)
+        tmp = 'yolo'
+        assert var_store.get_variable('hello')[1] == 'hello'
+        self.assertRaises(VariableNotFound, var_store.get_variable, 'notfound')
 
     def test_substitute_variable(self):
         var_store = VariableStore()
@@ -28,6 +33,9 @@ class TestVariableStore(unittest.TestCase):
         assert var_store.substitute(None) is None
         assert var_store.substitute(None, True) is None
         assert var_store.substitute(list['a', 'b']) == list['a', 'b']
+        var_store.set_variable('first', ['one', 'two'])
+        assert var_store.substitute('hello $first[0] $foo') == 'hello one bar'
+        assert var_store.substitute('hello $first[1] $foo') == 'hello two bar'
 
     def test_remove_sign(self):
         var_store = VariableStore()
@@ -76,3 +84,15 @@ class TestVariableStore(unittest.TestCase):
         self.assertRaises(ListParseException, VariableStore.parse_list, 'blah[\'hello"]')
         self.assertRaises(ListParseException, VariableStore.parse_list, 'blah["hello\']')
         self.assertRaises(ListParseException, VariableStore.parse_list, 'blah[]')
+
+    def test_get_list_variables(self) -> None:
+        var_store: VariableStore = VariableStore()
+        var_store.set_variable('first', ['a', 'b', 'c'])
+        var_store.set_variable('second', ['one', 'two', 'three'])
+        all_list_vars = var_store.get_lists_variables()
+        assert all_list_vars['first[0]'] == 'a'
+        assert all_list_vars['first[1]'] == 'b'
+        assert all_list_vars['first[2]'] == 'c'
+        assert all_list_vars['second[0]'] == 'one'
+        assert all_list_vars['second[1]'] == 'two'
+        assert all_list_vars['second[2]'] == 'three'
