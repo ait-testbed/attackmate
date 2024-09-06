@@ -52,7 +52,7 @@ class VariableStore:
         else:
             list_name, index_str = parsed.groups()
 
-        return (list_name, int(index_str)
+        return (list_name, int(index_str))
 
     def get_lists_variables(self) -> dict[str, str]:
         ret = {}
