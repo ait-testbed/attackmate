@@ -31,7 +31,7 @@ class VariableStore:
 
     def clear(self):
         self.lists: dict[str, list[str]] = {}
-        [self.variables = {}](self.variables: dict[str, str] = {})
+        self.variables: dict[str, str] = {}
 
     @classmethod
     def is_list(cls, variable: str) -> bool:
