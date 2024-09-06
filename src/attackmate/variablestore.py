@@ -50,7 +50,7 @@ class VariableStore:
         if parsed.group(2) is None:
             raise ListParseException('List-value is None')
         else:
-            value = parsed.group(2)
+            list_name, index_str = parsed.groups()
 
         return (list_name, int(index_str)
 
