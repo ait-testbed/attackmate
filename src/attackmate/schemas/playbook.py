@@ -63,5 +63,5 @@ Commands = List[Union[
 
 
 class Playbook(BaseModel):
-    vars: Optional[Dict[str, StrInt]] = None
+    vars: Optional[Dict[str, List[StrInt] | StrInt]] = None
     commands: Commands
