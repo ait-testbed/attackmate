@@ -56,10 +56,10 @@ class VariableStore:
 
    def get_lists_variables(self) -> dict[str, str]:
        all_indexed_list_vars = {}
-           for list_name, list in self.lists.items():
-               for index, value in enumerate(list):
-                   all_indexed_list_vars[f'{list_name}[{index}]'] = value
-                   return all_indexed_list_vars
+       for list_name, list in self.lists.items():
+           for index, value in enumerate(list):
+               all_indexed_list_vars[f'{list_name}[{index}]'] = value
+       return all_indexed_list_vars
 
     def from_dict(self, variables: Optional[dict]):
         if isinstance(variables, dict):
