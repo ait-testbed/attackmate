@@ -31,7 +31,7 @@ class VariableStore:
 
     def clear(self):
         self.lists: dict[str, list[str]] = {}
-        self.variables = {}
+        self.variables: dict[str, str] = {}
 
     @classmethod
     def is_list(cls, variable: str) -> bool:
@@ -50,17 +50,16 @@ class VariableStore:
         if parsed.group(2) is None:
             raise ListParseException('List-value is None')
         else:
-            value = parsed.group(2)
+            list_name, index_str = parsed.groups()
 
-        return (parsed.group(1), int(value))
+        return (list_name, int(index_str))
 
     def get_lists_variables(self) -> dict[str, str]:
-        ret = {}
-
-        for k, v in self.lists.items():
-            for idx, val in enumerate(v):
-                ret[f'{k}[{idx}]'] = val
-        return ret
+        all_indexed_list_vars = {}
+        for list_name, list in self.lists.items():
+            for index, value in enumerate(list):
+                all_indexed_list_vars[f'{list_name}[{index}]'] = value
+        return all_indexed_list_vars
 
     def from_dict(self, variables: Optional[dict]):
         if isinstance(variables, dict):
@@ -102,8 +101,8 @@ class VariableStore:
             varname = self.remove_sign(variable)
             if isinstance(value, str):
                 if self.is_list(varname):
-                    parsed = self.parse_list(varname)
-                    self.lists[parsed[0]][parsed[1]] = value
+                    list_name, index = self.parse_list(varname)
+                    self.lists[list_name][index] = value
                 else:
                     self.variables[varname] = value
             if isinstance(value, list):
