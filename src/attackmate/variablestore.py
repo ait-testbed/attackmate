@@ -87,7 +87,7 @@ class VariableStore:
             varname = self.remove_sign(variable)
             if isinstance(value, str):
                 if self.is_list(varname):
-                    parsed = self.parse_list(varname)
+                    list_name, index = self.parse_list(varname)
                     self.lists[parsed[0]][parsed[1]] = value
                 else:
                     self.variables[varname] = value
