@@ -1,4 +1,4 @@
-from typing import Optional, List, Literal
+from typing import Optional, Literal, List
 from pydantic import ValidationInfo, field_validator
 from .base import BaseCommand, StringNumber
 
@@ -29,7 +29,6 @@ class SSHBase(BaseCommand):
 class SSHCommand(SSHBase):
     type: Literal['ssh']
     interactive: bool = False
-    validate_prompt: bool = True
     command_timeout: StringNumber = '15'
     prompts: List[str] = ['$ ', '# ', '> ']
     bin: bool = False

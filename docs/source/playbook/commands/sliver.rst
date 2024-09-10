@@ -110,14 +110,11 @@ The path to the implant is saved and can be retrieved from the variable store as
    ###
    commands:
      - type: sliver
-       cmd: start_https_listener
-       host: 0.0.0.0
-       port: 443
-
-     - type: sliver
        cmd: generate_implant
+       c2url: "https://myC2url.com"
        name: "linux_implant"
        target: linux/amd64
+       filepath: /path/to/implant/my_implant
 
 
 .. confval:: target
@@ -156,14 +153,17 @@ The path to the implant is saved and can be retrieved from the variable store as
 
 .. confval:: name
 
-   Name of the Implant
+   Name of the implant.
+   This name is the session used by the attackmate command 'sliver-session'.
 
    :type: str
    :required: True
 
 .. confval:: filepath
 
-   The local filepath to save the implant to.
+   The local filepath to save the implant to. If none is given the implant is saved in /tmp.
+   The <name> will be random and have the format ^tmp[a-z0-9]{8}$.
+
 
    :type: str
    :default: ``/tmp/<name>``
