@@ -1,4 +1,8 @@
 import logging
+import json
+from datetime import datetime
+from typing import Any
+from collections import OrderedDict
 from attackmate.executors.features.cmdvars import CmdVars
 from attackmate.executors.features.exitonerror import ExitOnError
 from attackmate.executors.features.looper import Looper
@@ -10,7 +14,6 @@ from attackmate.schemas.base import BaseCommand
 from attackmate.schemas.config import CommandConfig
 from attackmate.variablestore import VariableStore
 from attackmate.processmanager import ProcessManager
-from typing import Any
 
 
 class BaseExecutor(ExitOnError, CmdVars, Looper, Background):
@@ -25,8 +28,9 @@ class BaseExecutor(ExitOnError, CmdVars, Looper, Background):
     _exec_cmd()
 
     """
-    def __init__(self, pm: ProcessManager, variablestore: VariableStore, cmdconfig=CommandConfig()):
-        """ Constructor for BaseExecutor
+
+    def __init__(self, pm: ProcessManager, varstore: VariableStore, cmdconfig=CommandConfig()):
+        """Constructor for BaseExecutor
 
         Parameters
         ----------
@@ -35,15 +39,16 @@ class BaseExecutor(ExitOnError, CmdVars, Looper, Background):
 
         """
         Background.__init__(self, pm)
-        CmdVars.__init__(self, variablestore)
+        CmdVars.__init__(self, varstore)
         ExitOnError.__init__(self)
         Looper.__init__(self, cmdconfig)
         self.logger = logging.getLogger('playbook')
+        self.json_logger = logging.getLogger('json')
         self.cmdconfig = cmdconfig
         self.output = logging.getLogger('output')
 
     def run(self, command: BaseCommand):
-        """ Execute the command
+        """Execute the command
 
         This method is executed by AttackMate and
         executes the given command. This method sets the
@@ -72,15 +77,32 @@ class BaseExecutor(ExitOnError, CmdVars, Looper, Background):
             self.exec(self.replace_variables(command))
 
     def log_command(self, command):
-        """ Log starting-status of the command
-
-        """
+        """Log starting-status of the command"""
         self.logger.info(f"Executing '{command}'")
 
+    def log_metadata(self, logger: logging.Logger, command):
+        """Log metadata of the command"""
+        if command.metadata:
+            logger.info(f'Metadata: {json.dumps(command.metadata)}')
+
+    def log_json(self, logger: logging.Logger, command, time):
+        command_dict = OrderedDict()
+        command_dict['start-datetime'] = time
+        if hasattr(command, 'type'):
+            command_dict['type'] = command.type
+        command_dict['cmd'] = command.cmd
+
+        command_dict['parameters'] = dict()
+        for key, value in command.__dict__.items():
+            if key not in command_dict:
+                command_dict['parameters'][key] = value
+
+        logger.info(json.dumps(command_dict))
+
     def save_output(self, command: BaseCommand, result: Result):
-        """ Save output of command to a file. This method will
-            ignore all exceptions and won't stop the programm
-            on error.
+        """Save output of command to a file. This method will
+        ignore all exceptions and won't stop the programm
+        on error.
         """
         if command.save:
             try:
@@ -92,9 +114,12 @@ class BaseExecutor(ExitOnError, CmdVars, Looper, Background):
     def exec(self, command: BaseCommand):
         try:
             self.log_command(command)
+            self.log_metadata(self.logger, command)
+            time_of_execution = datetime.now().isoformat()
             result = self._exec_cmd(command)
         except ExecException as error:
             result = Result(error, 1)
+        self.log_json(self.json_logger, command, time_of_execution)
         self.save_output(command, result)
         if not command.background:
             self.exit_on_error(command, result)

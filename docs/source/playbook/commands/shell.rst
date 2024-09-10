@@ -43,7 +43,7 @@ Execute local shell-commands.
    However, for some exploits it is necessary to run a command and send keystrokes to an
    interactive session. For example run with the first command "vim" and with the second command
    send keystrokes to the open vim-session. In interactive-mode the command will try reading the
-   output until no output is written for a certain amount of seconds. 
+   output until no output is written for a certain amount of seconds.
 
    This mode works only on unix and unix-like operating systems!
 
@@ -92,3 +92,18 @@ Execute local shell-commands.
 
    :type: str
    :default: ``/bin/sh``
+
+.. confval:: bin
+
+   Enable binary mode. In this mode only hex-characters are allowed.
+
+   :type: bool
+   :default: ``False``
+
+   .. code-block:: yaml
+
+      commands:
+        - type: shell
+          # hex-code for "id"
+          cmd: "6964"
+          bin: True

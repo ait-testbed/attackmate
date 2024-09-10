@@ -19,9 +19,9 @@ from attackmate.schemas.config import CommandConfig
 
 
 class MsfPayloadExecutor(BaseExecutor):
-    def __init__(self, pm: ProcessManager, varstore: VariableStore,
-                 cmdconfig=CommandConfig(), *,
-                 msfconfig=None):
+    def __init__(
+        self, pm: ProcessManager, varstore: VariableStore, cmdconfig=CommandConfig(), *, msfconfig=None
+    ):
         self.msfconfig = msfconfig
         self.msf = None
         self.tempfilestore: list[Any] = []

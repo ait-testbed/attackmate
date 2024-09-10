@@ -19,3 +19,4 @@ class ShellCommand(BaseCommand):
     command_timeout: StringNumber = '10'
     read: bool = True
     command_shell: str = '/bin/sh'
+    bin: Optional[bool] = False
