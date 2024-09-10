@@ -132,3 +132,82 @@ commands:
     env_vars = {'FOO': 'SHOULD_NOT_REPLACE', 'PLAYBOOK_VAR': 'SHOULD_NOT_REPLACE'}
     with patch.dict(os.environ, env_vars):
         assert replace_env_variables_in_playbook(playbook_with_env_var_value) == playbook_with_env_var_value
+
+
+def test_vars_section_variable_with_prefix():
+    # Test that prefixed variable is not replaced if no env var exists
+    playbook_with_env_var_value = """\
+vars:
+    ATTACKMATE_FOO: FOO
+commands:
+    - type: debug
+      cmd: echo $ATTACKMATE_FOO
+"""
+
+    assert replace_env_variables_in_playbook(playbook_with_env_var_value) == playbook_with_env_var_value
+
+
+def test_vars_section_variable_with_prefix_gets_replaced():
+    # Test that prefixed variable is replaced if env var exists
+    playbook_with_env_var_value = """\
+vars:
+    ATTACKMATE_FOO: foo
+commands:
+    - type: debug
+      cmd: echo $ATTACKMATE_FOO
+"""
+    env_vars = {'FOO': 'env_foo'}
+    with patch.dict(os.environ, env_vars):
+        expected_result = """\
+vars:
+    ATTACKMATE_FOO: foo
+commands:
+    - type: debug
+      cmd: echo env_foo
+"""
+        assert replace_env_variables_in_playbook(playbook_with_env_var_value) == expected_result
+
+
+def test_var_and_env_var_with_same_name():
+    # Test that prefixed variable is replaced if env var exists, but unprefixed var is not replaced
+    playbook_with_env_var_value = """\
+vars:
+    ATTACKMATE_FOO: foo
+    SAME_NAME_IN_VAR_SECTION_AND_ENV: bar
+commands:
+    - type: debug
+      cmd: echo $ATTACKMATE_FOO $SAME_NAME_IN_VAR_SECTION_AND_ENV
+"""
+    env_vars = {'FOO': 'env_foo'}
+    with patch.dict(os.environ, env_vars):
+        expected_result = """\
+vars:
+    ATTACKMATE_FOO: foo
+    SAME_NAME_IN_VAR_SECTION_AND_ENV: bar
+commands:
+    - type: debug
+      cmd: echo env_foo $SAME_NAME_IN_VAR_SECTION_AND_ENV
+"""
+        assert replace_env_variables_in_playbook(playbook_with_env_var_value) == expected_result
+
+
+def test_env_var_with_prefix():
+    # Test that env variable with ATTACKACKMATE prefix is replaced
+    # if that variable is not defined in vars section
+    playbook_with_env_var_value = """\
+vars:
+    ATTACKMATE_FOO: foo
+commands:
+    - type: debug
+      cmd: echo $ATTACKMATE_PREFIXED_VAR_NOT_DEFINED_IN_VAR_SECTION
+"""
+    env_vars = {'ATTACKMATE_PREFIXED_VAR_NOT_DEFINED_IN_VAR_SECTION': 'env_bar'}
+    with patch.dict(os.environ, env_vars):
+        expected_result = """\
+vars:
+    ATTACKMATE_FOO: foo
+commands:
+    - type: debug
+      cmd: echo env_bar
+"""
+        assert replace_env_variables_in_playbook(playbook_with_env_var_value) == expected_result
