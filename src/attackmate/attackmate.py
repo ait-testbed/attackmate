@@ -56,6 +56,7 @@ class AttackMate:
             'msfconfig': self.pyconfig.msf_config,
             'msfsessionstore': self.msfsessionstore,
             'sliver_config': self.pyconfig.sliver_config,
+            'runfunc': self._run_commands,
         }
         return config
 
