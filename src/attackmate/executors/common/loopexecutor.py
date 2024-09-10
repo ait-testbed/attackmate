@@ -73,6 +73,6 @@ class LoopExecutor(BaseExecutor):
         # idea: use runfunc with one command only
         # in that way it is possible to replace context-variables first
         # runfunc will replace global variables then
-        self.check_condition(command)
+        self.execute_loop(command)
         self.logger.info('Loop ends')
         return Result('', 0)
