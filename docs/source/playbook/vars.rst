@@ -14,9 +14,11 @@ they always must start with a $-sign.
 Environmental Variables
 =======================
 
-Variables names used in the format $SOME_VARIABLE in the commands-section that have NOT been defined in the vars-section will be replaced with 
+Variables names used in the format $SOME_VARIABLE in the commands-section that have NOT been defined in the vars-section will be replaced with
 environmental variables loaded with os.environ(). Parsing the playbook will fail if the environmental variable can not be loaded.
-Variable names in the var-section take precedence, they will never be replaced with environmental variables.
+Variable names already defined in the var-section take precedence, they will only be replaced with environmental variables if prefixed with "ATTACKMATE_".
+For example ATTACKMATE_FOO defined in the vars section will be overwritten by env variable value if env variable FOO exists.
+
 
 
 .. code-block:: yaml
@@ -26,14 +28,18 @@ Variable names in the var-section take precedence, they will never be replaced w
      $SERVER_ADDRESS: 192.42.0.254
      # the $-sign is not necessary here:
      NMAP: /usr/bin/nmap
+     $ATTACKMATE_FOO: foo
 
    commands:
      - type: shell
        # the $-sign is required when using the variable:
        cmd: $NMAP $SERVER_ADDRESS
     - type: shell
-       # This variable will be replaced by environmental variable:
+       # This variable is not defined in the vars section and will be replaced by environmental variable:
        cmd: echo $SOME_ENV_VAR
+    - type: shell
+       # This variable will be replaced by the environmental variable FOO if it exists:
+       cmd: echo $ATTACKMATE_FOO
 
 .. note::
 
