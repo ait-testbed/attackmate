@@ -48,7 +48,7 @@ class LoopExecutor(BaseExecutor):
                 template_cmd.cmd = tpl.substitute(LOOP_ITEM=x)
                 self.runfunc([template_cmd])
 
-    def check_condition(self, command: LoopCommand) -> None:
+    def execute_loop(self, command: LoopCommand) -> None:
         m = re.search(r'range\(\s*(\d+)\s*,\s*(\d+)\s*\)', command.cmd)
         if m:
             range_start: int = int(m.group(1))
