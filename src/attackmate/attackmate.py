@@ -83,6 +83,7 @@ class AttackMate:
             'mktemp': executors.TempfileExecutor(**init_args),
             'debug': executors.DebugExecutor(**init_args),
             'include': executors.IncludeExecutor(**init_args, runfunc=self.run_commands),
+            'loop': executors.LoopExecutor(**init_args, runfunc=self.run_commands),
             'regex': executors.RegExExecutor(**init_args),
         }
 

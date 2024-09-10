@@ -72,6 +72,20 @@ class VariableStore:
         else:
             return name
 
+    def get_list(self, listname: str) -> list[str]:
+        name = self.remove_sign(listname)
+        if name in self.lists:
+            return self.lists[name]
+        else:
+            raise VariableNotFound
+
+    def get_str(self, variable: str) -> str:
+        name = self.remove_sign(variable)
+        if name in self.variables:
+            return self.variables[name]
+        else:
+            raise VariableNotFound
+
     def substitute_str(self, template_str: str, blank: bool = False) -> str:
         temp = ListTemplate(template_str)
         if blank:
