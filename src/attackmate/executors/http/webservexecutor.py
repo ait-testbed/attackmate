@@ -11,8 +11,10 @@ from attackmate.schemas.http import WebServCommand
 from attackmate.executors.features.cmdvars import CmdVars
 from http.server import HTTPServer, BaseHTTPRequestHandler
 import magic
+from attackmate.executors.executor_factory import executor_factory
 
 
+@executor_factory.register_executor('webserv')
 class WebRequestHandler(BaseHTTPRequestHandler):
     def __init__(self, *args, local_path=None, **kwargs):
         self.local_path = local_path
