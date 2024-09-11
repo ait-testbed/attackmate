@@ -65,9 +65,9 @@ class BaseExecutor(ExitOnError, CmdVars, Looper, Background):
         if command.only_if:
             if not Conditional.test(self.varstore.substitute(command.only_if, True)):
                 if hasattr(command, 'type'):
-                    self.logger.warn(f'Skipping {command.type}: {command.cmd}')
+                    self.logger.warning(f'Skipping {command.type}: {command.cmd}')
                 else:
-                    self.logger.warn(f'Skipping {command.cmd}')
+                    self.logger.warning(f'Skipping {command.cmd}')
                 return
         self.reset_run_count()
         self.logger.debug(f"Template-Command: '{command.cmd}'")
@@ -86,16 +86,7 @@ class BaseExecutor(ExitOnError, CmdVars, Looper, Background):
             logger.info(f'Metadata: {json.dumps(command.metadata)}')
 
     def log_json(self, logger: logging.Logger, command, time):
-        command_dict = OrderedDict()
-        command_dict['start-datetime'] = time
-        if hasattr(command, 'type'):
-            command_dict['type'] = command.type
-        command_dict['cmd'] = command.cmd
-
-        command_dict['parameters'] = dict()
-        for key, value in command.__dict__.items():
-            if key not in command_dict:
-                command_dict['parameters'][key] = value
+        command_dict = self.make_command_serilizable(command, time)
 
         try:
             logger.info(json.dumps(command_dict))
@@ -107,6 +98,25 @@ class BaseExecutor(ExitOnError, CmdVars, Looper, Background):
                 e,
             )
 
+    def make_command_serilizable(self, command, time):
+        command_dict = OrderedDict()
+        command_dict['start-datetime'] = time
+        if hasattr(command, 'type'):
+            command_dict['type'] = command.type
+        command_dict['cmd'] = command.cmd
+
+        command_dict['parameters'] = dict()
+        for key, value in command.__dict__.items():
+            if key not in command_dict and key != 'commands':
+                command_dict['parameters'][key] = value
+            # Handle nested "commands" recursively
+            if key == 'commands' and isinstance(value, list):
+                command_dict['parameters']['commands'] = [
+                    self.make_command_serilizable(sub_command, time) for sub_command in value
+                ]
+
+        return command_dict
+
     def save_output(self, command: BaseCommand, result: Result):
         """Save output of command to a file. This method will
         ignore all exceptions and won't stop the programm
@@ -117,7 +127,7 @@ class BaseExecutor(ExitOnError, CmdVars, Looper, Background):
                 with open(command.save, 'w') as outfile:
                     outfile.write(result.stdout)
             except Exception as e:
-                self.logger.warn(f'Unable to write output to file {command.save}: {e}')
+                self.logger.warning(f'Unable to write output to file {command.save}: {e}')
 
     def exec(self, command: BaseCommand):
         try:
