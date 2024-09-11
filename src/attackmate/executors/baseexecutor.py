@@ -99,8 +99,13 @@ class BaseExecutor(ExitOnError, CmdVars, Looper, Background):
 
         try:
             logger.info(json.dumps(command_dict))
-        except TypeError:
-            logger.warn('log_json is broken')
+        except TypeError as e:
+            logger.warning(
+                'Failed to serialize object to JSON. '
+                'Ensure only basic data types (str, int, float, bool, list, dict) are used. '
+                'Error details: %s',
+                e,
+            )
 
     def save_output(self, command: BaseCommand, result: Result):
         """Save output of command to a file. This method will
