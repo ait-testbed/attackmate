@@ -14,7 +14,6 @@ import magic
 from attackmate.executors.executor_factory import executor_factory
 
 
-@executor_factory.register_executor('webserv')
 class WebRequestHandler(BaseHTTPRequestHandler):
     def __init__(self, *args, local_path=None, **kwargs):
         self.local_path = local_path
@@ -52,6 +51,7 @@ class WebServe(HTTPServer):
             pass
 
 
+@executor_factory.register_executor('webserv')
 class WebServExecutor(BaseExecutor):
 
     def log_command(self, command: WebServCommand):
