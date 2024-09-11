@@ -97,7 +97,10 @@ class BaseExecutor(ExitOnError, CmdVars, Looper, Background):
             if key not in command_dict:
                 command_dict['parameters'][key] = value
 
-        logger.info(json.dumps(command_dict))
+        try:
+            logger.info(json.dumps(command_dict))
+        except TypeError:
+            logger.warn('log_json is broken')
 
     def save_output(self, command: BaseCommand, result: Result):
         """Save output of command to a file. This method will
