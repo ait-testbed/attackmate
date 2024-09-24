@@ -86,7 +86,7 @@ class BaseExecutor(ExitOnError, CmdVars, Looper, Background):
             logger.info(f'Metadata: {json.dumps(command.metadata)}')
 
     def log_json(self, logger: logging.Logger, command, time):
-        command_dict = self.make_command_serilizable(command, time)
+        command_dict = self.make_command_serializable(command, time)
 
         try:
             logger.info(json.dumps(command_dict))
@@ -98,7 +98,7 @@ class BaseExecutor(ExitOnError, CmdVars, Looper, Background):
                 e,
             )
 
-    def make_command_serilizable(self, command, time):
+    def make_command_serializable(self, command, time):
         command_dict = OrderedDict()
         command_dict['start-datetime'] = time
         if hasattr(command, 'type'):
