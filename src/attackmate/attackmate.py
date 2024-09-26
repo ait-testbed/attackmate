@@ -42,6 +42,7 @@ class AttackMate:
         """
         self.varstore = VariableStore()
         self.varstore.from_dict(self.playbook.vars)
+        self.varstore.replace_with_prefixed_env_vars()
 
     def initialize_executors(self):
         """Initialize all Executors

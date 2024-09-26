@@ -1,23 +1,26 @@
 from string import Template
 import re
+import os
 from typing import Any, Optional
 
 
 class ListParseException(Exception):
-    """ Exception for all List-Parser
+    """Exception for all List-Parser
 
     This exception is raised by parse_list if anything
     goes wrong.
     """
+
     pass
 
 
 class VariableNotFound(Exception):
-    """ Exception for all List-Parser
+    """Exception for all List-Parser
 
     This exception is raised by get_variable if the
     variable does not exist in the variablestore.
     """
+
     pass
 
 
@@ -108,7 +111,7 @@ class VariableStore:
             if isinstance(value, list):
                 self.lists[varname] = list(value)
 
-    def get_variable(self, variable: str) -> (str | list[str]):
+    def get_variable(self, variable: str) -> str | list[str]:
         if variable in self.variables:
             return self.variables[variable]
         if variable in self.lists:
@@ -120,3 +123,15 @@ class VariableStore:
             return self.substitute_str(data, blank)
         else:
             return data
+
+    def get_prefixed_env_vars(self, prefix: str = "ATTACKMATE_") -> dict[str, str]:
+        prefixed_env_vars = {k[len(prefix) :]: v for k, v in os.environ.items() if k.startswith(prefix)}
+        return prefixed_env_vars
+
+    def replace_with_prefixed_env_vars(self):
+        """Replaces the current variables with corresponding prefixed environment variables if they exist."""
+        env_vars = self.get_prefixed_env_vars()
+
+        for var_name in list(self.variables.keys()):
+            if var_name in env_vars:
+                self.set_variable(var_name, env_vars[var_name])
