@@ -28,15 +28,13 @@ class Looper:
         if command.loop_if is not None:
             m = re.search(command.loop_if, result.stdout, re.MULTILINE)
             if m is not None:
-                self.logger.warning(
-                        f'Re-run command because loop_if matches: {m.group(0)}'
-                        )
+                self.logger.warning(f'Re-run command because loop_if matches: {m.group(0)}')
                 if self.run_count < CmdVars.variable_to_int('loop_count', command.loop_count):
                     self.run_count = self.run_count + 1
                     time.sleep(self.cmdconfig.loop_sleep)
                     self._loop_exec(command)
                 else:
-                    self.logger.error('Exitting because loop_count exceeded')
+                    self.logger.error('Exiting because loop_count exceeded')
                     exit(1)
             else:
                 self.logger.debug('loop_if does not match')
@@ -45,9 +43,7 @@ class Looper:
         if command.loop_if_not is not None:
             m = re.search(command.loop_if_not, result.stdout, re.MULTILINE)
             if m is None:
-                self.logger.warning(
-                        'Re-run command because loop_if_not does not match'
-                        )
+                self.logger.warning('Re-run command because loop_if_not does not match')
                 if self.run_count < CmdVars.variable_to_int('loop_count', command.loop_count):
                     self.run_count = self.run_count + 1
                     time.sleep(self.cmdconfig.loop_sleep)

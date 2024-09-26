@@ -15,7 +15,7 @@ class TestRegExExecutor:
     def test_log_command(self):
         command = RegExCommand(type='regex', cmd='test', mode='findall', output={})
         self.executor.log_command(command)
-        self.executor.logger.warn.assert_called_once_with("RegEx: 'test', Mode: 'findall'")
+        self.executor.logger.warning.assert_called_once_with("RegEx: 'test', Mode: 'findall'")
 
     def test_forge_variables(self):
 

@@ -110,6 +110,6 @@ class AttackMate:
             self.run_commands(self.playbook.commands)
             self.pm.kill_or_wait_processes()
         except KeyboardInterrupt:
-            self.logger.warn('Program stopped manually')
+            self.logger.warning('Program stopped manually')
 
         return 0
