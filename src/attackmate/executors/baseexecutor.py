@@ -112,7 +112,7 @@ class BaseExecutor(ExitOnError, CmdVars, Looper, Background):
             # Handle nested "commands" recursively
             if key == 'commands' and isinstance(value, list):
                 command_dict['parameters']['commands'] = [
-                    self.make_command_serilizable(sub_command, time) for sub_command in value
+                    self.make_command_serializable(sub_command, time) for sub_command in value
                 ]
 
         return command_dict
