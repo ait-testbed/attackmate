@@ -35,8 +35,10 @@ from datetime import datetime, timedelta
 from tabulate import tabulate
 from attackmate.executors.features.cmdvars import CmdVars
 from attackmate.processmanager import ProcessManager
+from attackmate.executors.executor_factory import executor_factory
 
 
+@executor_factory.register_executor('sliver-session')
 class SliverSessionExecutor(BaseExecutor):
 
     def __init__(self, pm: ProcessManager, cmdconfig=None, *, varstore: VariableStore, sliver_config=None):

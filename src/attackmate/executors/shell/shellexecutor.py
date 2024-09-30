@@ -20,8 +20,10 @@ from attackmate.variablestore import VariableStore
 from attackmate.processmanager import ProcessManager
 from attackmate.executors.shell.sessionstore import SessionStore
 from attackmate.executors.features.cmdvars import CmdVars
+from attackmate.executors.executor_factory import executor_factory
 
 
+@executor_factory.register_executor('shell')
 class ShellExecutor(BaseExecutor):
     def __init__(self, pm: ProcessManager, varstore: VariableStore, cmdconfig=CommandConfig()):
         self.session_store = SessionStore()

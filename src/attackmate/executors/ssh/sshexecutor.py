@@ -18,8 +18,10 @@ from attackmate.variablestore import VariableStore
 from attackmate.processmanager import ProcessManager
 from attackmate.executors.ssh.sessionstore import SessionStore
 from attackmate.executors.ssh.sftpfeature import SFTPFeature
+from attackmate.executors.executor_factory import executor_factory
 
 
+@executor_factory.register_executor('ssh')
 class SSHExecutor(BaseExecutor, SFTPFeature, Interactive):
     def __init__(self, pm: ProcessManager, cmdconfig=None, *, varstore: VariableStore):
         self.session_store = SessionStore()

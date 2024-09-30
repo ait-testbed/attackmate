@@ -11,8 +11,10 @@ from attackmate.schemas.regex import RegExCommand
 from string import Template
 from typing import Match
 import re
+from attackmate.executors.executor_factory import executor_factory
 
 
+@executor_factory.register_executor('regex')
 class RegExExecutor(BaseExecutor):
 
     def log_command(self, command: RegExCommand):

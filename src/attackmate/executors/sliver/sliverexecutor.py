@@ -19,7 +19,10 @@ from attackmate.schemas.base import BaseCommand
 from attackmate.schemas.sliver import SliverGenerateCommand, SliverHttpsListenerCommand
 from attackmate.processmanager import ProcessManager
 
+from attackmate.executors.executor_factory import executor_factory
 
+
+@executor_factory.register_executor('sliver')
 class SliverExecutor(BaseExecutor):
 
     def __init__(self, pm: ProcessManager, cmdconfig=None, *, varstore: VariableStore, sliver_config=None):

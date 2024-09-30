@@ -10,8 +10,10 @@ from attackmate.schemas.setvar import SetVarCommand
 import base64
 import codecs
 import urllib.parse
+from attackmate.executors.executor_factory import executor_factory
 
 
+@executor_factory.register_executor('setvar')
 class SetVarExecutor(BaseExecutor):
     def encode(self, encoder: str, cmd: str):
         if encoder == 'base64-encoder':

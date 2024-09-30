@@ -13,8 +13,10 @@ from attackmate.schemas.playbook import Playbook, Commands
 from attackmate.variablestore import VariableStore
 from attackmate.execexception import ExecException
 from attackmate.processmanager import ProcessManager
+from attackmate.executors.executor_factory import executor_factory
 
 
+@executor_factory.register_executor('include')
 class IncludeExecutor(BaseExecutor):
     def __init__(
         self,
