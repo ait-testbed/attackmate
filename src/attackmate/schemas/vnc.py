@@ -15,11 +15,15 @@ class VncCommand(BaseCommand):
     filename: Optional[str] = None
     x: Optional[int] = None
     y: Optional[int] = None
+    creates_session: Optional[str] = None
+    session: Optional[str] = None
 
     @model_validator(mode='after')
     def check_cmd_requirements(cls, values):
         cmd = values.cmd
 
+        if values.creates_session is not None and values.session is not None:
+            raise ValueError('Cannot specify both "creates_session" and "session" at the same time.')
         if cmd == 'type' and values.input is None:
             raise ValueError('Command "type" requires an "input" field.')
         elif cmd == 'key' and values.key is None:

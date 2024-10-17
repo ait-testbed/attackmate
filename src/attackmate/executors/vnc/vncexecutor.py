@@ -2,6 +2,10 @@
 vncexecutor.py
 ============================================
 This class enables executing commands via vnc.
+It utilizes the vncdotool. https://github.com/sibson/vncdotool (can be installed with pip)
+
+the vnc client connection_string needs to be in the format address[:display|::port]
+
 """
 
 from attackmate.executors.baseexecutor import BaseExecutor
@@ -12,10 +16,12 @@ from attackmate.processmanager import ProcessManager
 from attackmate.schemas.vnc import VncCommand
 from vncdotool import api
 from vncdotool.client import AuthenticationError
+from attackmate.executors.vnc.sessionstore import SessionStore
 
 
 class VncExecutor(BaseExecutor):
     def __init__(self, pm: ProcessManager, cmdconfig=None, *, varstore: VariableStore):
+        self.session_store = SessionStore()
         self.set_defaults()
         super().__init__(pm, varstore, cmdconfig)
 
@@ -24,7 +30,6 @@ class VncExecutor(BaseExecutor):
         self.port = None
         self.display = None
         self.password = None
-        self.client = None
 
     def connect(self, command: VncCommand) -> api.ThreadedVNCClientProxy:
         connection_string = self.hostname
@@ -36,6 +41,34 @@ class VncExecutor(BaseExecutor):
                 connection_string += f'::{self.port}'
 
         client = api.connect(connection_string, command.password)
+
+        return client
+
+    def connect_use_session(self, command):
+
+        if command.creates_session is not None:
+            # If 'creates_session' is specified, create a new session and save it
+            client = self.connect(command)
+            self.session_store.set_session(command.creates_session, client)
+            return client
+
+        if command.session is not None:
+            # If 'session' is specified, check if it exists, else raise an error
+            if not self.session_store.has_session(command.session):
+                raise ExecException(f'VNC-Session not in Session-Store: {command.session}')
+            else:
+                return self.session_store.get_client_by_session(command.session)
+
+        # If neither 'creates_session' nor 'session' is provided
+        default_session = 'default'
+
+        if not self.session_store.has_session(default_session):
+            # Create default session if it doesn't exist
+            client = self.connect(command)
+            self.session_store.set_session(default_session, client)
+        else:
+            # Retrieve the default session if it already exists
+            client = self.session_store.get_client_by_session(default_session)
 
         return client
 
@@ -61,20 +94,17 @@ class VncExecutor(BaseExecutor):
         self.cache_settings(command)
 
         try:
-            if not self.client:
-                self.client = self.connect(command)
-
+            client = self.connect_use_session(command)
             if command.cmd == 'key' and command.key:
-                self.client.keyPress(command.key)
+                client.keyPress(command.key)
             elif command.cmd == 'type' and command.input:
-                cl = self.client
-                self.send_keys(cl, command.input)
+                self.send_keys(client, command.input)
             elif command.cmd == 'move':
-                self.client.mouseMove(command.x, command.y)
+                client.mouseMove(command.x, command.y)
             elif command.cmd == 'capture':
-                self.client.captureScreen(command.filename)
+                client.captureScreen(command.filename)
             elif command.cmd == 'click':
-                self.client.mousePress(1)
+                client.mousePress(1)
         except ValueError as e:
             raise ExecException(e)
         except AttributeError as e:
