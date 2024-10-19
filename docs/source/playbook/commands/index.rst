@@ -211,20 +211,21 @@ The next pages will describe all possible commands in detail.
    :maxdepth: 4
    :hidden:
 
-   shell
-   sleep
-   ssh
-   sftp
+   debug
+   father
+   httpclient
+   include
+   loop
+   mktemp
    msf-module
    msf-session
    payload
    regex
-   debug
    setvar
-   include
-   mktemp
-   webserv
-   httpclient
+   shell
+   sftp
+   sleep
    sliver
    sliver-session
-   father
+   ssh
+   webserv
