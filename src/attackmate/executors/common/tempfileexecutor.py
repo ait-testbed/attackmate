@@ -20,9 +20,9 @@ class TempfileExecutor(BaseExecutor):
 
     def log_command(self, command: TempfileCommand):
         if command.cmd == 'dir':
-            self.logger.warn('Creating temporary directory..')
+            self.logger.warning('Creating temporary directory..')
         else:
-            self.logger.warn('Creating temporary file..')
+            self.logger.warning('Creating temporary file..')
 
     def _exec_cmd(self, command: TempfileCommand) -> Result:
         ret = 0

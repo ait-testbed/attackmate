@@ -16,7 +16,7 @@ import re
 class RegExExecutor(BaseExecutor):
 
     def log_command(self, command: RegExCommand):
-        self.logger.warn(f"RegEx: '{command.cmd}', Mode: '{command.mode}'")
+        self.logger.warning(f"RegEx: '{command.cmd}', Mode: '{command.mode}'")
 
     def forge_variables(self, data, variable_name='MATCH'):
         result = {}
@@ -55,19 +55,19 @@ class RegExExecutor(BaseExecutor):
     def _exec_cmd(self, command: RegExCommand) -> Result:
         self.setoutuptvars = False
         if command.mode == 'findall':
-            m = re.findall(command.cmd, self.varstore.get_variable(command.input))
+            m = re.findall(command.cmd, self.varstore.get_str(command.input))
             self.forge_and_register_variables(command.output, m)
         if command.mode == 'split':
-            m = re.split(command.cmd, self.varstore.get_variable(command.input))
+            m = re.split(command.cmd, self.varstore.get_str(command.input))
             self.forge_and_register_variables(command.output, m)
         if command.mode == 'search':
             # search() module will only return the first occurrence that matches the specified pattern.
-            m3 = re.search(command.cmd, self.varstore.get_variable(command.input))
+            m3 = re.search(command.cmd, self.varstore.get_str(command.input))
             if m3 is not None and isinstance(m3, Match):
                 self.forge_and_register_variables(command.output, m3.group())
         if command.mode == 'sub':
             if command.replace:
-                replaced = re.sub(command.cmd, command.replace, self.varstore.get_variable(command.input))
+                replaced = re.sub(command.cmd, command.replace, self.varstore.get_str(command.input))
                 self.forge_and_register_variables(command.output, replaced)
 
         return Result('', 0)

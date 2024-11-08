@@ -57,9 +57,13 @@ class AttackMate:
             'cmdconfig': self.pyconfig.cmd_config,
         }
 
+        # same executor instance for ssh and sftp commands
+        ssh_executor = executors.SSHExecutor(**init_args)
+
         self.executors = {
             'shell': executors.ShellExecutor(**init_args),
-            'ssh': executors.SSHExecutor(**init_args),
+            'ssh': ssh_executor,
+            'sftp': ssh_executor,
             'msf-session': executors.MsfSessionExecutor(
                 **init_args, msfconfig=self.pyconfig.msf_config, msfsessionstore=self.msfsessionstore
             ),
@@ -79,6 +83,7 @@ class AttackMate:
             'mktemp': executors.TempfileExecutor(**init_args),
             'debug': executors.DebugExecutor(**init_args),
             'include': executors.IncludeExecutor(**init_args, runfunc=self.run_commands),
+            'loop': executors.LoopExecutor(**init_args, runfunc=self.run_commands),
             'regex': executors.RegExExecutor(**init_args),
             'vnc': executors.VncExecutor(**init_args),
         }
@@ -106,6 +111,6 @@ class AttackMate:
             self.run_commands(self.playbook.commands)
             self.pm.kill_or_wait_processes()
         except KeyboardInterrupt:
-            self.logger.warn('Program stopped manually')
+            self.logger.warning('Program stopped manually')
 
         return 0

@@ -16,3 +16,5 @@ to install the Sliver Framework. The simplest method is a curl oneliner:
 
 Sliver will create an operator named "root" and save the configs under ``/root/.sliver-client/configs``
 which can be used by AttackMate.
+
+attackm8 only works if daemon-mode is enabled: ``"daemon-mode": "true"`` in the sliver-server under ``.sliver/configs/server.json``

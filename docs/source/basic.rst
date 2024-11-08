@@ -16,6 +16,7 @@ AttackMate ships with a executable stub called "attackmate" that can be called l
      --config CONFIG  Attack-Playbook in yaml-format
      --debug          Enable verbose output
      --version        show program's version number and exit
+     --json           log commands to attackmate.json
 
    (Austrian Institute of Technology) https://aecid.ait.ac.at Version: 0.2.0
 

@@ -15,6 +15,7 @@ from .common.sleepexecutor import SleepExecutor
 from .common.tempfileexecutor import TempfileExecutor
 from .common.debugexecutor import DebugExecutor
 from .common.includeexecutor import IncludeExecutor
+from .common.loopexecutor import LoopExecutor
 from .common.regexexecutor import RegExExecutor
 
 
@@ -37,4 +38,5 @@ __all__ = [
     'IncludeExecutor',
     'RegExExecutor',
     'VncExecutor',
+    'LoopExecutor',
 ]
