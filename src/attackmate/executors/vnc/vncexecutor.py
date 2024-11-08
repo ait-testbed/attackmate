@@ -105,6 +105,8 @@ class VncExecutor(BaseExecutor):
                 client.captureScreen(command.filename)
             elif command.cmd == 'click':
                 client.mousePress(1)
+            elif command.cmd == 'expectscreen':
+                client.expectScreen(command.filename, command.maxrms)
         except ValueError as e:
             raise ExecException(e)
         except AttributeError as e:

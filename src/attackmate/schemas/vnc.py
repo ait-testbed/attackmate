@@ -5,7 +5,7 @@ from pydantic import model_validator
 
 class VncCommand(BaseCommand):
     type: Literal['vnc']
-    cmd: Literal['key', 'type', 'move', 'capture', 'click']
+    cmd: Literal['key', 'type', 'move', 'capture', 'click', 'expectscreen']
     hostname: Optional[str] = None
     port: Optional[StringNumber] = None
     display: Optional[StringNumber] = None
@@ -17,6 +17,7 @@ class VncCommand(BaseCommand):
     y: Optional[int] = None
     creates_session: Optional[str] = None
     session: Optional[str] = None
+    maxrms: Optional[float] = 0
 
     @model_validator(mode='after')
     def check_cmd_requirements(cls, values):
@@ -30,6 +31,8 @@ class VncCommand(BaseCommand):
             raise ValueError('Command "key" requires a "key" field.')
         elif cmd == 'capture' and values.filename is None:
             raise ValueError('Command "capture" requires a "filename" field.')
+        elif cmd == 'expectscreen' and values.filename is None:
+            raise ValueError('Command  "expectscreen" requires a "filename" field.')
         elif cmd == 'move':
             if values.x is None or values.y is None:
                 raise ValueError('Command "move" requires both "x" and "y" fields.')
