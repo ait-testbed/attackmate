@@ -149,7 +149,7 @@ class TestRegExExecutor:
         )
         self.executor._exec_cmd(command)
         assert 'output_var' not in self.varstore.variables
-        assert 'REGEX_MATCHES_LIST' not in self.varstore.variables
+        assert self.varstore.get_variable('REGEX_MATCHES_LIST') == []
 
     def test_exec_cmd_sub_no_match(self):
         # Test mode "sub" without matches

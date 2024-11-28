@@ -70,6 +70,8 @@ class RegExExecutor(BaseExecutor):
             m3 = re.search(command.cmd, self.varstore.get_str(command.input))
             if m3 is not None and isinstance(m3, Match):
                 self.forge_and_register_variables(command.output, m3.group())
+            else:
+                self.varstore.set_variable('REGEX_MATCHES_LIST', [])
         if command.mode == 'sub':
             if command.replace:
                 replaced = re.sub(command.cmd, command.replace, self.varstore.get_str(command.input))

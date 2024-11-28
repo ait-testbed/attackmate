@@ -90,8 +90,7 @@ By using the mode "split", strings that are seperated by whitespaces can be toke
    first occurance. The first match (even if there is only one) is indexed MATCH_0.
    If the regex-command does not match, no output variable will be set!
    Note that if sub() or split() do not have a match the input string is returned.
-   Additionally, ``REGEX_MATCHES_LIST`` is set every time a regex command yields matches
-   and it contains a list of all matches.
+   Additionally, ``REGEX_MATCHES_LIST`` is set every time a regex command yields matches and it contains a list of all matches.
 
 
    .. note::
