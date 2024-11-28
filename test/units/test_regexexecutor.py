@@ -45,12 +45,14 @@ class TestRegExExecutor:
         outputvars = {'output_var': 'Matched: $MATCH_0'}
         self.executor.register_outputvars(outputvars, matches)
         assert self.varstore.get_variable('output_var') == 'Matched: test'
+        assert self.varstore.get_variable('REGEX_MATCHES_LIST') == ['test']
 
     def test_forge_and_register_variables(self):
         output = {'output_var': 'Matched: $MATCH_0'}
         data = 'test'
         self.executor.forge_and_register_variables(output, data)
         assert self.varstore.get_variable('output_var') == 'Matched: test'
+        assert self.varstore.get_variable('REGEX_MATCHES_LIST') == ['test']
 
     def test_exec_cmd_findall(self):
         # Test mode "findall"
@@ -64,6 +66,7 @@ class TestRegExExecutor:
         )
         self.executor._exec_cmd(command)
         assert self.varstore.get_variable('output_var') == 'Found: test1, test2, test3'
+        assert self.varstore.get_variable('REGEX_MATCHES_LIST') == ['test1', 'test2', 'test3']
 
     def test_exec_cmd_split(self):
         # Test mode "split"
@@ -77,6 +80,7 @@ class TestRegExExecutor:
         )
         self.executor._exec_cmd(command)
         assert self.varstore.get_variable('output_var') == 'First: test1, Second: test2, Third: test3'
+        assert self.varstore.get_variable('REGEX_MATCHES_LIST') == ['test1', 'test2', 'test3']
 
     def test_exec_cmd_search(self):
         # Test mode "search"
@@ -90,9 +94,11 @@ class TestRegExExecutor:
         )
         self.executor._exec_cmd(command)
         assert self.varstore.get_variable('output_var') == 'Found: test1'
+        assert self.varstore.get_variable('REGEX_MATCHES_LIST') == ['test1']
 
     def test_exec_cmd_sub(self):
         # Test mode "sub"
+        # emulates behaviour of re.sub, if no match is found input string is returned
         self.varstore.set_variable('input_var', 'test1 test2 test3')
         command = RegExCommand(
             type='regex',
@@ -104,6 +110,7 @@ class TestRegExExecutor:
         )
         self.executor._exec_cmd(command)
         assert self.varstore.get_variable('output_var') == 'Replaced: TEST1 TEST2 TEST3'
+        assert self.varstore.get_variable('REGEX_MATCHES_LIST') == ['TEST1 TEST2 TEST3']
 
     def test_exec_cmd_findall_no_match(self):
         # Test mode "findall" without matches
@@ -117,15 +124,18 @@ class TestRegExExecutor:
         )
         self.executor._exec_cmd(command)
         assert 'output_var' not in self.varstore.variables
+        assert self.varstore.get_variable('REGEX_MATCHES_LIST') == []
 
     def test_exec_cmd_split_no_match(self):
         # Test mode "split" without matches
+        # emulates behaviour of re.split, if no match is found input string is returned
         self.varstore.set_variable('input_var', 'no matches here')
         command = RegExCommand(
             type='regex', cmd='\\d', mode='split', input='input_var', output={'output_var': 'First: $MATCH_0'}
         )
         self.executor._exec_cmd(command)
         assert self.varstore.get_variable('output_var') == 'First: no matches here'
+        assert self.varstore.get_variable('REGEX_MATCHES_LIST') == ['no matches here']
 
     def test_exec_cmd_search_no_match(self):
         # Test mode "search" without matches
@@ -139,9 +149,11 @@ class TestRegExExecutor:
         )
         self.executor._exec_cmd(command)
         assert 'output_var' not in self.varstore.variables
+        assert 'REGEX_MATCHES_LIST' not in self.varstore.variables
 
     def test_exec_cmd_sub_no_match(self):
         # Test mode "sub" without matches
+        # emulates behaviour of re.sub, if no match is found input string is returned
         self.varstore.set_variable('input_var', 'no matches here')
         command = RegExCommand(
             type='regex',
@@ -153,3 +165,4 @@ class TestRegExExecutor:
         )
         self.executor._exec_cmd(command)
         assert self.varstore.get_variable('output_var') == 'Replaced: no matches here'
+        assert self.varstore.get_variable('REGEX_MATCHES_LIST') == ['no matches here']
