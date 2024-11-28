@@ -41,3 +41,5 @@ The following variables are set by the system:
 ``LAST_SLIVER_IMPLANT`` is set every time after a new sliver implant was created and contains the path to the implant file.
 
 ``LAST_FATHER_PATH`` is set every time when a father-rootkit was generated.
+
+``REGEX_MATCHES_LIST`` is set every time a regex command yields matches and it contains a list of all matches. Note that if sub or split does not have a match the input string is returned.
