@@ -40,11 +40,16 @@ class RegExExecutor(BaseExecutor):
     def register_outputvars(self, outputvars: dict, matches):
         if not matches:
             self.logger.debug('no match!')
+            self.varstore.set_variable('REGEX_MATCHES_LIST', [])
             return
 
         for k, v in outputvars.items():
             temp = Template(v)
+            # register individual matches
             self.varstore.set_variable(k, temp.safe_substitute(matches))
+            # extract all matches into a list
+            matches_list = list(matches.values()) if isinstance(matches, dict) else []
+            self.varstore.set_variable('REGEX_MATCHES_LIST', matches_list)
 
     def forge_and_register_variables(self, output: dict, data):
         matches = self.forge_variables(data)
