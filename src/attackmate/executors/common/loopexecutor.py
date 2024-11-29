@@ -35,7 +35,7 @@ class LoopExecutor(BaseExecutor):
 
     def break_condition_met(self, command: LoopCommand):
         if command.break_condition:
-            if Conditional.test(self.varstore.substitute(command.break_condition)):
+            if Conditional.test(Template(command.break_condition).safe_substitute(**self.varstore.variables)):
                 self.logger.warning('Breaking out of loop')
                 return True
             else:
