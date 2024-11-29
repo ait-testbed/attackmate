@@ -46,7 +46,7 @@ class LoopExecutor(BaseExecutor):
             for cmd in command.commands:
                 template_cmd: Command = copy.deepcopy(cmd)
                 tpl = Template(template_cmd.cmd)
-                template_cmd.cmd = tpl.substitute(LOOP_INDEX=x)
+                template_cmd.cmd = tpl.substitute(LOOP_INDEX=x, **self.varstore.variables)
                 if self.break_condition_met(command):
                     return
                 self.runfunc([template_cmd])
@@ -56,7 +56,7 @@ class LoopExecutor(BaseExecutor):
             for cmd in command.commands:
                 template_cmd: Command = copy.deepcopy(cmd)
                 tpl = Template(template_cmd.cmd)
-                template_cmd.cmd = tpl.substitute(LOOP_ITEM=x)
+                template_cmd.cmd = tpl.substitute(LOOP_ITEM=x, **self.varstore.variables)
                 if self.break_condition_met(command):
                     return
                 self.runfunc([template_cmd])
