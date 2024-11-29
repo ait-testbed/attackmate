@@ -8,6 +8,7 @@ import copy
 from typing import Callable
 from string import Template
 from attackmate.executors.baseexecutor import BaseExecutor
+from attackmate.executors.features.conditional import Conditional
 from attackmate.result import Result
 from attackmate.schemas.loop import LoopCommand
 from attackmate.schemas.playbook import Commands, Command
@@ -32,12 +33,22 @@ class LoopExecutor(BaseExecutor):
     def log_command(self, command: LoopCommand):
         self.logger.info('Looping commands')
 
+    def break_condition_met(self, command: LoopCommand):
+        if command.break_condition:
+            if Conditional.test(self.varstore.substitute(command.break_condition)):
+                self.logger.warning('Breaking out of loop')
+                return True
+            else:
+                return False
+
     def loop_range(self, command: LoopCommand, start: int, end: int) -> None:
         for x in range(start, end):
             for cmd in command.commands:
                 template_cmd: Command = copy.deepcopy(cmd)
                 tpl = Template(template_cmd.cmd)
                 template_cmd.cmd = tpl.substitute(LOOP_INDEX=x)
+                if self.break_condition_met(command):
+                    return
                 self.runfunc([template_cmd])
 
     def loop_items(self, command: LoopCommand, varname: str, iterable: list[str]) -> None:
@@ -46,6 +57,8 @@ class LoopExecutor(BaseExecutor):
                 template_cmd: Command = copy.deepcopy(cmd)
                 tpl = Template(template_cmd.cmd)
                 template_cmd.cmd = tpl.substitute(LOOP_ITEM=x)
+                if self.break_condition_met(command):
+                    return
                 self.runfunc([template_cmd])
 
     def execute_loop(self, command: LoopCommand) -> None:
