@@ -12,8 +12,10 @@ from attackmate.executors.metasploit.msfsessionstore import MsfSessionStore
 from attackmate.processmanager import ProcessManager
 from multiprocessing import Manager
 from multiprocessing.queues import JoinableQueue
+from attackmate.executors.executor_factory import executor_factory
 
 
+@executor_factory.register_executor('msf-module')
 class MsfModuleExecutor(BaseExecutor):
     def __init__(
         self,

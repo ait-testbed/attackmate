@@ -8,12 +8,15 @@ over all attacks and runs the specific Executor with the given
 configuration.
 """
 
+from typing import Dict
 import logging
 import attackmate.executors as executors
 from attackmate.schemas.config import Config
 from attackmate.schemas.playbook import Playbook, Commands
 from .variablestore import VariableStore
 from .processmanager import ProcessManager
+from attackmate.executors.baseexecutor import BaseExecutor
+from attackmate.executors.executor_factory import executor_factory
 
 
 class AttackMate:
@@ -32,10 +35,12 @@ class AttackMate:
         self.pm = ProcessManager()
         self.pyconfig = config
         self.playbook = playbook
-        self.initialize_variable_parser()
-        self.initialize_executors()
+        self._initialize_variable_parser()
+        self.msfsessionstore = executors.MsfSessionStore(self.varstore)
+        self.executor_config = self._get_executor_config()
+        self.executors: Dict[str, BaseExecutor] = {}
 
-    def initialize_variable_parser(self):
+    def _initialize_variable_parser(self):
         """Initializes the variable-parser
 
         The variablestore stores and replaces variables with values in certain strings
@@ -44,59 +49,30 @@ class AttackMate:
         self.varstore.from_dict(self.playbook.vars)
         self.varstore.replace_with_prefixed_env_vars()
 
-    def initialize_executors(self):
-        """Initialize all Executors
-
-        Executors are supposed to execute commands. This method initializes
-        all possible executors.
-
-        """
-        self.msfsessionstore = executors.MsfSessionStore(self.varstore)
-        init_args = {
+    def _get_executor_config(self) -> dict:
+        config = {
             'pm': self.pm,
             'varstore': self.varstore,
             'cmdconfig': self.pyconfig.cmd_config,
+            'msfconfig': self.pyconfig.msf_config,
+            'msfsessionstore': self.msfsessionstore,
+            'sliver_config': self.pyconfig.sliver_config,
+            'runfunc': self._run_commands,
         }
+        return config
 
-        # same executor instance for ssh and sftp commands
-        ssh_executor = executors.SSHExecutor(**init_args)
+    def _get_executor(self, command_type: str) -> BaseExecutor:
+        if command_type not in self.executors:
+            self.executors[command_type] = executor_factory.create_executor(
+                command_type, **self.executor_config
+            )
 
-        self.executors = {
-            'shell': executors.ShellExecutor(**init_args),
-            'ssh': ssh_executor,
-            'sftp': ssh_executor,
-            'msf-session': executors.MsfSessionExecutor(
-                **init_args, msfconfig=self.pyconfig.msf_config, msfsessionstore=self.msfsessionstore
-            ),
-            'msf-payload': executors.MsfPayloadExecutor(**init_args, msfconfig=self.pyconfig.msf_config),
-            'msf-module': executors.MsfModuleExecutor(
-                **init_args, msfconfig=self.pyconfig.msf_config, msfsessionstore=self.msfsessionstore
-            ),
-            'sliver': executors.SliverExecutor(**init_args, sliver_config=self.pyconfig.sliver_config),
-            'sliver-session': executors.SliverSessionExecutor(
-                **init_args, sliver_config=self.pyconfig.sliver_config
-            ),
-            'father': executors.FatherExecutor(**init_args),
-            'webserv': executors.WebServExecutor(**init_args),
-            'http-client': executors.HttpClientExecutor(**init_args),
-            'setvar': executors.SetVarExecutor(**init_args),
-            'sleep': executors.SleepExecutor(**init_args),
-            'mktemp': executors.TempfileExecutor(**init_args),
-            'debug': executors.DebugExecutor(**init_args),
-            'include': executors.IncludeExecutor(**init_args, runfunc=self.run_commands),
-            'loop': executors.LoopExecutor(**init_args, runfunc=self.run_commands),
-            'regex': executors.RegExExecutor(**init_args),
-        }
+        return self.executors[command_type]
 
-    def run_commands(self, commands: Commands):
-        """Pass commands to the executors
-
-        This function interates over all configured
-        commands and passes them to the executors.
-
-        """
+    def _run_commands(self, commands: Commands):
         for command in commands:
-            executor = self.executors.get(command.type)
+            command_type = 'ssh' if command.type == 'sftp' else command.type
+            executor = self._get_executor(command_type)
             if executor:
                 executor.run(command)
 
@@ -108,7 +84,7 @@ class AttackMate:
 
         """
         try:
-            self.run_commands(self.playbook.commands)
+            self._run_commands(self.playbook.commands)
             self.pm.kill_or_wait_processes()
         except KeyboardInterrupt:
             self.logger.warning('Program stopped manually')

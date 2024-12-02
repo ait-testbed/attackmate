@@ -18,7 +18,10 @@ from attackmate.schemas.father import FatherCommand
 from attackmate.variablestore import VariableStore
 from attackmate.processmanager import ProcessManager
 
+from attackmate.executors.executor_factory import executor_factory
 
+
+@executor_factory.register_executor('father')
 class FatherExecutor(BaseExecutor):
     def __init__(self, pm: ProcessManager, varstore: VariableStore, cmdconfig=None):
         self.tempfilestore: list[Any] = []
