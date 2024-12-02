@@ -9,6 +9,10 @@ Once assigned, they can be used as placeholders in command-settings. It
 is unnecessary to begin variable names with a $-sign when defined in the
 vars-section. However, when variables are placed in the commands section,
 they always must start with a $-sign.
+If the same variable name with the prefix "ATTACKMATE_" exists as an
+environment variable it will overwrite the playbook variable value.
+i.e. the playbookvariabel $FOO will be overwritten be environment variabel
+$ATTACKMATE_FOO.
 
 .. code-block:: yaml
 
