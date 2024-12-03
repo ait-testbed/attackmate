@@ -19,11 +19,19 @@ List files and directories on the remote host
      - type: sliver-session
        cmd: ls
        remote_path: /etc
+       session: implant-name
 
 
 .. confval:: remote_path
 
    Path to list all files
+
+   :type: str
+   :required: ``True``
+
+.. confval:: session
+
+   The name of the sliver implant to connect to. Defined previously by the by sliver generate_implant command.
 
    :type: str
    :required: ``True``
@@ -41,6 +49,7 @@ Change the working directory
      - type: sliver-session
        cmd: cd
        remote_path: /home
+       session: implant-name
 
 
 .. confval:: remote_path
@@ -67,6 +76,7 @@ Print network connection information
        ipv4: True
        ipv6: False
        listening: True
+       session: implant-name
 
 
 .. confval:: tcp
@@ -121,6 +131,7 @@ Execute a program on the remote system
          - root
          - /etc/passwd
        output: True
+       session: implant-name
 
 
 .. confval:: exe
@@ -156,6 +167,7 @@ Create a remote directory.
      - type: sliver-session
        cmd: mkdir
        remote_path: /tmp/somedirectory
+       session: implant-name
 
 
 .. confval:: remote_path
@@ -177,6 +189,7 @@ View network interface configurations
    commands:
      - type: sliver-session
        cmd: ifconfig
+       session: implant-name
 
 ps
 --
@@ -189,6 +202,7 @@ List processes of the remote system
    commands:
      - type: sliver-session
        cmd: ps
+       session: implant-name
 
 
 pwd
@@ -202,6 +216,7 @@ Print working directory of the active session.
    commands:
      - type: sliver-session
        cmd: pwd
+       session: implant-name
 
 download
 --------
@@ -216,6 +231,7 @@ Download a file or directory from the remote system. Directories will be downloa
        cmd: download
        remote_path: /root
        recurse: True
+       session: implant-name
 
 
 .. confval:: remote_path
@@ -253,6 +269,7 @@ Upload a file to the remote system.
        cmd: upload
        remote_path: /tmp/somefile
        local_path: /home/user/somefile
+       session: implant-name
 
 .. confval:: remote_path
 
@@ -288,6 +305,7 @@ Dumps the process memory of a given pid to a local file.
        cmd: process_dump
        pid: 102
        local_path: /home/user/some_service.dump
+       session: implant-name
 
 .. confval:: pid
 

@@ -10,8 +10,10 @@ from attackmate.executors.baseexecutor import BaseExecutor
 from attackmate.result import Result
 from attackmate.schemas.http import HttpClientCommand
 from attackmate.execexception import ExecException
+from attackmate.executors.executor_factory import executor_factory
 
 
+@executor_factory.register_executor('http-client')
 class HttpClientExecutor(BaseExecutor):
     def log_command(self, command: HttpClientCommand):
         self.logger.info(f'Performing HTTP[{command.cmd}] to {command.url}')
@@ -39,26 +41,29 @@ class HttpClientExecutor(BaseExecutor):
         return content
 
     def request_http2(self, command: HttpClientCommand) -> httpx.Response:
-        client = httpx.Client(http2=True,
-                              headers=self.generate_headers(command),
-                              cookies=command.cookies,
-                              verify=command.verify)
-        response = client.request(command.cmd,
-                                  command.url,
-                                  content=self.load_content(command.local_path),
-                                  follow_redirects=command.follow,
-                                  data=command.data)
+        client = httpx.Client(
+            http2=True, headers=self.generate_headers(command), cookies=command.cookies, verify=command.verify
+        )
+        response = client.request(
+            command.cmd,
+            command.url,
+            content=self.load_content(command.local_path),
+            follow_redirects=command.follow,
+            data=command.data,
+        )
         return response
 
     def request(self, command: HttpClientCommand) -> httpx.Response:
-        return httpx.request(command.cmd,
-                             command.url,
-                             content=self.load_content(command.local_path),
-                             headers=self.generate_headers(command),
-                             cookies=command.cookies,
-                             data=command.data,
-                             follow_redirects=command.follow,
-                             verify=command.verify)
+        return httpx.request(
+            command.cmd,
+            command.url,
+            content=self.load_content(command.local_path),
+            headers=self.generate_headers(command),
+            cookies=command.cookies,
+            data=command.data,
+            follow_redirects=command.follow,
+            verify=command.verify,
+        )
 
     def _exec_cmd(self, command: HttpClientCommand) -> Result:
         try:

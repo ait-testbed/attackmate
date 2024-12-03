@@ -9,13 +9,20 @@ from attackmate.result import Result
 from attackmate.schemas.base import BaseCommand
 from attackmate.schemas.metasploit import MsfSessionCommand
 from attackmate.processmanager import ProcessManager
+from attackmate.executors.executor_factory import executor_factory
 
 
+@executor_factory.register_executor('msf-session')
 class MsfSessionExecutor(BaseExecutor):
-    def __init__(self, pm: ProcessManager, cmdconfig=None, *,
-                 varstore: VariableStore,
-                 msfconfig=None,
-                 msfsessionstore: MsfSessionStore):
+    def __init__(
+        self,
+        pm: ProcessManager,
+        cmdconfig=None,
+        *,
+        varstore: VariableStore,
+        msfconfig=None,
+        msfsessionstore: MsfSessionStore,
+    ):
         self.msfconfig = msfconfig
         self.sessionstore = msfsessionstore
         self.msf = None
@@ -70,8 +77,9 @@ class MsfSessionExecutor(BaseExecutor):
             if not return_empty:
                 self.logger.info('Executing a msf-command')
                 try:
-                    output = self.msf.sessions.session(session_id).run_with_output(command.cmd,
-                                                                                   command.end_str)
+                    output = self.msf.sessions.session(session_id).run_with_output(
+                        command.cmd, command.end_str
+                    )
                 except TypeError:
                     self.logger.debug('Fallback: First raw-write again and then raw-read data in msf-session')
                     self.msf.sessions.session(session_id).write(command.cmd)

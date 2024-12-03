@@ -11,8 +11,10 @@ from attackmate.result import Result
 from attackmate.schemas.tempfile import TempfileCommand
 from attackmate.variablestore import VariableStore
 from attackmate.processmanager import ProcessManager
+from attackmate.executors.executor_factory import executor_factory
 
 
+@executor_factory.register_executor('mktemp')
 class TempfileExecutor(BaseExecutor):
     def __init__(self, pm: ProcessManager, varstore: VariableStore, cmdconfig=None):
         self.tempfilestore: dict[str, Any] = {}
@@ -20,9 +22,9 @@ class TempfileExecutor(BaseExecutor):
 
     def log_command(self, command: TempfileCommand):
         if command.cmd == 'dir':
-            self.logger.warn('Creating temporary directory..')
+            self.logger.warning('Creating temporary directory..')
         else:
-            self.logger.warn('Creating temporary file..')
+            self.logger.warning('Creating temporary file..')
 
     def _exec_cmd(self, command: TempfileCommand) -> Result:
         ret = 0

@@ -16,6 +16,7 @@ AttackMate ships with a executable stub called "attackmate" that can be called l
      --config CONFIG  Attack-Playbook in yaml-format
      --debug          Enable verbose output
      --version        show program's version number and exit
+     --json           log commands to attackmate.json
 
    (Austrian Institute of Technology) https://aecid.ait.ac.at Version: 0.2.0
 
@@ -57,6 +58,7 @@ First Run
 =========
 
 Now we can run the playbook using the following command:
+(We can supply the full path to the playbook, otherwise the parser tries to find it in the current working directory or in the folder /etc/attackmate/playbooks)
 
 ::
 

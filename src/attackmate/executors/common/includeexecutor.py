@@ -13,12 +13,19 @@ from attackmate.schemas.playbook import Playbook, Commands
 from attackmate.variablestore import VariableStore
 from attackmate.execexception import ExecException
 from attackmate.processmanager import ProcessManager
+from attackmate.executors.executor_factory import executor_factory
 
 
+@executor_factory.register_executor('include')
 class IncludeExecutor(BaseExecutor):
-    def __init__(self, pm: ProcessManager, cmdconfig=None, *,
-                 varstore: VariableStore,
-                 runfunc: Callable[[Commands], None]):
+    def __init__(
+        self,
+        pm: ProcessManager,
+        cmdconfig=None,
+        *,
+        varstore: VariableStore,
+        runfunc: Callable[[Commands], None],
+    ):
         self.runfunc = runfunc
         super().__init__(pm, varstore, cmdconfig)
 

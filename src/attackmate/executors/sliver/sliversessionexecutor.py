@@ -11,28 +11,37 @@ import time
 from sliver import SliverClientConfig, SliverClient
 from sliver.session import InteractiveSession
 from sliver.beacon import InteractiveBeacon
+
 # from sliver.protobuf import client_pb2
 from attackmate.variablestore import VariableStore
 from attackmate.executors.baseexecutor import BaseExecutor
 from attackmate.execexception import ExecException
 from attackmate.result import Result
-from attackmate.schemas.sliver import (SliverSessionCDCommand, SliverSessionCommand,
-                                       SliverSessionDOWNLOADCommand, SliverSessionEXECCommand,
-                                       SliverSessionLSCommand, SliverSessionNETSTATCommand,
-                                       SliverSessionPROCDUMPCommand, SliverSessionSimpleCommand,
-                                       SliverSessionMKDIRCommand, SliverSessionTERMINATECommand,
-                                       SliverSessionUPLOADCommand, SliverSessionRMCommand)
+from attackmate.schemas.sliver import (
+    SliverSessionCDCommand,
+    SliverSessionCommand,
+    SliverSessionDOWNLOADCommand,
+    SliverSessionEXECCommand,
+    SliverSessionLSCommand,
+    SliverSessionNETSTATCommand,
+    SliverSessionPROCDUMPCommand,
+    SliverSessionSimpleCommand,
+    SliverSessionMKDIRCommand,
+    SliverSessionTERMINATECommand,
+    SliverSessionUPLOADCommand,
+    SliverSessionRMCommand,
+)
 from datetime import datetime, timedelta
 from tabulate import tabulate
 from attackmate.executors.features.cmdvars import CmdVars
 from attackmate.processmanager import ProcessManager
+from attackmate.executors.executor_factory import executor_factory
 
 
+@executor_factory.register_executor('sliver-session')
 class SliverSessionExecutor(BaseExecutor):
 
-    def __init__(self, pm: ProcessManager, cmdconfig=None, *,
-                 varstore: VariableStore,
-                 sliver_config=None):
+    def __init__(self, pm: ProcessManager, cmdconfig=None, *, varstore: VariableStore, sliver_config=None):
         self.sliver_config = sliver_config
         self.client = None
         self.client_config = None
@@ -179,16 +188,21 @@ class SliverSessionExecutor(BaseExecutor):
                 uid = str(entry.UID)
             else:
                 uid = ''
-            lines.append((entry.Protocol,
-                          entry.LocalAddr.Ip + ':' + str(entry.LocalAddr.Port),
-                          entry.RemoteAddr.Ip,
-                          state,
-                          str(entry.Process.Pid) + '/' + entry.Process.Executable,
-                          uid))
+            lines.append(
+                (
+                    entry.Protocol,
+                    entry.LocalAddr.Ip + ':' + str(entry.LocalAddr.Port),
+                    entry.RemoteAddr.Ip,
+                    state,
+                    str(entry.Process.Pid) + '/' + entry.Process.Executable,
+                    uid,
+                )
+            )
         output = '\n'
-        output += tabulate(lines, headers=['Protocol', 'Local Address',
-                                           'Foreign Address', 'State',
-                                           'PID/Program Name', 'UID'])
+        output += tabulate(
+            lines,
+            headers=['Protocol', 'Local Address', 'Foreign Address', 'State', 'PID/Program Name', 'UID'],
+        )
         output += '\n'
         self.result = Result(output, 0)
 
@@ -219,9 +233,7 @@ class SliverSessionExecutor(BaseExecutor):
         coro = self.connect()
         loop.run_until_complete(coro)
 
-    async def get_session_or_beacon(self,
-                                    name,
-                                    beacon=False) -> InteractiveBeacon | InteractiveSession:
+    async def get_session_or_beacon(self, name, beacon=False) -> InteractiveBeacon | InteractiveSession:
         if beacon:
             return await self.get_beacon_by_name(name)
         else:

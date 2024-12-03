@@ -8,33 +8,20 @@ over all attacks and runs the specific Executor with the given
 configuration.
 """
 
+from typing import Dict
 import logging
-from attackmate.executors.shell.shellexecutor import ShellExecutor
-from attackmate.executors.ssh.sshexecutor import SSHExecutor
-from attackmate.executors.metasploit.msfsessionexecutor import MsfSessionExecutor
-from attackmate.executors.metasploit.msfpayloadexecutor import MsfPayloadExecutor
-from attackmate.executors.metasploit.msfsessionstore import MsfSessionStore
-from attackmate.executors.metasploit.msfexecutor import MsfModuleExecutor
-from attackmate.executors.sliver.sliverexecutor import SliverExecutor
-from attackmate.executors.sliver.sliversessionexecutor import SliverSessionExecutor
-from attackmate.executors.father.fatherexecutor import FatherExecutor
-from attackmate.executors.http.webservexecutor import WebServExecutor
-from attackmate.executors.http.httpclientexecutor import HttpClientExecutor
-from attackmate.executors.common.setvarexecutor import SetVarExecutor
-from attackmate.executors.common.sleepexecutor import SleepExecutor
-from attackmate.executors.common.tempfileexecutor import TempfileExecutor
-from attackmate.executors.common.debugexecutor import DebugExecutor
-from attackmate.executors.common.includeexecutor import IncludeExecutor
-from attackmate.executors.common.regexexecutor import RegExExecutor
+import attackmate.executors as executors
 from attackmate.schemas.config import Config
 from attackmate.schemas.playbook import Playbook, Commands
 from .variablestore import VariableStore
 from .processmanager import ProcessManager
+from attackmate.executors.baseexecutor import BaseExecutor
+from attackmate.executors.executor_factory import executor_factory
 
 
 class AttackMate:
     def __init__(self, playbook: Playbook, config: Config) -> None:
-        """ Constructor for AttackMate
+        """Constructor for AttackMate
 
         This constructor initializes the logger('playbook'), the playbook,
         the variable-parser and all the executors.
@@ -48,112 +35,58 @@ class AttackMate:
         self.pm = ProcessManager()
         self.pyconfig = config
         self.playbook = playbook
-        self.initialize_variable_parser()
-        self.initialize_executors()
+        self._initialize_variable_parser()
+        self.msfsessionstore = executors.MsfSessionStore(self.varstore)
+        self.executor_config = self._get_executor_config()
+        self.executors: Dict[str, BaseExecutor] = {}
 
-    def initialize_variable_parser(self):
-        """ Initializes the variable-parser
+    def _initialize_variable_parser(self):
+        """Initializes the variable-parser
 
         The variablestore stores and replaces variables with values in certain strings
         """
         self.varstore = VariableStore()
         self.varstore.from_dict(self.playbook.vars)
+        self.varstore.replace_with_prefixed_env_vars()
 
-    def initialize_executors(self):
-        """ Initialize all Executors
+    def _get_executor_config(self) -> dict:
+        config = {
+            'pm': self.pm,
+            'varstore': self.varstore,
+            'cmdconfig': self.pyconfig.cmd_config,
+            'msfconfig': self.pyconfig.msf_config,
+            'msfsessionstore': self.msfsessionstore,
+            'sliver_config': self.pyconfig.sliver_config,
+            'runfunc': self._run_commands,
+        }
+        return config
 
-        Executors are supposed to execute commands. This method initializes
-        all possible executors.
+    def _get_executor(self, command_type: str) -> BaseExecutor:
+        if command_type not in self.executors:
+            self.executors[command_type] = executor_factory.create_executor(
+                command_type, **self.executor_config
+            )
 
-        """
-        self.msfsessionstore = MsfSessionStore(self.varstore)
-        self.se = ShellExecutor(self.pm, self.varstore, self.pyconfig.cmd_config)
-        self.sleep = SleepExecutor(self.pm, self.pyconfig.cmd_config,
-                                   varstore=self.varstore)
-        self.ssh = SSHExecutor(self.pm, self.pyconfig.cmd_config,
-                               varstore=self.varstore)
-        self.father = FatherExecutor(self.pm, self.varstore, self.pyconfig.cmd_config)
-        self.msfmodule = MsfModuleExecutor(self.pm, self.pyconfig.cmd_config,
-                                           varstore=self.varstore,
-                                           msfconfig=self.pyconfig.msf_config,
-                                           msfsessionstore=self.msfsessionstore)
-        self.msfpayload = MsfPayloadExecutor(self.pm, self.varstore,
-                                             self.pyconfig.cmd_config,
-                                             msfconfig=self.pyconfig.msf_config)
-        self.msfsession = MsfSessionExecutor(
-                self.pm,
-                self.pyconfig.cmd_config,
-                varstore=self.varstore,
-                msfconfig=self.pyconfig.msf_config,
-                msfsessionstore=self.msfsessionstore)
-        self.debugger = DebugExecutor(self.pm, self.varstore, self.pyconfig.cmd_config)
-        self.webserv = WebServExecutor(self.pm, self.varstore, self.pyconfig.cmd_config)
-        self.setvar = SetVarExecutor(self.pm, self.varstore, self.pyconfig.cmd_config)
-        self.mktemp = TempfileExecutor(self.pm, self.varstore, self.pyconfig.cmd_config)
-        self.regex = RegExExecutor(self.pm, self.varstore, self.pyconfig.cmd_config)
-        self.httpclient = HttpClientExecutor(self.pm, self.varstore, self.pyconfig.cmd_config)
-        self.include = IncludeExecutor(self.pm, self.pyconfig.cmd_config,
-                                       varstore=self.varstore,
-                                       runfunc=self.run_commands)
-        self.sliver = SliverExecutor(self.pm, self.pyconfig.cmd_config,
-                                     varstore=self.varstore,
-                                     sliver_config=self.pyconfig.sliver_config)
-        self.sliversession = SliverSessionExecutor(self.pm, self.pyconfig.cmd_config,
-                                                   varstore=self.varstore,
-                                                   sliver_config=self.pyconfig.sliver_config)
+        return self.executors[command_type]
 
-    def run_commands(self, commands: Commands):
-        """ Pass commands to the executors
-
-        This function interates over all configured
-        commands and passes them to the executors.
-
-        """
+    def _run_commands(self, commands: Commands):
         for command in commands:
-            if command.type == 'shell':
-                self.se.run(command)
-            if command.type == 'father':
-                self.father.run(command)
-            if command.type == 'sleep':
-                self.sleep.run(command)
-            if command.type == 'msf-module':
-                self.msfmodule.run(command)
-            if command.type == 'msf-session':
-                self.msfsession.run(command)
-            if command.type == 'msf-payload':
-                self.msfpayload.run(command)
-            if command.type in ['ssh', 'sftp']:
-                self.ssh.run(command)
-            if command.type == 'debug':
-                self.debugger.run(command)
-            if command.type == 'setvar':
-                self.setvar.run(command)
-            if command.type == 'regex':
-                self.regex.run(command)
-            if command.type == 'sliver':
-                self.sliver.run(command)
-            if command.type == 'sliver-session':
-                self.sliversession.run(command)
-            if command.type == 'mktemp':
-                self.mktemp.run(command)
-            if command.type == 'include':
-                self.include.run(command)
-            if command.type == 'webserv':
-                self.webserv.run(command)
-            if command.type == 'http-client':
-                self.httpclient.run(command)
+            command_type = 'ssh' if command.type == 'sftp' else command.type
+            executor = self._get_executor(command_type)
+            if executor:
+                executor.run(command)
 
     def main(self):
-        """ The main function
+        """The main function
 
-            Passes the main playbook-commands
-            to run_commands
+        Passes the main playbook-commands
+        to run_commands
 
         """
         try:
-            self.run_commands(self.playbook.commands)
+            self._run_commands(self.playbook.commands)
             self.pm.kill_or_wait_processes()
         except KeyboardInterrupt:
-            self.logger.warn('Program stopped manually')
+            self.logger.warning('Program stopped manually')
 
         return 0

@@ -16,12 +16,14 @@ from attackmate.variablestore import VariableStore
 from attackmate.executors.features.cmdvars import CmdVars
 from attackmate.schemas.metasploit import MsfPayloadCommand
 from attackmate.schemas.config import CommandConfig
+from attackmate.executors.executor_factory import executor_factory
 
 
+@executor_factory.register_executor('msf-payload')
 class MsfPayloadExecutor(BaseExecutor):
-    def __init__(self, pm: ProcessManager, varstore: VariableStore,
-                 cmdconfig=CommandConfig(), *,
-                 msfconfig=None):
+    def __init__(
+        self, pm: ProcessManager, varstore: VariableStore, cmdconfig=CommandConfig(), *, msfconfig=None
+    ):
         self.msfconfig = msfconfig
         self.msf = None
         self.tempfilestore: list[Any] = []

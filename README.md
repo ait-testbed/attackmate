@@ -1,4 +1,4 @@
-AttackMate <img alt="Logo" src="/images/AttackMate_logo.svg" align="right" height="90">
+AttackMate <img alt="Logo" src="/images/AttackMate_logo_no_logo.png" align="right" height="90">
 ==========
 [![Build Status](https://aecidjenkins.ait.ac.at/buildStatus/icon?job=AECID%2FAECID%2Fattackmate%2Fmain)]( "https://aecidjenkins.ait.ac.at/job/AECID/job/AECID/job/attackmate/job/main/")
 
