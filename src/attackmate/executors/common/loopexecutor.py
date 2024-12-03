@@ -15,9 +15,11 @@ from attackmate.schemas.playbook import Commands, Command
 from attackmate.variablestore import VariableStore
 from attackmate.execexception import ExecException
 from attackmate.processmanager import ProcessManager
+from attackmate.executors.executor_factory import executor_factory
 import re
 
 
+@executor_factory.register_executor('loop')
 class LoopExecutor(BaseExecutor):
     def __init__(
         self,

@@ -10,8 +10,10 @@ from attackmate.executors.baseexecutor import BaseExecutor
 from attackmate.result import Result
 from attackmate.schemas.http import HttpClientCommand
 from attackmate.execexception import ExecException
+from attackmate.executors.executor_factory import executor_factory
 
 
+@executor_factory.register_executor('http-client')
 class HttpClientExecutor(BaseExecutor):
     def log_command(self, command: HttpClientCommand):
         self.logger.info(f'Performing HTTP[{command.cmd}] to {command.url}')

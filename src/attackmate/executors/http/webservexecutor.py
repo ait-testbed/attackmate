@@ -11,6 +11,7 @@ from attackmate.schemas.http import WebServCommand
 from attackmate.executors.features.cmdvars import CmdVars
 from http.server import HTTPServer, BaseHTTPRequestHandler
 import magic
+from attackmate.executors.executor_factory import executor_factory
 
 
 class WebRequestHandler(BaseHTTPRequestHandler):
@@ -50,6 +51,7 @@ class WebServe(HTTPServer):
             pass
 
 
+@executor_factory.register_executor('webserv')
 class WebServExecutor(BaseExecutor):
 
     def log_command(self, command: WebServCommand):
