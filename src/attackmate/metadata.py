@@ -8,7 +8,7 @@ __website__ = 'https://aecid.ait.ac.at'
 __license__ = 'GPLv3'
 __maintainer__ = 'Wolfgang Hotwagner, Max Landauer, Markus Wurzenberger, Florian Skopik'
 __status__ = 'Production'
-__version__ = '0.3.2'
+__version__ = '0.4.0'
 __version_string__ = (
         f'(Austrian Institute of Technology)\t'
         f'{__website__}\tVersion: {__version__}')
