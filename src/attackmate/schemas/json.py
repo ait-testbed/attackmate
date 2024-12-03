@@ -4,5 +4,5 @@ from .base import BaseCommand
 
 class JsonCommand(BaseCommand):
     type: Literal['json']
-    file: str
-    varstore: Optional[bool]
+    cmd: str
+    varstore: Optional[bool] = False

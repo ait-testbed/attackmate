@@ -61,7 +61,7 @@ class VariableStore:
         all_indexed_list_vars = {}
         for list_name, list in self.lists.items():
             for index, value in enumerate(list):
-                all_indexed_list_vars[f'{list_name}[{index}]'] = value
+                all_indexed_list_vars[f'{list_name}[{str(index)}]'] = value
         return all_indexed_list_vars
 
     def from_dict(self, variables: Optional[dict]):
@@ -124,7 +124,7 @@ class VariableStore:
         else:
             return data
 
-    def get_prefixed_env_vars(self, prefix: str = "ATTACKMATE_") -> dict[str, str]:
+    def get_prefixed_env_vars(self, prefix: str = 'ATTACKMATE_') -> dict[str, str]:
         prefixed_env_vars = {k[len(prefix) :]: v for k, v in os.environ.items() if k.startswith(prefix)}
         return prefixed_env_vars
 
