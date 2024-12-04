@@ -84,16 +84,12 @@ class TestJsonExecutor:
         """
         # Mock the open function to raise a generic exception
         with patch('builtins.open', side_effect=Exception('Unexpected error')):
-            # Inject the mock logger into the JsonExecutor instance
             self.json_executor.logger = mock_logger
 
-            # Create a mock JsonCommand
             command = JsonCommand(type='json', cmd='unexpected.json', varstore=False)
 
-            # Execute the command
             result = self.json_executor._exec_cmd(command)
 
-            # Assertions
             assert result.returncode == 1
             assert 'Unexpected error: Unexpected error' in result.stdout
             mock_logger.error.assert_called_with
