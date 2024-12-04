@@ -28,7 +28,7 @@ class TestJsonExecutor:
         self.process_manager = ProcessManager()
         self.json_executor = JsonExecutor(self.process_manager, varstore=self.varstore)
 
-    def test_successful_json_load(self, mock_json_file, mock_logger):
+    def test_successful_json_load_from_file(self, mock_json_file, mock_logger):
         """
         Test successful loading and parsing of a JSON file.
         """
@@ -93,3 +93,52 @@ class TestJsonExecutor:
             assert result.returncode == 1
             assert 'Unexpected error: Unexpected error' in result.stdout
             mock_logger.error.assert_called_with
+
+    def test_successful_json_load_from_varstore(self, mock_logger):
+        """
+        Test successful parsing of JSON stored in the VariableStore (RESULT_STDOUT).
+        """
+        self.json_executor.logger = mock_logger
+        # Set up the variable store with a valid JSON string
+        json_data = {'foo': 'bar', 'hello': 'world', 'my_list': ['cthulu', 'azatoth']}
+        self.varstore.set_variable('RESULT_STDOUT', json.dumps(json_data))
+
+        command = JsonCommand(type='json', cmd='RESULT_STDOUT', varstore=True, use_var=True)
+
+        result = self.json_executor._exec_cmd(command)
+
+        assert result.returncode == 0
+        assert result.stdout == json_data
+        assert self.varstore.get_variable('FOO') == 'bar'
+        assert self.varstore.get_variable('HELLO') == 'world'
+        assert self.varstore.get_variable('MY_LIST') == ['cthulu', 'azatoth']
+        mock_logger.info.assert_any_call('Successfully parsed JSON from RESULT_STDOUT')
+
+    def test_invalid_json_in_varstore(self, mock_logger):
+        """
+        Test behavior when the JSON in the VariableStore is invalid.
+        """
+        # Set up the variable store with invalid JSON content
+        self.varstore.set_variable('RESULT_STDOUT', '{invalid_json}')
+
+        self.json_executor.logger = mock_logger
+
+        command = JsonCommand(type='json', cmd='RESULT_STDOUT', varstore=False, use_var=True)
+
+        result = self.json_executor._exec_cmd(command)
+
+        assert result.returncode == 1
+        assert 'Error parsing JSON' in result.stdout
+
+    def test_missing_result_stdout_variable(self, mock_logger):
+        """
+        Test behavior when RESULT_STDOUT is not set in the VariableStore.
+        """
+        self.json_executor.logger = mock_logger
+
+        command = JsonCommand(type='json', cmd='RESULT_STDOUT', varstore=False, use_var=True)
+
+        result = self.json_executor._exec_cmd(command)
+
+        assert result.returncode == 1
+        assert 'Unexpected error' in result.stdout
