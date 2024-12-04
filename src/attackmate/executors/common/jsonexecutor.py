@@ -35,7 +35,7 @@ class JsonExecutor(BaseExecutor):
                     # Convert non-string types to string
                     input_var = str(input_var)
                 json_data = json.loads(input_var)
-                self.logger.info('Successfully parsed JSON from RESULT_STDOUT')
+                self.logger.info(f'Successfully parsed JSON from {command.cmd}')
             else:
                 with open(command.cmd, 'r') as json_file:
                     json_data = json.load(json_file)
