@@ -20,6 +20,12 @@ def parse_args():
     parser.add_argument('--config', help='Configfile in yaml-format')
     parser.add_argument('--debug', action='store_true', default=False, help='Enable verbose output')
     parser.add_argument('--json', action='store_true', default=False, help='log commands to attackmate.json')
+    parser.add_argument(
+        '--append_logs',
+        action='store_true',
+        default=False,
+        help='append logs to attackmatelog, output.log and attackmate.json instead of overwriting',
+    )
     parser.add_argument('--version', action='version', version=__version_string__)
     parser.add_argument('playbook', help='Playbook in yaml-format')
     return parser.parse_args()
@@ -27,9 +33,9 @@ def parse_args():
 
 def main():
     args = parse_args()
-    logger = initialize_logger(args.debug)
-    initialize_output_logger(args.debug)
-    initialize_json_logger(args.json)
+    logger = initialize_logger(args.debug, args.append_logs)
+    initialize_output_logger(args.debug, args.append_logs)
+    initialize_json_logger(args.json, args.append_logs)
     hacky = AttackMate(parse_playbook(args.playbook, logger), parse_config(args.config, logger))
     sys.exit(hacky.main())
 
