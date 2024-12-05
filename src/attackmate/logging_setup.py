@@ -55,7 +55,7 @@ def initialize_json_logger(json: bool, append_logs: bool):
     json_logger = logging.getLogger('json')
     json_logger.setLevel(logging.DEBUG)
     formatter = logging.Formatter('%(message)s')
-    file_handler = _create_file_handler('attackmate.json', append_logs, formatter)
+    file_handler = create_file_handler('attackmate.json', append_logs, formatter)
     json_logger.addHandler(file_handler)
 
     return json_logger
