@@ -35,16 +35,19 @@ class JsonExecutor(BaseExecutor):
                 items.extend(self.flatten_dict(value, new_key, sep=sep).items())
             elif isinstance(value, list):
                 # Handle lists
-                for i, sub_value in enumerate(value):
-                    if isinstance(sub_value, dict):
-                        # Recursively flatten each dictionary within the list
-                        items.extend(self.flatten_dict(sub_value, f'{new_key}_{i}', sep=sep).items())
-                    if isinstance(sub_value, list):
-                        # Recursively flatten a list within a list
-                        items.extend(self.flatten_dict(sub_value, f'{new_key}_{i}', sep=sep).items)
-                    if isinstance(sub_value, str) or isinstance(sub_value, int):
-                        # If the list item is a simple value, just append the list
-                        items.append((f'{new_key}', value))
+                # If the list contains only primitive values (str, int), keep the list as is
+                if all(isinstance(i, (str, int)) for i in value):
+                    items.append((new_key, value))  # Retain the list as a whole
+                else:
+                    for i, sub_value in enumerate(value):
+                        if isinstance(sub_value, dict):
+                            # Recursively flatten each dictionary within the list
+                            items.extend(self.flatten_dict(sub_value, f'{new_key}_{i}', sep=sep).items())
+                        elif isinstance(sub_value, list):
+                            # Recursively flatten a list within a list
+                            items.extend(self.flatten_dict(sub_value, f'{new_key}_{i}', sep=sep).items)
+                        else:
+                            items.append((f'{new_key}_{i}', value))
             else:
                 items.append((new_key, value))
 

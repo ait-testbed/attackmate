@@ -100,6 +100,8 @@ class VariableStore:
             return temp.safe_substitute(self.variables | self.get_lists_variables())
 
     def set_variable(self, variable: str, value: str | list[str]):
+        if isinstance(value, int):
+            value = str(value)
         if isinstance(variable, str):
             varname = self.remove_sign(variable)
             if isinstance(value, str):
