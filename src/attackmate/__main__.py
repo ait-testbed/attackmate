@@ -24,7 +24,7 @@ def parse_args():
         '--append_logs',
         action='store_true',
         default=False,
-        help='append logs to attackmatelog, output.log and attackmate.json instead of overwriting',
+        help='append logs to attackmate.log, output.log and attackmate.json instead of overwriting',
     )
     parser.add_argument('--version', action='version', version=__version_string__)
     parser.add_argument('playbook', help='Playbook in yaml-format')
