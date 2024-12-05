@@ -24,6 +24,32 @@ class JsonExecutor(BaseExecutor):
 
         self.logger.warning(f"Loading variables from file: '{command.cmd}'")
 
+    def flatten_dict(self, nested_json, parent_key='', sep='_'):
+        items = []
+
+        for key, value in nested_json.items():
+            new_key = f'{parent_key}{sep}{key}' if parent_key else key
+
+            if isinstance(value, dict):
+                # Recursively flatten the dictionary
+                items.extend(self.flatten_dict(value, new_key, sep=sep).items())
+            elif isinstance(value, list):
+                # Handle lists
+                for i, sub_value in enumerate(value):
+                    if isinstance(sub_value, dict):
+                        # Recursively flatten each dictionary within the list
+                        items.extend(self.flatten_dict(sub_value, f'{new_key}_{i}', sep=sep).items())
+                    if isinstance(sub_value, list):
+                        # Recursively flatten a list within a list
+                        items.extend(self.flatten_dict(sub_value, f'{new_key}_{i}', sep=sep).items)
+                    if isinstance(sub_value, str) or isinstance(sub_value, int):
+                        # If the list item is a simple value, just append the list
+                        items.append((f'{new_key}', value))
+            else:
+                items.append((new_key, value))
+
+        return dict(items)
+
     def _exec_cmd(self, command: JsonCommand) -> Result:
         try:
             if command.use_var:
@@ -43,7 +69,7 @@ class JsonExecutor(BaseExecutor):
                 self.logger.info(f"Successfully loaded JSON file: '{command.cmd}'")
 
             # Populate the variable store
-            for k, v in json_data.items():
+            for k, v in self.flatten_dict(json_data).items():
                 self.varstore.set_variable(k.upper(), v)
             if command.varstore:
                 self.logger.info(f'Variables updated in VariableStore: {self.varstore.variables}')
