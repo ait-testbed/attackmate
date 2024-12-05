@@ -4,7 +4,7 @@ import logging
 from colorlog import ColoredFormatter
 
 
-def _create_file_handler(
+def create_file_handler(
     file_name: str, append_logs: bool, formatter: logging.Formatter
 ) -> logging.FileHandler:
     mode = 'a' if append_logs else 'w'
@@ -23,7 +23,7 @@ def initialize_output_logger(debug: bool, append_logs: bool):
     formatter = logging.Formatter(
         '--- %(asctime)s %(levelname)s: ---\n\n%(message)s', datefmt='%Y-%m-%d %H:%M:%S'
     )
-    file_handler = _create_file_handler('output.log', append_logs, formatter)
+    file_handler = create_file_handler('output.log', append_logs, formatter)
     output_logger.addHandler(file_handler)
 
 
@@ -43,7 +43,7 @@ def initialize_logger(debug: bool, append_logs: bool):
     # plain text output
     playbook_logger.addHandler(console_handler)
     formatter = logging.Formatter('%(asctime)s %(levelname)s - %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
-    file_handler = _create_file_handler('attackmate.log', append_logs, formatter)
+    file_handler = create_file_handler('attackmate.log', append_logs, formatter)
     playbook_logger.addHandler(file_handler)
 
     return playbook_logger

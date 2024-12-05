@@ -1,40 +1,33 @@
-from unittest.mock import patch, MagicMock
-from logging import FileHandler
 import pytest
-from attackmate.logging_setup import initialize_output_logger, initialize_logger, initialize_json_logger
+from unittest.mock import patch, MagicMock
+from attackmate.logging_setup import create_file_handler
 
 
-@pytest.fixture
-def mock_file_handler():
-    with patch('logging.FileHandler', spec=FileHandler) as mock_file_handler:
-        yield mock_file_handler
+@patch('attackmate.logging_setup.logging.FileHandler')
+def test_create_file_handler_append_mode(MockFileHandler):
+    mock_handler = MagicMock()
+    MockFileHandler.return_value = mock_handler
+
+    file_name = 'test.log'
+    append_logs = True
+    formatter = MagicMock()
+
+    create_file_handler(file_name, append_logs, formatter)
+
+    MockFileHandler.assert_called_with(file_name, mode='a')
+    mock_handler.setFormatter.assert_called_with(formatter)
 
 
-def test_initialize_output_logger_append_mode(mock_file_handler):
-    mock_handler_instance = MagicMock()
-    mock_file_handler.return_value = mock_handler_instance
+@patch('attackmate.logging_setup.logging.FileHandler')
+def test_create_file_handler_write_mode(MockFileHandler):
+    mock_handler = MagicMock()
+    MockFileHandler.return_value = mock_handler
 
-    initialize_output_logger(debug=True, append_logs=True)
+    file_name = 'test.log'
+    append_logs = False
+    formatter = MagicMock()
 
-    mock_file_handler.assert_called_once_with('output.log', mode='a')
-    mock_handler_instance.setFormatter.assert_called_once()
+    create_file_handler(file_name, append_logs, formatter)
 
-
-def test_initialize_logger_append_mode(mock_file_handler):
-    mock_handler_instance = MagicMock()
-    mock_file_handler.return_value = mock_handler_instance
-
-    initialize_logger(debug=False, append_logs=True)
-
-    mock_file_handler.assert_any_call('attackmate.log', mode='a')
-    mock_handler_instance.setFormatter.assert_called()
-
-
-def test_initialize_json_logger_append_mode(mock_file_handler):
-    mock_handler_instance = MagicMock()
-    mock_file_handler.return_value = mock_handler_instance
-
-    initialize_json_logger(json=True, append_logs=True)
-
-    mock_file_handler.assert_called_once_with('attackmate.json', mode='a')
-    mock_handler_instance.setFormatter.assert_called_once()
+    MockFileHandler.assert_called_with(file_name, mode='w')
+    mock_handler.setFormatter.assert_called_with(formatter)
