@@ -21,8 +21,8 @@ class JsonExecutor(BaseExecutor):
     def log_command(self, command: JsonCommand):
         if command.varstore:
             self.logger.warning(f'Varstore: {self.varstore.variables}')
-
-        self.logger.warning(f"Loading variables from file: '{command.cmd}'")
+        file = command.local_path if command.local_path else command.cmd
+        self.logger.warning(f"Loading variables from: '{file}'")
 
     def flatten_dict(self, nested_json, parent_key='', sep='_'):
         items = []
@@ -55,7 +55,7 @@ class JsonExecutor(BaseExecutor):
 
     def _exec_cmd(self, command: JsonCommand) -> Result:
         try:
-            if command.use_var:
+            if not command.local_path and command.cmd:
                 input_var = self.varstore.get_variable(command.cmd)
                 # Ensure input_var is a string
                 if isinstance(input_var, list):
@@ -66,10 +66,10 @@ class JsonExecutor(BaseExecutor):
                 json_data = json.loads(input_var)
                 self.logger.info(f'Successfully parsed JSON from {command.cmd}')
             else:
-                with open(command.cmd, 'r') as json_file:
+                with open(str(command.local_path), 'r') as json_file:
                     json_data = json.load(json_file)
 
-                self.logger.info(f"Successfully loaded JSON file: '{command.cmd}'")
+                self.logger.info(f"Successfully loaded JSON file: '{command.local_path}'")
 
             # Populate the variable store
             for k, v in self.flatten_dict(json_data).items():
