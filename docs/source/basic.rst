@@ -7,7 +7,7 @@ AttackMate ships with a executable stub called "attackmate" that can be called l
 ::
 
    attackmate -h
-   usage: attackmate [-h] --config CONFIG [--debug] [--version]
+   usage: attackmate [-h] --config CONFIG [--debug] [--version] [--json] [--append_logs]
 
    AttackMate is an attack orchestration tool that executes full attack-chains based on playbooks.
 
@@ -17,6 +17,7 @@ AttackMate ships with a executable stub called "attackmate" that can be called l
      --debug          Enable verbose output
      --version        show program's version number and exit
      --json           log commands to attackmate.json
+     --append_logs    append logs to attackmate.log, output.log and attackmate.json instead of overwriting
 
    (Austrian Institute of Technology) https://aecid.ait.ac.at Version: 0.2.0
 
