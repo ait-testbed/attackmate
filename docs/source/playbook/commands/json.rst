@@ -1,12 +1,101 @@
 ====
-json
 ====
 
-Parse variables from an .json file or from a variable (for example ``RESULT_STDOUT``) that is a valid json string.
-If the "local_path" option is used, read the json from this command. "cmd" option is optional.
-If "local_path" is defined, "cmd" will be ignored.
-If no "local_path" is set, read the json from "cmd"
+Parse variables from a JSON file or from a variable (for example, ``RESULT_STDOUT``) that contains a valid JSON string.
+If the "local_path" option is used, the JSON is read directly from the specified file. The "cmd" option is optional. If "local_path" is defined, the "cmd" option will be ignored.
+If no "local_path" is set, the JSON is read from the "cmd" option. The variables are recursively parsed from the JSON input and saved in the variable store.
+The variables are recursively parsed from the json input and are saved as single variables in the variable store,
+with the execption of lists that only contain primitiva data types.
 
+Example
+-------
+
+Given the following JSON input:
+
+.. code-block:: json
+
+    {
+      "first_list": [1, 2, 3],
+      "user": {
+        "name": "John Doe",
+        "age": 30,
+        "address": {
+          "street": "123 Main St",
+          "city": "New York",
+          "postal_codes": [10001, 10002]
+        },
+        "friends": [
+          {
+            "name": "Jane Smith",
+            "age": 28,
+            "address": {
+              "street": "456 Oak Rd",
+              "city": "Los Angeles",
+              "postal_codes": [90001, 90002]
+            }
+          },
+          {
+            "name": "Emily Davis",
+            "age": 35,
+            "address": {
+              "street": "789 Pine Ln",
+              "city": "Chicago",
+              "postal_codes": [60007, 60008]
+            }
+          }
+        ]
+      }
+    }
+
+The variables would be saved in the variable store as follows:
+
+.. code-block:: yaml
+
+    first_list: [1, 2, 3]
+    user_name: "John Doe"
+    user_age: 30
+    user_address_street: "123 Main St"
+    user_address_city: "New York"
+    user_address_postal_codes: [10001, 10002, 10003]
+    user_friends_0_name: "Jane Smith"
+    user_friends_0_age: 28
+    user_friends_0_address_street: "456 Oak Rd"
+    user_friends_0_address_city: "Los Angeles"
+    user_friends_0_address_postal_codes: [90001, 90002]
+    user_friends_1_name: "Emily Davis"
+    user_friends_1_age: 35
+    user_friends_1_address_street: "789 Pine Ln"
+    user_friends_1_address_city: "Chicago"
+    user_friends_1_address_postal_codes: [60007, 60008]
+
+Configuration
+-------------
+
+.. confval:: local_path
+
+   The JSON input to parse from. Valid input is a path to a JSON file. If "local_path" is set, the "cmd" option will be ignored.
+
+   :type: str
+   :required: False
+
+.. confval:: cmd
+
+   The JSON input to parse from. Valid input is a variable name from the variable store (without the leading ``$``) that contains a valid JSON string.
+
+   :type: str
+   :required: False
+
+   Either ``local_path`` OR ``cmd`` is required.
+
+.. confval:: varstore
+
+   If set to ``True``, logs the variable store before and after adding variables using the JSON command.
+
+   :type: bool
+   :required: False
+
+Examples
+--------
 
 .. code-block:: yaml
 
@@ -25,27 +114,3 @@ If no "local_path" is set, read the json from "cmd"
       - type: json
         cmd: RESULT_STDOUT
         use_var: True
-
-
-.. confval:: local_path
-
-   Json input to parse from. Valid input is a path to a json file. If "local_path" is set, "cmd" will be ignored.
-
-   :type: str
-   :required: ``False``
-
-.. confval:: cmd
-
-   Json input to parse from. Valid input is a variable name from the variable store (without the leading $), that contains a valid json string.
-
-   :type: str
-   :required: ``False``
-
-Either local_path OR cmd is required
-
-.. confval:: varstore
-
-   If True logs the variable store before and afteradding variables with json command.
-
-   :type: bool
-   :required: ``False``
