@@ -4,8 +4,8 @@
 Sessions, Interactive
 =====================
 
-Many commands of AttackMate support the setting "session" or "interactive. 
-This chapter is about these important concepts of AttackMate. 
+Many commands of AttackMate support the setting "session" or "interactive.
+This chapter is about these important concepts of AttackMate.
 
 Session
 -------
@@ -65,4 +65,3 @@ Many commands work in such a way that they first execute something and then coll
 .. warning::
 
       Please note that you **MUST** send a newline when you execute interactive commands!
-

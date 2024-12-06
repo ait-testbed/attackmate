@@ -16,6 +16,7 @@ from .common.debugexecutor import DebugExecutor
 from .common.includeexecutor import IncludeExecutor
 from .common.loopexecutor import LoopExecutor
 from .common.regexexecutor import RegExExecutor
+from .common.jsonexecutor import JsonExecutor
 
 
 __all__ = [
@@ -37,4 +38,5 @@ __all__ = [
     'IncludeExecutor',
     'RegExExecutor',
     'LoopExecutor',
+    'JsonExecutor',
 ]
