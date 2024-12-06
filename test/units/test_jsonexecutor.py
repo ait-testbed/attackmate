@@ -36,7 +36,7 @@ class TestJsonExecutor:
         with patch('builtins.open', mock_open(read_data=mock_json_file)):
             self.json_executor.logger = mock_logger
 
-            command = JsonCommand(type='json', cmd='mockfile.json', varstore=True)
+            command = JsonCommand(type='json', local_path='mockfile.json', varstore=True)
 
             result = self.json_executor._exec_cmd(command)
 
@@ -55,7 +55,7 @@ class TestJsonExecutor:
         with patch('builtins.open', side_effect=FileNotFoundError):
             self.json_executor.logger = mock_logger
 
-            command = JsonCommand(type='json', cmd='nonexistent.json', varstore=False)
+            command = JsonCommand(type='json', local_path='nonexistent.json', varstore=False)
 
             result = self.json_executor._exec_cmd(command)
 
@@ -71,7 +71,7 @@ class TestJsonExecutor:
         with patch('builtins.open', mock_open(read_data='{invalid_json}')):
             self.json_executor.logger = mock_logger
 
-            command = JsonCommand(type='json', cmd='invalid.json', varstore=False)
+            command = JsonCommand(type='json', local_path='invalid.json', varstore=False)
 
             result = self.json_executor._exec_cmd(command)
 
@@ -86,7 +86,7 @@ class TestJsonExecutor:
         with patch('builtins.open', side_effect=Exception('Unexpected error')):
             self.json_executor.logger = mock_logger
 
-            command = JsonCommand(type='json', cmd='unexpected.json', varstore=False)
+            command = JsonCommand(type='json', local_path='unexpected.json', varstore=False)
 
             result = self.json_executor._exec_cmd(command)
 
@@ -103,7 +103,7 @@ class TestJsonExecutor:
         json_data = {'foo': 'bar', 'hello': 'world', 'my_list': ['cthulu', 'azatoth']}
         self.varstore.set_variable('RESULT_STDOUT', json.dumps(json_data))
 
-        command = JsonCommand(type='json', cmd='RESULT_STDOUT', varstore=True, use_var=True)
+        command = JsonCommand(type='json', cmd='RESULT_STDOUT', varstore=True)
 
         result = self.json_executor._exec_cmd(command)
 
@@ -123,7 +123,7 @@ class TestJsonExecutor:
 
         self.json_executor.logger = mock_logger
 
-        command = JsonCommand(type='json', cmd='RESULT_STDOUT', varstore=False, use_var=True)
+        command = JsonCommand(type='json', cmd='RESULT_STDOUT', varstore=False)
 
         result = self.json_executor._exec_cmd(command)
 
@@ -136,7 +136,7 @@ class TestJsonExecutor:
         """
         self.json_executor.logger = mock_logger
 
-        command = JsonCommand(type='json', cmd='RESULT_STDOUT', varstore=False, use_var=True)
+        command = JsonCommand(type='json', cmd='RESULT_STDOUT', varstore=False)
 
         result = self.json_executor._exec_cmd(command)
 

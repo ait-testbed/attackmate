@@ -81,12 +81,12 @@ class JsonExecutor(BaseExecutor):
             return Result(json_data, 0)
 
         except FileNotFoundError:
-            error_msg = f"File '{command.cmd}' not found"
+            error_msg = f"File '{command.local_path}' not found"
             self.logger.error(error_msg)
             return Result(error_msg, 1)
 
         except json.JSONDecodeError as e:
-            error_msg = f"Error parsing JSON file '{command.cmd}': {str(e)}"
+            error_msg = f"Error parsing JSON file '{command.local_path}': {str(e)}"
             self.logger.error(error_msg)
             return Result(error_msg, 1)
 
