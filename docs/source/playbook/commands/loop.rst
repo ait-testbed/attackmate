@@ -52,6 +52,14 @@ This mode iterates over a range of integers. The current index is accessible as 
    - **items(LISTA)**: Iterate over the elements of a list named `LISTA`.
    - **range(0, 10)**: Iterate over a range from 0 to 9.
 
+.. confval:: break_condition
+
+   This condition is checked before every command in the loop.
+   If the condition evaluates to `True`, break out of the loop.
+   Supports the same operators like :confval:`only_if`.
+
+   :type: str
+
 .. confval:: commands
 
    The list of commands to execute during each iteration of the loop. These commands are executed once per iteration, with loop-specific variables (`$LOOP_ITEM` or `$LOOP_INDEX`) available for substitution.
