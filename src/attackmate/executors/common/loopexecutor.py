@@ -64,6 +64,21 @@ class LoopExecutor(BaseExecutor):
                     return
                 self.runfunc([template_cmd])
 
+    def loop_until(self, command: LoopCommand, condition: str) -> None:
+        x = 0
+        tpl = Template(condition)
+        condition = tpl.substitute(LOOP_ITEM=x, **self.varstore.variables)
+        while not Conditional.test(condition):
+            for cmd in command.commands:
+                if not Conditional.test(condition):
+                    template_cmd: Command = copy.deepcopy(cmd)
+                    tpl = Template(template_cmd.cmd)
+                    template_cmd.cmd = tpl.substitute(LOOP_INDEX=x, **self.varstore.variables)
+                    self.runfunc([template_cmd])
+                else:
+                    return
+            x += 1
+
     def execute_loop(self, command: LoopCommand) -> None:
         range_match = re.search(r'range\(\s*(\d+)\s*,\s*(\d+)\s*\)', command.cmd)
         if range_match:
@@ -81,6 +96,13 @@ class LoopExecutor(BaseExecutor):
                 raise ExecException(f"List variable '{var_name}' does not exist")
             self.loop_items(command, var_name, listvar)
             return
+
+        until_match = re.search(r'until\(\s*(.+?)\s*\)', command.cmd)
+        if until_match:
+            condition = until_match.group()
+            self.loop_until(command, condition)
+            return
+
         self.logger.warning('No valid loop condition found in command: %s', command.cmd)
 
     def _exec_cmd(self, command: LoopCommand) -> Result:
