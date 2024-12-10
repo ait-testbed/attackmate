@@ -60,7 +60,7 @@ The current index/iteration of the loop is also accessible as the `$LOOP_INDEX` 
    - **range(0, 10)**: Iterate over a range from 0 to 9.
    - **until($PORT == 7)
 
-.. confval:: break_condition
+.. confval:: break_if
 
    If defined, this condition is checked before every command in the loop.
    If the condition evaluates to `True`, break out of the loop.
