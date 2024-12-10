@@ -43,7 +43,8 @@ This mode iterates over a range of integers. The current index is accessible as 
 
 **Loop until condition is fulfilled**
 This mode iterates indefinitely until the condition is fulfilled. (Checked before every command within the loop)
-The current index/iteration of the loop is also accessible as the `$LOOP_INDEX` variable
+Variables in cmd settings of an until loop command until($VAR1 == $VAR2) will be substituted from the variable store on every iteration of the loop.
+The current index/iteration of the loop is also accessible as the `$LOOP_INDEX` variable for the until() condition.
 
 .. confval:: cmd
 
