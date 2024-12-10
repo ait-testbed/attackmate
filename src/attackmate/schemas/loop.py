@@ -73,4 +73,4 @@ class LoopCommand(BaseCommand):
     type: Literal['loop']
     cmd: str = 'loop condition'
     commands: Commands
-    break_condition: Optional[str] = None
+    break_if: Optional[str] = None

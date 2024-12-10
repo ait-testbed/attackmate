@@ -37,11 +37,11 @@ class LoopExecutor(BaseExecutor):
         self.logger.info('Looping commands')
 
     def break_condition_met(self, command: LoopCommand) -> bool:
-        if not command.break_condition:
+        if not command.break_if:
             return False
-        condition = Template(command.break_condition).safe_substitute(**self.varstore.variables)
+        condition = Template(command.break_if).safe_substitute(**self.varstore.variables)
         if Conditional.test(condition):
-            self.logger.warning('Breaking out of loop due to condition: %s', command.break_condition)
+            self.logger.warning('Breaking out of loop due to condition: %s', command.break_if)
             return True
         return False
 
