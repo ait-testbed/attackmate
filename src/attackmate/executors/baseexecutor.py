@@ -29,15 +29,22 @@ class BaseExecutor(ExitOnError, CmdVars, Looper, Background):
 
     """
 
-    def __init__(self, pm: ProcessManager, varstore: VariableStore, cmdconfig=CommandConfig()):
+    def __init__(
+        self, pm: ProcessManager, varstore: VariableStore, cmdconfig=CommandConfig(), substitute_cmd_vars=True
+    ):
         """Constructor for BaseExecutor
-
         Parameters
         ----------
-        cmdconfig : str, default `None`
-            cmd_config settings.
-
+        pm : ProcessManager
+            Process manager instance.
+        varstore : VariableStore
+            Variable store instance.
+        cmdconfig : CommandConfig, default `None`
+            Command configuration settings.
+        substitute_cmd_vars : bool, default `True`
+            Flag to enable or disable variable substitution in command.cmd
         """
+
         Background.__init__(self, pm)
         CmdVars.__init__(self, varstore)
         ExitOnError.__init__(self)
@@ -46,6 +53,7 @@ class BaseExecutor(ExitOnError, CmdVars, Looper, Background):
         self.json_logger = logging.getLogger('json')
         self.cmdconfig = cmdconfig
         self.output = logging.getLogger('output')
+        self.substitute_cmd_vars = substitute_cmd_vars
 
     def run(self, command: BaseCommand):
         """Execute the command
@@ -54,7 +62,7 @@ class BaseExecutor(ExitOnError, CmdVars, Looper, Background):
         executes the given command. This method sets the
         run_count to 1 and runs the method exec(). Please note
         that this function will exchange all variables of the BaseCommand
-        with the values of the VariableStore!
+        with the values of the VariableStore if substitute_cmd_vars is True!
 
         Parameters
         ----------
@@ -62,6 +70,7 @@ class BaseExecutor(ExitOnError, CmdVars, Looper, Background):
             The settings for the command to execute
 
         """
+
         if command.only_if:
             if not Conditional.test(self.varstore.substitute(command.only_if, True)):
                 if hasattr(command, 'type'):
@@ -72,9 +81,9 @@ class BaseExecutor(ExitOnError, CmdVars, Looper, Background):
         self.reset_run_count()
         self.logger.debug(f"Template-Command: '{command.cmd}'")
         if command.background:
-            self.exec_background(self.replace_variables(command))
+            self.exec_background(self.substitute_template_vars(command, self.substitute_cmd_vars))
         else:
-            self.exec(self.replace_variables(command))
+            self.exec(self.substitute_template_vars(command, self.substitute_cmd_vars))
 
     def log_command(self, command):
         """Log starting-status of the command"""

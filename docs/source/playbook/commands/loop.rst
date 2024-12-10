@@ -43,6 +43,7 @@ This mode iterates over a range of integers. The current index is accessible as 
 
 **Loop until condition is fulfilled**
 This mode iterates indefinitely until the condition is fulfilled. (Checked before every command within the loop)
+The current index/iteration of the loop is also accessible as the `$LOOP_INDEX` variable
 
 .. confval:: cmd
 
@@ -56,7 +57,7 @@ This mode iterates indefinitely until the condition is fulfilled. (Checked befor
 
    - **items(LISTA)**: Iterate over the elements of a list named `LISTA`.
    - **range(0, 10)**: Iterate over a range from 0 to 9.
-   - **until(PORT == 7)
+   - **until($PORT == 7)
 
 .. confval:: break_condition
 

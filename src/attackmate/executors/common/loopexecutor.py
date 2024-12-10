@@ -28,9 +28,10 @@ class LoopExecutor(BaseExecutor):
         *,
         varstore: VariableStore,
         runfunc: Callable[[Commands], None],
+        substitute_cmd_vars=False,
     ):
         self.runfunc = runfunc
-        super().__init__(pm, varstore, cmdconfig)
+        super().__init__(pm, varstore, cmdconfig, substitute_cmd_vars)
 
     def log_command(self, command: LoopCommand):
         self.logger.info('Looping commands')
@@ -67,13 +68,15 @@ class LoopExecutor(BaseExecutor):
     def loop_until(self, command: LoopCommand, condition: str) -> None:
         x = 0
         tpl = Template(condition)
-        condition = tpl.substitute(LOOP_ITEM=x, **self.varstore.variables)
+
+        condition = tpl.safe_substitute(LOOP_INDEX=x, **self.varstore.variables)
         while not Conditional.test(condition):
             for cmd in command.commands:
-                if not Conditional.test(condition):
+                if not Conditional.test(tpl.safe_substitute(LOOP_INDEX=x, **self.varstore.variables)):
                     template_cmd: Command = copy.deepcopy(cmd)
-                    tpl = Template(template_cmd.cmd)
-                    template_cmd.cmd = tpl.substitute(LOOP_INDEX=x, **self.varstore.variables)
+                    temp = Template(template_cmd.cmd)
+                    template_cmd.cmd = temp.safe_substitute(LOOP_INDEX=x, **self.varstore.variables)
+
                     self.runfunc([template_cmd])
                 else:
                     return
@@ -97,9 +100,10 @@ class LoopExecutor(BaseExecutor):
             self.loop_items(command, var_name, listvar)
             return
 
-        until_match = re.search(r'until\(\s*(.+?)\s*\)', command.cmd)
+        until_match = re.search(r'until\((.*)\)', command.cmd)
         if until_match:
-            condition = until_match.group()
+            condition = until_match.group(1)
+            self.logger.info('Loop until ' + condition)
             self.loop_until(command, condition)
             return
 
