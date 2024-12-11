@@ -64,7 +64,7 @@ The current index/iteration of the loop is also accessible as the `$LOOP_INDEX` 
 
    If defined, this condition is checked before every command in the loop.
    If the condition evaluates to `True`, break out of the loop.
-   Supports the same operators like :confval:`only_if`.
+   Supports the same operators as :confval:`only_if`.
 
    :type: str
    :required: ``False``
