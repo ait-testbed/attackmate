@@ -47,7 +47,7 @@ class BaseExecutor(ExitOnError, CmdVars, Looper, Background):
         self.cmdconfig = cmdconfig
         self.output = logging.getLogger('output')
 
-    def run(self, command: BaseCommand):
+    def run(self, command: BaseCommand) -> Result:
         """Execute the command
 
         This method is executed by AttackMate and
@@ -64,17 +64,17 @@ class BaseExecutor(ExitOnError, CmdVars, Looper, Background):
         """
         if command.only_if:
             if not Conditional.test(self.varstore.substitute(command.only_if, True)):
-                if hasattr(command, 'type'):
-                    self.logger.warning(f'Skipping {command.type}: {command.cmd}')
-                else:
-                    self.logger.warning(f'Skipping {command.cmd}')
-                return
+                self.logger.info(f'Skipping {getattr(command, "type", "")}({command.cmd})')
+                return Result(None, None)
         self.reset_run_count()
         self.logger.debug(f"Template-Command: '{command.cmd}'")
         if command.background:
-            self.exec_background(self.replace_variables(command))
+            # Background commands always return Result(None,None)
+            result = self.exec_background(self.replace_variables(command))
         else:
-            self.exec(self.replace_variables(command))
+            result = self.exec(self.replace_variables(command))
+
+        return result
 
     def log_command(self, command):
         """Log starting-status of the command"""
@@ -129,7 +129,7 @@ class BaseExecutor(ExitOnError, CmdVars, Looper, Background):
             except Exception as e:
                 self.logger.warning(f'Unable to write output to file {command.save}: {e}')
 
-    def exec(self, command: BaseCommand):
+    def exec(self, command: BaseCommand) -> Result:
         try:
             self.log_command(command)
             self.log_metadata(self.logger, command)
@@ -146,9 +146,11 @@ class BaseExecutor(ExitOnError, CmdVars, Looper, Background):
             self.error_if_or_not(command, result)
         self.loop_if(command, result)
         self.loop_if_not(command, result)
+        return result
 
-    def _loop_exec(self, command: BaseCommand):
-        self.exec(command)
+    def _loop_exec(self, command: BaseCommand) -> Result:
+        result = self.exec(command)
+        return result
 
     def _exec_cmd(self, command: Any) -> Result:
         return Result(None, None)
