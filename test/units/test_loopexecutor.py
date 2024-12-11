@@ -24,9 +24,9 @@ class TestLoopExecutor:
         caplog.set_level(logging.INFO)
         self.varstore.clear()
         self.varstore.set_variable('one', ['first', 'second'])
-        lc = LoopCommand(type='loop',
-                         cmd='items($one)',
-                         commands=[DebugCommand(cmd='$LOOP_ITEM', type='debug')])
+        lc = LoopCommand(
+            type='loop', cmd='items($one)', commands=[DebugCommand(cmd='$LOOP_ITEM', type='debug')]
+        )
         self.loop_executor.run(lc)
         assert 'Debug: \'first\'' in [rec.message for rec in caplog.records]
         assert 'Debug: \'second\'' in [rec.message for rec in caplog.records]
@@ -35,9 +35,23 @@ class TestLoopExecutor:
         caplog.set_level(logging.INFO)
         self.varstore.clear()
         self.varstore.set_variable('one', ['first', 'second'])
-        lc = LoopCommand(type='loop',
-                         cmd='range(1,3)',
-                         commands=[DebugCommand(cmd='$LOOP_INDEX', type='debug')])
+        lc = LoopCommand(
+            type='loop', cmd='range(1,3)', commands=[DebugCommand(cmd='$LOOP_INDEX', type='debug')]
+        )
         self.loop_executor.run(lc)
         assert 'Debug: \'1\'' in [rec.message for rec in caplog.records]
         assert 'Debug: \'2\'' in [rec.message for rec in caplog.records]
+
+    def test_until(self, caplog):
+        caplog.set_level(logging.INFO)
+        self.varstore.clear()
+        lc = LoopCommand(
+            type='loop',
+            cmd='until($LOOP_INDEX == 2)',
+            commands=[DebugCommand(cmd='$LOOP_INDEX', type='debug')],
+        )
+        self.loop_executor.run(lc)
+        # Verify that the loop ran exactly 2 times
+        assert 'Debug: \'0\'' in [rec.message for rec in caplog.records]
+        assert 'Debug: \'1\'' in [rec.message for rec in caplog.records]
+        assert 'Debug: \'2\'' not in [rec.message for rec in caplog.records]
