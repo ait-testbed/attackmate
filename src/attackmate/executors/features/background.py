@@ -40,6 +40,7 @@ class Background:
         p.start()
         p.join(5)
         self.pm.add_process(p, command.kill_on_exit)
+        # background commands always return None Result
         return Result(None, None)
 
     def _exec_bg_cmd(self, command: Any, queue: Optional[Queue] = None):
