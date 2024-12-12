@@ -8,11 +8,11 @@ over all attacks and runs the specific Executor with the given
 configuration.
 """
 
-from typing import Dict
+from typing import Dict, Optional
 import logging
 from attackmate.result import Result
 import attackmate.executors as executors
-from attackmate.schemas.config import Config
+from attackmate.schemas.config import CommandConfig, Config, MsfConfig, SliverConfig
 from attackmate.schemas.playbook import Playbook, Commands, Command
 from .variablestore import VariableStore
 from .processmanager import ProcessManager
@@ -21,7 +21,7 @@ from attackmate.executors.executor_factory import executor_factory
 
 
 class AttackMate:
-    def __init__(self, playbook: Playbook, config: Config) -> None:
+    def __init__(self, playbook: Optional[Playbook] = None, config: Optional[Config] = None) -> None:
         """Constructor for AttackMate
 
         This constructor initializes the logger('playbook'), the playbook,
@@ -34,12 +34,23 @@ class AttackMate:
         """
         self.logger = logging.getLogger('playbook')
         self.pm = ProcessManager()
-        self.pyconfig = config
-        self.playbook = playbook
+
+        # Initialize playbook and config, with defaults if not provided
+        self.playbook = playbook if playbook else self._default_playbook()
+        self.pyconfig = config if config else self._default_config()
+
         self._initialize_variable_parser()
         self.msfsessionstore = executors.MsfSessionStore(self.varstore)
         self.executor_config = self._get_executor_config()
         self.executors: Dict[str, BaseExecutor] = {}
+
+    def _default_playbook(self) -> Playbook:
+        """TODO: Creates a default playbook if none is provided."""
+        return Playbook(commands=[], vars={})
+
+    def _default_config(self) -> Config:
+        """TODO: Creates a default configuration if none is provided."""
+        return Config(cmd_config=CommandConfig(), msf_config=MsfConfig(), sliver_config=SliverConfig())
 
     def _initialize_variable_parser(self):
         """Initializes the variable-parser
