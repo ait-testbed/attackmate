@@ -21,7 +21,12 @@ from attackmate.executors.executor_factory import executor_factory
 
 
 class AttackMate:
-    def __init__(self, playbook: Optional[Playbook] = None, config: Optional[Config] = None) -> None:
+    def __init__(
+        self,
+        playbook: Optional[Playbook] = None,
+        config: Optional[Config] = None,
+        varstore: Optional[Dict] = None,
+    ) -> None:
         """Constructor for AttackMate
 
         This constructor initializes the logger('playbook'), the playbook,
@@ -39,7 +44,7 @@ class AttackMate:
         self.playbook = playbook if playbook else self._default_playbook()
         self.pyconfig = config if config else self._default_config()
 
-        self._initialize_variable_parser()
+        self._initialize_variable_parser(varstore)
         self.msfsessionstore = executors.MsfSessionStore(self.varstore)
         self.executor_config = self._get_executor_config()
         self.executors: Dict[str, BaseExecutor] = {}
@@ -52,13 +57,15 @@ class AttackMate:
         """TODO: Creates a default configuration if none is provided."""
         return Config(cmd_config=CommandConfig(), msf_config=MsfConfig(), sliver_config=SliverConfig())
 
-    def _initialize_variable_parser(self):
+    def _initialize_variable_parser(self, varstore: Optional[Dict] = None):
         """Initializes the variable-parser
 
         The variablestore stores and replaces variables with values in certain strings
         """
         self.varstore = VariableStore()
-        self.varstore.from_dict(self.playbook.vars)
+        # if attackmate is imported and initialized in another project, vars can be passed as dict
+        # otherwise variable store is initializen with vars from playbook
+        self.varstore.from_dict(varstore if varstore else self.playbook.vars)
         self.varstore.replace_with_prefixed_env_vars()
 
     def _get_executor_config(self) -> dict:
