@@ -1,6 +1,7 @@
 from typing import Optional, Literal, List
 from pydantic import ValidationInfo, field_validator
 from .base import BaseCommand, StringNumber
+from attackmate.command import CommandRegistry
 
 
 class SSHBase(BaseCommand):
@@ -26,6 +27,7 @@ class SSHBase(BaseCommand):
     jmp_username: Optional[str] = None
 
 
+@CommandRegistry.register('ssh')
 class SSHCommand(SSHBase):
     type: Literal['ssh']
     interactive: bool = False
@@ -34,6 +36,7 @@ class SSHCommand(SSHBase):
     bin: bool = False
 
 
+@CommandRegistry.register('sftp')
 class SFTPCommand(SSHBase):
     type: Literal['sftp']
     cmd: Literal['get', 'put']
