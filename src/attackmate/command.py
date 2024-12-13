@@ -1,16 +1,16 @@
 from typing import Dict, Tuple, Optional
-from attackmate.schemas.playbook import Commands
+from attackmate.schemas.base import BaseCommand
 
 
 class CommandRegistry:
-    _type_registry: Dict[str, Commands] = {}
-    _type_cmd_registry: Dict[Tuple[str, str], Commands] = {}
+    _type_registry: Dict[str, BaseCommand] = {}
+    _type_cmd_registry: Dict[Tuple[str, str], BaseCommand] = {}
 
     @classmethod
     def register(cls, type_: str, cmd: Optional[str] = None):
         """register a command class by type or type + cmd."""
 
-        def decorator(command_class: Commands):
+        def decorator(command_class: BaseCommand):
             if cmd:
                 cls._type_cmd_registry[(type_, cmd)] = command_class
             else:
