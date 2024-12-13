@@ -24,4 +24,4 @@ class DebugExecutor(BaseExecutor):
         if command.exit:
             ret = 1
 
-        return Result('', ret)
+        return Result(f"Debug: '{command.cmd}'", ret)
