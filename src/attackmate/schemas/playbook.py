@@ -30,8 +30,10 @@ from .tempfile import TempfileCommand
 from .debug import DebugCommand
 from .regex import RegExCommand
 from .json import JsonCommand
+from .browser import BrowserCommand
 
 Command = Union[
+    BrowserCommand,
     ShellCommand,
     MsfModuleCommand,
     MsfSessionCommand,
