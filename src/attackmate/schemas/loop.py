@@ -28,10 +28,12 @@ from .father import FatherCommand
 from .tempfile import TempfileCommand
 from .debug import DebugCommand
 from .regex import RegExCommand
+from .browser import BrowserCommand
 
 
 Commands = List[
     Union[
+        BrowserCommand,
         ShellCommand,
         MsfModuleCommand,
         MsfSessionCommand,
