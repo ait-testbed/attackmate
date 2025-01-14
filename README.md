@@ -67,3 +67,7 @@ a command injection. Keep that in mind!
 ## License
 
 [GPL-3.0](LICENSE)
+
+## Financial Support
+
+Funded by the European Union under GA no. 101121403 (NEWSROOM) and GA no. 101103385 (AInception). Views and opinions expressed are however those of the author(s) only and do not necessarily reflect those of the European Union or the European Commission. Neither the European Union nor the granting authority can be held responsible for them. Further supported by the Horizon Europe project MIRANDA (101168144). Co-funded by the Austrian FFG Kiras projects ASOC (FO999905301) and Testcat (FO999911248).
