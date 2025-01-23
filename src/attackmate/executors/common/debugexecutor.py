@@ -21,6 +21,9 @@ class DebugExecutor(BaseExecutor):
     def _exec_cmd(self, command: DebugCommand) -> Result:
         self.setoutuptvars = False
         ret = 0
+        if command.wait_for_key:
+            self.logger.warning("Type enter to continue")
+            input()
         if command.exit:
             ret = 1
 
