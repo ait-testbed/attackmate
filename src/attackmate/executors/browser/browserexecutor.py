@@ -15,7 +15,11 @@ class BrowserExecutor(BaseExecutor):
         self.command_delay = 2  # TODO: what's the best way to handle delay between commands?
 
     def log_command(self, command: BrowserCommand):
-        self.logger.info(f"Executing Browser Command: {command.cmd}")
+        self.logger.info(
+            f"Executing Browser Command: {command.cmd}"
+            f"{f' {command.selector}' if command.selector else ''}"
+            f"{f' {command.url}' if command.url else ''}"
+        )
 
     def open_browser(self, command: BrowserCommand):
         if command.session and self.session_store.has_session(command.session):
@@ -52,8 +56,12 @@ class BrowserExecutor(BaseExecutor):
             if command.cmd == 'visit':
                 page.goto(command.url)
             elif command.cmd == 'click':
+                if not page.query_selector(command.selector):
+                    raise ValueError(f"Element {command.selector} not found!")
                 page.click(command.selector)
             elif command.cmd == 'type':
+                if not page.query_selector(command.selector):
+                    raise ValueError(f"Element {command.selector} not found!")
                 page.fill(command.selector, command.text)
             elif command.cmd == 'screenshot':
                 page.screenshot(path=command.screenshot_path)
