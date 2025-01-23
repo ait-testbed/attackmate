@@ -39,4 +39,12 @@ purposes only.
    that this is an exceptional break.
 
    :type: bool
-   :default: ``True``
+   :default: ``False``
+
+.. confval:: wait_for_key
+
+   This setting causes the programm to pause until the user
+   hits the enter key.
+
+   :type: bool
+   :default: ``False``
