@@ -1,10 +1,8 @@
-import time
-from playwright.sync_api import sync_playwright
 from attackmate.executors.baseexecutor import BaseExecutor
 from attackmate.result import Result
 from attackmate.schemas.browser import BrowserCommand
 from attackmate.executors.executor_factory import executor_factory
-from .sessionstore import BrowserSessionStore
+from .sessionstore import BrowserSessionStore, SessionThread
 
 
 @executor_factory.register_executor('browser')
@@ -12,7 +10,6 @@ class BrowserExecutor(BaseExecutor):
     def __init__(self, pm, varstore, **kwargs):
         super().__init__(pm, varstore, **kwargs)
         self.session_store = BrowserSessionStore()
-        self.command_delay = 2  # TODO: what's the best way to handle delay between commands?
 
     def log_command(self, command: BrowserCommand):
         self.logger.info(
@@ -21,62 +18,43 @@ class BrowserExecutor(BaseExecutor):
             f"{f' {command.url}' if command.url else ''}"
         )
 
-    def open_browser(self, command: BrowserCommand):
-        if command.session and self.session_store.has_session(command.session):
-            # Reuse existing session
-            return self.session_store.get_session(command.session)
-
-        # create a new session
-        playwright = sync_playwright().start()
-        browser = playwright.chromium.launch(headless=False)  # TODO: make it an option to set in playbook
-        context = browser.new_context()
-        page = context.new_page()
-
-        # store session if requested
-        if command.creates_session:
-            self.session_store.set_session(command.creates_session, browser, context, page)
-
-        return browser, context, page
-
-    def close_browser(self, browser=None, context=None, page=None):
-        if page:
-            page.close()
-        if context:
-            context.close()
-        if browser:
-            browser.close()
-
     def _exec_cmd(self, command: BrowserCommand) -> Result:
-        browser, context, page = None, None, None
+        self.log_command(command)
+
         try:
-            # get or create browser, context, and page
-            browser, context, page = self.open_browser(command)
+            # Decide whether we’re using or creating a named session, or ephemeral
+            if command.session:
+                # We expect an existing session by this name
+                if not self.session_store.has_session(command.session):
+                    return Result(f"Session '{command.session}' not found!", 1)
+                session_thread = self.session_store.get_session(command.session)
+            elif command.creates_session:
+                # We create a new session
+                if self.session_store.has_session(command.creates_session):
+                    return Result(f"Session '{command.creates_session}' already exists!", 1)
+                session_thread = SessionThread(session_name=command.creates_session)
+                self.session_store.set_session(command.creates_session, session_thread)
+            else:
+                # No session info => ephemeral
+                session_thread = SessionThread()
 
             # Execute the command
             if command.cmd == 'visit':
-                page.goto(command.url)
+                session_thread.submit_command('visit', url=command.url)
             elif command.cmd == 'click':
-                if not page.query_selector(command.selector):
-                    raise ValueError(f"Element {command.selector} not found!")
-                page.click(command.selector)
+                session_thread.submit_command('click', selector=command.selector)
             elif command.cmd == 'type':
-                if not page.query_selector(command.selector):
-                    raise ValueError(f"Element {command.selector} not found!")
-                page.fill(command.selector, command.text)
+                session_thread.submit_command('type', selector=command.selector, text=command.text)
             elif command.cmd == 'screenshot':
-                page.screenshot(path=command.screenshot_path)
+                session_thread.submit_command('screenshot', screenshot_path=command.screenshot_path)
             else:
-                raise ValueError(f"Unknown browser command: {command.cmd}")
+                return Result(f"Unknown browser command: {command.cmd}", 1)
 
-            # delay for visibility
-            time.sleep(self.command_delay)
+            # If this is ephemeral (no session name set or created), close it immediately
+            if not command.session and not command.creates_session:
+                session_thread.stop_thread()
 
             return Result('Browser command executed successfully.', 0)
 
         except Exception as e:
             return Result(str(e), 1)
-
-        finally:
-            # close the browser resources if not using a session
-            if not command.session and not command.creates_session:
-                self.close_browser(browser, context, page)
