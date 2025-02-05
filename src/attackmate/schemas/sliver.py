@@ -1,7 +1,9 @@
 from typing import Literal, Optional, List
 from .base import BaseCommand, StringNumber
+from attackmate.command import CommandRegistry
 
 
+@CommandRegistry.register('sliver', 'start_https_listener')
 class SliverHttpsListenerCommand(BaseCommand):
     type: Literal['sliver']
     cmd: Literal['start_https_listener']
@@ -18,22 +20,15 @@ class SliverHttpsListenerCommand(BaseCommand):
     timeout: StringNumber = '60'
 
 
+@CommandRegistry.register('sliver', 'generate_implant')
 class SliverGenerateCommand(BaseCommand):
     type: Literal['sliver']
     cmd: Literal['generate_implant']
     target: Literal[
-            'darwin/amd64',
-            'darwin/arm64',
-            'linux/386',
-            'linux/amd64',
-            'windows/386',
-            'windows/amd64'] = 'linux/amd64'
+        'darwin/amd64', 'darwin/arm64', 'linux/386', 'linux/amd64', 'windows/386', 'windows/amd64'
+    ] = 'linux/amd64'
     c2url: str
-    format: Literal[
-            'EXECUTABLE',
-            'SERVICE',
-            'SHARED_LIB',
-            'SHELLCODE'] = 'EXECUTABLE'
+    format: Literal['EXECUTABLE', 'SERVICE', 'SHARED_LIB', 'SHELLCODE'] = 'EXECUTABLE'
     name: str
     filepath: Optional[str] = None
     IsBeacon: bool = False
@@ -42,17 +37,20 @@ class SliverGenerateCommand(BaseCommand):
     Evasion: bool = False
 
 
+@CommandRegistry.register('sliver-session')
 class SliverSessionCommand(BaseCommand):
     type: Literal['sliver-session']
     session: str
     beacon: bool = False
 
 
+@CommandRegistry.register('sliver-session', 'cd')
 class SliverSessionCDCommand(SliverSessionCommand):
     cmd: Literal['cd']
     remote_path: str
 
 
+@CommandRegistry.register('sliver-session', 'mdkdir')
 class SliverSessionMKDIRCommand(SliverSessionCommand):
     cmd: Literal['mkdir']
     remote_path: str

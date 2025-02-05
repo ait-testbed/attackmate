@@ -1,8 +1,10 @@
 from typing import Literal, Optional
 from pydantic import field_validator, ValidationInfo
 from .base import BaseCommand
+from attackmate.command import CommandRegistry
 
 
+@CommandRegistry.register('json')
 class JsonCommand(BaseCommand):
     type: Literal['json']
     cmd: str = 'no/valid/path'

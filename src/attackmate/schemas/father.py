@@ -1,7 +1,9 @@
 from typing import Literal, Optional
 from .base import BaseCommand
+from attackmate.command import CommandRegistry
 
 
+@CommandRegistry.register('father')
 class FatherCommand(BaseCommand):
     type: Literal['father']
     cmd: Literal['generate'] = 'generate'

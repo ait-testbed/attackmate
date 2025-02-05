@@ -1,7 +1,9 @@
 from typing import Literal, Optional, Dict
 from .base import BaseCommand, StringNumber
+from attackmate.command import CommandRegistry
 
 
+@CommandRegistry.register('webserv')
 class WebServCommand(BaseCommand):
     type: Literal['webserv']
     cmd: str = 'HTTP-GET'
@@ -10,6 +12,7 @@ class WebServCommand(BaseCommand):
     address: str = '0.0.0.0'  # nosec
 
 
+@CommandRegistry.register('http-client')
 class HttpClientCommand(BaseCommand):
     type: Literal['http-client']
     cmd: Literal['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'HEAD', 'OPTIONS'] = 'GET'

@@ -2,8 +2,10 @@ from typing import Literal, Optional, Dict
 from pydantic import field_validator
 from .base import StringNumber
 from attackmate.schemas.base import BaseCommand
+from attackmate.command import CommandRegistry
 
 
+@CommandRegistry.register('msf-session')
 class MsfSessionCommand(BaseCommand):
     @field_validator('background')
     @classmethod
@@ -19,6 +21,7 @@ class MsfSessionCommand(BaseCommand):
     end_str: Optional[str] = None
 
 
+@CommandRegistry.register('msf-payload')
 class MsfPayloadCommand(BaseCommand):
     type: Literal['msf-payload']
     cmd: str

@@ -24,3 +24,7 @@ class Result:
         """
         self.stdout = stdout
         self.returncode = returncode
+
+    def __repr__(self):
+            return f"Result(stdout={repr(self.stdout)}, returncode={self.returncode})"
+
