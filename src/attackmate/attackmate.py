@@ -50,11 +50,9 @@ class AttackMate:
         self.executors: Dict[str, BaseExecutor] = {}
 
     def _default_playbook(self) -> Playbook:
-        """TODO: Creates a default playbook if none is provided."""
         return Playbook(commands=[], vars={})
 
     def _default_config(self) -> Config:
-        """TODO: Creates a default configuration if none is provided."""
         return Config(cmd_config=CommandConfig(), msf_config=MsfConfig(), sliver_config=SliverConfig())
 
     def _initialize_variable_parser(self, varstore: Optional[Dict] = None):
