@@ -29,7 +29,7 @@ class TestBaseExecutor:
         varstore.set_variable('wonder', 'woman')
         be = BaseExecutor(ProcessManager(), varstore)
         bc = BaseCommand(cmd='$foo hello', exit_on_error=False, loop_if_not='world $wonder')
-        replaced = be.replace_variables(bc)
+        replaced = be.substitute_template_vars(bc)
         assert replaced.cmd == 'bar hello'
         # exit_on_error must not have changed!
         assert replaced.exit_on_error is False
@@ -45,7 +45,7 @@ class TestBaseExecutor:
         varstore.set_variable('wonder', 'woman')
         be = BaseExecutor(ProcessManager(), varstore)
         rex = RegExCommand(type='regex', cmd='$foo.*', output={'foo$foo': '$foo'}, input='hello world')
-        replaced = be.replace_variables(rex)
+        replaced = be.substitute_template_vars(rex)
         assert replaced.cmd == 'bar.*'
         assert replaced.output['foo$foo'] == 'bar'
         # input must not have changed!
@@ -61,10 +61,15 @@ class TestBaseExecutor:
         varstore.set_variable('foo', 'bar')
         varstore.set_variable('wonder', 'woman')
         be = BaseExecutor(ProcessManager(), varstore)
-        sl = SliverSessionEXECCommand(type='sliver-session', cmd='execute',
-                                      exe='hello $foo', output=False, session='$foo $woman',
-                                      args=['woo $wonder', 'hoo $foo'])
-        replaced = be.replace_variables(sl)
+        sl = SliverSessionEXECCommand(
+            type='sliver-session',
+            cmd='execute',
+            exe='hello $foo',
+            output=False,
+            session='$foo $woman',
+            args=['woo $wonder', 'hoo $foo'],
+        )
+        replaced = be.substitute_template_vars(sl)
         assert replaced.cmd == 'execute'
         assert replaced.session == 'bar $woman'
         assert replaced.exe == 'hello bar'

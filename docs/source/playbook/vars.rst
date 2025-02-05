@@ -31,6 +31,11 @@ $ATTACKMATE_FOO.
 
    For more information about using the variables see `string.Template <https://docs.python.org/3/library/string.html#string.Template>`_
 
+
+.. note::
+
+   variables in cmd settings of a loop command will be substituted on every iteration of the loop, see :ref:`loop`
+
 Builtin Variables
 =================
 

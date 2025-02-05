@@ -41,22 +41,40 @@ The current item is accessible as the `$LOOP_ITEM` variable.
 **Loop with range**:
 This mode iterates over a range of integers. The current index is accessible as the `$LOOP_INDEX` variable.
 
+**Loop until condition is fulfilled**
+This mode iterates indefinitely until the condition is fulfilled. (Checked before every command within the loop)
+Variables in cmd settings of an until loop command until($VAR1 == $VAR2) will be substituted from the variable store on every iteration of the loop.
+The current index/iteration of the loop is also accessible as the `$LOOP_INDEX` variable for the until() condition.
+
 .. confval:: cmd
 
-   The loop condition. This defines how the loop should iterate, either over a list or a range of values.
+   The loop condition. This defines how the loop should iterate, either over a list or a range of values, or idefinitely until the
+   condition defined in until() is rached.
 
    :type: str
+   :required: ``True``
 
    Examples:
 
    - **items(LISTA)**: Iterate over the elements of a list named `LISTA`.
    - **range(0, 10)**: Iterate over a range from 0 to 9.
+   - **until($PORT == 7)
+
+.. confval:: break_if
+
+   If defined, this condition is checked before every command in the loop.
+   If the condition evaluates to `True`, break out of the loop.
+   Supports the same operators as :confval:`only_if`.
+
+   :type: str
+   :required: ``False``
 
 .. confval:: commands
 
    The list of commands to execute during each iteration of the loop. These commands are executed once per iteration, with loop-specific variables (`$LOOP_ITEM` or `$LOOP_INDEX`) available for substitution.
 
    :type: list[Command]
+   :required: ``True``
 
    .. code-block:: yaml
 

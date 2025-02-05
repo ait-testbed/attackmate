@@ -16,8 +16,8 @@ class CmdVars:
             self.varstore.set_variable('RESULT_STDOUT', result.stdout)
             self.varstore.set_variable('RESULT_RETURNCODE', str(result.returncode))
 
-    def replace_variables(self, command: BaseCommand) -> BaseCommand:
-        """ Replace variables using the VariableStore
+    def substitute_template_vars(self, command: BaseCommand, substitute_cmd_vars: bool = True) -> BaseCommand:
+        """Replace variables using the VariableStore
 
         Replace all template-variables of the BaseCommand and return
         a new BaseCommand with all variables replaced with their values.
@@ -32,28 +32,36 @@ class CmdVars:
         BaseCommand
             BaseCommand with replaced variables
         """
-        template_cmd = copy.deepcopy(command)
-        for member in command.list_template_vars():
-            cmd_member = getattr(command, member)
-            if isinstance(cmd_member, str):
-                replaced_str = self.varstore.substitute(cmd_member)
-                setattr(template_cmd, member, replaced_str)
-            elif isinstance(cmd_member, dict):
+        substituted_command = copy.deepcopy(command)
+        for attr_name in command.list_template_vars():
+
+            # Skip variable substitution for "cmd"
+            if attr_name == 'cmd' and not substitute_cmd_vars:
+                continue
+
+            attr_value = getattr(command, attr_name)
+
+            if isinstance(attr_value, str):
+                substituted_value = self.varstore.substitute(attr_value)
+                setattr(substituted_command, attr_name, substituted_value)
+
+            elif isinstance(attr_value, dict):
                 # copy the dict to avoid referencing the original dict
-                new_cmd_member = copy.deepcopy(cmd_member)
-                for k, v in new_cmd_member.items():
+                substituted_dict = copy.deepcopy(attr_value)
+                for k, v in substituted_dict.items():
                     if isinstance(v, str):
-                        new_cmd_member[k] = self.varstore.substitute(v)
-                setattr(template_cmd, member, new_cmd_member)
-            elif isinstance(cmd_member, list):
+                        substituted_dict[k] = self.varstore.substitute(v)
+                setattr(substituted_command, attr_name, substituted_dict)
+
+            elif isinstance(attr_value, list):
                 # copy the dict to avoid referencing the original list
-                new_list = [i for i in cmd_member]
-                for v in new_list:
+                substituted_list = [i for i in attr_value]
+                for v in substituted_list:
                     if isinstance(v, str):
-                        index = new_list.index(v)
-                        new_list[index] = self.varstore.substitute(v)
-                setattr(template_cmd, member, new_list)
-        return template_cmd
+                        index = substituted_list.index(v)
+                        substituted_list[index] = self.varstore.substitute(v)
+                setattr(substituted_command, attr_name, substituted_list)
+        return substituted_command
 
     @staticmethod
     def variable_to_int(variablename: str, value: StringNumber) -> int:
@@ -70,8 +78,8 @@ class CmdVars:
 
     @staticmethod
     def variable_to_bool(variablename: str, value: str) -> bool:
-        if str(value).lower() in ('yes', 'y', 'true',  't', '1'):
+        if str(value).lower() in ('yes', 'y', 'true', 't', '1'):
             return True
-        if str(value).lower() in ('no',  'n', 'false', 'f', '0', '0.0', '', 'none', '[]', '{}'):
+        if str(value).lower() in ('no', 'n', 'false', 'f', '0', '0.0', '', 'none', '[]', '{}'):
             return False
         raise ExecException(f'Invalid value for boolean conversion of {variablename}: {value}')
