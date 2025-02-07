@@ -19,7 +19,7 @@ class DebugExecutor(BaseExecutor):
             self.logger.warning(self.varstore.variables)
 
     def _exec_cmd(self, command: DebugCommand) -> Result:
-        self.setoutuptvars = False
+        self.setoutputvars = False
         ret = 0
         if command.wait_for_key:
             self.logger.warning("Type enter to continue")
