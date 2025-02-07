@@ -1,7 +1,6 @@
 from attackmate.schemas.base import BaseCommand
 from pydantic import field_validator
-from typing import Literal
-from typing import List, Union
+from typing import Literal, Union, Optional, List
 from .sleep import SleepCommand
 from .shell import ShellCommand
 from .vnc import VncCommand
@@ -76,3 +75,4 @@ class LoopCommand(BaseCommand):
     type: Literal['loop']
     cmd: str = 'loop condition'
     commands: Commands
+    break_if: Optional[str] = None

@@ -9,8 +9,10 @@ from attackmate.result import Result
 from attackmate.schemas.base import BaseCommand
 from attackmate.schemas.metasploit import MsfSessionCommand
 from attackmate.processmanager import ProcessManager
+from attackmate.executors.executor_factory import executor_factory
 
 
+@executor_factory.register_executor('msf-session')
 class MsfSessionExecutor(BaseExecutor):
     def __init__(
         self,

@@ -30,6 +30,7 @@ from .tempfile import TempfileCommand
 from .debug import DebugCommand
 from .regex import RegExCommand
 from .vnc import VncCommand
+from .json import JsonCommand
 
 Command = Union[
     ShellCommand,
@@ -48,6 +49,7 @@ Command = Union[
     LoopCommand,
     WebServCommand,
     HttpClientCommand,
+    JsonCommand,
     SliverSessionCDCommand,
     SliverSessionLSCommand,
     SliverSessionNETSTATCommand,

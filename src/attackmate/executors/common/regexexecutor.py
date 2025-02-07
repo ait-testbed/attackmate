@@ -11,8 +11,10 @@ from attackmate.schemas.regex import RegExCommand
 from string import Template
 from typing import Match
 import re
+from attackmate.executors.executor_factory import executor_factory
 
 
+@executor_factory.register_executor('regex')
 class RegExExecutor(BaseExecutor):
 
     def log_command(self, command: RegExCommand):
@@ -40,11 +42,16 @@ class RegExExecutor(BaseExecutor):
     def register_outputvars(self, outputvars: dict, matches):
         if not matches:
             self.logger.debug('no match!')
+            self.varstore.set_variable('REGEX_MATCHES_LIST', [])
             return
 
         for k, v in outputvars.items():
             temp = Template(v)
+            # register individual matches
             self.varstore.set_variable(k, temp.safe_substitute(matches))
+            # extract all matches into a list
+            matches_list = list(matches.values()) if isinstance(matches, dict) else []
+            self.varstore.set_variable('REGEX_MATCHES_LIST', matches_list)
 
     def forge_and_register_variables(self, output: dict, data):
         matches = self.forge_variables(data)
@@ -65,6 +72,8 @@ class RegExExecutor(BaseExecutor):
             m3 = re.search(command.cmd, self.varstore.get_str(command.input))
             if m3 is not None and isinstance(m3, Match):
                 self.forge_and_register_variables(command.output, m3.group())
+            else:
+                self.varstore.set_variable('REGEX_MATCHES_LIST', [])
         if command.mode == 'sub':
             if command.replace:
                 replaced = re.sub(command.cmd, command.replace, self.varstore.get_str(command.input))

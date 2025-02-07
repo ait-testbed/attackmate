@@ -1,5 +1,7 @@
 from attackmate.variablestore import VariableNotFound, VariableStore, ListParseException
 import unittest
+import os
+from unittest.mock import patch
 
 
 class TestVariableStore(unittest.TestCase):
@@ -100,3 +102,32 @@ class TestVariableStore(unittest.TestCase):
         assert all_list_vars['second[0]'] == 'one'
         assert all_list_vars['second[1]'] == 'two'
         assert all_list_vars['second[2]'] == 'three'
+
+    def test_get_prefixed_env_vars(self) -> None:
+        var_store: VariableStore = VariableStore()
+        env_vars = {
+            'ATTACKMATE_FOO': 'env_foo',
+            'ATTACKMATE_BAR': 'env_bar',
+        }
+        with patch.dict(os.environ, env_vars):
+            prefixed_env_vars = var_store.get_prefixed_env_vars()
+            assert len(prefixed_env_vars) == 2
+            assert prefixed_env_vars['FOO'] == 'env_foo'
+            assert prefixed_env_vars['BAR'] == 'env_bar'
+
+    def test_replace_with_prefixed_env_vars(self) -> None:
+        var_store: VariableStore = VariableStore()
+        store_vars = {
+            'FOO': 'store_foo',
+            'BAR': 'store_bar',
+        }
+        env_vars = {
+            'ATTACKMATE_FOO': 'env_foo',
+            'ATTACKMATE_BAR': 'env_bar',
+        }
+        var_store.from_dict(store_vars)
+        with patch.dict(os.environ, env_vars):
+            var_store.replace_with_prefixed_env_vars()
+            assert len(var_store.variables) == 2
+            assert var_store.variables['FOO'] == 'env_foo'
+            assert var_store.variables['BAR'] == 'env_bar'
