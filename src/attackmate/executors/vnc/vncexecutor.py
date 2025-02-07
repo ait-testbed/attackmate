@@ -17,8 +17,9 @@ from attackmate.schemas.vnc import VncCommand
 from vncdotool import api
 from vncdotool.client import AuthenticationError
 from attackmate.executors.vnc.sessionstore import SessionStore
+from attackmate.executors.executor_factory import executor_factory
 
-
+@executor_factory.register_executor('vnc')
 class VncExecutor(BaseExecutor):
     def __init__(self, pm: ProcessManager, cmdconfig=None, *, varstore: VariableStore):
         self.session_store = SessionStore()
@@ -31,17 +32,19 @@ class VncExecutor(BaseExecutor):
         self.display = None
         self.password = None
 
-    def connect(self, command: VncCommand) -> api.ThreadedVNCClientProxy:
-        connection_string = self.hostname
 
+    def build_connection_string(self) -> str:
+        if not self.hostname:
+            raise ExecException("Hostname is required for VNC connection.")
+        connection_str = self.hostname
         if self.display is not None:
-            connection_string += f':{self.display}'
-        if self.port is not None:
-            if self.display is None:
-                connection_string += f'::{self.port}'
+            connection_str += f":{self.display}"
+        elif self.port is not None:
+            connection_str += f"::{self.port}"
+        return connection_str
 
-        client = api.connect(connection_string, command.password)
-
+    def connect(self, command: VncCommand) -> api.ThreadedVNCClientProxy:
+        client = api.connect(self.build_connection_string(), command.password)
         return client
 
     def connect_use_session(self, command):
@@ -95,26 +98,22 @@ class VncExecutor(BaseExecutor):
 
         try:
             client = self.connect_use_session(command)
-            if command.cmd == 'key' and command.key:
-                client.keyPress(command.key)
-            elif command.cmd == 'type' and command.input:
-                self.send_keys(client, command.input)
-            elif command.cmd == 'move':
-                client.mouseMove(command.x, command.y)
-            elif command.cmd == 'capture':
-                client.captureScreen(command.filename)
-            elif command.cmd == 'click':
-                client.mousePress(1)
-            elif command.cmd == 'expectscreen':
-                client.expectScreen(command.filename, command.maxrms)
-        except ValueError as e:
-            raise ExecException(e)
-        except AttributeError as e:
-            raise ExecException(e)
-        except AuthenticationError as e:
-            raise ExecException(e)
-        except OSError as e:
-            raise ExecException(e)
+            actions = {
+                "key": lambda: client.keyPress(command.key),
+                "type": lambda: self.send_keys(client, command.input),
+                "move": lambda: client.mouseMove(command.x, command.y),
+                "capture": lambda: client.captureScreen(command.filename),
+                "click": lambda: client.mousePress(1),
+                "expectscreen": lambda: client.expectScreen(command.filename, command.maxrms),
+            }
+            action = actions.get(command.cmd)
+            if action:
+                action()
+            else:
+                raise ExecException(f"Unknown VNC command: {command.cmd}")
+            
+        except (ValueError, AttributeError, AuthenticationError, OSError) as e:
+            raise ExecException(f"VNC Execution Error: {e}")
 
         output = ''
         return Result(output, 0)

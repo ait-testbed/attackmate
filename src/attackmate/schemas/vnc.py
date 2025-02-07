@@ -25,16 +25,18 @@ class VncCommand(BaseCommand):
 
         if values.creates_session is not None and values.session is not None:
             raise ValueError('Cannot specify both "creates_session" and "session" at the same time.')
-        if cmd == 'type' and values.input is None:
-            raise ValueError('Command "type" requires an "input" field.')
-        elif cmd == 'key' and values.key is None:
-            raise ValueError('Command "key" requires a "key" field.')
-        elif cmd == 'capture' and values.filename is None:
-            raise ValueError('Command "capture" requires a "filename" field.')
-        elif cmd == 'expectscreen' and values.filename is None:
-            raise ValueError('Command  "expectscreen" requires a "filename" field.')
-        elif cmd == 'move':
-            if values.x is None or values.y is None:
-                raise ValueError('Command "move" requires both "x" and "y" fields.')
+        
+        required_fields = {
+        "type": ["input"],
+        "key": ["key"],
+        "capture": ["filename"],
+        "expectscreen": ["filename"],
+        "move": ["x", "y"],
+        }   
+
+        if cmd in required_fields:
+            missing_fields = [field for field in required_fields[cmd] if getattr(values, field, None) is None]
+            if missing_fields:
+                raise ValueError(f'Command "{cmd}" requires {", ".join(missing_fields)} field(s).')
 
         return values
