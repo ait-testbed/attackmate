@@ -4,6 +4,7 @@ regex
 
 This command parses variables using regular expressions. For more information
 about regular expressions see `Python Regex  <https://docs.python.org/3/library/re.html>`_
+This command does not modify the Builtin Variable ``RESULT_STDOUT``.
 
 The following example parses the portnumber from the output of the last command and stores it in variable "UNREALPORT":
 

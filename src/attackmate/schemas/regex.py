@@ -1,8 +1,10 @@
 from typing import Literal, Optional
 from pydantic import ValidationInfo, field_validator
 from .base import BaseCommand
+from attackmate.command import CommandRegistry
 
 
+@CommandRegistry.register('regex')
 class RegExCommand(BaseCommand):
 
     @field_validator('mode')

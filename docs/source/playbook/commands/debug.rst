@@ -3,7 +3,7 @@ debug
 =====
 
 This command prints out strings and variables and is for debugging
-purposes only.
+purposes/printing to the console only. This command does not modify the Builtin Variable ``RESULT_STDOUT``.
 
    .. code-block:: yaml
 
