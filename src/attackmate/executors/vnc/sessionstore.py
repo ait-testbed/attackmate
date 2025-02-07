@@ -27,3 +27,9 @@ class SessionStore:
 
     def set_session(self, session_name: str, client: VncClient):
         self.store[session_name] = client
+
+    def remove_session(self, session_name: str):
+        if session_name in self.store:
+            del self.store[session_name]
+        else:
+            raise KeyError('Session not found in Sessionstore')

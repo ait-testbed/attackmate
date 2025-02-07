@@ -105,6 +105,7 @@ class VncExecutor(BaseExecutor):
                 "capture": lambda: client.captureScreen(command.filename),
                 "click": lambda: client.mousePress(1),
                 "expectscreen": lambda: client.expectScreen(command.filename, command.maxrms),
+                "close": lambda: self.close_connection(command.session),
             }
             action = actions.get(command.cmd)
             if action:
@@ -117,3 +118,22 @@ class VncExecutor(BaseExecutor):
 
         output = ''
         return Result(output, 0)
+
+    def close_connection(self, session_name: str = "default"):
+        """Closes the VNC connection for a given session."""
+        if self.session_store.has_session(session_name):
+            client = self.session_store.get_client_by_session(session_name)
+            if client:
+                try:
+                    self.logger.info(f"Closing VNC connection for session: {session_name}")
+                    client.disconnect()
+                    api.shutdown()
+                    self.session_store.remove_session(session_name)
+                    self.logger.info(f"VNC session '{session_name}' closed and removed.")
+                except Exception as e:
+                    self.logger.error(f"Error while closing VNC connection for session '{session_name}': {str(e)}")
+                    raise ExecException(f"Error closing VNC connection: {e}")
+        else:
+            self.logger.warning(f"VNC session '{session_name}' not found in session store.")
+
+                   
