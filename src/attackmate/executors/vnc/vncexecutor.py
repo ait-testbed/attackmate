@@ -44,8 +44,15 @@ class VncExecutor(BaseExecutor):
         return connection_str
 
     def connect(self, command: VncCommand) -> api.ThreadedVNCClientProxy:
+        # self.logger.info(f"Password: {command.password}")
+
         client = api.connect(self.build_connection_string(), command.password)
-        return client
+        if not client.protocol:  
+            self.logger.info(f"Could not connect to VNC server: {self.build_connection_string()}")
+            client.disconnect()
+            api.shutdown()
+        else:
+            return client
 
     def connect_use_session(self, command):
 
@@ -95,9 +102,13 @@ class VncExecutor(BaseExecutor):
 
     def _exec_cmd(self, command: VncCommand) -> Result:
         self.cache_settings(command)
-
+        output = ''
+        
         try:
             client = self.connect_use_session(command)
+            if not client:
+                return Result(output, 0)
+
             actions = {
                 "key": lambda: client.keyPress(command.key),
                 "type": lambda: self.send_keys(client, command.input),
@@ -116,7 +127,7 @@ class VncExecutor(BaseExecutor):
         except (ValueError, AttributeError, AuthenticationError, OSError) as e:
             raise ExecException(f"VNC Execution Error: {e}")
 
-        output = ''
+        output = 'vnc connected'
         return Result(output, 0)
 
     def close_connection(self, session_name: str = "default"):
