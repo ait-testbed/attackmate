@@ -18,6 +18,7 @@ from vncdotool import api
 from vncdotool.client import AuthenticationError
 from attackmate.executors.vnc.sessionstore import SessionStore
 from attackmate.executors.executor_factory import executor_factory
+import time
 
 @executor_factory.register_executor('vnc')
 class VncExecutor(BaseExecutor):
@@ -44,21 +45,25 @@ class VncExecutor(BaseExecutor):
         return connection_str
 
     def connect(self, command: VncCommand) -> api.ThreadedVNCClientProxy:
-        # self.logger.info(f"Password: {command.password}")
+        
 
         client = api.connect(self.build_connection_string(), command.password)
-        if not client.protocol:  
+        time.sleep(5)
+        if not client or not client.protocol or not client.protocol.transport.connected:  
             self.logger.info(f"Could not connect to VNC server: {self.build_connection_string()}")
             client.disconnect()
             api.shutdown()
-        else:
-            return client
+            return None
+        # else:
+        return client
 
     def connect_use_session(self, command):
 
         if command.creates_session is not None:
             # If 'creates_session' is specified, create a new session and save it
             client = self.connect(command)
+            if not client:
+                return None
             self.session_store.set_session(command.creates_session, client)
             return client
 
