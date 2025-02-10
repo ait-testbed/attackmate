@@ -52,9 +52,10 @@ class VncExecutor(BaseExecutor):
         if not (client and client.protocol and client.protocol.connected):  
             self.logger.info(f"Could not connect to VNC server: {self.build_connection_string()}")
             client.disconnect()
-            api.shutdown()
+            # TODO add session cleanup somehwere after playbook is run--> api.shutdown() so that attackmate can finish
             return None
-        return client
+        else:
+            return client
 
     def connect_use_session(self, command):
 
@@ -110,7 +111,7 @@ class VncExecutor(BaseExecutor):
         
         try:
             client = self.connect_use_session(command)
-            if not client:
+            if not (client and client.protocol.connected):
                 return Result(output, 0)
 
             actions = {
@@ -131,7 +132,7 @@ class VncExecutor(BaseExecutor):
         except (ValueError, AttributeError, AuthenticationError, OSError) as e:
             raise ExecException(f"VNC Execution Error: {e}")
 
-        output = 'vnc connected'
+        output = "vnc_connected"
         return Result(output, 0)
 
     def close_connection(self, session_name: str = "default"):
