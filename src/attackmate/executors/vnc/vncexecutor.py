@@ -49,12 +49,11 @@ class VncExecutor(BaseExecutor):
 
         client = api.connect(self.build_connection_string(), command.password)
         time.sleep(5)
-        if not client or not client.protocol or not client.protocol.transport.connected:  
+        if not (client and client.protocol and client.protocol.connected):  
             self.logger.info(f"Could not connect to VNC server: {self.build_connection_string()}")
             client.disconnect()
             api.shutdown()
             return None
-        # else:
         return client
 
     def connect_use_session(self, command):
