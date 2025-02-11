@@ -1,18 +1,12 @@
 from typing import Optional, Literal
 from .base import BaseCommand, StringNumber
-from pydantic import model_validator, ValidationInfo
+from pydantic import model_validator, field_validator, ValidationInfo
 
 
 
 
 class VncCommand(BaseCommand):
 
-    @classmethod
-    def background_unsupported(cls, v, info: ValidationInfo) -> str:
-        if info.data['background']:
-            raise ValueError('background mode is unsupported for VNC')
-        return v
-    
     type: Literal['vnc']
     cmd: Literal['key', 'type', 'move', 'capture', 'click', 'expectscreen', "close"]
     hostname: Optional[str] = None
@@ -32,6 +26,8 @@ class VncCommand(BaseCommand):
     def check_cmd_requirements(cls, values):
         cmd = values.cmd
 
+        if values.background:
+            raise ValueError('background mode is unsupported for VNC')
         if values.creates_session is not None and values.session is not None:
             raise ValueError('Cannot specify both "creates_session" and "session" at the same time.')
         
