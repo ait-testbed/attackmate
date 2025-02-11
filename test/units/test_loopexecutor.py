@@ -47,6 +47,17 @@ class TestLoopExecutor:
         assert 'Debug: \'1\'' in [rec.message for rec in caplog.records]
         assert 'Debug: \'2\'' in [rec.message for rec in caplog.records]
 
+    def test_break_if_with_range(self, caplog):
+        caplog.set_level(logging.INFO)
+        lc = LoopCommand(
+            type='loop', cmd='range(1,5)', break_if='$LOOP_INDEX =~ 2', commands=[DebugCommand(cmd='$LOOP_INDEX', type='debug')]
+        )
+        self.loop_executor.run(lc)
+        assert 'Debug: \'1\'' in [rec.message for rec in caplog.records]
+        assert 'Debug: \'2\'' not in [rec.message for rec in caplog.records]
+        assert 'Debug: \'3\'' not in [rec.message for rec in caplog.records]
+
+
     def test_until(self, caplog):
         caplog.set_level(logging.INFO)
         self.varstore.clear()
