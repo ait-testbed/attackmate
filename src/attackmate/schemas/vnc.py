@@ -1,9 +1,18 @@
 from typing import Optional, Literal
 from .base import BaseCommand, StringNumber
-from pydantic import model_validator
+from pydantic import model_validator, ValidationInfo
+
+
 
 
 class VncCommand(BaseCommand):
+
+    @classmethod
+    def background_unsupported(cls, v, info: ValidationInfo) -> str:
+        if info.data['background']:
+            raise ValueError('background mode is unsupported for VNC')
+        return v
+    
     type: Literal['vnc']
     cmd: Literal['key', 'type', 'move', 'capture', 'click', 'expectscreen', "close"]
     hostname: Optional[str] = None
