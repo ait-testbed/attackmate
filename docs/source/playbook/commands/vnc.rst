@@ -65,6 +65,7 @@ Execute commands on a remote server via VNC. Uses the `vncdotool <https://github
    Specifies the display to use on the remote machine.
 
    :type: str
+   :default: ``1``
 
 .. confval:: password
 
@@ -80,9 +81,10 @@ Execute commands on a remote server via VNC. Uses the `vncdotool <https://github
 
 .. confval:: maxrms
 
-   Metric to compare a screenshot with ``expext screen``.
+   Metric to compare a screen with ``expext screen``. Only continue if the sceen matches.
+   Maximum RMS (root mean square) error allowed (set a small value for near-exact match)
 
-   :type: int
+   :type: float
 
 .. confval:: input
 
@@ -126,6 +128,10 @@ Execute commands on a remote server via VNC. Uses the `vncdotool <https://github
 
    :type: str
 
+
+.. note::
+
+   The vnc connection needs to be closed with the command ``close`` explicitely, otherwise attackmate will keep running.
 
 
 

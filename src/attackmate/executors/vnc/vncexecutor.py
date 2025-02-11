@@ -52,7 +52,6 @@ class VncExecutor(BaseExecutor):
         if not (client and client.protocol and client.protocol.connected):  
             self.logger.info(f"Could not connect to VNC server: {self.build_connection_string()}")
             client.disconnect()
-            # TODO add session cleanup somehwere after playbook is run--> api.shutdown() so that attackmate can finish
             return None
         else:
             return client
