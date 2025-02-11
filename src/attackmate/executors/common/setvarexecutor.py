@@ -33,7 +33,7 @@ class SetVarExecutor(BaseExecutor):
         self.logger.warning(f"Setting Variable: '{command.variable}'")
 
     def _exec_cmd(self, command: SetVarCommand) -> Result:
-        self.setoutuptvars = False
+        self.setoutputvars = False
         content = command.cmd
         if command.encoder:
             try:

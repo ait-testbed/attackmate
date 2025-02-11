@@ -66,6 +66,7 @@ class LoopExecutor(BaseExecutor):
                     'LOOP_INDEX': x,
                     **self.varstore.variables,
                 }
+
                 if self.break_condition_met(command, placeholders):
                     return
                 self.substitute_variables_in_command(template_cmd, placeholders)

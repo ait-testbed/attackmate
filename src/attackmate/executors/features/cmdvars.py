@@ -9,10 +9,10 @@ from attackmate.execexception import ExecException
 class CmdVars:
     def __init__(self, variablestore: VariableStore):
         self.varstore = variablestore
-        self.setoutuptvars = True
+        self.setoutputvars = True
 
     def set_result_vars(self, result: Result):
-        if self.setoutuptvars:
+        if self.setoutputvars:
             self.varstore.set_variable('RESULT_STDOUT', result.stdout)
             self.varstore.set_variable('RESULT_RETURNCODE', str(result.returncode))
 
