@@ -1,7 +1,7 @@
 .. _integration:
 
 =========================================
-Integrating AttackMate in a Python Script
+Using AttackMate in a Python Script
 =========================================
 
 It is possible to integrate AttackMate into a Python script for automation and custom attack scenarios.
@@ -71,7 +71,7 @@ Commands that run in the Background return Result(None,None)
 
 .. note::
    Regular Commands return a ``Result`` object.
-   Commands that run in background mode do not return ``Result(None,None)``.
+   Commands that run in background mode return ``Result(None,None)``.
 
 Attributes
 ----------

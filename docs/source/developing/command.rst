@@ -1,4 +1,4 @@
-.. _executors:
+.. _command:
 
 ======================
 Adding a New Command
@@ -80,7 +80,7 @@ The factory filters the provided configurations based on the class constructor s
         return config
 
 
-5. Modify the Loop Command  to Include the New Command
+4. Modify the Loop Command to Include the New Command
 =====================================================
 
 Update the ``LoopCommand`` schema to include the new command.

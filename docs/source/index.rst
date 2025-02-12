@@ -23,8 +23,6 @@ Welcome to AttackMate's documentation!
    configuration/index
    basic
 
-
-
 .. toctree::
    :maxdepth: 4
    :caption: Playbook:
@@ -37,7 +35,15 @@ Welcome to AttackMate's documentation!
 
 .. toctree::
    :maxdepth: 1
-   :caption: Development:
+   :caption: Developing:
+
+   developing/command
+   developing/integration
+
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Package:
 
    attackmate/attackmate
 
