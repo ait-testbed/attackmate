@@ -80,10 +80,24 @@ The factory filters the provided configurations based on the class constructor s
         return config
 
 
-5. Modify the Loop Command to Include the New Command
+5. Modify the Loop Command  to Include the New Command
 =====================================================
 
 Update the ``LoopCommand`` schema to include the new command.
+
+::
+
+    Command = Union[
+            ShellCommand,
+            DebugCommand,  # Newly added command
+            # ... other command classes ...
+        ]
+    
+
+5. Modify playbook.py to Include the New Command
+=====================================================
+
+Update the ``Playbook`` schema to include the new command.
 
 ::
 
