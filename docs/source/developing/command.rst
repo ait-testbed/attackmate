@@ -7,10 +7,11 @@ Adding a New Command
 AttackMate supports extending its functionality by adding new commands. 
 This section details the steps required to integrate a new command.
 
+
 1. Define the Command Schema
 =============================
 
-Commands in AttackMate inherit from ``BaseCommand``.  
+All Commands in AttackMate inherit from ``BaseCommand``.  
 To create a new command, define a class in `/src/attackmate/schemas` and register it using the ``@CommandRegistry.register('<command_type>')`` decorator.
 
 For example, to add a ``debug`` command:

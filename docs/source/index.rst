@@ -38,6 +38,7 @@ Welcome to AttackMate's documentation!
    :caption: Developing:
 
    developing/command
+   developing/baseexecutor
    developing/integration
 
 
