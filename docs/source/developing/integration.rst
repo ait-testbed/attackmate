@@ -12,12 +12,12 @@ Installation
 
 Before using AttackMate in a script, ensure it is installed.
 
-Example Script
-==============
+Integration
+============
 
 Below is an example of how to integrate AttackMate into a Python script.
-Configs and Variable Store can be passed as a dictionary or as a Config object.
-Commands can be created with the Command.create() method and passed to the run_command() method.
+Configs can be passed as a as a Config object, the Variable Store can be passed as a dictionary.
+Commands can be created with the ``Command.create()`` method and passed to the ``run_command()`` method.
 
 ::
 
@@ -62,15 +62,16 @@ To execute the script, save it as `attackmate_script.py` and run:
 
 If AttackMate is configured correctly, it will execute the commands and print the results.
 
-.. note::
-   Reguler Commands return a Result object.
-   Commands that run in Background Mode do not return a Result object.
 
 Understanding the Result Object
 ===============================
 
-When executing a command with AttackMate, the result is returned as an instance of the `Result` class. This object contains the standard output (`stdout`) and the return code (`returncode`) of the executed command.
+When executing a command with AttackMate, the result is returned as an instance of the ``Result`` class. This object contains the standard output (`stdout`) and the return code (`returncode`) of the executed command.
 Commands that run in the Background return Result(None,None)
+
+.. note::
+   Regular Commands return a ``Result`` object.
+   Commands that run in background mode do not return ``Result(None,None)``.
 
 Attributes
 ----------
@@ -81,7 +82,7 @@ Attributes
 Example Usage
 -------------
 
-The `Result` object can be used to check the output and status of a command execution:
+The ``Result`` object can be used to check the output and status of a command execution:
 
 ::
 
