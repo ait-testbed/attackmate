@@ -10,7 +10,7 @@ This chapter is about these important concepts of AttackMate.
 Session
 -------
 
-Attackmate executes all commands stateless. Therefore, each command is executed in a new "environment".
+AttackMate executes all commands stateless. Therefore, each command is executed in a new "environment".
 What "environment" means depends on the type of the command. For example, every stateless shell
 command spawns a new shell process. As illustrated in the following image, every shell command
 is executed in a new `/bin/sh` process.

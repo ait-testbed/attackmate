@@ -60,7 +60,7 @@ class RegExExecutor(BaseExecutor):
         return
 
     def _exec_cmd(self, command: RegExCommand) -> Result:
-        self.setoutuptvars = False
+        self.setoutputvars = False
         if command.mode == 'findall':
             m = re.findall(command.cmd, self.varstore.get_str(command.input))
             self.forge_and_register_variables(command.output, m)

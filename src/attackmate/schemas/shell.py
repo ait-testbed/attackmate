@@ -2,8 +2,10 @@ from typing import Literal, Optional
 from pydantic import ValidationInfo, field_validator
 from attackmate.schemas.base import StringNumber
 from attackmate.schemas.base import BaseCommand
+from attackmate.command import CommandRegistry
 
 
+@CommandRegistry.register('shell')
 class ShellCommand(BaseCommand):
     @field_validator('session', 'creates_session')
     @classmethod

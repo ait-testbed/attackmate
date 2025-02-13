@@ -1,5 +1,7 @@
 from attackmate.schemas.base import BaseCommand
 from pydantic import field_validator
+from typing import Literal
+from attackmate.command import CommandRegistry
 from typing import Literal, Union, Optional, List
 from .sleep import SleepCommand
 from .shell import ShellCommand
@@ -66,6 +68,7 @@ Commands = List[
 ]
 
 
+@CommandRegistry.register('loop')
 class LoopCommand(BaseCommand):
     @field_validator('background')
     @classmethod

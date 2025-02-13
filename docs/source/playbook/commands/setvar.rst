@@ -4,6 +4,7 @@ setvar
 
 Set a variable. This could be used for string interpolation or for
 copying variables.
+This command does not modify the Builtin Variable ``RESULT_STDOUT``.
 
 .. code-block:: yaml
 
