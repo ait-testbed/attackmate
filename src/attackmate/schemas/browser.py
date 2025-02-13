@@ -1,7 +1,9 @@
 from typing import Literal, Optional
 from attackmate.schemas.base import BaseCommand
+from attackmate.command import CommandRegistry
 
 
+@CommandRegistry.register('browser')
 class BrowserCommand(BaseCommand):
     type: Literal['browser']
     cmd: Literal['visit', 'click', 'type', 'screenshot'] = 'visit'
