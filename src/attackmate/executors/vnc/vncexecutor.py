@@ -124,6 +124,9 @@ class VncExecutor(BaseExecutor):
 
             else:
                 raise ExecException(f"Unknown VNC command: {command.cmd}")
+        
+        except(TimeoutError):
+            raise ExecException(f"VNC Timeout Error after {command.expect_timeout} seconds")
             
         except (ValueError, AttributeError, AuthenticationError, OSError) as e:
             raise ExecException(f"VNC Execution Error: {e}")
