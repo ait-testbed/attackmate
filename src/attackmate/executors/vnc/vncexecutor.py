@@ -34,27 +34,29 @@ class VncExecutor(BaseExecutor):
         self.password = None
 
 
-    def build_connection_string(self) -> str:
-        if not self.hostname:
+    def build_connection_string(self, hostname: str, port: int = None, display: int = None) -> str:
+        if not hostname:
             raise ExecException("Hostname is required for VNC connection.")
-        connection_str = self.hostname
-        if self.display is not None:
-            connection_str += f":{self.display}"
-        elif self.port is not None:
-            connection_str += f"::{self.port}"
+        connection_str = hostname
+        if display is not None:
+            connection_str += f":{display}"
+        elif port is not None:
+            connection_str += f"::{port}"
         return connection_str
 
     def connect(self, command: VncCommand) -> api.ThreadedVNCClientProxy:
-        client = api.connect(self.build_connection_string(), command.password)
+        connection_string = self.build_connection_string(command.hostname, command.port, command.display)
+        client = api.connect(connection_string, command.password)
 
         timeout = 5  # Maximum time to wait for connection
         start_time = time.time()
 
         while time.time() - start_time < timeout:
             if client and client.protocol and client.protocol.connected:
+                self.logger.info(f"Connected to VNC server: {connection_string}")
                 return client
             time.sleep(0.1)  # Poll every 100ms for connection status
-        self.logger.info(f"Could not connect to VNC server: {self.build_connection_string()}")
+        self.logger.info(f"Could not connect to VNC server: {connection_string}")
         client.disconnect()
         return None
 
@@ -88,26 +90,15 @@ class VncExecutor(BaseExecutor):
 
         return client
 
-    def cache_settings(self, command: VncCommand):
-        if command.hostname:
-            self.hostname = command.hostname
-        if command.port:
-            self.port = command.port
-        if command.display:
-            self.display = command.display
-        if command.password:
-            self.password = command.password
 
     def log_command(self, command: VncCommand):
-        self.cache_settings(command)
-        self.logger.info(f"Executing Vnc-Command: '{command.cmd}'. Host: {self.hostname}")
+        self.logger.info(f"Executing VNC-Command: '{command.cmd}'.")
 
     def send_keys(self, client, keys):
         for k in keys:
             client.keyPress(k)
 
     def _exec_cmd(self, command: VncCommand) -> Result:
-        self.cache_settings(command)
         output = ''
         
         try:
