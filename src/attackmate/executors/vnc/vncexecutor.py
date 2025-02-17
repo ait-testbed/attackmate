@@ -45,16 +45,18 @@ class VncExecutor(BaseExecutor):
         return connection_str
 
     def connect(self, command: VncCommand) -> api.ThreadedVNCClientProxy:
-        
-
         client = api.connect(self.build_connection_string(), command.password)
-        time.sleep(5)
-        if not (client and client.protocol and client.protocol.connected):  
-            self.logger.info(f"Could not connect to VNC server: {self.build_connection_string()}")
-            client.disconnect()
-            return None
-        else:
-            return client
+
+        timeout = 5  # Maximum time to wait for connection
+        start_time = time.time()
+
+        while time.time() - start_time < timeout:
+            if client and client.protocol and client.protocol.connected:
+                return client
+            time.sleep(0.1)  # Poll every 100ms for connection status
+        self.logger.info(f"Could not connect to VNC server: {self.build_connection_string()}")
+        client.disconnect()
+        return None
 
     def connect_use_session(self, command):
 
