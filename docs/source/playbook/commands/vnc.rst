@@ -2,7 +2,7 @@
 vnc
 ===
 
-Execute commands on a remote server via VNC. Uses the `vncdotool <https://github.com/sibson/vncdotool>` library.
+Execute commands on a remote server via VNC. Uses the `vncdotool <https://github.com/sibson/vncdotool>`_ library.
 
 .. note::
 
@@ -75,13 +75,13 @@ Execute commands on a remote server via VNC. Uses the `vncdotool <https://github
 
 .. confval:: filename
 
-   Path where a screeshot ``capture`` should be saved, or file to compare a screenshot with ``expext screen``.
+   Path where a screenshot ``capture`` should be saved, or file to compare a screenshot with ``expectscreen``.
 
    :type: str
 
 .. confval:: maxrms
 
-   Metric to compare a screen with ``expext screen``. Only continue if the sceen matches.
+   Metric to compare a screen with ``expectscreen``. Only continue if the screen matches.
    Maximum RMS (root mean square) error allowed (set a small value for near-exact match)
 
    :type: float
@@ -101,13 +101,13 @@ Execute commands on a remote server via VNC. Uses the `vncdotool <https://github
 
 .. confval:: x
 
-   x position ot move the cursor to with the command ``move``
+   x position to move the cursor to with the command ``move``
 
    :type: int
 
 .. confval:: y
 
-   y position ot move the cursor to ``move``
+   y position to move the cursor to with the command ``move``
 
    :type: int
 
@@ -124,7 +124,7 @@ Execute commands on a remote server via VNC. Uses the `vncdotool <https://github
 .. confval:: session
 
    Reuse an existing session. This setting works only if another
-   vnc-command was executed with the command-option "creates_session"
+   vnc-command was executed with the command-option ``creates_session``
 
    :type: str
 

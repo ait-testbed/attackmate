@@ -6,10 +6,7 @@ class SessionStore:
         self.store: dict[str, VncClient] = {}
 
     def has_session(self, session_name: str) -> bool:
-        if session_name in self.store:
-            return True
-        else:
-            return False
+        return session_name in self.store
 
     def get_client_by_session(self, session_name: str) -> VncClient:
         if session_name in self.store:
