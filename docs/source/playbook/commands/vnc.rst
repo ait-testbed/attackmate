@@ -128,6 +128,25 @@ Execute commands on a remote server via VNC. Uses the `vncdotool <https://github
 
    :type: str
 
+.. confval:: connection_timeout
+
+   timeout in seconds for the connection to be established
+
+   :type: int
+   :default: ``10``
+
+.. confval:: expect_timeout
+
+   timeout in seconds for a command to finish. **Gets passed as an argument to the client the first time a connection is established**.
+
+   :type: int
+   :default: ``60``
+
+
+.. note::
+
+   The ``connection_timeout`` and `expect_timeout`` need to be set in the first command that establishes the connection
+
 
 .. note::
 
