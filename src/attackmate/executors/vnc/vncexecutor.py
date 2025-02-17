@@ -19,11 +19,13 @@ from vncdotool.client import AuthenticationError
 from attackmate.executors.vnc.sessionstore import SessionStore
 from attackmate.executors.executor_factory import executor_factory
 import time
+import threading
 
 @executor_factory.register_executor('vnc')
 class VncExecutor(BaseExecutor):
     def __init__(self, pm: ProcessManager, cmdconfig=None, *, varstore: VariableStore):
         self.session_store = SessionStore()
+        self.connection_timeout = 10
         self.set_defaults()
         super().__init__(pm, varstore, cmdconfig)
 
@@ -46,12 +48,10 @@ class VncExecutor(BaseExecutor):
 
     def connect(self, command: VncCommand) -> api.ThreadedVNCClientProxy:
         connection_string = self.build_connection_string(command.hostname, command.port, command.display)
-        client = api.connect(connection_string, command.password)
-
-        timeout = 5  # Maximum time to wait for connection
+        client = api.connect(connection_string, command.password, timeout = 10)
         start_time = time.time()
 
-        while time.time() - start_time < timeout:
+        while time.time() - start_time < command.connection_timeout :
             if client and client.protocol and client.protocol.connected:
                 self.logger.info(f"Connected to VNC server: {connection_string}")
                 return client
@@ -98,6 +98,28 @@ class VncExecutor(BaseExecutor):
         for k in keys:
             client.keyPress(k)
 
+    def wait_for_action(self, cmd, action, *args, **kwargs):
+            result = []
+
+            def wrapper():
+                try:
+                    result.append(action(*args, **kwargs))
+                except Exception as e:
+                    result.append(e)
+            # Create a thread to execute the action
+            action_thread = threading.Thread(target=wrapper)
+            action_thread.start()
+            # Wait for the action to finish, with a timeout
+            action_thread.join(cmd.expect_timeout)
+            # Check if the action has completed within the timeout
+            if action_thread.is_alive():
+                # Timeout occurred
+                action_thread.join()  # Only terminates after the ThreadedVNCClientProxy's timeout
+                
+
+            return result[0] if result else None
+
+
     def _exec_cmd(self, command: VncCommand) -> Result:
         output = ''
         
@@ -112,12 +134,20 @@ class VncExecutor(BaseExecutor):
                 "move": lambda: client.mouseMove(command.x, command.y),
                 "capture": lambda: client.captureScreen(command.filename),
                 "click": lambda: client.mousePress(1),
-                "expectscreen": lambda: client.expectScreen(command.filename, command.maxrms),
+#
+
                 "close": lambda: self.close_connection(command.session),
             }
             action = actions.get(command.cmd)
             if action:
                 action()
+            
+            elif command.cmd == "expectscreen":
+                result = self.wait_for_action(command, client.expectScreen, command.filename, command.maxrms)
+                self.logger.info(f"Screen match result: {result}")
+                if isinstance(result, TimeoutError):
+                    raise ExecException(f"ExpectScreen timed out after {command.expect_timeout} seconds.")
+
             else:
                 raise ExecException(f"Unknown VNC command: {command.cmd}")
             
