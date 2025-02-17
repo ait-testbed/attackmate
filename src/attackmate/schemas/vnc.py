@@ -21,7 +21,7 @@ class VncCommand(BaseCommand):
     creates_session: Optional[str] = None
     session: Optional[str] = None
     maxrms: Optional[float] = 0
-    expect_timeout: Optional[int] = 3600
+    expect_timeout: Optional[int] = 60
     connection_timeout: Optional[int] = 10
 
     @model_validator(mode='after')

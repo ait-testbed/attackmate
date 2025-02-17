@@ -48,7 +48,7 @@ class VncExecutor(BaseExecutor):
 
     def connect(self, command: VncCommand) -> api.ThreadedVNCClientProxy:
         connection_string = self.build_connection_string(command.hostname, command.port, command.display)
-        client = api.connect(connection_string, command.password, timeout = 10)
+        client = api.connect(connection_string, command.password, timeout = command.expect_timeout)
         start_time = time.time()
 
         while time.time() - start_time < command.connection_timeout :
@@ -98,26 +98,6 @@ class VncExecutor(BaseExecutor):
         for k in keys:
             client.keyPress(k)
 
-    def wait_for_action(self, cmd, action, *args, **kwargs):
-            result = []
-
-            def wrapper():
-                try:
-                    result.append(action(*args, **kwargs))
-                except Exception as e:
-                    result.append(e)
-            # Create a thread to execute the action
-            action_thread = threading.Thread(target=wrapper)
-            action_thread.start()
-            # Wait for the action to finish, with a timeout
-            action_thread.join(cmd.expect_timeout)
-            # Check if the action has completed within the timeout
-            if action_thread.is_alive():
-                # Timeout occurred
-                action_thread.join()  # Only terminates after the ThreadedVNCClientProxy's timeout
-                
-
-            return result[0] if result else None
 
 
     def _exec_cmd(self, command: VncCommand) -> Result:
@@ -135,18 +115,12 @@ class VncExecutor(BaseExecutor):
                 "capture": lambda: client.captureScreen(command.filename),
                 "click": lambda: client.mousePress(1),
 #
-
+                "expectscreen": lambda: client.expectScreen(command.filename, maxrms=command.maxrms),
                 "close": lambda: self.close_connection(command.session),
             }
             action = actions.get(command.cmd)
             if action:
                 action()
-            
-            elif command.cmd == "expectscreen":
-                result = self.wait_for_action(command, client.expectScreen, command.filename, command.maxrms)
-                self.logger.info(f"Screen match result: {result}")
-                if isinstance(result, TimeoutError):
-                    raise ExecException(f"ExpectScreen timed out after {command.expect_timeout} seconds.")
 
             else:
                 raise ExecException(f"Unknown VNC command: {command.cmd}")
