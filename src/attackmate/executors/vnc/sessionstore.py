@@ -25,7 +25,7 @@ class SessionStore:
 
     def clean_sessions(self):
         """
-        Disconnect all activ evnc sessionsin the session store,
+        Disconnect all active vnc sessionsin the session store,
         """
         for session_name, client in self.store.items():
             if client is not None:
