@@ -121,6 +121,9 @@ class SSHExecutor(BaseExecutor, SFTPFeature, Interactive):
         if command.creates_session is not None:
             self.session_store.set_session(command.creates_session, client)
         return client
+    
+    def cleanup(self):
+        self.session_store.clean_sessions()
 
     def _exec_cmd(self, command: SFTPCommand | SSHCommand) -> Result:
         error = None
