@@ -101,9 +101,12 @@ class AttackMate:
         return result if result else Result(None, None)
     
     def clean_session_stores(self):
+        self.logger.warning('Cleaning up session stores')
         # msf
-        if (msf_executor := self.executors.get("msf-session")):
-            msf_executor.cleanup()
+        if (msf_module_executor := self.executors.get("msf-module")):
+            msf_module_executor.cleanup()
+        if (msf_session_executor := self.executors.get("msf-session")):
+            msf_session_executor.cleanup()
         # ssh
         if (ssh_executor := self.executors.get("ssh")):
             ssh_executor.cleanup()

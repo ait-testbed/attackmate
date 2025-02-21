@@ -131,3 +131,20 @@ class MsfModuleExecutor(BaseExecutor):
         cid = self.msf.consoles.console().cid
         output = self.msf.consoles.console(cid).run_module_with_output(exploit, payload=payload)
         return Result(output, 0)
+
+    def cleanup(self):
+        if self.msf is not None:
+            self.logger.debug('Killing all Meterpreter sessions')
+            active_sessions = self.msf.sessions.list
+            if active_sessions:
+                for session_id, session_data in active_sessions.items():
+                    try:
+                        self.logger.debug(f"Stopping msf session {session_id}")
+                        self.msf.sessions.session(session_id).stop()
+                        self.logger.info(f"Msf session {session_id} stopped successfully.")
+                    except Exception as e:
+                        self.logger.error(f"Failed to stop msf session {session_id}: {str(e)}")
+            else:
+                self.logger.debug("No active msf sessions found.")
+
+#msf.session returs shell manager
