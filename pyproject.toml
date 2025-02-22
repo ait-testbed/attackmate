@@ -19,6 +19,8 @@ dependencies = [
     "python-magic",
     "httpx",
     "httpx[http2]",
+    "vncdotool",
+    "pytest-mock",
     "playwright"
 ]
 dynamic = ["version"]
