@@ -22,3 +22,17 @@ class SessionStore:
             del self.store[session_name]
         else:
             raise KeyError('Session not found in Sessionstore')
+
+    def clean_sessions(self):
+        """
+        Disconnect all active vnc sessionsin the session store,
+        """
+        for session_name, client in self.store.items():
+            if client is not None:
+                try:
+                    client.disconnect()
+                except Exception as e:
+                    self.logger.error(f"Error closing vnc client for session '{session_name}': {e}")
+
+        self.store.clear()
+

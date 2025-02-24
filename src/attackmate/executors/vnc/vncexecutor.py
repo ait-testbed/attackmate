@@ -114,7 +114,6 @@ class VncExecutor(BaseExecutor):
                 "move": lambda: client.mouseMove(command.x, command.y),
                 "capture": lambda: client.captureScreen(command.filename),
                 "click": lambda: client.mousePress(1),
-#
                 "expectscreen": lambda: client.expectScreen(command.filename, maxrms=command.maxrms),
                 "close": lambda: self.close_connection(command.session),
             }
@@ -126,6 +125,7 @@ class VncExecutor(BaseExecutor):
                 raise ExecException(f"Unknown VNC command: {command.cmd}")
         
         except(TimeoutError):
+            self.cleanup()
             raise ExecException(f"VNC Timeout Error after {command.expect_timeout} seconds")
             
         except (ValueError, AttributeError, AuthenticationError, OSError) as e:
@@ -150,5 +150,10 @@ class VncExecutor(BaseExecutor):
                     raise ExecException(f"Error closing VNC connection: {e}")
         else:
             self.logger.warning(f"VNC session '{session_name}' not found in session store.")
+
+    def cleanup(self):
+        self.session_store.clean_sessions()
+        api.shutdown()
+        self.logger.warning("VNC sessions cleaned up and VNC API shutdown.")
 
                    
