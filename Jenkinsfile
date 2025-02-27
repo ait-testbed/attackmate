@@ -34,7 +34,8 @@ pipeline {
                                 sh "id"
                                 sh "useradd --system --uid=112 -U --home /home/jenkins -m --shell /bin/bash jenkins"
                                 sh "ls -la /docs"
-                                sh "su - jenkins -c 'make html'"
+                                sh "make html"
+                                sh "chown -R jenkins *" 
                         }
                 }
         }
