@@ -3,7 +3,7 @@ debug
 =====
 
 This command prints out strings and variables and is for debugging
-purposes only.
+purposes/printing to the console only. This command does not modify the Builtin Variable ``RESULT_STDOUT``.
 
    .. code-block:: yaml
 
@@ -39,4 +39,12 @@ purposes only.
    that this is an exceptional break.
 
    :type: bool
-   :default: ``True``
+   :default: ``False``
+
+.. confval:: wait_for_key
+
+   This setting causes the programm to pause until the user
+   hits the enter key.
+
+   :type: bool
+   :default: ``False``

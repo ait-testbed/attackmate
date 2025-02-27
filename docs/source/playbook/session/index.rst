@@ -4,13 +4,13 @@
 Sessions, Interactive
 =====================
 
-Many commands of AttackMate support the setting "session" or "interactive. 
-This chapter is about these important concepts of AttackMate. 
+Many commands of AttackMate support the setting "session" or "interactive.
+This chapter is about these important concepts of AttackMate.
 
 Session
 -------
 
-Attackmate executes all commands stateless. Therefore, each command is executed in a new "environment".
+AttackMate executes all commands stateless. Therefore, each command is executed in a new "environment".
 What "environment" means depends on the type of the command. For example, every stateless shell
 command spawns a new shell process. As illustrated in the following image, every shell command
 is executed in a new `/bin/sh` process.
@@ -65,4 +65,3 @@ Many commands work in such a way that they first execute something and then coll
 .. warning::
 
       Please note that you **MUST** send a newline when you execute interactive commands!
-

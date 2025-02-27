@@ -1,8 +1,10 @@
 from attackmate.schemas.base import BaseCommand
 from pydantic import field_validator
 from typing import Literal
+from attackmate.command import CommandRegistry
 
 
+@CommandRegistry.register('include')
 class IncludeCommand(BaseCommand):
     @field_validator('background')
     @classmethod

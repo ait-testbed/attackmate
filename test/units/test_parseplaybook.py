@@ -3,7 +3,7 @@ import logging
 from unittest.mock import patch, MagicMock
 from pathlib import Path
 import yaml
-from attackmate.__main__ import parse_playbook
+from attackmate.playbook_parser import parse_playbook
 
 
 # Mock Playbook class for validation
@@ -38,8 +38,8 @@ def mock_playbook_file(tmp_path):
 
 def test_parse_playbook_valid_file(mock_logger, mock_playbook_file):
     with patch(
-        'attackmate.__main__.yaml.safe_load', return_value=yaml.safe_load(sample_playbook_yaml)
-    ), patch('attackmate.__main__.Playbook', MockPlaybook):
+        'attackmate.playbook_parser.yaml.safe_load', return_value=yaml.safe_load(sample_playbook_yaml)
+    ), patch('attackmate.playbook_parser.Playbook', MockPlaybook):
 
         result = parse_playbook(str(mock_playbook_file), mock_logger)
 
@@ -50,7 +50,7 @@ def test_parse_playbook_nonexistent_file(mock_logger):
     non_existent_file = Path('/non/existent/path/playbook.yml')
     error_message = (
         f"Error: Playbook file not found under '{non_existent_file}' "
-        "or in the current directory or in /etc/attackmate/playbooks"
+        'or in the current directory or in /etc/attackmate/playbooks'
     )
 
     with pytest.raises(SystemExit):

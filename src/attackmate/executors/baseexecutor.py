@@ -29,15 +29,22 @@ class BaseExecutor(ExitOnError, CmdVars, Looper, Background):
 
     """
 
-    def __init__(self, pm: ProcessManager, varstore: VariableStore, cmdconfig=CommandConfig()):
+    def __init__(
+        self, pm: ProcessManager, varstore: VariableStore, cmdconfig=CommandConfig(), substitute_cmd_vars=True
+    ):
         """Constructor for BaseExecutor
-
         Parameters
         ----------
-        cmdconfig : str, default `None`
-            cmd_config settings.
-
+        pm : ProcessManager
+            Process manager instance.
+        varstore : VariableStore
+            Variable store instance.
+        cmdconfig : CommandConfig, default `None`
+            Command configuration settings.
+        substitute_cmd_vars : bool, default `True`
+            Flag to enable or disable variable substitution in command.cmd
         """
+
         Background.__init__(self, pm)
         CmdVars.__init__(self, varstore)
         ExitOnError.__init__(self)
@@ -46,15 +53,16 @@ class BaseExecutor(ExitOnError, CmdVars, Looper, Background):
         self.json_logger = logging.getLogger('json')
         self.cmdconfig = cmdconfig
         self.output = logging.getLogger('output')
+        self.substitute_cmd_vars = substitute_cmd_vars
 
-    def run(self, command: BaseCommand):
+    def run(self, command: BaseCommand) -> Result:
         """Execute the command
 
         This method is executed by AttackMate and
         executes the given command. This method sets the
         run_count to 1 and runs the method exec(). Please note
         that this function will exchange all variables of the BaseCommand
-        with the values of the VariableStore!
+        with the values of the VariableStore if substitute_cmd_vars is True!
 
         Parameters
         ----------
@@ -62,19 +70,21 @@ class BaseExecutor(ExitOnError, CmdVars, Looper, Background):
             The settings for the command to execute
 
         """
+
         if command.only_if:
             if not Conditional.test(self.varstore.substitute(command.only_if, True)):
-                if hasattr(command, 'type'):
-                    self.logger.warning(f'Skipping {command.type}: {command.cmd}')
-                else:
-                    self.logger.warning(f'Skipping {command.cmd}')
-                return
+                self.logger.info(f'Skipping {getattr(command, "type", "")}({command.cmd})')
+                return Result(None, None)
         self.reset_run_count()
         self.logger.debug(f"Template-Command: '{command.cmd}'")
         if command.background:
-            self.exec_background(self.replace_variables(command))
+            # Background commands always return Result(None,None)
+            result = self.exec_background(self.substitute_template_vars(command, self.substitute_cmd_vars))
         else:
-            self.exec(self.replace_variables(command))
+            result = self.exec(self.substitute_template_vars(command, self.substitute_cmd_vars))
+
+        return result
+
 
     def log_command(self, command):
         """Log starting-status of the command"""
@@ -129,7 +139,7 @@ class BaseExecutor(ExitOnError, CmdVars, Looper, Background):
             except Exception as e:
                 self.logger.warning(f'Unable to write output to file {command.save}: {e}')
 
-    def exec(self, command: BaseCommand):
+    def exec(self, command: BaseCommand) -> Result:
         try:
             self.log_command(command)
             self.log_metadata(self.logger, command)
@@ -146,9 +156,11 @@ class BaseExecutor(ExitOnError, CmdVars, Looper, Background):
             self.error_if_or_not(command, result)
         self.loop_if(command, result)
         self.loop_if_not(command, result)
+        return result
 
-    def _loop_exec(self, command: BaseCommand):
-        self.exec(command)
+    def _loop_exec(self, command: BaseCommand) -> Result:
+        result = self.exec(command)
+        return result
 
     def _exec_cmd(self, command: Any) -> Result:
         return Result(None, None)

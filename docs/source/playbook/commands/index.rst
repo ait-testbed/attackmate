@@ -215,6 +215,7 @@ The next pages will describe all possible commands in detail.
    father
    httpclient
    include
+   json
    loop
    mktemp
    msf-module
@@ -228,4 +229,5 @@ The next pages will describe all possible commands in detail.
    sliver
    sliver-session
    ssh
+   vnc
    webserv
