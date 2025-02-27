@@ -32,7 +32,7 @@ pipeline {
         	        }
                         dir("docs") {
                                 sh "id"
-                                sh "adduser --system --uid=112 --gid=112 --home /home/jenkins --shell /bin/bash jenkins"
+                                sh "useradd --system --uid=112 --gid=112 --home /home/jenkins --shell /bin/bash jenkins"
                                 sh "ls -la /docs"
                                 sh "su - jenkins -c 'make html'"
                         }
