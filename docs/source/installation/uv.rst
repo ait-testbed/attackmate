@@ -41,11 +41,22 @@ Installation Steps
 
      $ uv build
 
-5. Install AttackMate using
+5. Install AttackMate and it`s dependencies using
 
 ::
 
-     $ uv pip install
+     $ uv pip install .
+
+
+6. You can run AttackMate in the project environment with
+
+::
+
+     $ uv run attackmate
 
 
 
+.. warning::
+
+   Please note that you need to :ref:`sliver-fix` if you want
+   to use the sliver commands!
