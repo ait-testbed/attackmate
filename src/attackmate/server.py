@@ -1,12 +1,12 @@
 from fastapi import FastAPI
 from jsonrpc import JSONRPCResponseManager, dispatcher
 from attackmate.attackmate import AttackMate
-from attackmate.command import Command
+from attackmate.command import Command, CommandRegistry
 import logging
 import json
 
 # Initialize FastAPI app
-app = FastAPI()
+app = FastAPI(title="AttackMate JSON-RPC API", description="API for executing commands via JSON-RPC", version="1.0")
 
 # Initialize logger
 logger = logging.getLogger("attackmate-server")
@@ -20,6 +20,13 @@ def do_command(type, cmd, **kwargs):
     Execute a command using AttackMate.
     Expects JSON-RPC input with a command dictionary.
     """
+    # Retrieve the correct Pydantic model based on type
+    CommandClass = CommandRegistry.get_command_class(type)
+    if not CommandClass:
+        raise ValueError(f"Unknown command type: {type}")
+    
+    CommandClass.model_validate(type=type, cmd=cmd, **kwargs)
+   
     try:
         # Create the command instance
         command = Command.create(type=type, cmd=cmd, **kwargs)
