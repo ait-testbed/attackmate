@@ -27,9 +27,12 @@ class BrowserExecutor(BaseExecutor):
                     return Result(f"Session '{command.session}' not found!", 1)
                 session_thread = self.session_store.get_session(command.session)
             elif command.creates_session:
-                # We create a new session
+                # before creating a new session, automatically close if a session with the same name already exists
                 if self.session_store.has_session(command.creates_session):
-                    return Result(f"Session '{command.creates_session}' already exists!", 1)
+                    self.logger.warning(
+                        f"Session '{command.creates_session}' already exists! Closing it before creating a new one."
+                    )
+                    self.session_store.close_session(command.creates_session)
                 session_thread = SessionThread(session_name=command.creates_session)
                 self.session_store.set_session(command.creates_session, session_thread)
             else:
