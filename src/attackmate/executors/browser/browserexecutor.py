@@ -19,8 +19,6 @@ class BrowserExecutor(BaseExecutor):
         )
 
     def _exec_cmd(self, command: BrowserCommand) -> Result:
-        self.log_command(command)
-
         try:
             # Decide whether we’re using or creating a named session, or ephemeral
             if command.session:
