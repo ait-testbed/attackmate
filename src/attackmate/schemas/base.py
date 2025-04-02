@@ -13,7 +13,7 @@ def transform_int_to_str(value) -> str:
 
 
 def check_var_pattern(value: str, info: ValidationInfo) -> str:
-    global pattern
+    global pattern  # noqa: F824
     assert pattern.match(value), f'{info.field_name} must be a variable, integer or numeric string'
     return value
 
