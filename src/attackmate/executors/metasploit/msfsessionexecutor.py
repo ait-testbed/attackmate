@@ -29,12 +29,6 @@ class MsfSessionExecutor(BaseExecutor):
         atexit.register(self.cleanup)
         super().__init__(pm, varstore, cmdconfig)
 
-    def cleanup(self):
-        if self.msf is not None:
-            self.logger.debug('Killing all Meterpreter-Sessions')
-            for session_id in self.msf.sessions.list.keys():
-                self.msf.sessions.session(session_id).stop()
-
     def connect(self, msfconfig=None):
         try:
             self.msf = MsfRpcClient(**msfconfig.dict())
@@ -90,3 +84,18 @@ class MsfSessionExecutor(BaseExecutor):
             self.logger.debug(session_id)
             raise ExecException(e)
         return Result(output, 0)
+
+    def cleanup(self):
+        if self.msf is not None:
+            self.logger.debug('Killing all Meterpreter sessions')
+            active_sessions = self.msf.sessions.list
+            if active_sessions:
+                for session_id, session_data in active_sessions.items():
+                    try:
+                        self.logger.debug(f"Stopping msf session {session_id}")
+                        self.msf.sessions.session(session_id).stop()
+                        self.logger.info(f"Msf session {session_id} stopped successfully.")
+                    except Exception as e:
+                        self.logger.error(f"Failed to stop msf session {session_id}: {str(e)}")
+            else:
+                self.logger.debug('No active msf sessions found.')

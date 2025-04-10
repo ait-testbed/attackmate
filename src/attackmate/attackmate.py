@@ -18,6 +18,8 @@ from .variablestore import VariableStore
 from .processmanager import ProcessManager
 from attackmate.executors.baseexecutor import BaseExecutor
 from attackmate.executors.executor_factory import executor_factory
+import asyncio
+
 
 
 class AttackMate:
@@ -99,16 +101,37 @@ class AttackMate:
         if executor:
             result = executor.run(command)
         return result if result else Result(None, None)
+    
+    def clean_session_stores(self):
+        self.logger.warning('Cleaning up session stores')
+        # msf
+        if (msf_module_executor := self.executors.get("msf-module")):
+            msf_module_executor.cleanup()
+        if (msf_session_executor := self.executors.get("msf-session")):
+            msf_session_executor.cleanup()
+        # ssh
+        if (ssh_executor := self.executors.get("ssh")):
+            ssh_executor.cleanup()
+        # vnc
+        if (vnc_executor := self.executors.get("vnc")):
+            vnc_executor.cleanup()
+        # sliver
+        if (sliver_executor := self.executors.get("sliver-session")):
+            loop = asyncio.get_event_loop()
+            loop.run_until_complete(sliver_executor.cleanup())
+
+
+
 
     def main(self):
         """The main function
 
-        Passes the main playbook-commands
-        to run_commands
+        Passes the main playbook-commands to run_commands
 
         """
         try:
             self._run_commands(self.playbook.commands)
+            self.clean_session_stores()
             self.pm.kill_or_wait_processes()
         except KeyboardInterrupt:
             self.logger.warning('Program stopped manually')

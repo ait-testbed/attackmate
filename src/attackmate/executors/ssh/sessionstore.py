@@ -1,11 +1,13 @@
 from paramiko.channel import Channel
 from paramiko.client import SSHClient
 from typing import Optional
+import logging
 
 
 class SessionStore:
     def __init__(self):
         self.store: dict[str, tuple[SSHClient, Optional[Channel]]] = {}
+        self.logger = logging.getLogger('playbook')
 
     def __getstate__(self):
         """
@@ -47,3 +49,29 @@ class SessionStore:
                              client: SSHClient, channel: Optional[Channel] = None):
         if self.has_session(session_name):
             self.set_session(session_name, client, channel)
+
+
+    def clean_sessions(self):
+        """
+        Closes all active SSH sessions and their associated channels in the session store,
+        then removes all entries from the store.
+        """
+        for session_name, (client, channel) in self.store.items():
+            if channel is not None:
+                try:
+                    channel.close()
+                    self.logger.warning(f"Closing channel for ssh session '{session_name}'.")
+
+                except Exception as e:
+                    self.logger.error(f"Error closing channel for ssh session '{session_name}': {e}")
+
+            if client is not None:
+                try:
+                    client.close()
+                    self.logger.warning(f"Closing client for ssh session '{session_name}'")
+
+                except Exception as e:
+                    self.logger.error(f"Error closing client for ssh session '{session_name}': {e}")
+
+        self.store.clear()
+
