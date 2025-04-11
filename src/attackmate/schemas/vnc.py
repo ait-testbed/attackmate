@@ -6,7 +6,7 @@ from pydantic import model_validator
 class VncCommand(BaseCommand):
 
     type: Literal['vnc']
-    cmd: Literal['key', 'type', 'move', 'capture', 'click', 'expectscreen', 'close']
+    cmd: Literal['key', 'type', 'move', 'capture', 'click', 'rightclick', 'expectscreen', 'close']
     hostname: Optional[str] = None
     port: Optional[StringNumber] = None
     display: Optional[StringNumber] = None
