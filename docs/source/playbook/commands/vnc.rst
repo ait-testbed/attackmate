@@ -42,7 +42,7 @@ Execute commands on a remote server via VNC. Uses the `vncdotool <https://github
 
 .. confval:: cmd
 
-   One of ``type``, ``key``, ``capture``, ``move``, ``expectscreen``, ``close``
+   One of ``type``, ``key``, ``capture``, ``move``, ``expectscreen``, ``close``, ``click``, ``rightclick``
 
    :type: str
 
