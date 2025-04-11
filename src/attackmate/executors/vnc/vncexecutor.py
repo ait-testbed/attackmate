@@ -124,6 +124,7 @@ class VncExecutor(BaseExecutor):
                 'move': lambda: client.mouseMove(command.x, command.y),
                 'capture': lambda: client.captureScreen(command.filename),
                 'click': lambda: client.mousePress(1),
+                'rightclick': lambda: client.mousePress(3),
                 'expectscreen': lambda: client.expectScreen(
                     command.filename, maxrms=command.maxrms
                 ),
