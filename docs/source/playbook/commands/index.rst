@@ -211,6 +211,7 @@ The next pages will describe all possible commands in detail.
    :maxdepth: 4
    :hidden:
 
+   browser
    debug
    father
    httpclient
