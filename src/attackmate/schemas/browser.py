@@ -14,6 +14,7 @@ class BrowserCommand(BaseCommand):
     screenshot_path: Optional[str] = None
     creates_session: Optional[str] = None
     session: Optional[str] = None
+    headless: Optional[bool] = None
 
     @model_validator(mode='after')
     def validate_browser_command(self) -> 'BrowserCommand':
