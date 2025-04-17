@@ -1,6 +1,8 @@
 import pytest
+from pydantic import ValidationError
 from unittest.mock import patch, MagicMock
 from attackmate.executors.browser.sessionstore import BrowserSessionStore, SessionThread
+from attackmate.executors.browser.browserexecutor import BrowserExecutor, BrowserCommand
 
 
 @pytest.fixture
@@ -126,3 +128,109 @@ def test_session_thread_click_selector_not_found(mock_playwright):
 
     # Clean up
     thread.stop_thread()
+
+
+# ----------------------------------------------------------------------------------------
+# Tests for BrowserExecutor
+# ----------------------------------------------------------------------------------------
+
+@pytest.fixture
+def browser_executor(mock_playwright):
+    """
+    Provides a mocked BrowserExecutor instance
+    """
+    return BrowserExecutor(pm=None, varstore=None)
+
+
+def test_browser_executor_ephemeral_session(browser_executor):
+    """
+    Tests that an ephemeral session is created and destroyed when no session is specified.
+    """
+    command = BrowserCommand(
+        type='browser',
+        cmd='visit',
+        url='http://example.org'
+    )
+    result = browser_executor._exec_cmd(command)
+    assert result.returncode == 0
+    assert 'Browser command executed successfully.' in result.stdout
+
+
+def test_browser_executor_named_session(browser_executor):
+    """
+    Tests that a named session is created and remains available, then can be reused.
+    """
+    create_cmd = BrowserCommand(
+        type='browser',
+        cmd='visit',
+        url='http://example.org',
+        creates_session='my_session'
+    )
+    result1 = browser_executor._exec_cmd(create_cmd)
+    assert result1.returncode == 0
+    assert 'executed successfully' in result1.stdout
+
+    # Now reuse the same session
+    reuse_cmd = BrowserCommand(
+        type='browser',
+        cmd='click',
+        selector='a[href="https://www.iana.org/domains/example"]',
+        session='my_session'
+    )
+    result2 = browser_executor._exec_cmd(reuse_cmd)
+    assert result2.returncode == 0
+    assert 'executed successfully' in result2.stdout
+
+
+def test_browser_executor_no_such_session(browser_executor):
+    """
+    If we specify a session that doesn't exist, we should get an error result.
+    """
+    bad_cmd = BrowserCommand(
+        type='browser',
+        cmd='click',
+        selector='#some-button',
+        session='nonexistent_session'
+    )
+    result = browser_executor._exec_cmd(bad_cmd)
+    assert result.returncode == 1
+    assert "Session 'nonexistent_session' not found!" in result.stdout
+
+
+def test_browser_executor_recreate_same_session(browser_executor):
+    """
+    If we specify creates_session with the same name again,
+    it should close the old one and create a fresh session.
+    """
+    cmd1 = BrowserCommand(
+        type='browser',
+        cmd='visit',
+        url='http://example.org',
+        creates_session='my_session'
+    )
+    res1 = browser_executor._exec_cmd(cmd1)
+    assert res1.returncode == 0
+
+    cmd2 = BrowserCommand(
+        type='browser',
+        cmd='visit',
+        url='http://example.com',
+        creates_session='my_session'
+    )
+    # This should close the old 'my_session' and create a new one
+    res2 = browser_executor._exec_cmd(cmd2)
+    assert res2.returncode == 0
+    assert 'executed successfully' in res2.stdout
+
+
+def test_browser_executor_unknown_command_validation():
+    """
+    Any cmd outside {'visit','click','type','screenshot'}
+    is rejected by BrowserCommand’s Literal validator.
+    """
+    with pytest.raises(ValidationError):
+        BrowserCommand(
+            type='browser',
+            cmd='zoom',  # invalid literal, should be one of [visit, click, type, screenshot]
+            url='http://example.org'
+        )
