@@ -149,7 +149,8 @@ def test_browser_executor_ephemeral_session(browser_executor):
     command = BrowserCommand(
         type='browser',
         cmd='visit',
-        url='http://example.org'
+        url='http://example.org',
+        headless=True
     )
     result = browser_executor._exec_cmd(command)
     assert result.returncode == 0
@@ -164,7 +165,8 @@ def test_browser_executor_named_session(browser_executor):
         type='browser',
         cmd='visit',
         url='http://example.org',
-        creates_session='my_session'
+        creates_session='my_session',
+        headless=True
     )
     result1 = browser_executor._exec_cmd(create_cmd)
     assert result1.returncode == 0
@@ -206,7 +208,8 @@ def test_browser_executor_recreate_same_session(browser_executor):
         type='browser',
         cmd='visit',
         url='http://example.org',
-        creates_session='my_session'
+        creates_session='my_session',
+        headless=True
     )
     res1 = browser_executor._exec_cmd(cmd1)
     assert res1.returncode == 0
@@ -215,7 +218,8 @@ def test_browser_executor_recreate_same_session(browser_executor):
         type='browser',
         cmd='visit',
         url='http://example.com',
-        creates_session='my_session'
+        creates_session='my_session',
+        headless=True
     )
     # This should close the old 'my_session' and create a new one
     res2 = browser_executor._exec_cmd(cmd2)
