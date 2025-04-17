@@ -101,7 +101,7 @@ def test_session_thread_invalid_command(mock_playwright):
     """
     Submitting an unknown command should raise an Exception.
     """
-    thread = SessionThread(session_name='test_session')
+    thread = SessionThread(session_name='test_session', headless=True)
 
     with pytest.raises(Exception) as excinfo:
         thread.submit_command('non_existent_command')
@@ -120,7 +120,7 @@ def test_session_thread_click_selector_not_found(mock_playwright):
     mock_page = mock_playwright['mock_page']
     mock_page.query_selector.return_value = None
 
-    thread = SessionThread(session_name='test_session')
+    thread = SessionThread(session_name='test_session', headless=True)
     with pytest.raises(Exception) as excinfo:
         thread.submit_command('click', selector='#missing-button')
 
