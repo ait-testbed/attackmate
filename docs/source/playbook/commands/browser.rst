@@ -93,3 +93,21 @@ Execute commands using a Playwright-managed browser (Chromium). This executor ca
    supports that usage pattern.
 
    :type: str
+
+.. confval:: headless
+
+   Run the browser in headless mode.
+   Useful for CI/CD pipelines or servers without a GUI.
+
+   :type: bool
+   :default: false
+
+    Example:
+
+    .. code-block:: yaml
+
+       - type: browser
+         cmd: visit
+         url: "https://example.com"
+         creates_session: ci_session
+         headless: true
