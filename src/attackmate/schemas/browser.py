@@ -18,6 +18,9 @@ class BrowserCommand(BaseCommand):
 
     @model_validator(mode='after')
     def validate_browser_command(self) -> 'BrowserCommand':
+        if self.background:
+            raise ValueError('background mode is unsupported for browser commands')
+
         if self.cmd == 'visit':
             if not self.url:
                 raise ValueError("`visit` command requires a 'url'")
