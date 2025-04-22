@@ -124,7 +124,7 @@ def test_session_thread_click_selector_not_found(mock_playwright):
     with pytest.raises(Exception) as excinfo:
         thread.submit_command('click', selector='#missing-button')
 
-    assert 'Element #missing-button not found!' in str(excinfo.value)
+    assert 'Locator.wait_for: Timeout 10000ms exceeded' in str(excinfo.value)
 
     # Clean up
     thread.stop_thread()

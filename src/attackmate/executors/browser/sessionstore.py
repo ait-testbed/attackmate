@@ -1,5 +1,4 @@
 import threading
-import time
 from playwright.sync_api import sync_playwright
 from queue import Queue, Empty
 
@@ -59,6 +58,8 @@ class SessionThread(threading.Thread):
         if not self.browser:
             self.browser = self.playwright.chromium.launch(headless=self.headless)
             self.context = self.browser.new_context()
+            self.context.set_default_timeout(10_000)  # element operations
+            self.context.set_default_navigation_timeout(30_000)  # navigations
             self.page = self.context.new_page()
 
     def _close_browser(self):
@@ -80,26 +81,23 @@ class SessionThread(threading.Thread):
 
         if cmd_name == 'visit':
             url = kwargs['url']
-            self.page.goto(url)
+            self.page.goto(url, wait_until='networkidle')
         elif cmd_name == 'click':
             selector = kwargs['selector']
-            if not self.page.query_selector(selector):
-                raise ValueError(f"Element {selector} not found!")
-            self.page.click(selector)
+            locator = self.page.locator(selector)
+            locator.wait_for(state='visible', timeout=10000)
+            locator.click()
         elif cmd_name == 'type':
             selector = kwargs['selector']
             text = kwargs['text']
-            if not self.page.query_selector(selector):
-                raise ValueError(f"Element {selector} not found!")
-            self.page.fill(selector, text)
+            locator = self.page.locator(selector)
+            locator.wait_for(state='visible', timeout=10000)
+            locator.fill(text)
         elif cmd_name == 'screenshot':
             screenshot_path = kwargs['screenshot_path']
             self.page.screenshot(path=screenshot_path)
         else:
             raise ValueError(f"Unknown command: {cmd_name}")
-
-        # If we want a built-in delay after each command, do it here
-        time.sleep(2)
 
         return 'OK'
 
