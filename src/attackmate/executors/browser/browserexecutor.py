@@ -19,6 +19,10 @@ class BrowserExecutor(BaseExecutor):
         )
 
     def _exec_cmd(self, command: BrowserCommand) -> Result:
+        session_thread = None
+        # Determine if this should be an ephemeral session (no session name set or created)
+        ephemeral = not command.session and not command.creates_session
+
         try:
             # Decide whether we’re using or creating a named session, or ephemeral
             if command.session:
@@ -55,11 +59,12 @@ class BrowserExecutor(BaseExecutor):
             else:
                 return Result(f"Unknown browser command: {command.cmd}", 1)
 
-            # If this is ephemeral (no session name set or created), close it immediately
-            if not command.session and not command.creates_session:
-                session_thread.stop_thread()
-
             return Result('Browser command executed successfully.', 0)
 
         except Exception as e:
             return Result(str(e), 1)
+
+        finally:
+            # Always clean up ephemeral sessions
+            if ephemeral and session_thread:
+                session_thread.stop_thread()
