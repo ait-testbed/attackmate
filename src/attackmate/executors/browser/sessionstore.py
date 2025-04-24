@@ -56,11 +56,14 @@ class SessionThread(threading.Thread):
     def _init_browser(self):
         """Initialize the browser/context/page if not already open."""
         if not self.browser:
-            self.browser = self.playwright.chromium.launch(headless=self.headless)
-            self.context = self.browser.new_context()
-            self.context.set_default_timeout(10_000)  # element operations
-            self.context.set_default_navigation_timeout(30_000)  # navigations
-            self.page = self.context.new_page()
+            try:
+                self.browser = self.playwright.chromium.launch(headless=self.headless)
+                self.context = self.browser.new_context()
+                self.context.set_default_timeout(10_000)  # element operations
+                self.context.set_default_navigation_timeout(30_000)  # navigations
+                self.page = self.context.new_page()
+            except Exception:
+                raise
 
     def _close_browser(self):
         """Close browser resources if they exist."""
