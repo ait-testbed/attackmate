@@ -45,9 +45,9 @@ class SessionThread(threading.Thread):
             cmd_name, args, kwargs = command
             try:
                 result = self._handle_command(cmd_name, *args, **kwargs)
-                self.res_queue.put((False, result))
+                self.res_queue.put((result, None))
             except Exception as e:
-                self.res_queue.put((True, str(e)))
+                self.res_queue.put((None, e))
 
         # Cleanup
         self._close_browser()
@@ -110,12 +110,12 @@ class SessionThread(threading.Thread):
         This is a synchronous call from the caller’s perspective:
          - we place the command on cmd_queue,
          - then wait for the response in res_queue
-         - raise an exception if the command fails
+         - re-raise the exception to preserve traceback if it failed
         """
         self.cmd_queue.put((cmd_name, args, kwargs))
-        error, result = self.res_queue.get()
+        result, error = self.res_queue.get()
         if error:
-            raise Exception(result)
+            raise error
         return result
 
     def stop_thread(self):
