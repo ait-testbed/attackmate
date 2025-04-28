@@ -88,7 +88,7 @@ By using the mode "split", strings that are seperated by whitespaces can be toke
    of the regular expressions are stored in temporary variables $MATCH. If the
    match is stored in a list or in a list of tuples the variablename will be
    numbered by the index. For example: "$MATCH_0_0" for the first element in the
-   first occurance. The first match (even if there is only one) is indexed MATCH_0.
+   first occurrence. The first match (even if there is only one) is indexed MATCH_0.
    If the regex-command does not match, no output variable will be set!
    Note that if sub() or split() do not have a match the input string is returned.
    Additionally, ``REGEX_MATCHES_LIST`` is set every time a regex command yields matches and it contains a list of all matches.
@@ -99,4 +99,4 @@ By using the mode "split", strings that are seperated by whitespaces can be toke
        A dump containing all matches will be printed if attackmate runs in debug-mode.
 
    :type: dict[str,str]
-   :required: True
+   :required: False
