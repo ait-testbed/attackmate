@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package attackmate.remote;
+
+// import "google/protobuf/struct.proto";
+import "common.proto";
+
+
+// Request to execute a playbook
+message ExecutePlaybookRequest {
+  string playbook_yaml = 1; // playbook content as YAML string
+  VariableStoreState initial_state = 2; // Optional initial variables
+}
+
+// Response after executing a full playbook
+message ExecutePlaybookResponse {
+  bool success = 1; // Did the entire playbook execution process succeed (no fatal errors)?
+  string message = 2;
+  VariableStoreState final_state = 3; // The state of the variable store after the playbook finished
+  // Optional: logs? output?
+}

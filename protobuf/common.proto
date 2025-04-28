@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package attackmate.remote;
+
+import "google/protobuf/struct.proto";
+
+// the result of a single command execution
+message CommandResult {
+  bool success = 1; // Indicates if the gRPC call itself succeeded
+  string stdout = 2;
+  int32 returncode = 3;
+  string error_message = 4;
+}
+
+// Represents a variable value
+message VariableValue {
+    oneof kind {
+        google.protobuf.NullValue null_value = 1;
+        double number_value = 2;
+        string string_value = 3;
+        bool bool_value = 4;
+        google.protobuf.Struct struct_value = 5;
+        google.protobuf.ListValue list_value = 6;
+    }
+}
+
+// Structure for representing for example variable store
+message VariableStoreState {
+    map<string, VariableValue> variables = 1;
+}

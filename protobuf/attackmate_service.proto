@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package attackmate.remote;
+
+import "playbook.proto";
+import "command.proto";
+
+service AttackMateService {
+  // Executes an entire playbook provided as YAML content
+  rpc ExecutePlaybook(ExecutePlaybookRequest) returns (ExecutePlaybookResponse);
+
+  // Executes a single command TODO: (server maintains state)
+  rpc ExecuteCommand(ExecuteCommandRequest) returns (ExecuteCommandResponse);
+
+  // Maybe also implement:
+  // rpc GetVariableStore(google.protobuf.Empty) returns (VariableStoreState);
+  // rpc CleanupSessions(google.protobuf.Empty) returns (google.protobuf.Empty);
+}
