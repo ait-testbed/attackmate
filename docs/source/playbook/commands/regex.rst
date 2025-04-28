@@ -99,4 +99,4 @@ By using the mode "split", strings that are seperated by whitespaces can be toke
        A dump containing all matches will be printed if attackmate runs in debug-mode.
 
    :type: dict[str,str]
-   :required: False
+   :required: True
