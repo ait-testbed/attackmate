@@ -6,30 +6,40 @@ repos:
     rev: v4.6.0
     hooks:
     -   id: trailing-whitespace
+        exclude: ^remote/.*_pb2.*\.py$ # Exclude generated files
     -   id: end-of-file-fixer
+        exclude: ^remote/.*_pb2.*\.py$ # Exclude generated files
     -   id: check-yaml
-    #    -   id: check-added-large-files
+    # -   id: check-added-large-files
     -   id: double-quote-string-fixer
+        exclude: ^remote/.*_pb2.*\.py$ # Exclude generated files
     -   id: forbid-submodules
     -   id: check-merge-conflict
     -   id: check-ast
+        exclude: ^remote/.*_pb2.*\.py$ # Exclude generated files
 
 -   repo: https://github.com/pre-commit/mirrors-mypy
     rev: v1.10.1
     hooks:
     -   id: mypy
-        additional_dependencies: [pydantic, types-PyYAML, types-requests, types-paramiko, types-tabulate]
+        additional_dependencies: [pydantic, types-PyYAML, types-requests, types-paramiko, types-tabulate, types-protobuf]
+        exclude: ^remote/.*(_pb2\.py|_pb2_grpc\.py|_pb2\.pyi)$
+
+
 
 -   repo: https://github.com/pycqa/flake8
-    rev: '7.1.0'  # pick a git hash / tag to point to
+    rev: '7.1.0'
     hooks:
     -   id: flake8
+        exclude: ^remote/.*_pb2.*\.py$ # Exclude generated files
+        args: [--max-line-length=110]
 
 -   repo: https://github.com/hhatto/autopep8
     rev: 'v2.3.1'
     hooks:
-    - id: autopep8
-      args: [--max-line-length=110, --diff]
+    -   id: autopep8
+        exclude: ^remote/.*_pb2.*\.py$ # Exclude generated files
+        args: [--max-line-length=110, --diff]
 
 
       # PROBLEMS WITH IMPORTS IN PYLINT!!!

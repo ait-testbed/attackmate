@@ -45,3 +45,15 @@ where = ["src"]
 
 [tool.setuptools.dynamic]
 version = {attr = "attackmate.metadata.__version__"}
+
+[tool.mypy]
+
+exclude = [
+    '^remote/.*_pb2\\.py$',
+    '^remote/.*_pb2_grpc\\.py$',
+    '^remote/.*_pb2\\.pyi$',
+]
+
+[[tool.mypy.overrides]]
+module = "remote.*"
+ignore_missing_imports = true
