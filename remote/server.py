@@ -78,6 +78,31 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
+PROTO_TO_PYDANTIC_MAP = {
+    # Protobuf field name : { Pydantic Class, 'type' string }
+    'shell_command':          {'class': ShellCommand,          'type_str': 'shell'},
+    'msf_module_command':     {'class': MsfModuleCommand,      'type_str': 'msf-module'},
+    'setvar_command':         {'class': SetVarCommand,         'type_str': 'setvar'},
+    'debug_command':          {'class': DebugCommand,          'type_str': 'debug'},
+    'msf_session_command':    {'class': MsfSessionCommand,     'type_str': 'msf-session'},
+    'ssh_command':            {'class': SSHCommand,            'type_str': 'ssh'},
+    'sftp_command':           {'class': SFTPCommand,           'type_str': 'sftp'},
+    'msf_payload_command':    {'class': MsfPayloadCommand,     'type_str': 'msf-payload'},
+    'sleep_command':          {'class': SleepCommand,          'type_str': 'sleep'},
+    'include_command':        {'class': IncludeCommand,        'type_str': 'include'},
+    # "loop_command":         {"class": LoopCommand,           "type_str": "loop"}, # TODO
+    'http_client_command':    {'class': HttpClientCommand,     'type_str': 'http-client'},
+    'webserv_command':        {'class': WebServCommand,        'type_str': 'webserv'},
+    'sliver_listener_command':{'class': SliverHttpsListenerCommand,'type_str': 'sliver'}, # Map to specific Pydantic
+    'sliver_generate_command':{'class': SliverGenerateCommand,   'type_str': 'sliver'}, # Map to specific Pydantic
+    'sliver_session_command': {'class': SliverSessionCommand,    'type_str': 'sliver-session'}, # Map to base, Pydantic validator handles specifics
+    'father_command':         {'class': FatherCommand,         'type_str': 'father'},
+    'regex_command':          {'class': RegExCommand,          'type_str': 'regex'},
+    'json_command':           {'class': JsonCommand,           'type_str': 'json'},
+    'tempfile_command':       {'class': TempfileCommand,       'type_str': 'mktemp'},
+    'vnc_command':            {'class': VncCommand,            'type_str': 'vnc'},
+    #  ADD COMMANDS HERE
+}
 
 # Helper Functions#
 def _value_to_protobuf(value: Any) -> common_pb2.VariableValue:
@@ -237,83 +262,90 @@ class AttackMateServiceImpl(attackmate_service_pb2_grpc.AttackMateServiceService
         return response
 
     def ExecuteCommand(self, request, context) -> common_pb2.ExecutionResponse:
-        logger.info("Received ExecuteCommand request.")
+        logger.info('Received ExecuteCommand request (using mapping).')
         response = common_pb2.ExecutionResponse()
         response.result.success = False
         pydantic_cmd = None
 
         try:
-            # which command was sent ?  get the specific proto message
             command_field = request.WhichOneof('command')
             if not command_field:
-                raise ValueError("No command provided in the request.")
+                raise ValueError('No command provided in request.')
+
             proto_cmd_specific = getattr(request, command_field)
             logger.info(f"Processing command type: {command_field}")
 
-            # Convert the  proto message to the  Pydantic model
-            if command_field == "shell_command":
-                pydantic_cmd = self._convert_shell_proto_to_pydantic(proto_cmd_specific)
-            elif command_field == "msf_module_command":
-                pydantic_cmd = self._convert_msf_module_proto_to_pydantic(proto_cmd_specific)
-            elif command_field == "setvar_command":
-                pydantic_cmd = self._convert_setvar_proto_to_pydantic(proto_cmd_specific)
-            elif command_field == "debug_command":
-                pydantic_cmd = self._convert_debug_proto_to_pydantic(proto_cmd_specific)
-            elif command_field == "msf_session_command":
-                pydantic_cmd = self._convert_msf_session_proto_to_pydantic(proto_cmd_specific)
-            elif command_field == "ssh_command":
-                pydantic_cmd = self._convert_ssh_proto_to_pydantic(proto_cmd_specific)
-            elif command_field == "sftp_command":
-                pydantic_cmd = self._convert_sftp_proto_to_pydantic(proto_cmd_specific)
-            elif command_field == "msf_payload_command":
-                pydantic_cmd = self._convert_msf_payload_proto_to_pydantic(proto_cmd_specific)
-            elif command_field == "sleep_command":
-                pydantic_cmd = self._convert_sleep_proto_to_pydantic(proto_cmd_specific)
-            elif command_field == "include_command":
-                pydantic_cmd = self._convert_include_proto_to_pydantic(proto_cmd_specific)
-            # elif command_field == "loop_command": # TODO
-            #      pydantic_cmd = self._convert_loop_proto_to_pydantic(proto_cmd_specific)
-            elif command_field == "http_client_command":
-                pydantic_cmd = self._convert_http_client_proto_to_pydantic(proto_cmd_specific)
-            elif command_field == "webserv_command":
-                pydantic_cmd = self._convert_webserv_proto_to_pydantic(proto_cmd_specific)
-            elif command_field == "sliver_listener_command":
-                pydantic_cmd = self._convert_sliver_listener_proto_to_pydantic(proto_cmd_specific)
-            elif command_field == "sliver_generate_command":
-                pydantic_cmd = self._convert_sliver_generate_proto_to_pydantic(proto_cmd_specific)
-            elif command_field == "sliver_session_command":
-                pydantic_cmd = self._convert_sliver_session_proto_to_pydantic(proto_cmd_specific)
-            elif command_field == "father_command":
-                pydantic_cmd = self._convert_father_proto_to_pydantic(proto_cmd_specific)
-            elif command_field == "regex_command":
-                pydantic_cmd = self._convert_regex_proto_to_pydantic(proto_cmd_specific)
-            elif command_field == "json_command":
-                pydantic_cmd = self._convert_json_proto_to_pydantic(proto_cmd_specific)
-            elif command_field == "tempfile_command":
-                pydantic_cmd = self._convert_tempfile_proto_to_pydantic(proto_cmd_specific)
-            elif command_field == "vnc_command":
-                pydantic_cmd = self._convert_vnc_proto_to_pydantic(proto_cmd_specific)
-            else:
-                raise ValueError(f"Server logic missing for command type: {command_field}")
+            # Look up Pydantic info from mapping
+            pydantic_info = PROTO_TO_PYDANTIC_MAP.get(command_field)
+            if not pydantic_info:
+                raise ValueError(f"No Pydantic mapping found for proto field: {command_field}")
 
-            if pydantic_cmd is None:
-                raise ValueError(f"Conversion failed for command type: {command_field}")
+            PydanticClass = pydantic_info['class']
+            pydantic_type_str = pydantic_info['type_str']
 
-            logger.info(f"Converted proto to Pydantic: {type(pydantic_cmd).__name__}")
+            # Convert proto message to dictionary
+            proto_dict = MessageToDict(proto_cmd_specific, preserving_proto_field_name=True)
 
-            #Execute the Pydantic command
+            # Extract and merge base fields
+            # name  base field in proto is named
+            base_fields = proto_dict.pop('base', {})
+            if not isinstance(base_fields, dict): #  base wasn't populated
+                base_fields = {}
+
+            # Create final dict for validation
+            pydantic_data = {**base_fields, **proto_dict}
+
+            # Add the essential 'type' field required by Pydantic schemas
+            pydantic_data['type'] = pydantic_type_str
+
+            # Handle potential 'cmd' ambiguity (e.g., sliver listener/generate)
+            # Pydantic class requires a specific 'cmd' value based on the type
+            if pydantic_type_str == 'sliver':
+                 if PydanticClass == SliverHttpsListenerCommand:
+                      pydantic_data['cmd'] = 'start_https_listener'
+                 elif PydanticClass == SliverGenerateCommand:
+                      pydantic_data['cmd'] = 'generate_implant'
+            elif pydantic_type_str == 'father':
+                 pydantic_data['cmd'] = 'generate' # Implicit
+            elif pydantic_type_str == 'mktemp':
+                 # TODO
+                 pass
+
+            # special case: SliverSessionCommand needs specific 'cmd' based on payload TODO debug this
+            if pydantic_type_str == 'sliver-session':
+                payload_field = proto_cmd_specific.WhichOneof('command_payload')
+                if payload_field == 'cd_payload': pydantic_data['cmd'] = 'cd'
+                elif payload_field == 'mkdir_payload': pydantic_data['cmd'] = 'mkdir'
+                elif payload_field == 'ls_payload': pydantic_data['cmd'] = 'ls'
+                elif payload_field == 'download_payload': pydantic_data['cmd'] = 'download'
+                elif payload_field == 'upload_payload': pydantic_data['cmd'] = 'upload'
+                elif payload_field == 'netstat_payload': pydantic_data['cmd'] = 'netstat'
+                elif payload_field == 'exec_payload': pydantic_data['cmd'] = 'execute'
+                elif payload_field == 'procdump_payload': pydantic_data['cmd'] = 'process_dump'
+                elif payload_field == 'rm_payload': pydantic_data['cmd'] = 'rm'
+                elif payload_field == 'terminate_payload': pydantic_data['cmd'] = 'terminate'
+                elif payload_field == 'ps_command': pydantic_data['cmd'] = 'ps'
+                elif payload_field == 'pwd_command': pydantic_data['cmd'] = 'pwd'
+                elif payload_field == 'ifconfig_command': pydantic_data['cmd'] = 'ifconfig'
+                # Remove the payload structure itself
+                if payload_field:
+                    payload_data = pydantic_data.pop(payload_field, {})
+                    pydantic_data.update(payload_data) # Merge payload fields
+
+
+            logger.debug(f"Data for Pydantic validation ({PydanticClass.__name__}): {pydantic_data}")
+
+            # Validate using Pydantic
+            pydantic_cmd = PydanticClass.model_validate(pydantic_data)
+            logger.info(f"Successfully converted to Pydantic: {type(pydantic_cmd).__name__}")
+
+            # Execute command
             attackmate_result: AttackMateResult = self.attackmate_instance.run_command(pydantic_cmd)
 
-            # Populate the response
             if attackmate_result.stdout is None and attackmate_result.returncode is None:
-                response.result.success = True
-                response.result.stdout = "Command likely backgrounded or skipped."
-                response.result.returncode = 0
+                response.result.success = True; response.result.stdout = 'BG/Skipped'; response.result.returncode = 0
             else:
-                response.result.success = True  # gRPC call succeeded
-                response.result.stdout = str(attackmate_result.stdout) if attackmate_result.stdout is not None else ""
-                response.result.returncode = int(attackmate_result.returncode) if attackmate_result.returncode is not None else -1
-
+                response.result.success = True; response.result.stdout = str(attackmate_result.stdout or ''); response.result.returncode = int(attackmate_result.returncode if attackmate_result.returncode is not None else -1)
             logger.info(f"Command execution finished. RC: {response.result.returncode}")
 
         except (ExecException, SystemExit) as e:
@@ -338,373 +370,14 @@ class AttackMateServiceImpl(attackmate_service_pb2_grpc.AttackMateServiceService
             context.set_code(grpc.StatusCode.INTERNAL)
             context.set_details(error_msg)
 
-        # Populate the updated state
+
+        # Populate state
         try:
             response.state.CopyFrom(_varstore_to_protobuf(self.attackmate_instance.varstore))
         except Exception as e:
-            logger.error(f"Failed to get updated variable store state after command execution: {e}")
+            logger.error(f"Failed to get updated state: {e}")
 
         return response
-
-    def _populate_base_pydantic_fields(self, pydantic_data: dict, base_proto: base_command_pb2.BaseCommandFields):
-        """Copies fields from BaseCommandFields proto to a dict for Pydantic validation."""
-        # Use HasField for optional fields to distinguish unset from default (e.g., false)
-        # and check if the field exists in the proto definition
-        if base_proto.HasField("only_if"): pydantic_data["only_if"] = base_proto.only_if
-        if base_proto.HasField("error_if"): pydantic_data["error_if"] = base_proto.error_if
-        if base_proto.HasField("error_if_not"): pydantic_data["error_if_not"] = base_proto.error_if_not
-        if base_proto.HasField("loop_if"): pydantic_data["loop_if"] = base_proto.loop_if
-        if base_proto.HasField("loop_if_not"): pydantic_data["loop_if_not"] = base_proto.loop_if_not
-        if base_proto.HasField("loop_count"): pydantic_data["loop_count"] = base_proto.loop_count
-        if base_proto.HasField("exit_on_error"): pydantic_data["exit_on_error"] = base_proto.exit_on_error
-        if base_proto.HasField("save"): pydantic_data["save"] = base_proto.save
-        if base_proto.HasField("background"): pydantic_data["background"] = base_proto.background
-        if base_proto.HasField("kill_on_exit"): pydantic_data["kill_on_exit"] = base_proto.kill_on_exit
-        if base_proto.metadata: pydantic_data["metadata"] = dict(base_proto.metadata) #  TODO handle metadata properly
-    def _convert_shell_proto_to_pydantic(self, proto: shell_command_pb2.ShellCommandProto) -> ShellCommand:
-        data = {"type": "shell"}
-        self._populate_base_pydantic_fields(data, proto.base)
-        data["cmd"] = proto.cmd
-        if proto.HasField("interactive"): data["interactive"] = proto.interactive
-        if proto.HasField("creates_session"): data["creates_session"] = proto.creates_session
-        if proto.HasField("session"): data["session"] = proto.session
-        if proto.HasField("command_timeout"): data["command_timeout"] = proto.command_timeout
-        if proto.HasField("read"): data["read"] = proto.read
-        if proto.HasField("command_shell"): data["command_shell"] = proto.command_shell
-        if proto.HasField("bin"): data["bin"] = proto.bin
-        return ShellCommand.model_validate(data)
-
-    def _convert_msf_module_proto_to_pydantic(self, proto: msf_module_command_pb2.MsfModuleCommandProto) -> MsfModuleCommand:
-        data = {"type": "msf-module"}
-        self._populate_base_pydantic_fields(data, proto.base)
-        data["cmd"] = proto.cmd
-        if proto.HasField("target"): data["target"] = proto.target
-        if proto.HasField("creates_session"): data["creates_session"] = proto.creates_session
-        if proto.HasField("session"): data["session"] = proto.session
-        if proto.HasField("payload"): data["payload"] = proto.payload
-        if proto.options: data["options"] = dict(proto.options) # TODO handle this properly
-        if proto.payload_options: data["payload_options"] = dict(proto.payload_options) # TODO handle this properly
-        return MsfModuleCommand.model_validate(data)
-
-    def _convert_setvar_proto_to_pydantic(self, proto: setvar_command_pb2.SetVarCommandProto) -> SetVarCommand:
-        data = {"type": "setvar"}
-        self._populate_base_pydantic_fields(data, proto.base)
-        data["cmd"] = proto.cmd
-        data["variable"] = proto.variable
-        if proto.HasField("encoder"): data["encoder"] = proto.encoder
-        return SetVarCommand.model_validate(data)
-
-    def _convert_debug_proto_to_pydantic(self, proto: debug_command_pb2.DebugCommandProto) -> DebugCommand:
-        data = {"type": "debug"}
-        self._populate_base_pydantic_fields(data, proto.base)
-        if proto.HasField("cmd"): data["cmd"] = proto.cmd
-        if proto.HasField("varstore"): data["varstore"] = proto.varstore
-        if proto.HasField("exit"): data["exit"] = proto.exit
-        if proto.HasField("wait_for_key"): data["wait_for_key"] = proto.wait_for_key
-        return DebugCommand.model_validate(data)
-
-    def _convert_msf_session_proto_to_pydantic(self, proto: msf_session_command_pb2.MsfSessionCommandProto) -> MsfSessionCommand:
-        data = {"type": "msf-session"}
-        self._populate_base_pydantic_fields(data, proto.base)
-        data["cmd"] = proto.cmd
-        if proto.HasField("stdapi"): data["stdapi"] = proto.stdapi
-        if proto.HasField("write"): data["write"] = proto.write
-        if proto.HasField("read"): data["read"] = proto.read
-        data["session"] = proto.session
-        if proto.HasField("end_str"): data["end_str"] = proto.end_str
-        return MsfSessionCommand.model_validate(data)
-
-    def _convert_ssh_proto_to_pydantic(self, proto: ssh_command_pb2.SSHCommandProto) -> SSHCommand:
-        data = {"type": "ssh"}
-        self._populate_base_pydantic_fields(data, proto.base)
-        data["cmd"] = proto.cmd
-        if proto.HasField("hostname"): data["hostname"] = proto.hostname
-        if proto.HasField("port"): data["port"] = proto.port
-        if proto.HasField("username"): data["username"] = proto.username
-        if proto.HasField("password"): data["password"] = proto.password
-        if proto.HasField("passphrase"): data["passphrase"] = proto.passphrase
-        if proto.HasField("key_filename"): data["key_filename"] = proto.key_filename
-        if proto.HasField("creates_session"): data["creates_session"] = proto.creates_session
-        if proto.HasField("session"): data["session"] = proto.session
-        if proto.HasField("clear_cache"): data["clear_cache"] = proto.clear_cache
-        if proto.HasField("timeout"): data["timeout"] = proto.timeout
-        if proto.HasField("jmp_hostname"): data["jmp_hostname"] = proto.jmp_hostname
-        if proto.HasField("jmp_port"): data["jmp_port"] = proto.jmp_port
-        if proto.HasField("jmp_username"): data["jmp_username"] = proto.jmp_username
-        if proto.HasField("interactive"): data["interactive"] = proto.interactive
-        if proto.HasField("command_timeout"): data["command_timeout"] = proto.command_timeout
-        if proto.prompts: data["prompts"] = list(proto.prompts)  # TODO fix types
-        if proto.HasField("bin"): data["bin"] = proto.bin
-        return SSHCommand.model_validate(data)
-
-    def _convert_sftp_proto_to_pydantic(self, proto: sftp_command_pb2.SFTPCommandProto) -> SFTPCommand:
-        data = {"type": "sftp"}
-        self._populate_base_pydantic_fields(data, proto.base)
-        data["cmd"] = proto.cmd
-        if proto.HasField("hostname"): data["hostname"] = proto.hostname
-        if proto.HasField("port"): data["port"] = proto.port
-        if proto.HasField("username"): data["username"] = proto.username
-        if proto.HasField("password"): data["password"] = proto.password
-        if proto.HasField("passphrase"): data["passphrase"] = proto.passphrase
-        if proto.HasField("key_filename"): data["key_filename"] = proto.key_filename
-        if proto.HasField("creates_session"): data["creates_session"] = proto.creates_session
-        if proto.HasField("session"): data["session"] = proto.session
-        if proto.HasField("clear_cache"): data["clear_cache"] = proto.clear_cache
-        if proto.HasField("timeout"): data["timeout"] = proto.timeout
-        if proto.HasField("jmp_hostname"): data["jmp_hostname"] = proto.jmp_hostname
-        if proto.HasField("jmp_port"): data["jmp_port"] = proto.jmp_port
-        if proto.HasField("jmp_username"): data["jmp_username"] = proto.jmp_username
-        data["remote_path"] = proto.remote_path
-        data["local_path"] = proto.local_path
-        if proto.HasField("mode"): data["mode"] = proto.mode
-        return SFTPCommand.model_validate(data)
-
-    def _convert_msf_payload_proto_to_pydantic(self, proto: msf_payload_command_pb2.MsfPayloadCommandProto) -> MsfPayloadCommand:
-        data = {"type": "msf-payload"}
-        self._populate_base_pydantic_fields(data, proto.base)
-        data["cmd"] = proto.cmd
-        if proto.HasField("format"): data["format"] = proto.format
-        if proto.HasField("badchars"): data["badchars"] = proto.badchars
-        if proto.HasField("force_encode"): data["force_encode"] = proto.force_encode
-        if proto.HasField("encoder"): data["encoder"] = proto.encoder
-        if proto.HasField("template"): data["template"] = proto.template
-        if proto.HasField("platform"): data["platform"] = proto.platform
-        if proto.HasField("keep_template_working"): data["keep_template_working"] = proto.keep_template_working
-        if proto.HasField("nopsled_size"): data["nopsled_size"] = proto.nopsled_size
-        if proto.HasField("iter"): data["iter"] = proto.iter
-        if proto.payload_options: data["payload_options"] = dict(proto.payload_options) # TODO fix types
-        if proto.HasField("local_path"): data["local_path"] = proto.local_path
-        return MsfPayloadCommand.model_validate(data)
-
-    def _convert_sleep_proto_to_pydantic(self, proto: sleep_command_pb2.SleepCommandProto) -> SleepCommand:
-        logger.info(f"Converting sleep command")
-        data = {"type": "sleep"}
-        self._populate_base_pydantic_fields(data, proto.base)
-        if proto.HasField("cmd"): data["cmd"] = proto.cmd
-        if proto.HasField("min_sec"): data["min_sec"] = proto.min_sec
-        if proto.HasField("seconds"): data["seconds"] = proto.seconds
-        if proto.HasField("random"): data["random"] = proto.random
-        return SleepCommand.model_validate(data)
-
-    def _convert_include_proto_to_pydantic(self, proto: include_command_pb2.IncludeCommandProto) -> IncludeCommand:
-        data = {"type": "include"}
-        self._populate_base_pydantic_fields(data, proto.base)
-        if proto.HasField("cmd"): data["cmd"] = proto.cmd
-        data["local_path"] = proto.local_path
-        return IncludeCommand.model_validate(data)
-
-    # TODO LoopCommand
-
-    def _convert_http_client_proto_to_pydantic(self, proto: http_client_command_pb2.HttpClientCommandProto) -> HttpClientCommand:
-        data = {"type": "http-client"}
-        self._populate_base_pydantic_fields(data, proto.base)
-        data["cmd"] = proto.cmd
-        data["url"] = proto.url
-        if proto.HasField("output_headers"): data["output_headers"] = proto.output_headers
-        if proto.headers: data["headers"] = dict(proto.headers)  # TODO fix types
-        if proto.cookies: data["cookies"] = dict(proto.cookies)  # TODO fix types
-        if proto.data: data["data"] = dict(proto.data)  # TODO fix types
-        if proto.HasField("local_path"): data["local_path"] = proto.local_path
-        if proto.HasField("useragent"): data["useragent"] = proto.useragent
-        if proto.HasField("follow"): data["follow"] = proto.follow
-        if proto.HasField("verify"): data["verify"] = proto.verify
-        if proto.HasField("http2"): data["http2"] = proto.http2
-        return HttpClientCommand.model_validate(data)
-
-    def _convert_webserv_proto_to_pydantic(self, proto: webserv_command_pb2.WebServCommandProto) -> WebServCommand:
-        data = {"type": "webserv"}
-        self._populate_base_pydantic_fields(data, proto.base)
-        if proto.HasField("cmd"): data["cmd"] = proto.cmd
-        data["local_path"] = proto.local_path
-        if proto.HasField("port"): data["port"] = proto.port
-        if proto.HasField("address"): data["address"] = proto.address
-        return WebServCommand.model_validate(data)
-
-    def _convert_sliver_listener_proto_to_pydantic(self, proto: sliver_listener_command_pb2.SliverListenerCommandProto) -> SliverHttpsListenerCommand:
-        data = {"type": "sliver", "cmd": "start_https_listener"}
-        self._populate_base_pydantic_fields(data, proto.base)
-        if proto.HasField("host"): data["host"] = proto.host
-        if proto.HasField("port"): data["port"] = proto.port
-        if proto.HasField("domain"): data["domain"] = proto.domain
-        if proto.HasField("website"): data["website"] = proto.website
-        if proto.HasField("acme"): data["acme"] = proto.acme
-        if proto.HasField("persistent"): data["persistent"] = proto.persistent
-        if proto.HasField("enforce_otp"): data["enforce_otp"] = proto.enforce_otp
-        if proto.HasField("randomize_jarm"): data["randomize_jarm"] = proto.randomize_jarm
-        if proto.HasField("long_poll_timeout"): data["long_poll_timeout"] = proto.long_poll_timeout
-        if proto.HasField("long_poll_jitter"): data["long_poll_jitter"] = proto.long_poll_jitter
-        if proto.HasField("timeout"): data["timeout"] = proto.timeout
-        return SliverHttpsListenerCommand.model_validate(data)
-
-    def _convert_sliver_generate_proto_to_pydantic(self, proto: sliver_generate_command_pb2.SliverGenerateCommandProto) -> SliverGenerateCommand:
-        data = {"type": "sliver", "cmd": "generate_implant"}
-        self._populate_base_pydantic_fields(data, proto.base)
-        if proto.HasField("target"): data["target"] = proto.target
-        data["c2url"] = proto.c2url
-        if proto.HasField("format"): data["format"] = proto.format
-        data["name"] = proto.name
-        if proto.HasField("filepath"): data["filepath"] = proto.filepath
-        if proto.HasField("IsBeacon"): data["IsBeacon"] = proto.IsBeacon
-        if proto.HasField("BeaconInterval"): data["BeaconInterval"] = proto.BeaconInterval
-        if proto.HasField("RunAtLoad"): data["RunAtLoad"] = proto.RunAtLoad
-        if proto.HasField("Evasion"): data["Evasion"] = proto.Evasion
-        return SliverGenerateCommand.model_validate(data)
-
-    # TODO debug all of this
-    def _convert_sliver_session_proto_to_pydantic(self, proto: sliver_session_command_pb2.SliverSessionCommandProto) -> SliverSessionCommand:
-        #  specific Pydantic class depends on the 'oneof' payload
-        data = {"type": "sliver-session"}
-        self._populate_base_pydantic_fields(data, proto.base)
-        data["session"] = proto.session
-        if proto.HasField("beacon"): data["beacon"] = proto.beacon
-
-        payload_field = proto.WhichOneof('command_payload')
-        if not payload_field:
-            raise ValueError("SliverSessionCommandProto missing specific command payload")
-
-        PydanticClass = None
-        if payload_field == "cd_payload":
-            data["cmd"] = "cd"
-            PydanticClass = SliverSessionCDCommand
-            pl = proto.cd_payload
-            data["remote_path"] = pl.remote_path
-        elif payload_field == "mkdir_payload":
-             data["cmd"] = "mkdir"
-             PydanticClass = SliverSessionMKDIRCommand
-             pl = proto.mkdir_payload
-             data["remote_path"] = pl.remote_path
-        elif payload_field == "ls_payload":
-            data["cmd"] = "ls"
-            PydanticClass = SliverSessionLSCommand
-            pl = proto.ls_payload
-            data["remote_path"] = pl.remote_path
-        elif payload_field == "download_payload":
-            data["cmd"] = "download"
-            PydanticClass = SliverSessionDOWNLOADCommand
-            pl = proto.download_payload
-            data["remote_path"] = pl.remote_path
-            if pl.HasField("local_path"): data["local_path"] = pl.local_path
-            if pl.HasField("recurse"): data["recurse"] = pl.recurse
-        elif payload_field == "upload_payload":
-            data["cmd"] = "upload"
-            PydanticClass = SliverSessionUPLOADCommand
-            pl = proto.upload_payload
-            data["remote_path"] = pl.remote_path
-            if pl.HasField("local_path"): data["local_path"] = pl.local_path
-            if pl.HasField("is_ioc"): data["is_ioc"] = pl.is_ioc
-        elif payload_field == "netstat_payload":
-            data["cmd"] = "netstat"
-            PydanticClass = SliverSessionNETSTATCommand
-            pl = proto.netstat_payload
-            if pl.HasField("tcp"): data["tcp"] = pl.tcp
-            if pl.HasField("udp"): data["udp"] = pl.udp
-            if pl.HasField("ipv4"): data["ipv4"] = pl.ipv4
-            if pl.HasField("ipv6"): data["ipv6"] = pl.ipv6
-            if pl.HasField("listening"): data["listening"] = pl.listening
-        elif payload_field == "exec_payload":
-            data["cmd"] = "execute"
-            PydanticClass = SliverSessionEXECCommand
-            pl = proto.exec_payload
-            data["exe"] = pl.exe
-            if pl.args: data["args"] = list(pl.args)   # TODO fix types
-            if pl.HasField("output"): data["output"] = pl.output
-        elif payload_field == "procdump_payload":
-            data["cmd"] = "process_dump"
-            PydanticClass = SliverSessionPROCDUMPCommand
-            pl = proto.procdump_payload
-            data["local_path"] = pl.local_path
-            data["pid"] = pl.pid
-        elif payload_field == "rm_payload":
-            data["cmd"] = "rm"
-            PydanticClass = SliverSessionRMCommand
-            pl = proto.rm_payload
-            data["remote_path"] = pl.remote_path
-            if pl.HasField("recursive"): data["recursive"] = pl.recursive
-            if pl.HasField("force"): data["force"] = pl.force
-        elif payload_field == "terminate_payload":
-            data["cmd"] = "terminate"
-            PydanticClass = SliverSessionTERMINATECommand
-            pl = proto.terminate_payload
-            data["pid"] = pl.pid
-            if pl.HasField("force"): data["force"] = pl.force
-        elif payload_field == "ps_command" and proto.ps_command:
-             data["cmd"] = "ps"
-             PydanticClass = SliverSessionSimpleCommand
-        elif payload_field == "pwd_command" and proto.pwd_command:
-             data["cmd"] = "pwd"
-             PydanticClass = SliverSessionSimpleCommand
-        elif payload_field == "ifconfig_command" and proto.ifconfig_command:
-             data["cmd"] = "ifconfig"
-             PydanticClass = SliverSessionSimpleCommand
-        else:
-            raise ValueError(f"Unknown or unhandled sliver session payload type: {payload_field}")
-
-        if PydanticClass is None:
-             raise ValueError(f"Could not determine Pydantic class for sliver session payload: {payload_field}")
-
-        return PydanticClass.model_validate(data)
-
-    def _convert_father_proto_to_pydantic(self, proto: father_command_pb2.FatherCommandProto) -> FatherCommand:
-        data = {"type": "father", "cmd": "generate"}
-        self._populate_base_pydantic_fields(data, proto.base)
-        if proto.HasField("gid"): data["gid"] = proto.gid
-        if proto.HasField("srcport"): data["srcport"] = proto.srcport
-        if proto.HasField("epochtime"): data["epochtime"] = proto.epochtime
-        if proto.HasField("env_var"): data["env_var"] = proto.env_var
-        if proto.HasField("file_prefix"): data["file_prefix"] = proto.file_prefix
-        if proto.HasField("preload_file"): data["preload_file"] = proto.preload_file
-        if proto.HasField("hiddenport"): data["hiddenport"] = proto.hiddenport
-        if proto.HasField("shell_pass"): data["shell_pass"] = proto.shell_pass
-        if proto.HasField("install_path"): data["install_path"] = proto.install_path
-        if proto.HasField("local_path"): data["local_path"] = proto.local_path
-        if proto.HasField("arch"): data["arch"] = proto.arch
-        if proto.HasField("build_command"): data["build_command"] = proto.build_command
-        return FatherCommand.model_validate(data)
-
-    def _convert_regex_proto_to_pydantic(self, proto: regex_command_pb2.RegExCommandProto) -> RegExCommand:
-        data = {"type": "regex"}
-        self._populate_base_pydantic_fields(data, proto.base)
-        data["cmd"] = proto.cmd
-        if proto.HasField("replace"): data["replace"] = proto.replace
-        if proto.HasField("mode"): data["mode"] = proto.mode
-        if proto.HasField("input"): data["input"] = proto.input
-        if proto.output: data["output"] = dict(proto.output)  # TODO fix types
-        return RegExCommand.model_validate(data)
-
-    def _convert_json_proto_to_pydantic(self, proto: json_command_pb2.JsonCommandProto) -> JsonCommand:
-        data = {"type": "json"}
-        self._populate_base_pydantic_fields(data, proto.base)
-        if proto.HasField("cmd"): data["cmd"] = proto.cmd
-        if proto.HasField("local_path"): data["local_path"] = proto.local_path
-        if proto.HasField("varstore"): data["varstore"] = proto.varstore
-        return JsonCommand.model_validate(data)
-
-    def _convert_tempfile_proto_to_pydantic(self, proto: tempfile_command_pb2.TempfileCommandProto) -> TempfileCommand:
-        data = {"type": "mktemp"}
-        self._populate_base_pydantic_fields(data, proto.base)
-        if proto.HasField("cmd"): data["cmd"] = proto.cmd
-        data["variable"] = proto.variable
-        return TempfileCommand.model_validate(data)
-
-    def _convert_vnc_proto_to_pydantic(self, proto: vnc_command_pb2.VncCommandProto) -> VncCommand:
-        data = {"type": "vnc"}
-        self._populate_base_pydantic_fields(data, proto.base)
-        data["cmd"] = proto.cmd
-        if proto.HasField("hostname"): data["hostname"] = proto.hostname
-        if proto.HasField("port"): data["port"] = proto.port
-        if proto.HasField("display"): data["display"] = proto.display
-        if proto.HasField("password"): data["password"] = proto.password
-        if proto.HasField("key"): data["key"] = proto.key
-        if proto.HasField("input"): data["input"] = proto.input
-        if proto.HasField("filename"): data["filename"] = proto.filename
-        if proto.HasField("x"): data["x"] = proto.x
-        if proto.HasField("y"): data["y"] = proto.y
-        if proto.HasField("creates_session"): data["creates_session"] = proto.creates_session
-        if proto.HasField("session"): data["session"] = proto.session
-        if proto.HasField("maxrms"): data["maxrms"] = proto.maxrms
-        if proto.HasField("expect_timeout"): data["expect_timeout"] = proto.expect_timeout
-        if proto.HasField("connection_timeout"): data["connection_timeout"] = proto.connection_timeout
-        return VncCommand.model_validate(data)
 
     def cleanup(self):
         """Cleans up resources when the server shuts down."""
@@ -719,7 +392,6 @@ class AttackMateServiceImpl(attackmate_service_pb2_grpc.AttackMateServiceService
 
 
 # Server Startup
-
 
 def serve():
     """Starts the gRPC server."""
