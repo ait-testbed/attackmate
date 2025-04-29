@@ -46,3 +46,21 @@ class VariableStoreState(_message.Message):
     VARIABLES_FIELD_NUMBER: _ClassVar[int]
     variables: _containers.MessageMap[str, VariableValue]
     def __init__(self, variables: _Optional[_Mapping[str, VariableValue]] = ...) -> None: ...
+
+class ExecutionResponse(_message.Message):
+    __slots__ = ("result", "state")
+    RESULT_FIELD_NUMBER: _ClassVar[int]
+    STATE_FIELD_NUMBER: _ClassVar[int]
+    result: CommandResult
+    state: VariableStoreState
+    def __init__(self, result: _Optional[_Union[CommandResult, _Mapping]] = ..., state: _Optional[_Union[VariableStoreState, _Mapping]] = ...) -> None: ...
+
+class PlaybookExecutionResponse(_message.Message):
+    __slots__ = ("success", "message", "final_state")
+    SUCCESS_FIELD_NUMBER: _ClassVar[int]
+    MESSAGE_FIELD_NUMBER: _ClassVar[int]
+    FINAL_STATE_FIELD_NUMBER: _ClassVar[int]
+    success: bool
+    message: str
+    final_state: VariableStoreState
+    def __init__(self, success: bool = ..., message: _Optional[str] = ..., final_state: _Optional[_Union[VariableStoreState, _Mapping]] = ...) -> None: ...

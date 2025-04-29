@@ -1,0 +1,12 @@
+syntax = "proto3";
+package attackmate.remote;
+import "base_command.proto";
+
+// Maps to attackmate.schemas.setvar.SetVarCommand
+message SetVarCommandProto {
+    BaseCommandFields base = 1;
+    // string type = "setvar";
+    string cmd = 100; // value to set (after potential encoding)
+    string variable = 101; // name of variable to set
+    optional string encoder = 102;
+}

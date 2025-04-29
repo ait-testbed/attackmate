@@ -1,0 +1,12 @@
+syntax = "proto3";
+package attackmate.remote;
+import "base_command.proto";
+
+// Maps to attackmate.schemas.json.JsonCommand
+message JsonCommandProto {
+    BaseCommandFields base = 1;
+    // string type = "json";
+    optional string cmd = 100;
+    optional string local_path = 101;
+    optional bool varstore = 102;
+}

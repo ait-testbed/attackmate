@@ -1,0 +1,14 @@
+syntax = "proto3";
+package attackmate.remote;
+import "base_command.proto";
+
+// Maps to attackmate.schemas.regex.RegExCommand
+message RegExCommandProto {
+    BaseCommandFields base = 1;
+    // string type = "regex";
+    string cmd = 100;
+    optional string replace = 101;
+    optional string mode = 102;
+    optional string input = 103;
+    map<string, string> output = 104;
+}

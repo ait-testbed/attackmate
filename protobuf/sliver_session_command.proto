@@ -1,0 +1,84 @@
+syntax = "proto3";
+package attackmate.remote;
+import "base_command.proto";
+
+// Specific Payloads for Sliver Session Sub-commands
+
+message SliverSessionCDPayload {
+    string remote_path = 1;
+}
+
+message SliverSessionMKDIRPayload {
+    string remote_path = 1;
+}
+
+message SliverSessionLSPayload {
+    string remote_path = 1;
+}
+
+message SliverSessionDownloadPayload {
+    string remote_path = 1;
+    optional string local_path = 2;
+    optional bool recurse = 3;
+}
+
+message SliverSessionUploadPayload {
+    string remote_path = 1;
+    optional string local_path = 2;
+    optional bool recurse = 3;
+    optional bool is_ioc = 4;
+}
+
+message SliverSessionNetstatPayload {
+    optional bool tcp = 1;
+    optional bool udp = 2;
+    optional bool ipv4 = 3;
+    optional bool ipv6 = 4;
+    optional bool listening = 5;
+}
+
+message SliverSessionExecPayload {
+    string exe = 1;
+    repeated string args = 2;
+    optional bool output = 3;
+}
+
+message SliverSessionProcdumpPayload {
+    string local_path = 1;
+    string pid = 2; // StringNumber
+}
+
+message SliverSessionRmPayload {
+    string remote_path = 1;
+    optional bool recursive = 2;
+    optional bool force = 3;
+}
+
+message SliverSessionTerminatePayload {
+    string pid = 1; // StringNumber
+    optional bool force = 2;
+}
+
+message SliverSessionCommandProto {
+    BaseCommandFields base = 1;
+    // string type = "sliver-session";
+    string session = 100; // Session name/ID
+    optional bool beacon = 101;
+
+    oneof command_payload {
+        SliverSessionCDPayload cd_payload = 200;
+        SliverSessionMKDIRPayload mkdir_payload = 201;
+        SliverSessionLSPayload ls_payload = 202;
+        SliverSessionDownloadPayload download_payload = 203;
+        SliverSessionUploadPayload upload_payload = 204;
+        SliverSessionNetstatPayload netstat_payload = 205;
+        SliverSessionExecPayload exec_payload = 206;
+        SliverSessionProcdumpPayload procdump_payload = 207;
+        SliverSessionRmPayload rm_payload = 208;
+        SliverSessionTerminatePayload terminate_payload = 209;
+        // Add fields for simple commands if needed, or handle by absence of payload
+        bool ps_command = 210; //  bool flags for payload-less commands
+        bool pwd_command = 211;
+        bool ifconfig_command = 212;
+    }
+}

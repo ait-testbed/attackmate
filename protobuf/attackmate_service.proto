@@ -3,16 +3,64 @@ syntax = "proto3";
 package attackmate.remote;
 
 import "playbook.proto";
-import "command.proto";
+import "common.proto";
+
+import "shell_command.proto";
+import "msf_module_command.proto";
+import "setvar_command.proto";
+import "debug_command.proto";
+import "msf_session_command.proto";
+import "ssh_command.proto";
+import "sftp_command.proto";
+import "msf_payload_command.proto";
+import "sleep_command.proto";
+import "include_command.proto";
+import "loop_command.proto"; // Note: Loop command itself cannot be directly executed via this. Playbook execution is needed.
+import "http_client_command.proto";
+import "webserv_command.proto";
+import "sliver_listener_command.proto";
+import "sliver_generate_command.proto";
+import "sliver_session_command.proto";
+import "father_command.proto";
+import "regex_command.proto";
+import "json_command.proto";
+import "tempfile_command.proto";
+import "vnc_command.proto";
+
+
+// Executes a single command
+message ExecuteCommandRequest {
+  oneof command {
+    ShellCommandProto shell_command = 1;
+    MsfModuleCommandProto msf_module_command = 2;
+    SetVarCommandProto setvar_command = 3;
+    DebugCommandProto debug_command = 4;
+    MsfSessionCommandProto msf_session_command = 5;
+    SSHCommandProto ssh_command = 6;
+    SFTPCommandProto sftp_command = 7;
+    MsfPayloadCommandProto msf_payload_command = 8;
+    SleepCommandProto sleep_command = 9;
+    IncludeCommandProto include_command = 10; // how to include the file?
+    // LoopCommandProto loop_command = 11; // Executing loop directly via RPC need a solution
+    HttpClientCommandProto http_client_command = 12;
+    WebServCommandProto webserv_command = 13;
+    SliverListenerCommandProto sliver_listener_command = 14; // server needs to handle mapping type=sliver,cmd=start_https_listener
+    SliverGenerateCommandProto sliver_generate_command = 15; // server needs to handle mapping type=sliver,cmd=generate_implant
+    SliverSessionCommandProto sliver_session_command = 16; // internal oneof for sub-commands
+    FatherCommandProto father_command = 17;
+    RegExCommandProto regex_command = 18;
+    JsonCommandProto json_command = 19;
+    TempfileCommandProto tempfile_command = 20;
+    VncCommandProto vnc_command = 21;
+  }
+  // TODO maye Optional: VariableStoreState current_state = 500; // if client manages state
+}
+
 
 service AttackMateService {
   // Executes an entire playbook provided as YAML content
   rpc ExecutePlaybook(ExecutePlaybookRequest) returns (ExecutePlaybookResponse);
 
-  // Executes a single command TODO: (server maintains state)
-  rpc ExecuteCommand(ExecuteCommandRequest) returns (ExecuteCommandResponse);
-
-  // Maybe also implement:
-  // rpc GetVariableStore(google.protobuf.Empty) returns (VariableStoreState);
-  // rpc CleanupSessions(google.protobuf.Empty) returns (google.protobuf.Empty);
+  // execute single command
+  rpc ExecuteCommand(ExecuteCommandRequest) returns (ExecutionResponse);
 }

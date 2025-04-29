@@ -1,0 +1,66 @@
+syntax = "proto3";
+package attackmate.remote;
+import "base_command.proto";
+
+//  Need to import ALL command types that can be nested. TODO more elegant solution?
+import "msf_module_command.proto";
+import "msf_session_command.proto";
+import "msf_payload_command.proto";
+import "shell_command.proto";
+import "sleep_command.proto";
+import "ssh_command.proto";
+import "sftp_command.proto";
+import "debug_command.proto";
+import "setvar_command.proto";
+import "regex_command.proto";
+import "tempfile_command.proto";
+import "include_command.proto";
+// import "loop_command.proto"; // Cannot import self
+import "webserv_command.proto";
+import "http_client_command.proto";
+import "json_command.proto";
+import "sliver_listener_command.proto";
+import "sliver_generate_command.proto";
+import "sliver_session_command.proto";
+import "vnc_command.proto";
+import "father_command.proto";
+// ADD IMPORTS FOR ANY OTHER COMMAND TYPES HERE
+
+// Represents ANY possible command that can be nested inside a loop
+// mirrors the oneof in the main service request.
+message AnyNestedCommand {
+    oneof command {
+        ShellCommandProto shell_command = 1;
+        MsfModuleCommandProto msf_module_command = 2;
+        MsfSessionCommandProto msf_session_command = 3;
+        MsfPayloadCommandProto msf_payload_command = 4;
+        SleepCommandProto sleep_command = 5;
+        SSHCommandProto ssh_command = 6;
+        SFTPCommandProto sftp_command = 7;
+        DebugCommandProto debug_command = 8;
+        SetVarCommandProto setvar_command = 9;
+        RegExCommandProto regex_command = 10;
+        TempfileCommandProto tempfile_command = 11;
+        IncludeCommandProto include_command = 12;
+        // LoopCommandProto loop_command = 13; // Cannot nest loop directly this way. potential future loop in loop feature?
+        WebServCommandProto webserv_command = 14;
+        HttpClientCommandProto http_client_command = 15;
+        JsonCommandProto json_command = 16;
+        SliverListenerCommandProto sliver_listener_command = 17;
+        SliverGenerateCommandProto sliver_generate_command = 18;
+        SliverSessionCommandProto sliver_session_command = 19;
+        VncCommandProto vnc_command = 20;
+        FatherCommandProto father_command = 21;
+        // ADD NEW COMMANDS HERE
+    }
+}
+
+
+// Maps to attackmate.schemas.loop.LoopCommand
+message LoopCommandProto {
+    BaseCommandFields base = 1;
+    // string type = "loop";
+    string cmd = 100; // Loop condition (e.g., "range(1,5)", "items(VAR)", "until(...)")
+    repeated AnyNestedCommand commands = 101; // List of nested commands
+    optional string break_if = 102;
+}

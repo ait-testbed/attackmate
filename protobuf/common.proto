@@ -28,3 +28,14 @@ message VariableValue {
 message VariableStoreState {
     map<string, VariableValue> variables = 1;
 }
+
+message ExecutionResponse {
+  CommandResult result = 1;
+  VariableStoreState state = 2; // State after the execution
+}
+
+message PlaybookExecutionResponse {
+  bool success = 1; //
+  string message = 2;
+  VariableStoreState final_state = 3;
+}

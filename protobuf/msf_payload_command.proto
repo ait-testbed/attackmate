@@ -1,0 +1,21 @@
+syntax = "proto3";
+package attackmate.remote;
+import "base_command.proto";
+
+// Maps to attackmate.schemas.metasploit.MsfPayloadCommand
+message MsfPayloadCommandProto {
+    BaseCommandFields base = 1;
+    // string type = "msf-payload";
+    string cmd = 100;
+    optional string format = 101;
+    optional string badchars = 102;
+    optional bool force_encode = 103;
+    optional string encoder = 104;
+    optional string template = 105;
+    optional string platform = 106;
+    optional bool keep_template_working = 107;
+    optional string nopsled_size = 108; // StringNumber
+    optional string iter = 109; // StringNumber
+    map<string, string> payload_options = 110;
+    optional string local_path = 111;
+}

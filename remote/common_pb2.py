@@ -25,7 +25,7 @@ _sym_db = _symbol_database.Default()
 from google.protobuf import struct_pb2 as google_dot_protobuf_dot_struct__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0c\x63ommon.proto\x12\x11\x61ttackmate.remote\x1a\x1cgoogle/protobuf/struct.proto\"[\n\rCommandResult\x12\x0f\n\x07success\x18\x01 \x01(\x08\x12\x0e\n\x06stdout\x18\x02 \x01(\t\x12\x12\n\nreturncode\x18\x03 \x01(\x05\x12\x15\n\rerror_message\x18\x04 \x01(\t\"\xf2\x01\n\rVariableValue\x12\x30\n\nnull_value\x18\x01 \x01(\x0e\x32\x1a.google.protobuf.NullValueH\x00\x12\x16\n\x0cnumber_value\x18\x02 \x01(\x01H\x00\x12\x16\n\x0cstring_value\x18\x03 \x01(\tH\x00\x12\x14\n\nbool_value\x18\x04 \x01(\x08H\x00\x12/\n\x0cstruct_value\x18\x05 \x01(\x0b\x32\x17.google.protobuf.StructH\x00\x12\x30\n\nlist_value\x18\x06 \x01(\x0b\x32\x1a.google.protobuf.ListValueH\x00\x42\x06\n\x04kind\"\xb1\x01\n\x12VariableStoreState\x12G\n\tvariables\x18\x01 \x03(\x0b\x32\x34.attackmate.remote.VariableStoreState.VariablesEntry\x1aR\n\x0eVariablesEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12/\n\x05value\x18\x02 \x01(\x0b\x32 .attackmate.remote.VariableValue:\x02\x38\x01\x62\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0c\x63ommon.proto\x12\x11\x61ttackmate.remote\x1a\x1cgoogle/protobuf/struct.proto\"[\n\rCommandResult\x12\x0f\n\x07success\x18\x01 \x01(\x08\x12\x0e\n\x06stdout\x18\x02 \x01(\t\x12\x12\n\nreturncode\x18\x03 \x01(\x05\x12\x15\n\rerror_message\x18\x04 \x01(\t\"\xf2\x01\n\rVariableValue\x12\x30\n\nnull_value\x18\x01 \x01(\x0e\x32\x1a.google.protobuf.NullValueH\x00\x12\x16\n\x0cnumber_value\x18\x02 \x01(\x01H\x00\x12\x16\n\x0cstring_value\x18\x03 \x01(\tH\x00\x12\x14\n\nbool_value\x18\x04 \x01(\x08H\x00\x12/\n\x0cstruct_value\x18\x05 \x01(\x0b\x32\x17.google.protobuf.StructH\x00\x12\x30\n\nlist_value\x18\x06 \x01(\x0b\x32\x1a.google.protobuf.ListValueH\x00\x42\x06\n\x04kind\"\xb1\x01\n\x12VariableStoreState\x12G\n\tvariables\x18\x01 \x03(\x0b\x32\x34.attackmate.remote.VariableStoreState.VariablesEntry\x1aR\n\x0eVariablesEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12/\n\x05value\x18\x02 \x01(\x0b\x32 .attackmate.remote.VariableValue:\x02\x38\x01\"{\n\x11\x45xecutionResponse\x12\x30\n\x06result\x18\x01 \x01(\x0b\x32 .attackmate.remote.CommandResult\x12\x34\n\x05state\x18\x02 \x01(\x0b\x32%.attackmate.remote.VariableStoreState\"y\n\x19PlaybookExecutionResponse\x12\x0f\n\x07success\x18\x01 \x01(\x08\x12\x0f\n\x07message\x18\x02 \x01(\t\x12:\n\x0b\x66inal_state\x18\x03 \x01(\x0b\x32%.attackmate.remote.VariableStoreStateb\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -42,4 +42,8 @@ if not _descriptor._USE_C_DESCRIPTORS:
   _globals['_VARIABLESTORESTATE']._serialized_end=581
   _globals['_VARIABLESTORESTATE_VARIABLESENTRY']._serialized_start=499
   _globals['_VARIABLESTORESTATE_VARIABLESENTRY']._serialized_end=581
+  _globals['_EXECUTIONRESPONSE']._serialized_start=583
+  _globals['_EXECUTIONRESPONSE']._serialized_end=706
+  _globals['_PLAYBOOKEXECUTIONRESPONSE']._serialized_start=708
+  _globals['_PLAYBOOKEXECUTIONRESPONSE']._serialized_end=829
 # @@protoc_insertion_point(module_scope)

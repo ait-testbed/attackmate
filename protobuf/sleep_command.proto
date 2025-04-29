@@ -1,0 +1,13 @@
+syntax = "proto3";
+package attackmate.remote;
+import "base_command.proto";
+
+// Maps to attackmate.schemas.sleep.SleepCommand
+message SleepCommandProto {
+    BaseCommandFields base = 1;
+    // string type = "sleep";
+    optional string cmd = 100; // Default 'sleep'
+    optional string min_sec = 101; // StringNumber -> string
+    optional string seconds = 102; // StringNumber -> string
+    optional bool random = 103;
+}

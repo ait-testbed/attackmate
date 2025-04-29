@@ -1,0 +1,26 @@
+syntax = "proto3";
+package attackmate.remote;
+import "base_command.proto";
+
+// Maps to attackmate.schemas.ssh.SFTPCommand
+message SFTPCommandProto {
+    BaseCommandFields base = 1;
+    // string type = "sftp";
+    string cmd = 100; // Literal['get', 'put'] -> string (validation on server? )
+    optional string hostname = 101;
+    optional string port = 102; // StringNumber
+    optional string username = 103;
+    optional string password = 104;
+    optional string passphrase = 105;
+    optional string key_filename = 106;
+    optional string creates_session = 107;
+    optional string session = 108;
+    optional bool clear_cache = 109;
+    optional double timeout = 110; // float  double
+    optional string jmp_hostname = 111;
+    optional string jmp_port = 112; // StringNumber
+    optional string jmp_username = 113;
+    string remote_path = 114;
+    string local_path = 115;
+    optional string mode = 116;
+}

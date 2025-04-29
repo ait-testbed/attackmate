@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package attackmate.remote;
+
+import "base_command.proto"; // Import common fields
+
+// Maps to attackmate.schemas.shell.ShellCommand
+message ShellCommandProto {
+  BaseCommandFields base = 1; // Embed common fields
+
+  // string type = "shell"; // implicit
+  string cmd = 100;
+  optional bool interactive = 101;
+  optional string creates_session = 102;
+  optional string session = 103;
+  optional string command_timeout = 104;
+  optional string command_shell = 106;
+  optional bool bin = 107;
+  optional bool read = 108;
+}

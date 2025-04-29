@@ -8,7 +8,7 @@ import "common.proto";
 // Represents a single AttackMate command for remote execution.
 message Command {
   string type = 1; // e.g., "shell", "msf-module"
-  string cmd = 2; // The main command string/identifier
+  string cmd = 2; // The main command string
 
   // Flexible parameters mirror Pydantic model fields.
   google.protobuf.Struct parameters = 3;
@@ -19,7 +19,7 @@ message Command {
   optional string error_if_not = 12;
   optional string loop_if = 13;
   optional string loop_if_not = 14;
-  optional string loop_count = 15; // Represented as string for flexibility (like StringNumber)
+  optional string loop_count = 15;
   optional bool exit_on_error = 16;
   optional string save = 17;
   optional bool background = 18;
@@ -27,15 +27,23 @@ message Command {
   map<string, string> metadata = 20;
 }
 
-// Request to execute a single command
-message ExecuteCommandRequest {
-  Command command = 1;
-  // Maybe send state here if managed on client side ??
-  // VariableStoreState current_state = 2;
+message BaseCommandFields {
+  optional string only_if = 1;
+  optional string error_if = 2;
+  optional string error_if_not = 3;
+  optional string loop_if = 4;
+  optional string loop_if_not = 5;
+  optional string loop_count = 6; // Represented as string like Pydantic StringNumber
+  optional bool exit_on_error = 7;
+  optional string save = 8;
+  optional bool background = 9;
+  optional bool kill_on_exit = 10;
+  map<string, string> metadata = 11;
 }
+
 
 // Response after executing a single command
 message ExecuteCommandResponse {
   CommandResult result = 1;
-  VariableStoreState updated_state = 2; // State *after* the command execution
+  VariableStoreState updated_state = 2;
 }

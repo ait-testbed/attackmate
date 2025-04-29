@@ -1,0 +1,13 @@
+syntax = "proto3";
+package attackmate.remote;
+import "base_command.proto";
+
+// Maps to attackmate.schemas.debug.DebugCommand
+message DebugCommandProto {
+    BaseCommandFields base = 1;
+    // string type = "debug";
+    optional string cmd = 100;
+    optional bool varstore = 101;
+    optional bool exit = 102;
+    optional bool wait_for_key = 103;
+}

@@ -1,0 +1,11 @@
+syntax = "proto3";
+package attackmate.remote;
+import "base_command.proto";
+
+// Maps to attackmate.schemas.tempfile.TempfileCommand
+message TempfileCommandProto {
+    BaseCommandFields base = 1;
+    // string type = "mktemp";
+    optional string cmd = 100;
+    string variable = 101;
+}

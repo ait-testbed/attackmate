@@ -1,0 +1,22 @@
+syntax = "proto3";
+package attackmate.remote;
+import "base_command.proto";
+
+// Maps to attackmate.schemas.father.FatherCommand
+message FatherCommandProto {
+    BaseCommandFields base = 1;
+    // string type = "father";
+    // string cmd = "generate";
+    optional string gid = 100;
+    optional string srcport = 101;
+    optional string epochtime = 102;
+    optional string env_var = 103;
+    optional string file_prefix = 104;
+    optional string preload_file = 105;
+    optional string hiddenport = 106;
+    optional string shell_pass = 107;
+    optional string install_path = 108;
+    optional string local_path = 109;
+    optional string arch = 110;
+    optional string build_command = 111;
+}

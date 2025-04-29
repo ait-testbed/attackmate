@@ -1,0 +1,21 @@
+syntax = "proto3";
+package attackmate.remote;
+import "base_command.proto";
+
+// Maps to attackmate.schemas.sliver.SliverHttpsListenerCommand
+message SliverListenerCommandProto {
+    BaseCommandFields base = 1;
+    // string type = "sliver"; // Ambiguous, rely on oneof field name
+    // string cmd = "start_https_listener";  // Implicit
+    optional string host = 100;
+    optional string port = 101; // StringNumber
+    optional string domain = 102;
+    optional string website = 103;
+    optional bool acme = 104;
+    optional bool persistent = 105;
+    optional bool enforce_otp = 106;
+    optional bool randomize_jarm = 107;
+    optional string long_poll_timeout = 108; // StringNumber
+    optional string long_poll_jitter = 109; // StringNumber
+    optional string timeout = 110; // StringNumber
+}

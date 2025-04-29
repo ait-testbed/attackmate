@@ -1,0 +1,21 @@
+syntax = "proto3";
+package attackmate.remote;
+import "base_command.proto";
+
+
+// Maps to attackmate.schemas.http.HttpClientCommand
+message HttpClientCommandProto {
+    BaseCommandFields base = 1;
+    // string type = "http-client";
+    string cmd = 100; // HTTP Method (GET, POST, etc.)
+    string url = 101;
+    optional bool output_headers = 102;
+    map<string, string> headers = 103; // Dict -> map
+    map<string, string> cookies = 104; // Dict -> map
+    map<string, string> data = 105; // Dict -> map (form data)
+    optional string local_path = 106;
+    optional string useragent = 107;
+    optional bool follow = 108;
+    optional bool verify = 109;
+    optional bool http2 = 110;
+}

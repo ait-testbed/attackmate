@@ -1,0 +1,11 @@
+syntax = "proto3";
+package attackmate.remote;
+import "base_command.proto";
+
+// Maps to attackmate.schemas.include.IncludeCommand
+message IncludeCommandProto {
+    BaseCommandFields base = 1;
+    // string type = "include";
+    optional string cmd = 100; // Default is 'include commands'
+    string local_path = 101;
+}

@@ -1,0 +1,15 @@
+syntax = "proto3";
+package attackmate.remote;
+import "base_command.proto";
+
+// Maps to attackmate.schemas.metasploit.MsfSessionCommand
+message MsfSessionCommandProto {
+    BaseCommandFields base = 1;
+    // string type = "msf-session";
+    string cmd = 100;
+    optional bool stdapi = 101;
+    optional bool write = 102;
+    optional bool read = 103;
+    string session = 104;
+    optional string end_str = 105;
+}

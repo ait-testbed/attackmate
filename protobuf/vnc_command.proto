@@ -1,0 +1,24 @@
+syntax = "proto3";
+package attackmate.remote;
+import "base_command.proto";
+
+// Maps to attackmate.schemas.vnc.VncCommand
+message VncCommandProto {
+    BaseCommandFields base = 1;
+    // string type = "vnc";
+    string cmd = 100;
+    optional string hostname = 101;
+    optional string port = 102; // StringNumber
+    optional string display = 103; // StringNumber
+    optional string password = 104;
+    optional string key = 105;
+    optional string input = 106;
+    optional string filename = 107;
+    optional int32 x = 108;
+    optional int32 y = 109;
+    optional string creates_session = 110;
+    optional string session = 111;
+    optional double maxrms = 112;
+    optional int32 expect_timeout = 113;
+    optional int32 connection_timeout = 114;
+}

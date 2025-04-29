@@ -46,11 +46,38 @@ class Command(_message.Message):
     metadata: _containers.ScalarMap[str, str]
     def __init__(self, type: _Optional[str] = ..., cmd: _Optional[str] = ..., parameters: _Optional[_Union[_struct_pb2.Struct, _Mapping]] = ..., only_if: _Optional[str] = ..., error_if: _Optional[str] = ..., error_if_not: _Optional[str] = ..., loop_if: _Optional[str] = ..., loop_if_not: _Optional[str] = ..., loop_count: _Optional[str] = ..., exit_on_error: bool = ..., save: _Optional[str] = ..., background: bool = ..., kill_on_exit: bool = ..., metadata: _Optional[_Mapping[str, str]] = ...) -> None: ...
 
-class ExecuteCommandRequest(_message.Message):
-    __slots__ = ("command",)
-    COMMAND_FIELD_NUMBER: _ClassVar[int]
-    command: Command
-    def __init__(self, command: _Optional[_Union[Command, _Mapping]] = ...) -> None: ...
+class BaseCommandFields(_message.Message):
+    __slots__ = ("only_if", "error_if", "error_if_not", "loop_if", "loop_if_not", "loop_count", "exit_on_error", "save", "background", "kill_on_exit", "metadata")
+    class MetadataEntry(_message.Message):
+        __slots__ = ("key", "value")
+        KEY_FIELD_NUMBER: _ClassVar[int]
+        VALUE_FIELD_NUMBER: _ClassVar[int]
+        key: str
+        value: str
+        def __init__(self, key: _Optional[str] = ..., value: _Optional[str] = ...) -> None: ...
+    ONLY_IF_FIELD_NUMBER: _ClassVar[int]
+    ERROR_IF_FIELD_NUMBER: _ClassVar[int]
+    ERROR_IF_NOT_FIELD_NUMBER: _ClassVar[int]
+    LOOP_IF_FIELD_NUMBER: _ClassVar[int]
+    LOOP_IF_NOT_FIELD_NUMBER: _ClassVar[int]
+    LOOP_COUNT_FIELD_NUMBER: _ClassVar[int]
+    EXIT_ON_ERROR_FIELD_NUMBER: _ClassVar[int]
+    SAVE_FIELD_NUMBER: _ClassVar[int]
+    BACKGROUND_FIELD_NUMBER: _ClassVar[int]
+    KILL_ON_EXIT_FIELD_NUMBER: _ClassVar[int]
+    METADATA_FIELD_NUMBER: _ClassVar[int]
+    only_if: str
+    error_if: str
+    error_if_not: str
+    loop_if: str
+    loop_if_not: str
+    loop_count: str
+    exit_on_error: bool
+    save: str
+    background: bool
+    kill_on_exit: bool
+    metadata: _containers.ScalarMap[str, str]
+    def __init__(self, only_if: _Optional[str] = ..., error_if: _Optional[str] = ..., error_if_not: _Optional[str] = ..., loop_if: _Optional[str] = ..., loop_if_not: _Optional[str] = ..., loop_count: _Optional[str] = ..., exit_on_error: bool = ..., save: _Optional[str] = ..., background: bool = ..., kill_on_exit: bool = ..., metadata: _Optional[_Mapping[str, str]] = ...) -> None: ...
 
 class ExecuteCommandResponse(_message.Message):
     __slots__ = ("result", "updated_state")

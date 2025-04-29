@@ -3,7 +3,8 @@
 import grpc
 import warnings
 
-from . import command_pb2 as command__pb2
+from . import attackmate_service_pb2 as attackmate__service__pb2
+from . import common_pb2 as common__pb2
 from . import playbook_pb2 as playbook__pb2
 
 GRPC_GENERATED_VERSION = '1.70.0'
@@ -42,8 +43,8 @@ class AttackMateServiceStub(object):
                 _registered_method=True)
         self.ExecuteCommand = channel.unary_unary(
                 '/attackmate.remote.AttackMateService/ExecuteCommand',
-                request_serializer=command__pb2.ExecuteCommandRequest.SerializeToString,
-                response_deserializer=command__pb2.ExecuteCommandResponse.FromString,
+                request_serializer=attackmate__service__pb2.ExecuteCommandRequest.SerializeToString,
+                response_deserializer=common__pb2.ExecutionResponse.FromString,
                 _registered_method=True)
 
 
@@ -58,7 +59,7 @@ class AttackMateServiceServicer(object):
         raise NotImplementedError('Method not implemented!')
 
     def ExecuteCommand(self, request, context):
-        """Executes a single command TODO: (server maintains state)
+        """execute single command
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -74,8 +75,8 @@ def add_AttackMateServiceServicer_to_server(servicer, server):
             ),
             'ExecuteCommand': grpc.unary_unary_rpc_method_handler(
                     servicer.ExecuteCommand,
-                    request_deserializer=command__pb2.ExecuteCommandRequest.FromString,
-                    response_serializer=command__pb2.ExecuteCommandResponse.SerializeToString,
+                    request_deserializer=attackmate__service__pb2.ExecuteCommandRequest.FromString,
+                    response_serializer=common__pb2.ExecutionResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -130,8 +131,8 @@ class AttackMateService(object):
             request,
             target,
             '/attackmate.remote.AttackMateService/ExecuteCommand',
-            command__pb2.ExecuteCommandRequest.SerializeToString,
-            command__pb2.ExecuteCommandResponse.FromString,
+            attackmate__service__pb2.ExecuteCommandRequest.SerializeToString,
+            common__pb2.ExecutionResponse.FromString,
             options,
             channel_credentials,
             insecure,
