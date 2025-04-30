@@ -80,7 +80,8 @@ if __name__ == '__main__':
     app = create_app()
     logger.info('Starting Uvicorn server...')
     try:
-        uvicorn.run(app, host='0.0.0.0', port=8000, log_level='info')
+        uvicorn.run(app, host='0.0.0.0', port=8000, log_level='info', log_config=None)
+        # Disabled default logging to have attackmate.log, attackmate.json etc. but maybe uvicorn logging needed
 
     finally:
         logger.info('Uvicorn server stopped. Performing application cleanup.')
