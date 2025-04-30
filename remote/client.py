@@ -65,6 +65,32 @@ logger = logging.getLogger(__name__)
 
 # Helper Functions
 
+# # mapping to reduce code duplication
+# COMMAND_TYPE_TO_PROTO_CLASS = {
+#     "shell": shell_command_pb2.ShellCommandProto,
+#     "msf-module": msf_module_command_pb2.MsfModuleCommandProto,
+#     "setvar": setvar_command_pb2.SetVarCommandProto,
+#     "debug": debug_command_pb2.DebugCommandProto,
+#     "msf-session": msf_session_command_pb2.MsfSessionCommandProto,
+#     "ssh": ssh_command_pb2.SSHCommandProto,
+#     "sftp": sftp_command_pb2.SFTPCommandProto,
+#     "msf-payload": msf_payload_command_pb2.MsfPayloadCommandProto,
+#     "sleep": sleep_command_pb2.SleepCommandProto,
+#     "include": include_command_pb2.IncludeCommandProto,
+#     # "loop": loop_command_pb2.LoopCommandProto, # If adding later
+#     "http-client": http_client_command_pb2.HttpClientCommandProto,
+#     "webserv": webserv_command_pb2.WebServCommandProto,
+#     "sliver-listener": sliver_listener_command_pb2.SliverListenerCommandProto,
+#     "sliver-generate": sliver_generate_command_pb2.SliverGenerateCommandProto,
+#     "sliver-session": sliver_session_command_pb2.SliverSessionCommandProto,
+#     "father": father_command_pb2.FatherCommandProto,
+#     "regex": regex_command_pb2.RegExCommandProto,
+#     "json": json_command_pb2.JsonCommandProto,
+#     "tempfile": tempfile_command_pb2.TempfileCommandProto,
+#     "vnc": vnc_command_pb2.VncCommandProto,
+#     # ADD OTHERS HERE
+# }
+
 
 def _protobuf_to_value(pb_value: common_pb2.VariableValue) -> Any:
     if pb_value.HasField("string_value"): return pb_value.string_value
