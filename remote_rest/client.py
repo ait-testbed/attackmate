@@ -1,11 +1,11 @@
-import httpx
 import argparse
-import yaml
+import json
 import logging
 import sys
-import json
-from typing import Dict, Any, List, Optional
+from typing import Any, Dict, List, Optional
 
+import httpx
+import yaml
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - CLIENT - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
