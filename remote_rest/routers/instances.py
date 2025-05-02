@@ -1,16 +1,17 @@
-from typing import Dict
-import uuid
 import logging
-from fastapi import APIRouter, HTTPException, Path, Depends
-from src.attackmate.attackmate import AttackMate
-from src.attackmate.schemas.config import Config
+import uuid
+from typing import Dict
+
+from fastapi import APIRouter, Depends, HTTPException, Path
 
 from remote_rest.schemas import (InstanceCreationResponse,
                                  VariableStoreStateModel)
-
 from remote_rest.utils import varstore_to_state_model
+from src.attackmate.attackmate import AttackMate
+from src.attackmate.schemas.config import Config
 
-from ..state import get_instances_dict, get_instance_by_id, get_attackmate_config
+from ..state import (get_attackmate_config, get_instance_by_id,
+                     get_instances_dict)
 
 router = APIRouter(tags=['Instances'])
 logger = logging.getLogger(__name__)

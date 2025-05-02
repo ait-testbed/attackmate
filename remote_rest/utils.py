@@ -1,9 +1,8 @@
 import logging
 from typing import Any, Dict
 
-from src.attackmate.variablestore import VariableStore
-
 from remote_rest.schemas import VariableStoreStateModel
+from src.attackmate.variablestore import VariableStore
 
 logger = logging.getLogger(__name__)
 

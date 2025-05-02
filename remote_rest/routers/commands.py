@@ -1,17 +1,18 @@
 import logging
+
+from fastapi import APIRouter, Depends, HTTPException, Path
+
 from attackmate.attackmate import AttackMate
 from attackmate.schemas.base import BaseCommand
-from fastapi import APIRouter, Depends, HTTPException, Path
+from remote_rest.schemas import CommandResultModel, ExecutionResponseModel
+from remote_rest.utils import varstore_to_state_model
+from src.attackmate.execexception import ExecException
 from src.attackmate.result import Result as AttackMateResult
 from src.attackmate.schemas.debug import DebugCommand
 from src.attackmate.schemas.setvar import SetVarCommand
 from src.attackmate.schemas.shell import ShellCommand
 from src.attackmate.schemas.sleep import SleepCommand
 from src.attackmate.schemas.tempfile import TempfileCommand
-from src.attackmate.execexception import ExecException
-
-from remote_rest.schemas import CommandResultModel, ExecutionResponseModel
-from remote_rest.utils import varstore_to_state_model
 
 from ..state import get_instance_by_id
 

@@ -1,14 +1,17 @@
 import logging
-from fastapi import APIRouter, HTTPException, Body
+import os
+
+import yaml
+from fastapi import APIRouter, Body, HTTPException
 from pydantic import ValidationError
+
 from attackmate.schemas.playbook import Playbook
-from remote_rest.schemas import PlaybookResponseModel, PlaybookFileRequest
+from remote_rest.schemas import PlaybookFileRequest, PlaybookResponseModel
 from remote_rest.utils import varstore_to_state_model
 from src.attackmate.attackmate import AttackMate
 from src.attackmate.playbook_parser import parse_playbook
-from .. state import attackmate_config
-import yaml
-import os
+
+from ..state import attackmate_config
 
 router = APIRouter(prefix='/playbooks', tags=['Playbooks'])
 logger = logging.getLogger(__name__)

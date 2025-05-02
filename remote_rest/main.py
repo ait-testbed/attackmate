@@ -1,20 +1,18 @@
-import uvicorn
 import logging
 from contextlib import asynccontextmanager
 from typing import AsyncGenerator
-from attackmate.execexception import ExecException
 
-from src.attackmate.playbook_parser import parse_config
-
+import uvicorn
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
+
+import remote_rest.state as state
+from attackmate.execexception import ExecException
+from remote_rest.routers import commands, instances, playbooks
 from src.attackmate.logging_setup import (initialize_json_logger,
                                           initialize_logger,
                                           initialize_output_logger)
-
-
-from remote_rest.routers import commands, instances, playbooks
-import remote_rest.state as state
+from src.attackmate.playbook_parser import parse_config
 
 # Logging
 initialize_logger(debug=True, append_logs=False)
