@@ -7,6 +7,7 @@ from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 
 import remote_rest.state as state
+from src.attackmate.attackmate import AttackMate
 from attackmate.execexception import ExecException
 from remote_rest.routers import commands, instances, playbooks
 from src.attackmate.logging_setup import (initialize_json_logger,
@@ -34,9 +35,12 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
             state.attackmate_config = loaded_config
             logger.info('Global AttackMate configuration loaded.')
         else:
-            raise RuntimeError('Failed to load essential AttackMate configuration (parse_config returned None).')
+            raise RuntimeError(
+                'Failed to load essential AttackMate configuration (parse_config returned None).')
         # Initialize the INSTANCES dict (it's already defined globally in state.py)
         state.INSTANCES.clear()
+        # instantiate the Instance in the INSTANCES dict
+        state.INSTANCES['default_context'] = AttackMate(playbook=None, config=loaded_config, varstore=None)
         logger.info('Instances dictionary initialized.')
         #  any other async startup tasks ?
 

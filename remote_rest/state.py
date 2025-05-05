@@ -32,3 +32,13 @@ def get_instance_by_id(
     if not instance:
         raise HTTPException(status_code=404, detail=f"AttackMate instance '{instance_id}' not found.")
     return instance
+
+
+def get_persistent_instance(
+    instances: Dict[str, AttackMate] = Depends(get_instances_dict)
+) -> AttackMate:
+    """Dependency to get the default context persistent AttackMate instance, raising 404 if not found."""
+    instance = instances.get('default_context')
+    if not instance:
+        raise HTTPException(status_code=404, detail='Persistent AttackMate instance not found.')
+    return instance

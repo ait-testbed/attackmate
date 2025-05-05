@@ -1,6 +1,6 @@
 import logging
 
-from fastapi import APIRouter, Depends, HTTPException, Path
+from fastapi import APIRouter, Depends, HTTPException
 
 from attackmate.attackmate import AttackMate
 from attackmate.schemas.base import BaseCommand
@@ -14,19 +14,19 @@ from src.attackmate.schemas.shell import ShellCommand
 from src.attackmate.schemas.sleep import SleepCommand
 from src.attackmate.schemas.tempfile import TempfileCommand
 
-from ..state import get_instance_by_id
+from ..state import get_persistent_instance
 
 # ADD IMPORTS FOR OTHER COMMAND PYDANTIC SCHEMAS HERE
 
 
-router = APIRouter(prefix='/instances/{instance_id}', tags=['Commands'])
+router = APIRouter(prefix='/command', tags=['Commands'])
 logger = logging.getLogger(__name__)
 
 
 async def run_command_on_instance(instance: AttackMate, command_data: BaseCommand) -> AttackMateResult:
     """Runs a command on a given AttackMate instance."""
     try:
-        logger.info(f"Executing command type '{command_data.type}' on instance") # type: ignore
+        logger.info(f"Executing command type '{command_data.type}' on instance")  # type: ignore
         # TODO does this work? need to pass command class object here?
         result = instance.run_command(command_data)
         logger.info(f"Command execution finished. RC: {result.returncode}")
@@ -43,72 +43,72 @@ async def run_command_on_instance(instance: AttackMate, command_data: BaseComman
 @router.post('/shell', response_model=ExecutionResponseModel, tags=['Commands'])
 async def execute_shell_command(
     command: ShellCommand,
-    instance_id: str = Path(...),
-    instance: AttackMate = Depends(get_instance_by_id)
+    instance: AttackMate = Depends(get_persistent_instance)
 ):
     """Executes a shell command on the specified AttackMate instance."""
     attackmate_result = await run_command_on_instance(instance, command)  # WHat about backgorund commands
 
     # response
     result_model = CommandResultModel(
-        success=(attackmate_result.returncode == 0 if attackmate_result.returncode is not None else True),  # Success if RC 0 or None (background)
+        # Success if RC 0 or None (background)
+        success=(attackmate_result.returncode == 0 if attackmate_result.returncode is not None else True),
         stdout=attackmate_result.stdout,
         returncode=attackmate_result.returncode
     )
     state_model = varstore_to_state_model(instance.varstore)
-    return ExecutionResponseModel(result=result_model, state=state_model, instance_id=instance_id)
+    return ExecutionResponseModel(result=result_model, state=state_model, instance_id='default-context')
 
 
 @router.post('/sleep', response_model=ExecutionResponseModel, tags=['Commands'])
 async def execute_sleep_command(
     command: SleepCommand,
-    instance_id: str = Path(...),
-    instance: AttackMate = Depends(get_instance_by_id)
+    instance: AttackMate = Depends(get_persistent_instance)
 ):
     """Executes a sleep command on the specified AttackMate instance."""
     attackmate_result = await run_command_on_instance(instance, command)
-    result_model = CommandResultModel(success=True, stdout=attackmate_result.stdout, returncode=attackmate_result.returncode)
+    result_model = CommandResultModel(
+        success=True, stdout=attackmate_result.stdout, returncode=attackmate_result.returncode)
     state_model = varstore_to_state_model(instance.varstore)
-    return ExecutionResponseModel(result=result_model, state=state_model, instance_id=instance_id)
+    return ExecutionResponseModel(result=result_model, state=state_model, instance_id='default-context')
 
 
 @router.post('/debug', response_model=ExecutionResponseModel, tags=['Commands'])
 async def execute_debug_command(
     command: DebugCommand,
-    instance_id: str = Path(...),
-    instance: AttackMate = Depends(get_instance_by_id)
+    instance: AttackMate = Depends(get_persistent_instance)
 ):
     """Executes a debug command on the specified AttackMate instance."""
     attackmate_result = await run_command_on_instance(instance, command)
     # Debug command might trigger SystemExit if command.exit is True
-    result_model = CommandResultModel(success=True, stdout=attackmate_result.stdout, returncode=attackmate_result.returncode)
+    result_model = CommandResultModel(
+        success=True, stdout=attackmate_result.stdout, returncode=attackmate_result.returncode)
     state_model = varstore_to_state_model(instance.varstore)
-    return ExecutionResponseModel(result=result_model, state=state_model, instance_id=instance_id)
+    return ExecutionResponseModel(result=result_model, state=state_model, instance_id='default-context')
 
 
 @router.post('/setvar', response_model=ExecutionResponseModel, tags=['Commands'])
 async def execute_setvar_command(
     command: SetVarCommand,
-    instance_id: str = Path(...),
-    instance: AttackMate = Depends(get_instance_by_id)
+    instance: AttackMate = Depends(get_persistent_instance)
 ):
     """Executes a setvar command on the specified AttackMate instance."""
     attackmate_result = await run_command_on_instance(instance, command)
-    result_model = CommandResultModel(success=True, stdout=attackmate_result.stdout, returncode=attackmate_result.returncode)
+    result_model = CommandResultModel(
+        success=True, stdout=attackmate_result.stdout, returncode=attackmate_result.returncode)
     state_model = varstore_to_state_model(instance.varstore)
-    return ExecutionResponseModel(result=result_model, state=state_model, instance_id=instance_id)
+    return ExecutionResponseModel(result=result_model, state=state_model, instance_id='default-context')
 
 
 @router.post('/mktemp', response_model=ExecutionResponseModel, tags=['Commands'])
 async def execute_mktemp_command(
     command: TempfileCommand,
-    instance_id: str = Path(...),
-    instance: AttackMate = Depends(get_instance_by_id)
+    instance: AttackMate = Depends(get_persistent_instance)
 ):
     """Executes an mktemp command (create temp file/dir) on the specified instance."""
     attackmate_result = await run_command_on_instance(instance, command)
-    result_model = CommandResultModel(success=True, stdout=attackmate_result.stdout, returncode=attackmate_result.returncode)
+    result_model = CommandResultModel(
+        success=True, stdout=attackmate_result.stdout, returncode=attackmate_result.returncode)
     state_model = varstore_to_state_model(instance.varstore)
-    return ExecutionResponseModel(result=result_model, state=state_model, instance_id=instance_id)
+    return ExecutionResponseModel(result=result_model, state=state_model, instance_id='default-context')
 
 #  Add other command endpoints here

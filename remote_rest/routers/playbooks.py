@@ -70,8 +70,10 @@ async def execute_playbook_from_file(request_body: PlaybookFileRequest):
     try:
         # base directory exists
         if not os.path.isdir(ALLOWED_PLAYBOOK_DIR):
-            logger.error(f"Configuration error: ALLOWED_PLAYBOOK_DIR '{ALLOWED_PLAYBOOK_DIR}' does not exist.")
-            raise HTTPException(status_code=500, detail='Server configuration error: Playbook directory not found.')
+            logger.error(
+                f"Configuration error: ALLOWED_PLAYBOOK_DIR '{ALLOWED_PLAYBOOK_DIR}' does not exist.")
+            raise HTTPException(
+                status_code=500, detail='Server configuration error: Playbook directory not found.')
 
         requested_path = os.path.normpath(request_body.file_path)
         # Disallow absolute paths or paths trying to go up directories
@@ -112,7 +114,8 @@ async def execute_playbook_from_file(request_body: PlaybookFileRequest):
         )
     except (ValidationError, ValueError) as e:
         logger.error(f"Playbook validation error from file '{full_path}': {e}")
-        raise HTTPException(status_code=400, detail=f"Invalid playbook content in file '{request_body.file_path}': {e}")
+        raise HTTPException(
+            status_code=400, detail=f"Invalid playbook content in file '{request_body.file_path}': {e}")
     except Exception as e:
         logger.error(f"Unexpected error during playbook file execution: {e}", exc_info=True)
         raise HTTPException(status_code=500, detail=f"Server error during playbook execution: {e}")
