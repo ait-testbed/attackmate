@@ -165,10 +165,13 @@ Every command, regardless of the type has the following general options:
 
    Background-Mode is currently not implemented for the following commands:
 
-   * SSHCommand
-   * SFTPCommand
    * MsfModuleCommand
    * IncludeCommand
+
+   Background-Mode together with a session is currently not implemented for the following commands:
+
+   * SSHCommand
+   * SFTPCommand
 
    :type: bool
    :default: ``False``
@@ -211,6 +214,7 @@ The next pages will describe all possible commands in detail.
    :maxdepth: 4
    :hidden:
 
+   browser
    debug
    father
    httpclient
