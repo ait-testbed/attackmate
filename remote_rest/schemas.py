@@ -24,6 +24,7 @@ class PlaybookResponseModel(BaseModel):
     success: bool
     message: str
     final_state: Optional[VariableStoreStateModel] = None
+    instance_id: Optional[str] = None
 
 
 class InstanceCreationResponse(BaseModel):
@@ -32,4 +33,5 @@ class InstanceCreationResponse(BaseModel):
 
 
 class PlaybookFileRequest(BaseModel):
-    file_path: str = Field(..., description='Path to the playbook file RELATIVE to a predefined server directory.')
+    file_path: str = Field(...,
+                           description='Path to the playbook file RELATIVE to a predefined server directory.')

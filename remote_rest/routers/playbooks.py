@@ -1,5 +1,6 @@
 import logging
 import os
+import uuid
 
 import yaml
 from fastapi import APIRouter, Body, HTTPException
@@ -32,8 +33,8 @@ async def execute_playbook_from_yaml(playbook_yaml: str = Body(..., media_type='
         if not playbook_dict:
             raise ValueError('Received empty or invalid playbook YAML content.')
         playbook = Playbook.model_validate(playbook_dict)
-
-        logger.info('Creating transient AttackMate instance...')
+        instance_id = str(uuid.uuid4())
+        logger.info(f"Creating transient AttackMate instance, ID: {instance_id}")
         am_instance = AttackMate(playbook=playbook, config=attackmate_config, varstore=None)
         return_code = am_instance.main()
         final_state = varstore_to_state_model(am_instance.varstore)
@@ -41,7 +42,8 @@ async def execute_playbook_from_yaml(playbook_yaml: str = Body(..., media_type='
         return PlaybookResponseModel(
             success=(return_code == 0),
             message='Playbook execution finished.',
-            final_state=final_state
+            final_state=final_state,
+            instance_id=instance_id
         )
     except (yaml.YAMLError, ValidationError, ValueError) as e:
         logger.error(f"Playbook validation/parsing error: {e}")
@@ -101,8 +103,8 @@ async def execute_playbook_from_file(request_body: PlaybookFileRequest):
         # Parse the playbook file
         logger.info(f"Parsing playbook from: {full_path}")
         playbook = parse_playbook(full_path, logger)
-
-        logger.info('Creating transient AttackMate instance')
+        instance_id = str(uuid.uuid4())
+        logger.info(f"Creating transient AttackMate instance, ID: {instance_id}")
         am_instance = AttackMate(playbook=playbook, config=attackmate_config, varstore=None)
         return_code = am_instance.main()
         final_state = varstore_to_state_model(am_instance.varstore)
@@ -110,7 +112,8 @@ async def execute_playbook_from_file(request_body: PlaybookFileRequest):
         return PlaybookResponseModel(
             success=(return_code == 0),
             message=f"Playbook '{request_body.file_path}' execution finished.",
-            final_state=final_state
+            final_state=final_state,
+            instance_id=instance_id
         )
     except (ValidationError, ValueError) as e:
         logger.error(f"Playbook validation error from file '{full_path}': {e}")
