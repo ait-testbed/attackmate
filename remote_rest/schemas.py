@@ -35,3 +35,7 @@ class InstanceCreationResponse(BaseModel):
 class PlaybookFileRequest(BaseModel):
     file_path: str = Field(...,
                            description='Path to the playbook file RELATIVE to a predefined server directory.')
+    debug: bool = Field(
+        False,
+        description='If true, the playbook will be executed in debug mode. '
+    )

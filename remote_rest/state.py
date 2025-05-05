@@ -12,7 +12,7 @@ attackmate_config: Optional[Config] = None
 
 def get_instances_dict() -> Dict[str, AttackMate]:
     """Dependency to get the shared INSTANCES dictionary."""
-    # Simply returns the global dict reference
+    # returns the global dict reference
     return INSTANCES
 
 

@@ -2,7 +2,7 @@ import argparse
 import json
 import logging
 import sys
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List
 
 import httpx
 import yaml
@@ -26,49 +26,6 @@ def parse_key_value_pairs(items: List[str] | None) -> Dict[str, str]:
     return result
 
 
-# def create_instance(client: httpx.Client, base_url: str) -> Optional[str]:
-#     """Requests creation of a new persistent instance."""
-#     url = f"{base_url}/instances"
-#     logger.info(f"Requesting new instance creation at {url}...")
-#     try:
-#         response = client.post(url)
-#         response.raise_for_status()
-#         data = response.json()
-#         instance_id = data.get('instance_id')
-#         logger.info(f"Successfully created instance: {instance_id}")
-#         print(f"Instance Created: {instance_id}")
-#         return instance_id
-#     except httpx.RequestError as e:
-#         logger.error(f"HTTP Request Error creating instance: {e}")
-#         return None
-#     except httpx.HTTPStatusError as e:
-#         logger.error(f"HTTP Status Error creating instance: {e.response.status_code} - {e.response.text}")
-#         return None
-#     except Exception as e:
-#         logger.error(f"Unexpected error creating instance: {e}", exc_info=True)
-#         return None
-
-
-# def delete_instance_on_server(client: httpx.Client, base_url: str, instance_id: str):
-#     """Requests deletion of a persistent instance."""
-#     url = f"{base_url}/instances/{instance_id}"
-#     logger.info(f"Requesting deletion of instance {instance_id} at {url}...")
-#     try:
-#         response = client.delete(url)
-#         response.raise_for_status()
-#         logger.info(f"Successfully requested deletion of instance: {instance_id} (Status: {response.status_code})")
-#         print(f"Instance {instance_id} deletion requested.")
-#     except httpx.RequestError as e:
-#         logger.error(f"HTTP Request Error deleting instance: {e}")
-#     except httpx.HTTPStatusError as e:
-#         if e.response.status_code == 404:
-#             logger.warning(f"Instance {instance_id} not found on server for deletion.")
-#         else:
-#             logger.error(f"HTTP Status Error deleting instance: {e.response.status_code} - {e.response.text}")
-#     except Exception as e:
-#         logger.error(f"Unexpected error deleting instance: {e}", exc_info=True)
-
-
 def get_instance_state_from_server(client: httpx.Client, base_url: str, instance_id: str):
     """Requests the state of a specific instance."""
     url = f"{base_url}/instances/{instance_id}/state"
@@ -87,7 +44,9 @@ def get_instance_state_from_server(client: httpx.Client, base_url: str, instance
         logger.error(f"Unexpected error getting state: {e}", exc_info=True)
 
 
-def run_playbook_yaml(client: httpx.Client, base_url: str, playbook_file: str):
+def run_playbook_yaml(
+    client: httpx.Client, base_url: str, playbook_file: str, debug: bool = False
+):
     """Sends playbook YAML content to the server."""
     url = f"{base_url}/playbooks/execute/yaml"
     logger.info(f"Attempting to execute playbook from local file: {playbook_file}")
@@ -99,13 +58,15 @@ def run_playbook_yaml(client: httpx.Client, base_url: str, playbook_file: str):
         sys.exit(1)
 
     try:
+        params = {'debug': True} if debug else {}
         response = client.post(url, content=playbook_yaml_content, headers={
-                               'Content-Type': 'application/yaml'})
+                               'Content-Type': 'application/yaml'}, params=params)
         response.raise_for_status()
         data = response.json()
         print('\n Playbook YAML Execution Result ')
         print(f"Success: {data.get('success')}")
         print(f"Message: {data.get('message')}")
+        print(f"ID: {data.get('instance_id')}")
         if data.get('final_state'):
             print('\n Final Variable Store State ')
             print(yaml.dump(data['final_state'].get('variables', {}), indent=2))
@@ -122,18 +83,25 @@ def run_playbook_yaml(client: httpx.Client, base_url: str, playbook_file: str):
         sys.exit(1)
 
 
-def run_playbook_file(client: httpx.Client, base_url: str, playbook_file_path_on_server: str):
+def run_playbook_file(
+    client: httpx.Client,
+    base_url: str,
+    playbook_file_path_on_server: str,
+    debug: bool = False
+):
     """Requests server to execute a playbook from local path."""
     url = f"{base_url}/playbooks/execute/file"
     logger.info(f"Requesting server execute playbook file: {playbook_file_path_on_server}")
     payload = {'file_path': playbook_file_path_on_server}
     try:
-        response = client.post(url, json=payload)
+        params = {'debug': True} if debug else {}
+        response = client.post(url, json=payload, params=params)
         response.raise_for_status()
         data = response.json()
         print('\n Playbook File Execution Result ')
         print(f"Success: {data.get('success')}")
         print(f"Message: {data.get('message')}")
+        print(f"ID: {data.get('instance_id')}")
         if data.get('final_state'):
             print('\n Final Variable Store State ')
             print(yaml.dump(data['final_state'].get('variables', {}), indent=2))
@@ -154,10 +122,6 @@ def run_command(client: httpx.Client, base_url: str, args):
     """Sends a single command to the server for execution against an instance."""
     # TODO this need more special handling for sliver commands?
     type = args.type
-    # instance_id = args.instance_id  # Get instance ID from args
-    # if not instance_id:
-    #     logger.error('Instance ID is required for executing commands.')
-    #     sys.exit(1)
 
     url = f"{base_url}/command/{type.replace('_', '-')}"
     logger.info(f"Attempting command '{type}' on instance 'default_context' at {url}")
@@ -170,7 +134,10 @@ def run_command(client: httpx.Client, base_url: str, args):
         if arg_name not in excluded_args and arg_value is not None:
             pydantic_field_name = arg_name
             # Type conversions for body (Pydantic/FastAPI handles validation, but ensure basic types)
-            if arg_name in ['option', 'payload_option', 'metadata', 'prompts', 'output_map', 'header', 'cookie', 'data']:
+            if arg_name in [
+                'option', 'payload_option', 'metadata', 'prompts',
+                'output_map', 'header', 'cookie', 'data'
+            ]:
                 if isinstance(arg_value, list):
                     body_dict[pydantic_field_name] = parse_key_value_pairs(arg_value)
             else:
@@ -224,24 +191,21 @@ def main():
     parser_pb_yaml = subparsers.add_parser(
         'playbook-yaml', help='Execute a playbook from a local YAML file content')
     parser_pb_yaml.add_argument('playbook_file', help='Path to the local playbook YAML file')
+    parser_pb_yaml.add_argument('--debug', action=argparse.BooleanOptionalAction,
+                                help='Enable server debug logging for this instance')
 
     parser_pb_file = subparsers.add_parser(
         'playbook-file', help='Request server execute a playbook from its filesystem')
     parser_pb_file.add_argument('server_playbook_path',
                                 help='Path to the playbook file relative to the server\'s allowed directory')
+    parser_pb_file.add_argument('--debug', action=argparse.BooleanOptionalAction,
+                                help='Enable server debug logging for this instance')
 
-    #  Instance Management Modes
-    # parser_inst_create = subparsers.add_parser(
-    #     'instance-create', help='Create a new persistent AttackMate instance')
-    # parser_inst_delete = subparsers.add_parser(
-    #     'instance-delete', help='Delete a persistent AttackMate instance')
-    # parser_inst_delete.add_argument('instance_id', help='ID of the instance to delete')
     parser_inst_state = subparsers.add_parser('instance-state', help='Get the state of an instance')
     parser_inst_state.add_argument('instance_id', help='ID of the instance')
 
     #  Command Mode
     parser_command = subparsers.add_parser('command', help='Execute a single command on a specific instance')
-    # parser_command.add_argument('instance_id', help='ID of the target persistent instance')
     command_subparsers = parser_command.add_subparsers(
         dest='type', required=True, help='Specific command type')
 
@@ -254,7 +218,10 @@ def main():
     common_args_parser.add_argument('--loop-if-not', help='Regex pattern to loop if no match')
     common_args_parser.add_argument('--loop-count', type=int, help='Maximum loop iterations')
     common_args_parser.add_argument(
-        '--exit-on-error', action=argparse.BooleanOptionalAction, help='Exit if command return code is non-zero')
+        '--exit-on-error',
+        action=argparse.BooleanOptionalAction,
+        help='Exit if command return code is non-zero'
+    )
     common_args_parser.add_argument('--save', help='File path to save command stdout')
     common_args_parser.add_argument(
         '--background', action=argparse.BooleanOptionalAction, help='Run command in the background')
@@ -313,13 +280,9 @@ def main():
         try:
             #  Execute based on mode
             if args.mode == 'playbook-yaml':
-                run_playbook_yaml(client, args.base_url, args.playbook_file)
+                run_playbook_yaml(client, args.base_url, args.playbook_file, args.debug)
             elif args.mode == 'playbook-file':
-                run_playbook_file(client, args.base_url, args.server_playbook_path)
-            # elif args.mode == 'instance-create':
-            #     create_instance(client, args.base_url)
-            # elif args.mode == 'instance-delete':
-            #     delete_instance_on_server(client, args.base_url, args.instance_id)
+                run_playbook_file(client, args.base_url, args.server_playbook_path, args.debug)
             elif args.mode == 'instance-state':
                 get_instance_state_from_server(client, args.base_url, args.instance_id)
             elif args.mode == 'command':
