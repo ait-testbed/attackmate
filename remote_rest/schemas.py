@@ -25,6 +25,8 @@ class PlaybookResponseModel(BaseModel):
     message: str
     final_state: Optional[VariableStoreStateModel] = None
     instance_id: Optional[str] = None
+    attackmate_log: Optional[str] = Field(None, description='Content of the attackmate.log for this run.')
+    output_log: Optional[str] = Field(None, description='Content of the output.log for this run.')
 
 
 class InstanceCreationResponse(BaseModel):

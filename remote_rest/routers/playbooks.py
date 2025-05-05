@@ -1,5 +1,6 @@
 import logging
 import os
+from typing import Optional
 import uuid
 
 import yaml
@@ -20,7 +21,20 @@ logger = logging.getLogger(__name__)
 ALLOWED_PLAYBOOK_DIR = '/usr/local/share/attackmate/remote_playbooks/'  # MUST EXIST
 
 
+# helper tp read logfil
+def read_log_file(log_path: Optional[str]) -> Optional[str]:
+    if not log_path or not os.path.exists(log_path):
+        return None
+    try:
+        with open(log_path, 'r') as f:
+            return f.read()
+    except Exception as e:
+        logger.error(f"Failed to read log file '{log_path}': {e}")
+        return f"Error reading log file: {e}"
+
 # Playbook Execution
+
+
 @router.post('/execute/yaml', response_model=PlaybookResponseModel)
 async def execute_playbook_from_yaml(playbook_yaml: str = Body(..., media_type='application/yaml'),
                                      debug: bool = Query(
@@ -34,7 +48,8 @@ async def execute_playbook_from_yaml(playbook_yaml: str = Body(..., media_type='
     logger.info('Received request to execute playbook from YAML content.')
     instance_id = str(uuid.uuid4())
     log_level = logging.DEBUG if debug else logging.INFO
-    with instance_logging(instance_id, log_level):
+    with instance_logging(instance_id, log_level) as log_files:
+        attackmate_log_path, output_log_path = log_files
         try:
             playbook_dict = yaml.safe_load(playbook_yaml)
             if not playbook_dict:
@@ -45,6 +60,8 @@ async def execute_playbook_from_yaml(playbook_yaml: str = Body(..., media_type='
             return_code = am_instance.main()
             final_state = varstore_to_state_model(am_instance.varstore)
             logger.info(f"Transient playbook execution finished. return code {return_code}")
+            attackmate_log = read_log_file(attackmate_log_path)
+            output_log = read_log_file(output_log_path)
         except (yaml.YAMLError, ValidationError, ValueError) as e:
             logger.error(f"Playbook validation/parsing error: {e}")
             raise HTTPException(status_code=422, detail=f"Invalid playbook YAML: {e}")
@@ -64,7 +81,9 @@ async def execute_playbook_from_yaml(playbook_yaml: str = Body(..., media_type='
         success=(return_code == 0),
         message='Playbook execution finished.',
         final_state=final_state,
-        instance_id=instance_id
+        instance_id=instance_id,
+        attackmate_log=attackmate_log,
+        output_log=output_log
     )
 
 
@@ -114,7 +133,8 @@ async def execute_playbook_from_file(request_body: PlaybookFileRequest,
 
     instance_id = str(uuid.uuid4())
     log_level = logging.DEBUG if debug else logging.INFO
-    with instance_logging(instance_id, log_level):
+    with instance_logging(instance_id, log_level) as log_files:
+        attackmate_log_path, output_log_path = log_files
         try:
             logger.info(f"Parsing playbook from: {full_path}")
             playbook = parse_playbook(full_path, logger)
@@ -123,6 +143,8 @@ async def execute_playbook_from_file(request_body: PlaybookFileRequest,
             return_code = am_instance.main()
             final_state = varstore_to_state_model(am_instance.varstore)
             logger.info(f"Transient playbook execution finished. RC: {return_code}")
+            attackmate_log = read_log_file(attackmate_log_path)
+            output_log = read_log_file(output_log_path)
         except (ValidationError, ValueError) as e:
             logger.error(f"Playbook validation error from file '{full_path}': {e}")
             raise HTTPException(
@@ -143,5 +165,7 @@ async def execute_playbook_from_file(request_body: PlaybookFileRequest,
         success=(return_code == 0),
         message=f"Playbook '{request_body.file_path}' execution finished.",
         final_state=final_state,
-        instance_id=instance_id
+        instance_id=instance_id,
+        attackmate_log=attackmate_log,
+        output_log=output_log
     )

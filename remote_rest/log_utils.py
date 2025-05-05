@@ -2,7 +2,7 @@ import logging
 import os
 import datetime
 from contextlib import contextmanager
-from typing import List
+from typing import Generator, List, Optional
 
 # directory for instance logs if running from project root:
 LOG_DIR = os.path.join(os.getcwd(), "attackmate_server_logs")
@@ -62,7 +62,7 @@ def instance_logging(instance_id: str, log_level: int = logging.INFO):
                 (f"Added instance log handlers for '{instance_id}' to logger '{logger_name}' -> "
                  f"{instance_output_log_file} and {instance_attackmate_log_file}")
             )
-        yield  # 'with' block executes here
+        yield [instance_attackmate_log_file, instance_output_log_file]  # 'with' block executes here
 
     except Exception as e:
         logging.error(f"Error setting up instance logging for '{instance_id}': {e}", exc_info=True)
