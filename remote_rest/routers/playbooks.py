@@ -1,19 +1,20 @@
 import logging
 import os
-from typing import Optional
 import uuid
+from typing import Optional
 
 import yaml
-from fastapi import APIRouter, Body, HTTPException, Query
-from pydantic import ValidationError
-
-from ..log_utils import instance_logging
 from attackmate.schemas.playbook import Playbook
-from remote_rest.schemas import PlaybookFileRequest, PlaybookResponseModel
-from remote_rest.utils import varstore_to_state_model
+from fastapi import APIRouter, Body, Depends, Header, HTTPException, Query
+from pydantic import ValidationError
 from src.attackmate.attackmate import AttackMate
 from src.attackmate.playbook_parser import parse_playbook
 
+from remote_rest.auth_utils import API_KEY_HEADER_NAME, get_current_user
+from remote_rest.schemas import PlaybookFileRequest, PlaybookResponseModel
+from remote_rest.utils import varstore_to_state_model
+
+from ..log_utils import instance_logging
 from ..state import attackmate_config
 
 router = APIRouter(prefix='/playbooks', tags=['Playbooks'])
@@ -40,7 +41,9 @@ async def execute_playbook_from_yaml(playbook_yaml: str = Body(..., media_type='
                                      debug: bool = Query(
                                          False,
                                          description="Enable debug level logging for this request's instance log."
-)):
+),
+                                     current_user: str = Depends(get_current_user),
+                                     x_auth_token: Optional[str] = Header(None, alias=API_KEY_HEADER_NAME)):
     """
     Executes a playbook provided as YAML content in the request body.
     Use a transient AttackMate instance.
@@ -83,7 +86,8 @@ async def execute_playbook_from_yaml(playbook_yaml: str = Body(..., media_type='
         final_state=final_state,
         instance_id=instance_id,
         attackmate_log=attackmate_log,
-        output_log=output_log
+        output_log=output_log,
+        current_token=x_auth_token
     )
 
 
@@ -94,7 +98,9 @@ async def execute_playbook_from_file(request_body: PlaybookFileRequest,
                                          description=(
                                              "Enable debug level logging for this request's instance log."
                                          )
-                                     )
+                                                    ),
+                                     current_user: str = Depends(get_current_user),
+                                     x_auth_token: Optional[str] = Header(None, alias=API_KEY_HEADER_NAME)
                                      ):
     """
     Executes a playbook located at a specific path *on the server*.
@@ -167,5 +173,6 @@ async def execute_playbook_from_file(request_body: PlaybookFileRequest,
         final_state=final_state,
         instance_id=instance_id,
         attackmate_log=attackmate_log,
-        output_log=output_log
+        output_log=output_log,
+        current_token=x_auth_token
     )

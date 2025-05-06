@@ -1,14 +1,59 @@
 import argparse
 import json
 import logging
+import os
 import sys
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 
 import httpx
 import yaml
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - CLIENT - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
+
+
+# Authentication
+CURRENT_TOKEN: Optional[str] = None
+# token can then be saved in env var since it does not persit in client memory
+TOKEN_ENV_VAR = 'ATTACKMATE_API_TOKEN'
+
+
+def load_token():
+    """Loads token from global or env"""
+    global CURRENT_TOKEN
+    if CURRENT_TOKEN:
+        return CURRENT_TOKEN
+    CURRENT_TOKEN = os.getenv(TOKEN_ENV_VAR)
+    if CURRENT_TOKEN:
+        logger.info('Token loaded')
+    return CURRENT_TOKEN
+
+
+def save_token(token: Optional[str]):
+    """Saves token to global var and env"""
+    global CURRENT_TOKEN
+    CURRENT_TOKEN = token
+    if token:
+        # This is pretty hacky, client mainly for testing purposes
+        logger.info('updating env var')
+        logger.info(f"run in your shell: export ATTACKMATE_API_TOKEN={token}")
+    else:
+        os.environ.pop(TOKEN_ENV_VAR, None)
+
+
+def get_auth_headers() -> Dict[str, str]:
+    token = load_token()
+    if token:
+        return {'X-Auth-Token': token}
+    return {}
+
+
+def update_token_from_response(data: Dict[str, Any]):
+    """Updates the stored token if present in the response data."""
+    new_token = data.get('current_token')
+    if new_token:
+        logger.info('Received renewed token in response')
+        save_token(new_token)
 
 
 #  Helper Functions
@@ -26,14 +71,43 @@ def parse_key_value_pairs(items: List[str] | None) -> Dict[str, str]:
     return result
 
 
+# Login
+def login(client: httpx.Client, base_url: str, username: str, password: str):
+    """Logs in and saves the token."""
+    url = f"{base_url}/login"
+    logger.info(f"Attempting login for user '{username}' at {url}...")
+    try:
+        # standard form encoding for OAuth2PasswordRequestForm -> expected bei Fastapi
+        response = client.post(url, data={'username': username, 'password': password})
+        response.raise_for_status()
+        data = response.json()
+        token = data.get('access_token')
+        if token:
+            save_token(token)  # workaround, export to env var in shell
+            print(f"Login successful. Token received: {token[:5]}...")
+        else:
+            logger.error(' No access token received in response.')
+            sys.exit(1)
+    except httpx.RequestError as e:
+        logger.error(f"HTTP Request Error during login: {e}")
+        sys.exit(1)
+    except httpx.HTTPStatusError as e:
+        logger.error(f"Login failed: {e.response.status_code}")
+        sys.exit(1)
+    except Exception as e:
+        logger.error(f"Unexpected error during login: {e}", exc_info=True)
+        sys.exit(1)
+
+
 def get_instance_state_from_server(client: httpx.Client, base_url: str, instance_id: str):
     """Requests the state of a specific instance."""
     url = f"{base_url}/instances/{instance_id}/state"
     logger.info(f"Requesting state for instance {instance_id} at {url}...")
     try:
-        response = client.get(url)
+        response = client.get(url, headers=get_auth_headers())
         response.raise_for_status()
         data = response.json()
+        update_token_from_response(data)
         print(f"\n State for Instance {instance_id} ")
         print(yaml.dump(data.get('variables', {}), indent=2))
     except httpx.RequestError as e:
@@ -56,13 +130,13 @@ def run_playbook_yaml(
     except Exception as e:
         logger.error(f"Error reading file '{playbook_file}': {e}")
         sys.exit(1)
-
     try:
         params = {'debug': True} if debug else {}
-        response = client.post(url, content=playbook_yaml_content, headers={
+        response = client.post(url, content=playbook_yaml_content, headers={**get_auth_headers(),
                                'Content-Type': 'application/yaml'}, params=params)
         response.raise_for_status()
         data = response.json()
+        update_token_from_response(data)
         print('\n Playbook YAML Execution Result ')
         print(f"Success: {data.get('success')}")
         print(f"Message: {data.get('message')}")
@@ -95,9 +169,10 @@ def run_playbook_file(
     payload = {'file_path': playbook_file_path_on_server}
     try:
         params = {'debug': True} if debug else {}
-        response = client.post(url, json=payload, params=params)
+        response = client.post(url, json=payload, params=params, headers=get_auth_headers())
         response.raise_for_status()
         data = response.json()
+        update_token_from_response(data)
         print('\n Playbook File Execution Result ')
         print(f"Success: {data.get('success')}")
         print(f"Message: {data.get('message')}")
@@ -146,9 +221,10 @@ def run_command(client: httpx.Client, base_url: str, args):
     try:
         logger.debug(f"Sending POST to {url}")
         logger.debug(f"Request Body: {json.dumps(body_dict, indent=2)}")
-        response = client.post(url, json=body_dict)
+        response = client.post(url, json=body_dict, headers=get_auth_headers())
         response.raise_for_status()
         data = response.json()
+        update_token_from_response(data)
         logger.info(f"Received response from /{type} endpoint.")
         logger.debug(f"Response data: {data}")
 
@@ -186,6 +262,11 @@ def main():
     parser.add_argument('--base-url', default='http://localhost:8000',
                         help='Base URL of the AttackMate API server')
     subparsers = parser.add_subparsers(dest='mode', required=True, help='Operation mode')
+
+    # Login Mode
+    parser_login = subparsers.add_parser('login', help='Authenticate and get a token')
+    parser_login.add_argument('username', help='API username')
+    parser_login.add_argument('password', help='API password')
 
     #  Playbook Modes
     parser_pb_yaml = subparsers.add_parser(
@@ -279,6 +360,8 @@ def main():
     with httpx.Client(base_url=args.base_url, timeout=60.0) as client:
         try:
             #  Execute based on mode
+            if args.mode == 'login':
+                login(client, args.base_url, args.username, args.password)
             if args.mode == 'playbook-yaml':
                 run_playbook_yaml(client, args.base_url, args.playbook_file, args.debug)
             elif args.mode == 'playbook-file':

@@ -3,24 +3,28 @@ from contextlib import asynccontextmanager
 from typing import AsyncGenerator
 
 import uvicorn
-from fastapi import FastAPI, Request
-from fastapi.responses import JSONResponse
-
-import remote_rest.state as state
-from src.attackmate.attackmate import AttackMate
 from attackmate.execexception import ExecException
-from remote_rest.routers import commands, instances, playbooks
+from fastapi import Depends, FastAPI, HTTPException, Request, status
+from fastapi.responses import JSONResponse
+from fastapi.security import OAuth2PasswordRequestForm
+from src.attackmate.attackmate import AttackMate
 from src.attackmate.logging_setup import (initialize_json_logger,
                                           initialize_logger,
                                           initialize_output_logger)
 from src.attackmate.playbook_parser import parse_config
+
+import remote_rest.state as state
+from remote_rest.routers import commands, instances, playbooks
+
+from .auth_utils import create_access_token, get_user_hash, verify_password
+from .schemas import TokenResponse
 
 # Logging
 initialize_logger(debug=True, append_logs=False)
 initialize_output_logger(debug=True, append_logs=False)
 initialize_json_logger(json=True, append_logs=False)
 logger = logging.getLogger('attackmate_api')  # specific logger for the API
-# TODO make this configurable via request, even also per attackmate instance?
+# TODO make this configurable via request
 logger.setLevel(logging.DEBUG)
 
 
@@ -72,11 +76,6 @@ app = FastAPI(
     version='1.0.0',
     lifespan=lifespan)
 
-# Include Routers
-app.include_router(instances.router, prefix='/instances')
-app.include_router(playbooks.router)
-app.include_router(commands.router)
-
 
 # Exception Handling
 @app.exception_handler(ExecException)
@@ -106,6 +105,46 @@ async def generic_exception_handler(request: Request, exc: Exception):
         )
     # Re-raise other exceptions for specific hanfling?
     raise exc
+
+
+# Login endpoint
+@app.post('/login', response_model=TokenResponse, tags=['Auth'])
+async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends()):
+    """Authenticates user and returns an access token."""
+    logger.info(f"Login attempt for user: {form_data.username}")
+    hashed_password = get_user_hash(form_data.username)
+    if not hashed_password:
+        logger.warning(f"Login failed: User '{form_data.username}' not found.")
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail='Incorrect username or password',
+            headers={'WWW-Authenticate': 'Bearer'},
+        )
+
+    if not verify_password(form_data.password, hashed_password):
+        logger.warning(f"Login failed: Invalid password for user '{form_data.username}'.")
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail='Incorrect username or password',
+            headers={'WWW-Authenticate': 'Bearer'},
+        )
+
+    # vlid password ->  create token
+    access_token = create_access_token(username=form_data.username)
+    logger.info(f"Login successful for user '{form_data.username}'. Token created.")
+    # Return token
+    return TokenResponse(access_token=access_token, token_type='bearer')
+
+# Include Routers
+app.include_router(instances.router, prefix='/instances')
+app.include_router(playbooks.router)
+app.include_router(commands.router)
+
+
+# Root Endpoint
+@app.get('/', include_in_schema=False)
+async def root():
+    return {'message': 'AttackMate API is running. Use /login to authenticate. See /docs.'}
 
 if __name__ == '__main__':
     uvicorn.run('remote_rest.main:app', host='0.0.0.0', port=8000, reload=True, log_config=None,)

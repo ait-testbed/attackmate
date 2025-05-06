@@ -1,7 +1,6 @@
 from typing import Dict, Optional
 
 from fastapi import Depends, HTTPException, Path
-
 from src.attackmate.attackmate import AttackMate
 from src.attackmate.schemas.config import Config
 

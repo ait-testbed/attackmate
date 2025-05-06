@@ -1,4 +1,5 @@
 pip install fastapi uvicorn httpx PyYAML pydantic
+bcrypt==3.2.2 !!
 
 
 uvicorn remote_rest.main:app --host 0.0.0.0 --port 8000 --reload

@@ -1,11 +1,9 @@
 import logging
-
-from fastapi import APIRouter, Depends, HTTPException
+from typing import Optional
 
 from attackmate.attackmate import AttackMate
 from attackmate.schemas.base import BaseCommand
-from remote_rest.schemas import CommandResultModel, ExecutionResponseModel
-from remote_rest.utils import varstore_to_state_model
+from fastapi import APIRouter, Depends, Header, HTTPException
 from src.attackmate.execexception import ExecException
 from src.attackmate.result import Result as AttackMateResult
 from src.attackmate.schemas.debug import DebugCommand
@@ -13,6 +11,10 @@ from src.attackmate.schemas.setvar import SetVarCommand
 from src.attackmate.schemas.shell import ShellCommand
 from src.attackmate.schemas.sleep import SleepCommand
 from src.attackmate.schemas.tempfile import TempfileCommand
+
+from remote_rest.auth_utils import API_KEY_HEADER_NAME, get_current_user
+from remote_rest.schemas import CommandResultModel, ExecutionResponseModel
+from remote_rest.utils import varstore_to_state_model
 
 from ..state import get_persistent_instance
 
@@ -43,7 +45,9 @@ async def run_command_on_instance(instance: AttackMate, command_data: BaseComman
 @router.post('/shell', response_model=ExecutionResponseModel, tags=['Commands'])
 async def execute_shell_command(
     command: ShellCommand,
-    instance: AttackMate = Depends(get_persistent_instance)
+    instance: AttackMate = Depends(get_persistent_instance),
+    current_user: str = Depends(get_current_user),
+    x_auth_token: Optional[str] = Header(None, alias=API_KEY_HEADER_NAME)
 ):
     """Executes a shell command on the specified AttackMate instance."""
     attackmate_result = await run_command_on_instance(instance, command)  # WHat about backgorund commands
@@ -56,26 +60,40 @@ async def execute_shell_command(
         returncode=attackmate_result.returncode
     )
     state_model = varstore_to_state_model(instance.varstore)
-    return ExecutionResponseModel(result=result_model, state=state_model, instance_id='default-context')
+    return ExecutionResponseModel(
+        result=result_model,
+        state=state_model,
+        instance_id='default-context',
+        current_token=x_auth_token
+    )
 
 
 @router.post('/sleep', response_model=ExecutionResponseModel, tags=['Commands'])
 async def execute_sleep_command(
     command: SleepCommand,
-    instance: AttackMate = Depends(get_persistent_instance)
+    instance: AttackMate = Depends(get_persistent_instance),
+    current_user: str = Depends(get_current_user),
+    x_auth_token: Optional[str] = Header(None, alias=API_KEY_HEADER_NAME)
 ):
     """Executes a sleep command on the specified AttackMate instance."""
     attackmate_result = await run_command_on_instance(instance, command)
     result_model = CommandResultModel(
         success=True, stdout=attackmate_result.stdout, returncode=attackmate_result.returncode)
     state_model = varstore_to_state_model(instance.varstore)
-    return ExecutionResponseModel(result=result_model, state=state_model, instance_id='default-context')
+    return ExecutionResponseModel(
+        result=result_model,
+        state=state_model,
+        instance_id='default-context',
+        current_token=x_auth_token
+    )
 
 
 @router.post('/debug', response_model=ExecutionResponseModel, tags=['Commands'])
 async def execute_debug_command(
     command: DebugCommand,
-    instance: AttackMate = Depends(get_persistent_instance)
+    instance: AttackMate = Depends(get_persistent_instance),
+    current_user: str = Depends(get_current_user),
+    x_auth_token: Optional[str] = Header(None, alias=API_KEY_HEADER_NAME)
 ):
     """Executes a debug command on the specified AttackMate instance."""
     attackmate_result = await run_command_on_instance(instance, command)
@@ -83,32 +101,50 @@ async def execute_debug_command(
     result_model = CommandResultModel(
         success=True, stdout=attackmate_result.stdout, returncode=attackmate_result.returncode)
     state_model = varstore_to_state_model(instance.varstore)
-    return ExecutionResponseModel(result=result_model, state=state_model, instance_id='default-context')
+    return ExecutionResponseModel(
+        result=result_model,
+        state=state_model,
+        instance_id='default-context',
+        current_token=x_auth_token
+    )
 
 
 @router.post('/setvar', response_model=ExecutionResponseModel, tags=['Commands'])
 async def execute_setvar_command(
     command: SetVarCommand,
-    instance: AttackMate = Depends(get_persistent_instance)
+    instance: AttackMate = Depends(get_persistent_instance),
+    current_user: str = Depends(get_current_user),
+    x_auth_token: Optional[str] = Header(None, alias=API_KEY_HEADER_NAME)
 ):
     """Executes a setvar command on the specified AttackMate instance."""
     attackmate_result = await run_command_on_instance(instance, command)
     result_model = CommandResultModel(
         success=True, stdout=attackmate_result.stdout, returncode=attackmate_result.returncode)
     state_model = varstore_to_state_model(instance.varstore)
-    return ExecutionResponseModel(result=result_model, state=state_model, instance_id='default-context')
+    return ExecutionResponseModel(
+        result=result_model,
+        state=state_model,
+        instance_id='default-context',
+        current_token=x_auth_token
+    )
 
 
 @router.post('/mktemp', response_model=ExecutionResponseModel, tags=['Commands'])
 async def execute_mktemp_command(
     command: TempfileCommand,
-    instance: AttackMate = Depends(get_persistent_instance)
+    instance: AttackMate = Depends(get_persistent_instance),
+    current_user: str = Depends(get_current_user),
+    x_auth_token: Optional[str] = Header(None, alias=API_KEY_HEADER_NAME)
 ):
     """Executes an mktemp command (create temp file/dir) on the specified instance."""
     attackmate_result = await run_command_on_instance(instance, command)
     result_model = CommandResultModel(
         success=True, stdout=attackmate_result.stdout, returncode=attackmate_result.returncode)
     state_model = varstore_to_state_model(instance.varstore)
-    return ExecutionResponseModel(result=result_model, state=state_model, instance_id='default-context')
-
+    return ExecutionResponseModel(
+        result=result_model,
+        state=state_model,
+        instance_id='default-context',
+        current_token=x_auth_token
+    )
 #  Add other command endpoints here
