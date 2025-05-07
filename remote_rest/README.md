@@ -1,5 +1,5 @@
 pip install fastapi uvicorn httpx PyYAML pydantic
-bcrypt==3.2.2 !!
+bcrypt==3.2.2 !! otherwise passlib complains
 
 
 uvicorn remote_rest.main:app --host 0.0.0.0 --port 8000 --reload
@@ -58,3 +58,20 @@ python -m remote_rest.client command shell 'echo "Hello"'
     python -m remote_rest.client command sleep --seconds 8 --background
     ```
     # (Client returns immediately, server sleeps)
+
+
+# Certificate generation
+preliminary, automate later?
+with open ssl
+    ```bash
+    openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -days 365 -nodes
+    ```
+
+Common Name: localhost (or ip adress the server will be)
+
+
+running client:
+
+```bash
+python -m client --cacert <path_to_cert> login user user
+```

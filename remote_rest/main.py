@@ -1,7 +1,8 @@
 import logging
 from contextlib import asynccontextmanager
+import sys
 from typing import AsyncGenerator
-
+import os
 import uvicorn
 from attackmate.execexception import ExecException
 from fastapi import Depends, FastAPI, HTTPException, Request, status
@@ -18,6 +19,11 @@ from remote_rest.routers import commands, instances, playbooks
 
 from .auth_utils import create_access_token, get_user_hash, verify_password
 from .schemas import TokenResponse
+
+
+CERT_DIR = os.path.dirname(os.path.abspath(__file__))
+KEY_FILE = os.path.join(CERT_DIR, "key.pem")
+CERT_FILE = os.path.join(CERT_DIR, "cert.pem")
 
 # Logging
 initialize_logger(debug=True, append_logs=False)
@@ -147,4 +153,16 @@ async def root():
     return {'message': 'AttackMate API is running. Use /login to authenticate. See /docs.'}
 
 if __name__ == '__main__':
-    uvicorn.run('remote_rest.main:app', host='0.0.0.0', port=8000, reload=True, log_config=None,)
+    if not os.path.exists(KEY_FILE):
+        logger.critical(f"SSL Error: Key file not found at {KEY_FILE}")
+        sys.exit(1)
+    if not os.path.exists(CERT_FILE):
+        logger.critical(f"SSL Error: Certificate file not found at {CERT_FILE}")
+        sys.exit(1)
+    uvicorn.run('remote_rest.main:app',
+                host='0.0.0.0',
+                port=8443,
+                reload=False,
+                log_config=None,
+                ssl_keyfile=KEY_FILE,
+                ssl_certfile=CERT_FILE)

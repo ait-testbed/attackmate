@@ -259,8 +259,12 @@ def run_command(client: httpx.Client, base_url: str, args):
 #  Main Execution Logic
 def main():
     parser = argparse.ArgumentParser(description='AttackMate REST API Client')
-    parser.add_argument('--base-url', default='http://localhost:8000',
+    parser.add_argument('--base-url', default='https://localhost:8443',
                         help='Base URL of the AttackMate API server')
+    parser.add_argument(
+        '--cacert',
+        help='Path to the server\'s self-signed certificate file (cert.pem) for verification.'
+    )
     subparsers = parser.add_subparsers(dest='mode', required=True, help='Operation mode')
 
     # Login Mode
@@ -355,9 +359,16 @@ def main():
     #  ADD SUBPARSERS FOR ALL OTHER COMMAND TYPES HERE
 
     args = parser.parse_args()
+    if args.cacert:
+        cert_path = os.path.abspath(args.cacert)  # Ensure absolute path
+        if os.path.exists(cert_path):
+            logger.info(f"Configured httpx to verify using CA cert: {cert_path}")
+        else:
+            logger.error(f"CA certificate file not found at specified path: {cert_path}")
+            sys.exit(1)
 
     #  Create HTTP Client
-    with httpx.Client(base_url=args.base_url, timeout=60.0) as client:
+    with httpx.Client(base_url=args.base_url, timeout=60.0, verify=cert_path) as client:
         try:
             #  Execute based on mode
             if args.mode == 'login':
@@ -375,6 +386,12 @@ def main():
                     logger.error('Internal error: Command mode selected but no command type specified.')
                     parser.print_help()
                     sys.exit(1)
+        except httpx.ConnectError as e:
+            logger.error(
+                f"Connection Error: Could not connect to {args.base_url}. "
+                f"Is the server running with HTTPS? Did you provide cert? Details: {e}"
+            )
+            sys.exit(1)
         except Exception as main_err:
             logger.error(f"Client execution failed: {main_err}", exc_info=True)
             sys.exit(1)
