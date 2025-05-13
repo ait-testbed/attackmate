@@ -21,6 +21,7 @@ dependencies = [
     "httpx[http2]",
     "vncdotool",
     "pytest-mock",
+    "fastapi",
     "playwright"
 ]
 dynamic = ["version"]
