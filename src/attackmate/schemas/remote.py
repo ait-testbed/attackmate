@@ -1,5 +1,7 @@
 from pydantic import BaseModel, Field, ValidationInfo, field_validator
-from typing import Literal, Optional, Dict, Any, List, Union
+from typing import Literal, Optional, Dict, Any, List, Union, TypeAlias
+
+from attackmate.schemas.loop import LoopCommand
 
 from .base import BaseCommand
 from ..command import CommandRegistry
@@ -9,6 +11,7 @@ from .shell import ShellCommand
 from .vnc import VncCommand
 from .setvar import SetVarCommand
 from .include import IncludeCommand
+from .loop import LoopCommand
 from .metasploit import MsfModuleCommand, MsfSessionCommand, MsfPayloadCommand
 
 from .sliver import (
@@ -35,38 +38,39 @@ from .regex import RegExCommand
 from .browser import BrowserCommand
 
 
-RemoteCommand = Union[
-        BrowserCommand,
-        ShellCommand,
-        MsfModuleCommand,
-        MsfSessionCommand,
-        MsfPayloadCommand,
-        SleepCommand,
-        SSHCommand,
-        FatherCommand,
-        SFTPCommand,
-        DebugCommand,
-        SetVarCommand,
-        RegExCommand,
-        VncCommand,
-        TempfileCommand,
-        IncludeCommand,
-        WebServCommand,
-        HttpClientCommand,
-        SliverSessionCDCommand,
-        SliverSessionLSCommand,
-        SliverSessionNETSTATCommand,
-        SliverSessionEXECCommand,
-        SliverSessionMKDIRCommand,
-        SliverSessionSimpleCommand,
-        SliverSessionDOWNLOADCommand,
-        SliverSessionUPLOADCommand,
-        SliverSessionPROCDUMPCommand,
-        SliverSessionRMCommand,
-        SliverSessionTERMINATECommand,
-        SliverHttpsListenerCommand,
-        SliverGenerateCommand,
-    ]
+RemoteCommand: TypeAlias = Union[
+    BrowserCommand,
+    ShellCommand,
+    MsfModuleCommand,
+    MsfSessionCommand,
+    MsfPayloadCommand,
+    SleepCommand,
+    SSHCommand,
+    FatherCommand,
+    SFTPCommand,
+    DebugCommand,
+    SetVarCommand,
+    RegExCommand,
+    VncCommand,
+    TempfileCommand,
+    IncludeCommand,
+    WebServCommand,
+    HttpClientCommand,
+    LoopCommand,
+    SliverSessionCDCommand,
+    SliverSessionLSCommand,
+    SliverSessionNETSTATCommand,
+    SliverSessionEXECCommand,
+    SliverSessionMKDIRCommand,
+    SliverSessionSimpleCommand,
+    SliverSessionDOWNLOADCommand,
+    SliverSessionUPLOADCommand,
+    SliverSessionPROCDUMPCommand,
+    SliverSessionRMCommand,
+    SliverSessionTERMINATECommand,
+    SliverHttpsListenerCommand,
+    SliverGenerateCommand,
+]
 
 
 @CommandRegistry.register('remote')
@@ -83,7 +87,7 @@ class AttackMateRemoteCommand(BaseCommand):
     remote_command: Optional[RemoteCommand]
 
     # Common command parameters (like background, only_if) from BaseCommand
-    # will be applied to the 'remote' command itself, not the remote_command directly -> remark in docs
+    # will be applied to the 'remote' command itself, not the remote_command directly -> note in docs
 
     @field_validator('cmd')
     @classmethod
