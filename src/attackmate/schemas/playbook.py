@@ -32,6 +32,7 @@ from .regex import RegExCommand
 from .vnc import VncCommand
 from .json import JsonCommand
 from .browser import BrowserCommand
+from .remote import AttackMateRemoteCommand
 
 Command = Union[
     BrowserCommand,
@@ -66,6 +67,7 @@ Command = Union[
     SliverHttpsListenerCommand,
     SliverGenerateCommand,
     VncCommand,
+    AttackMateRemoteCommand
 ]
 
 

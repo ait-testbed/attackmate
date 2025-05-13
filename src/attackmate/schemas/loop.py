@@ -26,6 +26,7 @@ from .sliver import (
     SliverGenerateCommand,
 )
 from .ssh import SSHCommand, SFTPCommand
+from .remote import AttackMateRemoteCommand
 from .http import WebServCommand, HttpClientCommand
 from .father import FatherCommand
 from .tempfile import TempfileCommand
@@ -36,6 +37,7 @@ from .browser import BrowserCommand
 
 Commands = List[
     Union[
+        AttackMateRemoteCommand,
         BrowserCommand,
         ShellCommand,
         MsfModuleCommand,

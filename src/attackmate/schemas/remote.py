@@ -1,17 +1,14 @@
-from pydantic import BaseModel, Field, ValidationInfo, field_validator
+from pydantic import BaseModel, Field, ValidationInfo, field_validator, model_validator
 from typing import Literal, Optional, Dict, Any, List, Union, TypeAlias
 
-from attackmate.schemas.loop import LoopCommand
-
 from .base import BaseCommand
-from ..command import CommandRegistry
+from attackmate.command import CommandRegistry
 
 from .sleep import SleepCommand
 from .shell import ShellCommand
 from .vnc import VncCommand
 from .setvar import SetVarCommand
 from .include import IncludeCommand
-from .loop import LoopCommand
 from .metasploit import MsfModuleCommand, MsfSessionCommand, MsfPayloadCommand
 
 from .sliver import (
@@ -56,7 +53,6 @@ RemoteCommand: TypeAlias = Union[
     IncludeCommand,
     WebServCommand,
     HttpClientCommand,
-    LoopCommand,
     SliverSessionCDCommand,
     SliverSessionLSCommand,
     SliverSessionNETSTATCommand,
@@ -82,23 +78,19 @@ class AttackMateRemoteCommand(BaseCommand):
     cacert: str  # configure this file path in some configs elsewhere?
     user: str
     password: str
-    playbook_yaml_content: Optional[str]
-    playbook_file_path: Optional[str]
-    remote_command: Optional[RemoteCommand]
+    playbook_yaml_content: Optional[str] = None
+    playbook_file_path: Optional[str] = None
+    remote_command: Optional[RemoteCommand] = None
 
     # Common command parameters (like background, only_if) from BaseCommand
     # will be applied to the 'remote' command itself, not the remote_command directly -> note in docs
 
-    @field_validator('cmd')
-    @classmethod
-    def check_command_specific_fields(cls, v: str, info: ValidationInfo) -> str:
-        values = info.data
-        if v == 'execute_command' and not values.get('remote_command'):
-            raise ValueError("'remote_command' is required when cmd is 'execute_command'")
-        if v == 'execute_playbook_yaml' and not values.get('playbook_yaml_content'):
-            raise ValueError("'playbook_yaml_content' is required for 'execute_playbook_yaml'")
-        if v == 'execute_playbook_file' and not values.get('playbook_file_path'):
-            raise ValueError(
-                "'playbook_file_path' (path on remote server) is required for 'execute_playbook_file'"
-            )
-        return v
+    @model_validator(mode='after')
+    def check_remote_command(self) -> 'AttackMateRemoteCommand':
+        if self.cmd == 'execute_command' and not self.remote_command:
+            raise ValueError("remote_command must be provided when cmd is 'execute_command'")
+        if self.cmd == 'execute_playbook_yaml' and not self.playbook_yaml_content:
+            raise ValueError("playbook_yaml_content must be provided when cmd is 'execute_playbook_yaml'")
+        if self.cmd == 'execute_playbook_file' and not self.playbook_file_path:
+            raise ValueError("playbook_file_path must be provided when cmd is 'execute_playbook_file'")
+        return self
