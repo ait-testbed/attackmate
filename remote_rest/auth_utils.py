@@ -15,10 +15,10 @@ load_dotenv()
 TOKEN_EXPIRE_MINUTES = int(os.getenv('TOKEN_EXPIRE_MINUTES', 30))
 API_KEY_HEADER_NAME = 'X-Auth-Token'
 api_key_header_scheme = APIKeyHeader(name=API_KEY_HEADER_NAME, auto_error=True)
-pwd_context = CryptContext(schemes=['bcrypt'], deprecated='auto')
+pwd_context = CryptContext(schemes=['argon2'], deprecated='auto')
 
 # In-Memory token Store
-# token looks like this {"username": str, "expires": datetime}
+# token looks like this token : {"username": str, "expires": datetime}
 # state is lost on server restart.
 # Not inherently thread-safe for multi-worker setups without locks ?
 ACTIVE_TOKENS: Dict[str, Dict[str, Any]] = {}

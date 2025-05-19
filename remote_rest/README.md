@@ -1,5 +1,4 @@
-pip install fastapi uvicorn httpx PyYAML pydantic
-bcrypt==3.2.2 !! otherwise passlib complains
+pip install fastapi uvicorn httpx PyYAML pydantic argon2_cffi
 
 
 uvicorn remote_rest.main:app --host 0.0.0.0 --port 8000 --reload
