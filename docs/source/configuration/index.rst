@@ -25,6 +25,7 @@ sliver and metasploit:
    ###
    cmd_config:
      loop_sleep: 5
+     command_delay: 0
 
    msf_config:
      password: securepassword
