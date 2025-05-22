@@ -1,6 +1,4 @@
 import logging
-import os
-import yaml
 import json
 from typing import Dict, Any, Optional
 
@@ -68,6 +66,8 @@ class RemoteExecutor(BaseExecutor):
                 # TODO decide on this, or if substitution happens only on the server side
 
                 try:
+                    if not command.playbook_yaml_content:
+                        raise ExecException('playbook_yaml_content cannot be None.')
                     with open(command.playbook_yaml_content, 'r') as f:
                         yaml_content = f.read()
                         # TODO decide on varibale subsitution here
@@ -77,6 +77,8 @@ class RemoteExecutor(BaseExecutor):
                     raise ExecException(f"Failed to read local file '{command.playbook_yaml_content}': {e}")
 
             elif command.cmd == 'execute_playbook_file':
+                if not command.playbook_file_path:
+                    raise ExecException("playbook_file_path cannot be None for 'execute_playbook_file' command.")
                 response_data = client.execute_remote_playbook_file(command.playbook_file_path,
                                                                     debug=api_call_debug_flag)
 
@@ -95,9 +97,9 @@ class RemoteExecutor(BaseExecutor):
                     return_code = cmd_result.get('returncode', 1 if not success else 0)
                     if not success and 'error_message' in cmd_result:
                         error_message = cmd_result['error_message']
-                elif 'success' in response_data: # For playbook responses
+                elif 'success' in response_data:  # For playbook responses
                     success = response_data.get('success', False)
-                    stdout_str = json.dumps(response_data, indent=2) # Whole response as stdout
+                    stdout_str = json.dumps(response_data, indent=2)  # Whole response as stdout
                     return_code = 0 if success else 1
                     if not success:
                         error_message = response_data.get('message')
