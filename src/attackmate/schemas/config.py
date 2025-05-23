@@ -16,9 +16,10 @@ class MsfConfig(BaseModel):
 
 class CommandConfig(BaseModel):
     loop_sleep: int = 5
+    command_delay: float = 0
 
 
 class Config(BaseModel):
     sliver_config: SliverConfig = SliverConfig(config_file=None)
     msf_config: MsfConfig = MsfConfig(password=None)
-    cmd_config: CommandConfig = CommandConfig(loop_sleep=5)
+    cmd_config: CommandConfig = CommandConfig(loop_sleep=5, command_delay=0)
