@@ -33,6 +33,7 @@ def test_create_file_handler_write_mode(MockFileHandler):
     MockFileHandler.assert_called_with(file_name, mode='w')
     mock_handler.setFormatter.assert_called_with(formatter)
 
+
 @patch('attackmate.logging_setup.logging.getLogger')
 @patch('attackmate.logging_setup.logging.Formatter')
 @patch('attackmate.logging_setup.create_file_handler')
