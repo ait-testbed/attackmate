@@ -40,7 +40,7 @@ def read_log_file(log_path: Optional[str]) -> Optional[str]:
 async def execute_playbook_from_yaml(playbook_yaml: str = Body(..., media_type='application/yaml'),
                                      debug: bool = Query(
                                          False,
-                                         description="Enable debug level logging for this request's instance log."
+                                         description="Enable debug logging for this request's instance log."
 ),
                                      current_user: str = Depends(get_current_user),
                                      x_auth_token: Optional[str] = Header(None, alias=API_KEY_HEADER_NAME)):
@@ -52,7 +52,7 @@ async def execute_playbook_from_yaml(playbook_yaml: str = Body(..., media_type='
     instance_id = str(uuid.uuid4())
     log_level = logging.DEBUG if debug else logging.INFO
     with instance_logging(instance_id, log_level) as log_files:
-        attackmate_log_path, output_log_path = log_files
+        attackmate_log_path, output_log_path, json_log_path = log_files
         try:
             playbook_dict = yaml.safe_load(playbook_yaml)
             if not playbook_dict:
@@ -65,6 +65,7 @@ async def execute_playbook_from_yaml(playbook_yaml: str = Body(..., media_type='
             logger.info(f"Transient playbook execution finished. return code {return_code}")
             attackmate_log = read_log_file(attackmate_log_path)
             output_log = read_log_file(output_log_path)
+            json_log = read_log_file(json_log_path)
         except (yaml.YAMLError, ValidationError, ValueError) as e:
             logger.error(f"Playbook validation/parsing error: {e}")
             raise HTTPException(status_code=422, detail=f"Invalid playbook YAML: {e}")
@@ -87,6 +88,7 @@ async def execute_playbook_from_yaml(playbook_yaml: str = Body(..., media_type='
         instance_id=instance_id,
         attackmate_log=attackmate_log,
         output_log=output_log,
+        json_log=json_log,
         current_token=x_auth_token
     )
 
@@ -140,7 +142,7 @@ async def execute_playbook_from_file(request_body: PlaybookFileRequest,
     instance_id = str(uuid.uuid4())
     log_level = logging.DEBUG if debug else logging.INFO
     with instance_logging(instance_id, log_level) as log_files:
-        attackmate_log_path, output_log_path = log_files
+        attackmate_log_path, output_log_path, json_log_path = log_files
         try:
             logger.info(f"Parsing playbook from: {full_path}")
             playbook = parse_playbook(full_path, logger)
@@ -151,6 +153,7 @@ async def execute_playbook_from_file(request_body: PlaybookFileRequest,
             logger.info(f"Transient playbook execution finished. RC: {return_code}")
             attackmate_log = read_log_file(attackmate_log_path)
             output_log = read_log_file(output_log_path)
+            json_log = read_log_file(json_log_path)
         except (ValidationError, ValueError) as e:
             logger.error(f"Playbook validation error from file '{full_path}': {e}")
             raise HTTPException(
@@ -174,5 +177,6 @@ async def execute_playbook_from_file(request_body: PlaybookFileRequest,
         instance_id=instance_id,
         attackmate_log=attackmate_log,
         output_log=output_log,
+        json_log=json_log,
         current_token=x_auth_token
     )
