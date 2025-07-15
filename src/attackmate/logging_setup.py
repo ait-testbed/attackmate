@@ -1,6 +1,7 @@
 # logging_setup.py
 
 import logging
+import sys
 from colorlog import ColoredFormatter
 
 
@@ -35,16 +36,22 @@ def initialize_logger(debug: bool, append_logs: bool):
         playbook_logger.setLevel(logging.INFO)
 
     # output to console
-    console_handler = logging.StreamHandler()
-    LOGFORMAT = '  %(asctime)s %(log_color)s%(levelname)-8s%(reset)s' '| %(log_color)s%(message)s%(reset)s'
-    formatter = ColoredFormatter(LOGFORMAT, datefmt='%Y-%m-%d %H:%M:%S')
-    console_handler.setFormatter(formatter)
+    if not any(
+        isinstance(handler, logging.StreamHandler) and handler.stream == sys.stdout
+        for handler in playbook_logger.handlers
+    ):
+        console_handler = logging.StreamHandler(sys.stdout) # Explicitly target stdout
+        LOGFORMAT = '  %(asctime)s %(log_color)s%(levelname)-8s%(reset)s' '| %(log_color)s%(message)s%(reset)s'
+        formatter = ColoredFormatter(LOGFORMAT, datefmt='%Y-%m-%d %H:%M:%S')
+        console_handler.setFormatter(formatter)
+        playbook_logger.addHandler(console_handler)
 
     # plain text output
-    playbook_logger.addHandler(console_handler)
-    formatter = logging.Formatter('%(asctime)s %(levelname)s - %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
-    file_handler = create_file_handler('attackmate.log', append_logs, formatter)
+
+    formatter2 = logging.Formatter('%(asctime)s %(levelname)s - %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
+    file_handler = create_file_handler('attackmate.log', append_logs, formatter2)
     playbook_logger.addHandler(file_handler)
+    playbook_logger.propagate = False
 
     return playbook_logger
 
