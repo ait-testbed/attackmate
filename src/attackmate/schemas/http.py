@@ -1,4 +1,4 @@
-from typing import Literal, Optional, Dict
+from typing import Literal, Optional, Dict, Any
 from .base import BaseCommand, StringNumber
 from attackmate.command import CommandRegistry
 
@@ -20,7 +20,7 @@ class HttpClientCommand(BaseCommand):
     output_headers: bool = False
     headers: Optional[Dict[str, str]] = None
     cookies: Optional[Dict[str, str]] = None
-    data: Optional[Dict[str, str]] = None
+    data: Optional[Dict[str, Any]] = None
     local_path: Optional[str] = None
     useragent: str = 'AttackMate'
     follow: bool = False

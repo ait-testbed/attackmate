@@ -8,6 +8,7 @@ over all attacks and runs the specific Executor with the given
 configuration.
 """
 
+import time
 from typing import Dict, Optional
 import logging
 from attackmate.result import Result
@@ -19,7 +20,6 @@ from .processmanager import ProcessManager
 from attackmate.executors.baseexecutor import BaseExecutor
 from attackmate.executors.executor_factory import executor_factory
 import asyncio
-
 
 
 class AttackMate:
@@ -89,10 +89,14 @@ class AttackMate:
         return self.executors[command_type]
 
     def _run_commands(self, commands: Commands):
+        delay = self.pyconfig.cmd_config.command_delay or 0
+        self.logger.info(f'Delay before commands: {delay} seconds')
         for command in commands:
             command_type = 'ssh' if command.type == 'sftp' else command.type
             executor = self._get_executor(command_type)
             if executor:
+                if command.type not in ('sleep', 'debug', 'setvar'):
+                    time.sleep(delay)
                 executor.run(command)
 
     def run_command(self, command: Command) -> Result:
@@ -101,27 +105,24 @@ class AttackMate:
         if executor:
             result = executor.run(command)
         return result if result else Result(None, None)
-    
+
     def clean_session_stores(self):
         self.logger.warning('Cleaning up session stores')
         # msf
-        if (msf_module_executor := self.executors.get("msf-module")):
+        if (msf_module_executor := self.executors.get('msf-module')):
             msf_module_executor.cleanup()
-        if (msf_session_executor := self.executors.get("msf-session")):
+        if (msf_session_executor := self.executors.get('msf-session')):
             msf_session_executor.cleanup()
         # ssh
-        if (ssh_executor := self.executors.get("ssh")):
+        if (ssh_executor := self.executors.get('ssh')):
             ssh_executor.cleanup()
         # vnc
-        if (vnc_executor := self.executors.get("vnc")):
+        if (vnc_executor := self.executors.get('vnc')):
             vnc_executor.cleanup()
         # sliver
-        if (sliver_executor := self.executors.get("sliver-session")):
+        if (sliver_executor := self.executors.get('sliver-session')):
             loop = asyncio.get_event_loop()
             loop.run_until_complete(sliver_executor.cleanup())
-
-
-
 
     def main(self):
         """The main function

@@ -167,6 +167,8 @@ Every command, regardless of the type has the following general options:
 
    * MsfModuleCommand
    * IncludeCommand
+   * VncCommand
+   * BrowserCommand
 
    Background-Mode together with a session is currently not implemented for the following commands:
 
