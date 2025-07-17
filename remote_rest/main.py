@@ -1,4 +1,3 @@
-import logging
 from contextlib import asynccontextmanager
 import sys
 from typing import AsyncGenerator
@@ -11,7 +10,8 @@ from fastapi.security import OAuth2PasswordRequestForm
 from src.attackmate.attackmate import AttackMate
 from src.attackmate.logging_setup import (initialize_json_logger,
                                           initialize_logger,
-                                          initialize_output_logger)
+                                          initialize_output_logger,
+                                          initialize_api_logger)
 from src.attackmate.playbook_parser import parse_config
 
 import remote_rest.state as state
@@ -22,16 +22,14 @@ from .schemas import TokenResponse
 
 
 CERT_DIR = os.path.dirname(os.path.abspath(__file__))
-KEY_FILE = os.path.join(CERT_DIR, "key.pem")
-CERT_FILE = os.path.join(CERT_DIR, "cert.pem")
+KEY_FILE = os.path.join(CERT_DIR, 'key.pem')
+CERT_FILE = os.path.join(CERT_DIR, 'cert.pem')
 
 # Logging
 initialize_logger(debug=True, append_logs=False)
 initialize_output_logger(debug=True, append_logs=False)
 initialize_json_logger(json=True, append_logs=False)
-logger = logging.getLogger('attackmate_api')  # specific logger for the API
-# TODO make this configurable via request
-logger.setLevel(logging.DEBUG)
+logger = initialize_api_logger(debug=True, append_logs=False)
 
 
 @asynccontextmanager
@@ -105,7 +103,10 @@ async def generic_exception_handler(request: Request, exc: Exception):
             status_code=400,  # client-side error pattern
             content={
                 'detail': 'Command execution led to termination request',
-                'error_message': f"SystemExit triggered (likely due to error condition like 'exit_on_error' or 'error_if'). Exit code: {exc.code}",
+                'error_message': (
+                    f"SystemExit triggered (likely due to error condition like 'exit_on_error'). "
+                    f"Exit code: {exc.code}"
+                ),
                 'instance_id': None
             },
         )
@@ -163,6 +164,6 @@ if __name__ == '__main__':
                 host='0.0.0.0',
                 port=8443,
                 reload=False,
-                log_config=None,
+
                 ssl_keyfile=KEY_FILE,
                 ssl_certfile=CERT_FILE)

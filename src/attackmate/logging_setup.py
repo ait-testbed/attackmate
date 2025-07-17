@@ -66,3 +66,31 @@ def initialize_json_logger(json: bool, append_logs: bool):
     json_logger.addHandler(file_handler)
 
     return json_logger
+
+def initialize_api_logger(debug: bool, append_logs: bool):
+    api_logger = logging.getLogger('attackmate_api')
+    if debug:
+        api_logger.setLevel(logging.DEBUG)
+    else:
+        api_logger.setLevel(logging.INFO)
+
+    # Console handler for API logs
+    if not any(
+        isinstance(handler, logging.StreamHandler) and handler.stream == sys.stdout
+        for handler in api_logger.handlers
+    ):
+        console_handler = logging.StreamHandler(sys.stdout)
+        LOGFORMAT = '  %(asctime)s %(log_color)s%(levelname)-8s%(reset)s' '| API | %(log_color)s%(message)s%(reset)s'
+        formatter = ColoredFormatter(LOGFORMAT, datefmt='%Y-%m-%d %H:%M:%S')
+        console_handler.setFormatter(formatter)
+        api_logger.addHandler(console_handler)
+
+    #  File handler for API logs ?
+    # api_file_formatter = logging.Formatter('%(asctime)s %(levelname)s [API] - %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
+    # api_file_handler = create_file_handler('attackmate_api.log', append_logs, api_file_formatter)
+    # api_logger.addHandler(api_file_handler)
+
+    # Prevent propagation to avoid duplicate logs if root logger also has handlers
+    api_logger.propagate = False
+
+    return api_logger
