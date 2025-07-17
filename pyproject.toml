@@ -22,7 +22,12 @@ dependencies = [
     "vncdotool",
     "pytest-mock",
     "fastapi",
-    "playwright"
+    "playwright",
+    "argon2-cffi",
+    "uvicorn",
+    "dotenv",
+    "passlib",
+    "python-multipart"
 ]
 dynamic = ["version"]
 
