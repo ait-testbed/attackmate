@@ -1,6 +1,7 @@
-from typing import List, Optional, Dict, Union
+from typing import Annotated, List, Optional, Dict, Union
+
 from .base import StrInt
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from .sleep import SleepCommand
 from .shell import ShellCommand
 from .setvar import SetVarCommand
@@ -72,6 +73,50 @@ Command = Union[
 
 
 Commands = List[Command]
+
+SliverSessionCommands = Annotated[Union[
+    SliverSessionCDCommand,
+    SliverSessionLSCommand,
+    SliverSessionNETSTATCommand,
+    SliverSessionEXECCommand,
+    SliverSessionMKDIRCommand,
+    SliverSessionSimpleCommand,
+    SliverSessionDOWNLOADCommand,
+    SliverSessionUPLOADCommand,
+    SliverSessionPROCDUMPCommand,
+    SliverSessionRMCommand,
+    SliverSessionTERMINATECommand], Field(discriminator='cmd')]
+
+
+SliverCommands = Annotated[Union[
+    SliverHttpsListenerCommand,
+    SliverGenerateCommand], Field(discriminator='cmd')]
+
+RemoteCommand = Annotated[
+    Union[
+        SliverSessionCommands,
+        SliverCommands,
+        BrowserCommand,
+        ShellCommand,
+        MsfModuleCommand,
+        MsfSessionCommand,
+        MsfPayloadCommand,
+        SleepCommand,
+        SSHCommand,
+        FatherCommand,
+        SFTPCommand,
+        DebugCommand,
+        SetVarCommand,
+        RegExCommand,
+        VncCommand,
+        TempfileCommand,
+        IncludeCommand,
+        WebServCommand,
+        HttpClientCommand,
+        JsonCommand,
+    ],
+    Field(discriminator='type'),
+]
 
 
 class Playbook(BaseModel):

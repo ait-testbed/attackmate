@@ -1,6 +1,5 @@
 from attackmate.schemas.base import BaseCommand
 from pydantic import field_validator
-from typing import Literal
 from attackmate.command import CommandRegistry
 from typing import Literal, Union, Optional, List
 from .sleep import SleepCommand
@@ -26,7 +25,6 @@ from .sliver import (
     SliverGenerateCommand,
 )
 from .ssh import SSHCommand, SFTPCommand
-from .remote import AttackMateRemoteCommand
 from .http import WebServCommand, HttpClientCommand
 from .father import FatherCommand
 from .tempfile import TempfileCommand
@@ -37,7 +35,6 @@ from .browser import BrowserCommand
 
 Commands = List[
     Union[
-        AttackMateRemoteCommand,
         BrowserCommand,
         ShellCommand,
         MsfModuleCommand,

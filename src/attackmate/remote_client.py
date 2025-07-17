@@ -179,16 +179,18 @@ class RemoteAttackMateClient:
         debug: bool = False
     ) -> Optional[Dict[str, Any]]:
         # get the correct enpoint
-        command_type_for_path = command_pydantic_model.type.replace('_', '-')  # API path has hyphens
-        endpoint = f"command/{command_type_for_path}"
+        endpoint = "command/execute"
 
         # Convert Pydantic model to dict for JSON body
         # handle None values for optional fields (exclude_none=True)
         command_body_dict = command_pydantic_model.model_dump(exclude_none=True)
+        request_payload = {
+            "command": command_body_dict
+        }
 
         return self._make_request(
             method='POST',
             endpoint=endpoint,
-            json_data=command_body_dict,
+            json_data=request_payload,
             params={'debug': True} if debug else None
         )

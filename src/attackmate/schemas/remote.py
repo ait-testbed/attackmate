@@ -1,5 +1,5 @@
-from pydantic import BaseModel, Field, ValidationInfo, field_validator, model_validator
-from typing import Literal, Optional, Dict, Any, List, Union, TypeAlias
+from pydantic import model_validator
+from typing import Literal, Optional, Union, TypeAlias
 
 from .base import BaseCommand
 from attackmate.command import CommandRegistry
