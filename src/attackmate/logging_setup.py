@@ -4,51 +4,38 @@ import logging
 import sys
 from colorlog import ColoredFormatter
 
+DATE_FORMAT = '%Y-%m-%d %H:%M:%S'
+OUTPUT_LOG_FILE = 'output.log'
+PLAYBOOK_LOG_FILE = 'attackmate.log'
+JSON_LOG_FILE = 'attackmate.json'
 
-def create_file_handler(
-    file_name: str, append_logs: bool, formatter: logging.Formatter
-) -> logging.FileHandler:
-    mode = 'a' if append_logs else 'w'
-    file_handler = logging.FileHandler(file_name, mode=mode)
-    file_handler.setFormatter(formatter)
-
-    return file_handler
+PLAYBOOK_CONSOLE_FORMAT = '  %(asctime)s %(log_color)s%(levelname)-8s%(reset)s | %(log_color)s%(message)s%(reset)s'
+API_CONSOLE_FORMAT = '  %(asctime)s %(log_color)s%(levelname)-8s%(reset)s | API | %(log_color)s%(message)s%(reset)s'
+DEFAULT_FILE_FORMAT = '%(asctime)s %(levelname)s - %(message)s'
+OUTPUT_FILE_FORMAT = '--- %(asctime)s %(levelname)s: ---\n\n%(message)s'
 
 
 def initialize_output_logger(debug: bool, append_logs: bool):
     output_logger = logging.getLogger('output')
-    if debug:
-        output_logger.setLevel(logging.DEBUG)
-    else:
-        output_logger.setLevel(logging.INFO)
-    formatter = logging.Formatter(
-        '--- %(asctime)s %(levelname)s: ---\n\n%(message)s', datefmt='%Y-%m-%d %H:%M:%S'
-    )
-    file_handler = create_file_handler('output.log', append_logs, formatter)
+    output_logger.setLevel(logging.DEBUG if debug else logging.INFO)
+    formatter = logging.Formatter(OUTPUT_FILE_FORMAT, datefmt=DATE_FORMAT)
+    file_handler = create_file_handler(OUTPUT_LOG_FILE, append_logs, formatter)
     output_logger.addHandler(file_handler)
 
 
 def initialize_logger(debug: bool, append_logs: bool):
     playbook_logger = logging.getLogger('playbook')
-    if debug:
-        playbook_logger.setLevel(logging.DEBUG)
-    else:
-        playbook_logger.setLevel(logging.INFO)
+    playbook_logger.setLevel(logging.DEBUG if debug else logging.INFO)
 
     # output to console
-    if not any(
-        isinstance(handler, logging.StreamHandler) and handler.stream == sys.stdout
-        for handler in playbook_logger.handlers
-    ):
-        console_handler = logging.StreamHandler(sys.stdout) # Explicitly target stdout
-        LOGFORMAT = '  %(asctime)s %(log_color)s%(levelname)-8s%(reset)s' '| %(log_color)s%(message)s%(reset)s'
-        formatter = ColoredFormatter(LOGFORMAT, datefmt='%Y-%m-%d %H:%M:%S')
+    if not has_stdout_handler(playbook_logger):
+        console_handler = logging.StreamHandler(sys.stdout)  # Explicitly target stdout
+        formatter = ColoredFormatter(PLAYBOOK_CONSOLE_FORMAT, datefmt=DATE_FORMAT)
         console_handler.setFormatter(formatter)
         playbook_logger.addHandler(console_handler)
 
     # plain text output
-
-    formatter2 = logging.Formatter('%(asctime)s %(levelname)s - %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
+    formatter2 = logging.Formatter(DEFAULT_FILE_FORMAT, datefmt=DATE_FORMAT)
     file_handler = create_file_handler('attackmate.log', append_logs, formatter2)
     playbook_logger.addHandler(file_handler)
     playbook_logger.propagate = False
@@ -62,31 +49,25 @@ def initialize_json_logger(json: bool, append_logs: bool):
     json_logger = logging.getLogger('json')
     json_logger.setLevel(logging.DEBUG)
     formatter = logging.Formatter('%(message)s')
-    file_handler = create_file_handler('attackmate.json', append_logs, formatter)
+    file_handler = create_file_handler(JSON_LOG_FILE, append_logs, formatter)
     json_logger.addHandler(file_handler)
 
     return json_logger
 
+
 def initialize_api_logger(debug: bool, append_logs: bool):
     api_logger = logging.getLogger('attackmate_api')
-    if debug:
-        api_logger.setLevel(logging.DEBUG)
-    else:
-        api_logger.setLevel(logging.INFO)
+    api_logger.setLevel(logging.DEBUG if debug else logging.INFO)
 
     # Console handler for API logs
-    if not any(
-        isinstance(handler, logging.StreamHandler) and handler.stream == sys.stdout
-        for handler in api_logger.handlers
-    ):
+    if not has_stdout_handler(api_logger):
         console_handler = logging.StreamHandler(sys.stdout)
-        LOGFORMAT = '  %(asctime)s %(log_color)s%(levelname)-8s%(reset)s' '| API | %(log_color)s%(message)s%(reset)s'
-        formatter = ColoredFormatter(LOGFORMAT, datefmt='%Y-%m-%d %H:%M:%S')
+        formatter = ColoredFormatter(API_CONSOLE_FORMAT, datefmt=DATE_FORMAT)
         console_handler.setFormatter(formatter)
         api_logger.addHandler(console_handler)
 
     #  File handler for API logs ?
-    # api_file_formatter = logging.Formatter('%(asctime)s %(levelname)s [API] - %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
+    # api_file_formatter = logging.Formatter(API_CONSOLE_FORMAT, datefmt=DATE_FORMAT)
     # api_file_handler = create_file_handler('attackmate_api.log', append_logs, api_file_formatter)
     # api_logger.addHandler(api_file_handler)
 
@@ -94,3 +75,23 @@ def initialize_api_logger(debug: bool, append_logs: bool):
     api_logger.propagate = False
 
     return api_logger
+
+
+def create_file_handler(
+    file_name: str, append_logs: bool, formatter: logging.Formatter
+) -> logging.FileHandler:
+    mode = 'a' if append_logs else 'w'
+    file_handler = logging.FileHandler(file_name, mode=mode)
+    file_handler.setFormatter(formatter)
+    return file_handler
+
+
+def has_stdout_handler(logger: logging.Logger) -> bool:
+    """
+    Checks if a logger already has a StreamHandler directed to stdout.
+
+    """
+    return any(
+        isinstance(handler, logging.StreamHandler) and handler.stream == sys.stdout
+        for handler in logger.handlers
+    )
