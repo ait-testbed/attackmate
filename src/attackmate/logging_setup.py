@@ -36,7 +36,7 @@ def initialize_logger(debug: bool, append_logs: bool):
 
     # plain text output
     formatter2 = logging.Formatter(DEFAULT_FILE_FORMAT, datefmt=DATE_FORMAT)
-    file_handler = create_file_handler('attackmate.log', append_logs, formatter2)
+    file_handler = create_file_handler(PLAYBOOK_LOG_FILE, append_logs, formatter2)
     playbook_logger.addHandler(file_handler)
     playbook_logger.propagate = False
 
