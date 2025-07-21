@@ -11,14 +11,15 @@ configuration.
 import time
 from typing import Dict, Optional
 import logging
-from attackmate.result import Result
+from .result import Result
 import attackmate.executors as executors
-from attackmate.schemas.config import CommandConfig, Config, MsfConfig, SliverConfig
-from attackmate.schemas.playbook import Playbook, Commands, Command
+from .schemas.config import CommandConfig, Config, MsfConfig, SliverConfig
+from .schemas.playbook import Playbook
+from attackmate.schemas.commands import Commands, Command
 from .variablestore import VariableStore
 from .processmanager import ProcessManager
-from attackmate.executors.baseexecutor import BaseExecutor
-from attackmate.executors.executor_factory import executor_factory
+from .executors.baseexecutor import BaseExecutor
+from .executors.executor_factory import executor_factory
 import asyncio
 
 

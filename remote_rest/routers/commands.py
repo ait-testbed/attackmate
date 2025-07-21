@@ -5,9 +5,9 @@ from attackmate.attackmate import AttackMate
 
 from attackmate.schemas.base import BaseCommand
 from fastapi import APIRouter, Depends, Header, HTTPException
-from attackmate.schemas.remote import RemoteCommand
 from src.attackmate.execexception import ExecException
 from src.attackmate.result import Result as AttackMateResult
+from src.attackmate.schemas.commands import Command
 
 
 from remote_rest.auth_utils import API_KEY_HEADER_NAME, get_current_user
@@ -22,7 +22,7 @@ logger = logging.getLogger(__name__)
 
 
 class CommandRequest(BaseModel):
-    command: RemoteCommand  # type: ignore
+    command: Command
 
 
 async def run_command_on_instance(instance: AttackMate, command_data: BaseCommand) -> AttackMateResult:

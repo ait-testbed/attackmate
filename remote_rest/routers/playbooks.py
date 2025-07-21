@@ -22,7 +22,7 @@ logger = logging.getLogger(__name__)
 ALLOWED_PLAYBOOK_DIR = '/usr/local/share/attackmate/remote_playbooks/'  # MUST EXIST
 
 
-# helper tp read logfil
+# helper t0 read logfile
 def read_log_file(log_path: Optional[str]) -> Optional[str]:
     if not log_path or not os.path.exists(log_path):
         return None

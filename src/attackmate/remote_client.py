@@ -179,13 +179,13 @@ class RemoteAttackMateClient:
         debug: bool = False
     ) -> Optional[Dict[str, Any]]:
         # get the correct enpoint
-        endpoint = "command/execute"
+        endpoint = 'command/execute'
 
         # Convert Pydantic model to dict for JSON body
         # handle None values for optional fields (exclude_none=True)
         command_body_dict = command_pydantic_model.model_dump(exclude_none=True)
         request_payload = {
-            "command": command_body_dict
+            'command': command_body_dict
         }
 
         return self._make_request(
