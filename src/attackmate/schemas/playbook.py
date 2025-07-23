@@ -3,7 +3,7 @@ from typing import List, Optional, Dict
 
 from .base import StrInt
 from pydantic import BaseModel
-from .commands import Commands
+from .command_types import Commands
 
 
 class Playbook(BaseModel):

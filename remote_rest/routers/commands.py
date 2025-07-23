@@ -7,7 +7,7 @@ from attackmate.schemas.base import BaseCommand
 from fastapi import APIRouter, Depends, Header, HTTPException
 from src.attackmate.execexception import ExecException
 from src.attackmate.result import Result as AttackMateResult
-from src.attackmate.schemas.commands import Command
+from src.attackmate.schemas.command_types import Command
 
 
 from remote_rest.auth_utils import API_KEY_HEADER_NAME, get_current_user
@@ -18,7 +18,7 @@ from ..state import get_persistent_instance
 
 
 router = APIRouter(prefix='/command', tags=['Commands'])
-logger = logging.getLogger(__name__)
+logger = logging.getLogger('attackmate_api')
 
 
 class CommandRequest(BaseModel):

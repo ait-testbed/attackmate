@@ -20,7 +20,6 @@ from remote_rest.routers import commands, instances, playbooks
 from .auth_utils import create_access_token, get_user_hash, verify_password
 from .schemas import TokenResponse
 
-
 CERT_DIR = os.path.dirname(os.path.abspath(__file__))
 KEY_FILE = os.path.join(CERT_DIR, 'key.pem')
 CERT_FILE = os.path.join(CERT_DIR, 'cert.pem')
