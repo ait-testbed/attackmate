@@ -30,13 +30,13 @@ def initialize_logger(debug: bool, append_logs: bool):
     # output to console
     if not has_stdout_handler(playbook_logger):
         console_handler = logging.StreamHandler(sys.stdout)  # Explicitly target stdout
-        formatter = ColoredFormatter(PLAYBOOK_CONSOLE_FORMAT, datefmt=DATE_FORMAT)
-        console_handler.setFormatter(formatter)
+        console_formatter = ColoredFormatter(PLAYBOOK_CONSOLE_FORMAT, datefmt=DATE_FORMAT)
+        console_handler.setFormatter(console_formatter)
         playbook_logger.addHandler(console_handler)
 
     # plain text output
-    formatter2 = logging.Formatter(DEFAULT_FILE_FORMAT, datefmt=DATE_FORMAT)
-    file_handler = create_file_handler(PLAYBOOK_LOG_FILE, append_logs, formatter2)
+    file_formatter = logging.Formatter(DEFAULT_FILE_FORMAT, datefmt=DATE_FORMAT)
+    file_handler = create_file_handler(PLAYBOOK_LOG_FILE, append_logs, file_formatter)
     playbook_logger.addHandler(file_handler)
     playbook_logger.propagate = False
 
