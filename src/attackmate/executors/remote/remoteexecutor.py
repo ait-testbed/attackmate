@@ -84,7 +84,6 @@ class RemoteExecutor(BaseExecutor):
             server_url=server_url,
             username=username,
             password=password,  # noqa: E501
-            # Split the line to adhere to the character limit
             cacert=cacert
         )
 
