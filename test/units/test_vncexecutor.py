@@ -1,11 +1,9 @@
 import pytest
-from unittest.mock import MagicMock, patch
+from unittest.mock import MagicMock
 from attackmate.executors.vnc.vncexecutor import VncExecutor
 from attackmate.schemas.vnc import VncCommand
 from attackmate.variablestore import VariableStore
 from attackmate.processmanager import ProcessManager
-from attackmate.execexception import ExecException
-from vncdotool.client import AuthenticationError
 
 
 @pytest.fixture

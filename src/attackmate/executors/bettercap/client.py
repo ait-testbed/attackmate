@@ -3,24 +3,25 @@ import ssl
 from typing import Any, Mapping, Tuple
 from .api import Api
 
+
 class Client(Api):
     def __init__(self,
                  *args: Any,
                  **kwargs: Any
                  ) -> None:
-        self.headers: dict[str,str] = {}
+        super().__init__()
         self.server = args[0]
         self._client = httpx.Client(**kwargs)
 
     def user_agent(self, user_agent: str) -> None:
         self.headers['User-Agent'] = user_agent
 
-    def basic_auth(self, username:str, password: str) -> None:
-        auth: BasicAuth = httpx.BasicAuth(username=username, password=password)
+    def basic_auth(self, username: str, password: str) -> None:
+        auth: httpx.BasicAuth = httpx.BasicAuth(username=username, password=password)
         self._client.auth = auth
 
     def ca_file(self, cafile: str) -> None:
-        ctx: SSLContext = ssl.create_default_context(cafile=cafile)
+        ctx: ssl.SSLContext = ssl.create_default_context(cafile=cafile)
         self._client.verify = ctx
 
     def _request(self,

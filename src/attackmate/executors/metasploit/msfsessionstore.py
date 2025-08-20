@@ -34,7 +34,8 @@ class MsfSessionStore:
                     if v['exploit_uuid'] == self.sessions[name]:
                         return k
                     else:
-                        self.logger.debug(f"uuid {self.sessions[name]} does not match with any entry in sessions")
+                        self.logger.debug(f"uuid {self.sessions[name]}"
+                                          + 'does not match with any entry in sessions')
                 else:
                     self.logger.debug(f"{name} not found in msfsessions")
 

@@ -85,7 +85,6 @@ class BaseExecutor(ExitOnError, CmdVars, Looper, Background):
 
         return result
 
-
     def log_command(self, command):
         """Log starting-status of the command"""
         self.logger.info(f"Executing '{command}'")

@@ -127,7 +127,7 @@ class VariableStore:
             return data
 
     def get_prefixed_env_vars(self, prefix: str = 'ATTACKMATE_') -> dict[str, str]:
-        prefixed_env_vars = {k[len(prefix) :]: v for k, v in os.environ.items() if k.startswith(prefix)}
+        prefixed_env_vars = {k[len(prefix):]: v for k, v in os.environ.items() if k.startswith(prefix)}
         return prefixed_env_vars
 
     def replace_with_prefixed_env_vars(self):
