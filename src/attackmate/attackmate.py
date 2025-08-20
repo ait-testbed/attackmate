@@ -13,7 +13,7 @@ from typing import Dict, Optional
 import logging
 from attackmate.result import Result
 import attackmate.executors as executors
-from attackmate.schemas.config import CommandConfig, Config, MsfConfig, SliverConfig
+from attackmate.schemas.config import BettercapConfig, CommandConfig, Config, MsfConfig, SliverConfig, BettercapConfig
 from attackmate.schemas.playbook import Playbook, Commands, Command
 from .variablestore import VariableStore
 from .processmanager import ProcessManager
@@ -55,7 +55,7 @@ class AttackMate:
         return Playbook(commands=[], vars={})
 
     def _default_config(self) -> Config:
-        return Config(cmd_config=CommandConfig(), msf_config=MsfConfig(), sliver_config=SliverConfig())
+        return Config(cmd_config=CommandConfig(), msf_config=MsfConfig(), sliver_config=SliverConfig(), bettercap_config={})
 
     def _initialize_variable_parser(self, varstore: Optional[Dict] = None):
         """Initializes the variable-parser
@@ -74,6 +74,7 @@ class AttackMate:
             'varstore': self.varstore,
             'cmdconfig': self.pyconfig.cmd_config,
             'msfconfig': self.pyconfig.msf_config,
+            'bettercap_config': self.pyconfig.bettercap_config,
             'msfsessionstore': self.msfsessionstore,
             'sliver_config': self.pyconfig.sliver_config,
             'runfunc': self._run_commands,

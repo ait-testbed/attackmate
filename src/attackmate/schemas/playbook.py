@@ -32,9 +32,14 @@ from .regex import RegExCommand
 from .vnc import VncCommand
 from .json import JsonCommand
 from .browser import BrowserCommand
+from .bettercap import BettercapGetCommand, BettercapGetFileCommand, BettercapPostApiSessionCommand, BettercapDeleteApiEventsCommand
 
 Command = Union[
     BrowserCommand,
+    BettercapGetCommand,
+    BettercapGetFileCommand,
+    BettercapPostApiSessionCommand,
+    BettercapDeleteApiEventsCommand,
     ShellCommand,
     MsfModuleCommand,
     MsfSessionCommand,

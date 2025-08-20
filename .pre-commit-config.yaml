@@ -31,7 +31,11 @@ repos:
     - id: autopep8
       args: [--max-line-length=110, --diff]
 
-
+-   repo: https://github.com/astral-sh/uv-pre-commit
+    # uv version.
+    rev: 0.8.12
+    hooks:
+      - id: uv-lock
       # PROBLEMS WITH IMPORTS IN PYLINT!!!
       #-   repo: https://github.com/PyCQA/prospector
       #    rev: 1.10.0 # The version of Prospector to use, if not 'master' for latest

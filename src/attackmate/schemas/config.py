@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from typing import Optional
+from typing import Optional, Dict
 
 
 class SliverConfig(BaseModel):
@@ -18,8 +18,15 @@ class CommandConfig(BaseModel):
     loop_sleep: int = 5
     command_delay: float = 0
 
+class BettercapConfig(BaseModel):
+    url: str
+    username: Optional[str] = None
+    password: Optional[str] = None
+    cafile: Optional[str] = None
+
 
 class Config(BaseModel):
     sliver_config: SliverConfig = SliverConfig(config_file=None)
     msf_config: MsfConfig = MsfConfig(password=None)
     cmd_config: CommandConfig = CommandConfig(loop_sleep=5, command_delay=0)
+    bettercap_config: Dict[str, BettercapConfig] = []

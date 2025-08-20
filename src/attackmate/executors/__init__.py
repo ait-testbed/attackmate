@@ -11,6 +11,7 @@ from .father.fatherexecutor import FatherExecutor
 from .http.webservexecutor import WebServExecutor
 from .http.httpclientexecutor import HttpClientExecutor
 from .vnc.vncexecutor import VncExecutor
+from .bettercap.bettercapexecutor import BettercapExecutor
 from .common.setvarexecutor import SetVarExecutor
 from .common.sleepexecutor import SleepExecutor
 from .common.tempfileexecutor import TempfileExecutor
@@ -43,4 +44,5 @@ __all__ = [
     'VncExecutor',
     'LoopExecutor',
     'JsonExecutor',
+    'BettercapExecutor',
 ]
