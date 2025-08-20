@@ -60,6 +60,3 @@ commands:
 
   - type: debug
     cmd: "Result string: $SUBSTITUTED"
-
-  
-

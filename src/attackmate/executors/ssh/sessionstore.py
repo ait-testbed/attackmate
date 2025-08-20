@@ -74,4 +74,3 @@ class SessionStore:
                     self.logger.error(f"Error closing client for ssh session '{session_name}': {e}")
 
         self.store.clear()
-

@@ -41,7 +41,7 @@ def test_vnc_connect_success(vnc_executor, mock_vnc_client, mocker):
     mock_vnc_client.protocol.connected = True  # Mock successful connection
 
     result = vnc_executor._exec_cmd(command)
-    
+
     assert result.stdout == 'vnc_connected'
     mock_vnc_client.keyPress.assert_called_once_with('a')
 
@@ -75,5 +75,3 @@ def test_vnc_create_and_use_session(vnc_executor, mock_vnc_client, mocker):
     assert result.stdout == 'vnc_connected'
     mock_vnc_client.keyPress.assert_any_call('a')
     mock_vnc_client.keyPress.assert_any_call('b')
-
-

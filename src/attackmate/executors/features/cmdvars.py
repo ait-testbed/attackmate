@@ -37,10 +37,10 @@ class CmdVars:
 
             # Skip variable substitution for "cmd"
             if attr_name == 'cmd'  and not substitute_cmd_vars:
-                continue 
+                continue
 
-            if attr_name == "break_if":
-                continue 
+            if attr_name == 'break_if':
+                continue
 
             attr_value = getattr(command, attr_name)
 

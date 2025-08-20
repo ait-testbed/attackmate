@@ -24,11 +24,11 @@ class BettercapExecutor(BaseExecutor):
         super().__init__(pm, varstore, cmdconfig)
         self.bettercap_config = bettercap_config
         self.client = Client('http://127.0.0.1:8081')
-        self.client.user_agent("AttackMate")
+        self.client.user_agent('AttackMate')
 
     def setup_connection(self, command: BettercapGetCommand|BettercapGetFileCommand|BettercapPostApiSessionCommand|BettercapDeleteApiEventsCommand):
         if self.bettercap_config is None:
-            raise ExecException("Bettercap config is missing")
+            raise ExecException('Bettercap config is missing')
         if command.connection is None:
             connection_name: str = next(iter(self.bettercap_config))
             self.logger.debug(f"Using default connection: {connection_name}")
@@ -39,7 +39,7 @@ class BettercapExecutor(BaseExecutor):
             connection_config: BettercapConfig = self.bettercap_config[connection_name]
             self.client.server = connection_config.url
             if connection_config.username and connection_config.password:
-                self.logger.debug("Using basic auth")
+                self.logger.debug('Using basic auth')
                 self.client.basic_auth(connection_config.username, connection_config.password)
             if connection_config.cafile:
                 self.logger.debug(f"Using cafile: {connection_config.cafile}")
@@ -55,11 +55,11 @@ class BettercapExecutor(BaseExecutor):
             self.setup_connection(command)
             if isinstance(command, BettercapGetCommand):
                 (code, headers, result) = getattr(self.client, command.cmd)()
-            elif command.cmd == "get_file" and isinstance(command, BettercapGetFileCommand):
+            elif command.cmd == 'get_file' and isinstance(command, BettercapGetFileCommand):
                 (code, headers, result) = self.client.get_file( command.filename)
-            elif command.cmd == "post_api_session" and isinstance(command, BettercapPostApiSessionCommand):
+            elif command.cmd == 'post_api_session' and isinstance(command, BettercapPostApiSessionCommand):
                 (code, headers, result) = self.client.post_api_session(command.data)
-            elif command.cmd == "delete_api_events" and isinstance(command, BettercapDeleteApiEventsCommand):
+            elif command.cmd == 'delete_api_events' and isinstance(command, BettercapDeleteApiEventsCommand):
                 (code, headers, result) = self.client.delete_api_events()
             else:
                 raise ExecException('Bettercap Command unknown or faulty Command-config')
@@ -72,4 +72,3 @@ class BettercapExecutor(BaseExecutor):
             return result
         except Exception as e:
             raise ExecException(e)
-

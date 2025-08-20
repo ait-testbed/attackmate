@@ -145,6 +145,6 @@ class MsfModuleExecutor(BaseExecutor):
                     except Exception as e:
                         self.logger.error(f"Failed to stop msf session {session_id}: {str(e)}")
             else:
-                self.logger.debug("No active msf sessions found.")
+                self.logger.debug('No active msf sessions found.')
 
 #msf.session returs shell manager

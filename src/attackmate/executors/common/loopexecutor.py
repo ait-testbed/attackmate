@@ -54,7 +54,7 @@ class LoopExecutor(BaseExecutor):
              and command_obj.url = '$LOOP_ITEM', then it becomes 'https://example.com'.
         """
         for attr_name, attr_val in vars(command_obj).items():
-            if isinstance(attr_val, str) and "$" in attr_val:
+            if isinstance(attr_val, str) and '$' in attr_val:
                 new_val = Template(attr_val).safe_substitute(placeholders)
                 setattr(command_obj, attr_name, new_val)
 
@@ -80,7 +80,7 @@ class LoopExecutor(BaseExecutor):
                     'LOOP_ITEM': x,
                     **self.varstore.variables,
                 }
-                
+
                 if self.break_condition_met(command, placeholders):
                     return
                 self.substitute_variables_in_command(template_cmd, placeholders)

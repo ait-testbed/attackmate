@@ -7,13 +7,13 @@ class Api:
         url = urljoin(self.server, '/api/file') + '?' + urlencode(params)
         return self._request('GET', url, headers=self.headers)
 
-    def post_api_session(self, body) -> Tuple[int, Mapping[str, str], bytes]: 
+    def post_api_session(self, body) -> Tuple[int, Mapping[str, str], bytes]:
         return self._request('POST',  urljoin(self.server, '/api/session'),headers=self.headers, json_data=body)
 
     def get_events(self)-> Tuple[int, Mapping[str, str], bytes]:
         return self._request('GET',  urljoin(self.server, '/api/events'),headers=self.headers)
 
-    def delete_api_events(self) -> Tuple[int, Mapping[str, str], bytes]: 
+    def delete_api_events(self) -> Tuple[int, Mapping[str, str], bytes]:
         return self._request('DELETE',  urljoin(self.server, '/api/events'),headers=self.headers)
 
     def get_session_modules(self) -> Tuple[int, Mapping[str, str], bytes]:

@@ -4,7 +4,7 @@ from typing import Any, Mapping, Tuple
 from .api import Api
 
 class Client(Api):
-    def __init__(self, 
+    def __init__(self,
                  *args: Any,
                  **kwargs: Any
                  ) -> None:
@@ -13,7 +13,7 @@ class Client(Api):
         self._client = httpx.Client(**kwargs)
 
     def user_agent(self, user_agent: str) -> None:
-        self.headers["User-Agent"] = user_agent
+        self.headers['User-Agent'] = user_agent
 
     def basic_auth(self, username:str, password: str) -> None:
         auth: BasicAuth = httpx.BasicAuth(username=username, password=password)
@@ -33,5 +33,3 @@ class Client(Api):
                 method, url, headers=dict(headers), json=json_data
         )
         return response.status_code, response.headers, response.content
-
-
