@@ -37,6 +37,9 @@ connection in attackmate.yml:
      - type: bettercap
        cmd: get_events
 
+.. note::
+
+   To configure the connection to the bettercap rest-api see :ref:`bettercap_config`
 
 
 post_api_session
