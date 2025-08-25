@@ -1,6 +1,10 @@
 from urllib.parse import urljoin, urlencode
 from typing import Mapping, Tuple, Optional
 
+"""
+Api-docs: https://www.bettercap.org/modules/core/apirest/
+"""
+
 
 class Api:
     def __init__(self) -> None:
@@ -22,69 +26,53 @@ class Api:
                              headers=self.headers, json_data=body)
 
     def get_events(self) -> Tuple[int, Mapping[str, str], bytes]:
-        if not self.server:
-            self.server = ''
-        return self._request('GET',  urljoin(self.server, '/api/events'), headers=self.headers)
+        return self._request_with_parameter('/api/events', 'GET')
 
     def delete_api_events(self) -> Tuple[int, Mapping[str, str], bytes]:
-        if not self.server:
-            self.server = ''
-        return self._request('DELETE',  urljoin(self.server, '/api/events'), headers=self.headers)
+        return self._request_with_parameter('/api/events', 'DELETE')
 
     def get_session_modules(self) -> Tuple[int, Mapping[str, str], bytes]:
-        if not self.server:
-            self.server = ''
-        return self._request('GET', urljoin(self.server, '/api/session/modules'), headers=self.headers)
+        return self._request_with_parameter('/api/session/modules', 'GET')
 
     def get_session_env(self) -> Tuple[int, Mapping[str, str], bytes]:
-        if not self.server:
-            self.server = ''
-        return self._request('GET', urljoin(self.server, '/api/session/env'), headers=self.headers)
+        return self._request_with_parameter('/api/session/env', 'GET')
 
     def get_session_gateway(self) -> Tuple[int, Mapping[str, str], bytes]:
-        if not self.server:
-            self.server = ''
-        return self._request('GET', urljoin(self.server, '/api/session/gateway'), headers=self.headers)
+        return self._request_with_parameter('/api/session/gateway', 'GET')
 
-    def get_session_hid(self) -> Tuple[int, Mapping[str, str], bytes]:
-        if not self.server:
-            self.server = ''
-        return self._request('GET', urljoin(self.server, '/api/session/hid'), headers=self.headers)
+    def get_session_hid(self, mac: Optional[str] = None) -> Tuple[int, Mapping[str, str], bytes]:
+        return self._request_with_parameter('/api/session/hid', 'GET', mac)
 
-    def get_session_ble(self) -> Tuple[int, Mapping[str, str], bytes]:
-        if not self.server:
-            self.server = ''
-        return self._request('GET', urljoin(self.server, '/api/session/ble'), headers=self.headers)
+    def get_session_ble(self, mac: Optional[str] = None) -> Tuple[int, Mapping[str, str], bytes]:
+        return self._request_with_parameter('/api/session/ble', 'GET', mac)
 
     def get_session_interface(self) -> Tuple[int, Mapping[str, str], bytes]:
-        if not self.server:
-            self.server = ''
-        return self._request('GET', urljoin(self.server, '/api/session/interface'), headers=self.headers)
+        return self._request_with_parameter('/api/session/interface', 'GET')
 
-    def get_session_lan(self) -> Tuple[int, Mapping[str, str], bytes]:
-        if not self.server:
-            self.server = ''
-        return self._request('GET', urljoin(self.server, '/api/session/lan'), headers=self.headers)
+    def get_session_lan(self, mac: Optional[str] = None) -> Tuple[int, Mapping[str, str], bytes]:
+        return self._request_with_parameter('/api/session/lan', 'GET', mac)
 
     def get_session_options(self) -> Tuple[int, Mapping[str, str], bytes]:
-        if not self.server:
-            self.server = ''
-        return self._request('GET', urljoin(self.server, '/api/session/options'), headers=self.headers)
+        return self._request_with_parameter('/api/session/options', 'GET')
 
     def get_session_packets(self) -> Tuple[int, Mapping[str, str], bytes]:
-        if not self.server:
-            self.server = ''
-        return self._request('GET', urljoin(self.server, '/api/session/packets'), headers=self.headers)
+        return self._request_with_parameter('/api/session/packets', 'GET')
 
     def get_session_started_at(self) -> Tuple[int, Mapping[str, str], bytes]:
-        if not self.server:
-            self.server = ''
-        return self._request('GET', urljoin(self.server, '/api/session/started-at'), headers=self.headers)
+        return self._request_with_parameter('/api/session/started-at', 'GET')
 
-    def get_session_wifi(self) -> Tuple[int, Mapping[str, str], bytes]:
+    def get_session_wifi(self, mac: Optional[str] = None) -> Tuple[int, Mapping[str, str], bytes]:
+        return self._request_with_parameter('/api/session/wifi', 'GET', mac)
+
+    def _request_with_parameter(self, url: str,
+                                method: str,
+                                param: Optional[str] = None) -> Tuple[int, Mapping[str, str], bytes]:
         if not self.server:
             self.server = ''
-        return self._request('GET', urljoin(self.server, '/api/session/wifi'), headers=self.headers)
+        api_url: str = urljoin(self.server, url)
+        if param:
+            api_url + '/' + param
+        return self._request(method, api_url, headers=self.headers)
 
     def _request(self,
                  method: str,

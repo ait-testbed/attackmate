@@ -14,6 +14,12 @@ class BettercapGetCommand(BaseCommand):
     connection: Optional[str] = None
 
 
+class BettercapGetWithMacCommand(BaseCommand):
+    type: Literal['bettercap']
+    connection: Optional[str] = None
+    mac: Optional[str] = None
+
+
 @CommandRegistry.register('bettercap', 'get_events')
 class BettercapGetEventsCommand(BettercapGetCommand):
     cmd: Literal['get_events']
@@ -35,12 +41,12 @@ class BettercapGetSessionGatewayCommand(BettercapGetCommand):
 
 
 @CommandRegistry.register('bettercap', 'get_session_hid')
-class BettercapGetSessionHidCommand(BettercapGetCommand):
+class BettercapGetSessionHidCommand(BettercapGetWithMacCommand):
     cmd: Literal['get_session_hid']
 
 
 @CommandRegistry.register('bettercap', 'get_session_ble')
-class BettercapGetSessionBleCommand(BettercapGetCommand):
+class BettercapGetSessionBleCommand(BettercapGetWithMacCommand):
     cmd: Literal['get_session_ble']
 
 
@@ -50,7 +56,7 @@ class BettercapGetSessionInterfaceCommand(BettercapGetCommand):
 
 
 @CommandRegistry.register('bettercap', 'get_session_lan')
-class BettercapGetSessionLanCommand(BettercapGetCommand):
+class BettercapGetSessionLanCommand(BettercapGetWithMacCommand):
     cmd: Literal['get_session_lan']
 
 
@@ -70,7 +76,7 @@ class BettercapGetSessionStartedAtCommand(BettercapGetCommand):
 
 
 @CommandRegistry.register('bettercap', 'get_session_wifi')
-class BettercapGetSessionWifiCommand(BettercapGetCommand):
+class BettercapGetSessionWifiCommand(BettercapGetWithMacCommand):
     cmd: Literal['get_session_wifi']
 
 

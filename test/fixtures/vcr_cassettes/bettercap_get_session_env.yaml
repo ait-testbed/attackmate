@@ -1,0 +1,76 @@
+interactions:
+- request:
+    body: '{}'
+    headers:
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      authorization:
+      - Basic dXNlcjpwYXNz
+      connection:
+      - keep-alive
+      content-length:
+      - '2'
+      content-type:
+      - application/json
+      host:
+      - 127.0.0.1:8081
+      user-agent:
+      - AttackMate
+    method: GET
+    uri: http://127.0.0.1:8081/api/session/env
+  response:
+    body:
+      string: "{\"data\":{\"$\":\"{by}{fw}{cidr} {fb}\\u003e {env.iface.ipv4} {reset}
+        {bold}\xBB {reset}\",\"any.proxy.dst_address\":\"\\u003cinterface address\\u003e\",\"any.proxy.dst_port\":\"8080\",\"any.proxy.iface\":\"\\u003cinterface
+        name\\u003e\",\"any.proxy.protocol\":\"TCP\",\"any.proxy.src_address\":\"\",\"any.proxy.src_port\":\"80\",\"api.rest.address\":\"127.0.0.1\",\"api.rest.alloworigin\":\"*\",\"api.rest.certificate\":\"\",\"api.rest.certificate.bits\":\"4096\",\"api.rest.certificate.commonname\":\"bettercap\",\"api.rest.certificate.country\":\"US\",\"api.rest.certificate.locality\":\"\",\"api.rest.certificate.organization\":\"bettercap
+        devteam\",\"api.rest.certificate.organizationalunit\":\"https://bettercap.org/\",\"api.rest.key\":\"\",\"api.rest.password\":\"pass\",\"api.rest.port\":\"8081\",\"api.rest.record.clock\":\"1\",\"api.rest.username\":\"user\",\"api.rest.websocket\":\"false\",\"arp.spoof.fullduplex\":\"false\",\"arp.spoof.internal\":\"false\",\"arp.spoof.skip_restore\":\"false\",\"arp.spoof.targets\":\"\\u003centire
+        subnet\\u003e\",\"arp.spoof.whitelist\":\"\",\"ble.device\":\"-1\",\"ble.show.filter\":\"\",\"ble.show.limit\":\"0\",\"ble.show.sort\":\"rssi
+        asc\",\"ble.timeout\":\"5\",\"ble.ttl\":\"30\",\"c2.channel.control\":\"#events\",\"c2.channel.events\":\"#events\",\"c2.channel.output\":\"#events\",\"c2.nick\":\"bettercap\",\"c2.operator\":\"admin\",\"c2.password\":\"password\",\"c2.sasl.password\":\"\",\"c2.sasl.username\":\"\",\"c2.server\":\"localhost:6697\",\"c2.server.tls\":\"true\",\"c2.server.tls.verify\":\"false\",\"c2.username\":\"bettercap\",\"can.device\":\"can0\",\"can.dump\":\"\",\"can.dump.inject\":\"false\",\"can.filter\":\"\",\"can.parse.obd2\":\"false\",\"can.transport\":\"can\",\"dhcp6.spoof.domains\":\"microsoft.com,
+        google.com, facebook.com, apple.com, twitter.com\",\"dns.port\":\"53\",\"dns.proxy.address\":\"\\u003cinterface
+        address\\u003e\",\"dns.proxy.blacklist\":\"\",\"dns.proxy.certificate\":\"~/.bettercap-ca.cert.pem\",\"dns.proxy.certificate.bits\":\"4096\",\"dns.proxy.certificate.commonname\":\"cloudflare-dns.com\",\"dns.proxy.certificate.country\":\"US\",\"dns.proxy.certificate.locality\":\"San
+        Francisco\",\"dns.proxy.certificate.organization\":\"Cloudflare, Inc.\",\"dns.proxy.certificate.organizationalunit\":\"\",\"dns.proxy.key\":\"~/.bettercap-ca.key.pem\",\"dns.proxy.nameserver\":\"1.1.1.1\",\"dns.proxy.port\":\"8053\",\"dns.proxy.protocol\":\"udp\",\"dns.proxy.redirect\":\"true\",\"dns.proxy.script\":\"\",\"dns.proxy.whitelist\":\"\",\"dns.spoof.address\":\"\\u003cinterface
+        address\\u003e\",\"dns.spoof.all\":\"false\",\"dns.spoof.domains\":\"\",\"dns.spoof.hosts\":\"\",\"dns.spoof.ttl\":\"1024\",\"events.stream.http.format.hex\":\"true\",\"events.stream.http.request.dump\":\"false\",\"events.stream.http.response.dump\":\"false\",\"events.stream.output\":\"\",\"events.stream.output.rotate\":\"true\",\"events.stream.output.rotate.compress\":\"true\",\"events.stream.output.rotate.format\":\"2006-01-02
+        15:04:05\",\"events.stream.output.rotate.how\":\"size\",\"events.stream.output.rotate.when\":\"10\",\"events.stream.time.format\":\"15:04:05\",\"gateway.address\":\"192.168.233.117\",\"gateway.mac\":\"08:00:27:97:29:fb\",\"gps.baudrate\":\"4800\",\"gps.device\":\"/dev/ttyUSB0\",\"graph.disconnected\":\"false\",\"graph.dot.layout\":\"neato\",\"graph.dot.name\":\"bettergraph\",\"graph.dot.output\":\"bettergraph.dot\",\"graph.json.output\":\"bettergraph.json\",\"graph.path\":\"/usr/local/share/bettercap/graph\",\"graph.privacy\":\"false\",\"hid.force.type\":\"logitech\",\"hid.hop.period\":\"100\",\"hid.lna\":\"true\",\"hid.ping.period\":\"100\",\"hid.show.filter\":\"\",\"hid.show.limit\":\"0\",\"hid.show.sort\":\"mac
+        desc\",\"hid.sniff.period\":\"500\",\"hid.ttl\":\"1200\",\"http.port\":\"80\",\"http.proxy.address\":\"\\u003cinterface
+        address\\u003e\",\"http.proxy.blacklist\":\"\",\"http.proxy.injectjs\":\"\",\"http.proxy.port\":\"8080\",\"http.proxy.redirect\":\"true\",\"http.proxy.script\":\"\",\"http.proxy.sslstrip\":\"false\",\"http.proxy.whitelist\":\"\",\"http.server.address\":\"\\u003cinterface
+        address\\u003e\",\"http.server.path\":\".\",\"http.server.port\":\"80\",\"https.port\":\"443\",\"https.proxy.address\":\"\\u003cinterface
+        address\\u003e\",\"https.proxy.blacklist\":\"\",\"https.proxy.certificate\":\"~/.bettercap-ca.cert.pem\",\"https.proxy.certificate.bits\":\"4096\",\"https.proxy.certificate.commonname\":\"Go
+        Daddy Secure Certificate Authority - G2\",\"https.proxy.certificate.country\":\"US\",\"https.proxy.certificate.locality\":\"Scottsdale\",\"https.proxy.certificate.organization\":\"GoDaddy.com,
+        Inc.\",\"https.proxy.certificate.organizationalunit\":\"https://certs.godaddy.com/repository/\",\"https.proxy.injectjs\":\"\",\"https.proxy.key\":\"~/.bettercap-ca.key.pem\",\"https.proxy.port\":\"8083\",\"https.proxy.redirect\":\"true\",\"https.proxy.script\":\"\",\"https.proxy.sslstrip\":\"false\",\"https.proxy.whitelist\":\"\",\"https.server.address\":\"\\u003cinterface
+        address\\u003e\",\"https.server.certificate\":\"~/.bettercap-httpd.cert.pem\",\"https.server.certificate.bits\":\"4096\",\"https.server.certificate.commonname\":\"bettercap\",\"https.server.certificate.country\":\"US\",\"https.server.certificate.locality\":\"\",\"https.server.certificate.organization\":\"bettercap
+        devteam\",\"https.server.certificate.organizationalunit\":\"https://bettercap.org/\",\"https.server.key\":\"~/.bettercap-httpd.key.pem\",\"https.server.path\":\".\",\"https.server.port\":\"443\",\"iface.index\":\"2\",\"iface.ipv4\":\"192.168.233.117\",\"iface.ipv6\":\"fe80::a00:27ff:fe97:29fb\",\"iface.mac\":\"08:00:27:97:29:fb\",\"iface.name\":\"enp0s3\",\"log.debug\":\"false\",\"log.silent\":\"false\",\"mac.changer.address\":\"\\u003crandom
+        mac\\u003e\",\"mac.changer.iface\":\"\\u003cinterface name\\u003e\",\"mysql.server.address\":\"\\u003cinterface
+        address\\u003e\",\"mysql.server.infile\":\"/etc/passwd\",\"mysql.server.outfile\":\"\",\"mysql.server.port\":\"3306\",\"ndp.spoof.neighbour\":\"fe80::1\",\"ndp.spoof.prefix\":\"d00d::\",\"ndp.spoof.prefix.length\":\"64\",\"ndp.spoof.router_lifetime\":\"10\",\"ndp.spoof.targets\":\"\",\"net.fuzz.layers\":\"Payload\",\"net.fuzz.rate\":\"1.0\",\"net.fuzz.ratio\":\"0.4\",\"net.fuzz.silent\":\"false\",\"net.probe.mdns\":\"true\",\"net.probe.nbns\":\"true\",\"net.probe.throttle\":\"10\",\"net.probe.upnp\":\"true\",\"net.probe.wsd\":\"true\",\"net.show.filter\":\"\",\"net.show.limit\":\"0\",\"net.show.meta\":\"false\",\"net.show.sort\":\"ip
+        asc\",\"net.sniff.filter\":\"not arp\",\"net.sniff.interface\":\"\",\"net.sniff.local\":\"false\",\"net.sniff.output\":\"\",\"net.sniff.regexp\":\"\",\"net.sniff.source\":\"\",\"net.sniff.verbose\":\"false\",\"packet.proxy.chain\":\"OUTPUT\",\"packet.proxy.plugin\":\"\",\"packet.proxy.queue.num\":\"0\",\"packet.proxy.rule\":\"\",\"syn.scan.show-progress-every\":\"1\",\"tcp.address\":\"\",\"tcp.port\":\"443\",\"tcp.proxy.address\":\"\\u003cinterface
+        address\\u003e\",\"tcp.proxy.port\":\"8443\",\"tcp.proxy.script\":\"\",\"tcp.tunnel.address\":\"\",\"tcp.tunnel.port\":\"0\",\"ticker.commands\":\"clear;
+        net.show; events.show 20\",\"ticker.period\":\"1\",\"ui.address\":\"127.0.0.1\",\"ui.port\":\"8080\",\"wifi.ap.bssid\":\"\\u003crandom
+        mac\\u003e\",\"wifi.ap.channel\":\"1\",\"wifi.ap.encryption\":\"true\",\"wifi.ap.ssid\":\"FreeWiFi\",\"wifi.ap.ttl\":\"300\",\"wifi.assoc.acquired\":\"false\",\"wifi.assoc.open\":\"false\",\"wifi.assoc.silent\":\"false\",\"wifi.assoc.skip\":\"\",\"wifi.bruteforce.stop_at_first\":\"true\",\"wifi.bruteforce.target\":\"\",\"wifi.bruteforce.timeout\":\"15\",\"wifi.bruteforce.wide\":\"false\",\"wifi.bruteforce.wordlist\":\"/usr/share/dict/words\",\"wifi.bruteforce.workers\":\"1\",\"wifi.channel_switch_announce.silent\":\"false\",\"wifi.deauth.acquired\":\"false\",\"wifi.deauth.open\":\"true\",\"wifi.deauth.silent\":\"false\",\"wifi.deauth.skip\":\"\",\"wifi.fake_auth.silent\":\"false\",\"wifi.handshakes.aggregate\":\"true\",\"wifi.handshakes.file\":\"~/bettercap-wifi-handshakes.pcap\",\"wifi.hop.period\":\"250\",\"wifi.interface\":\"\",\"wifi.region\":\"\",\"wifi.rssi.min\":\"-200\",\"wifi.show.filter\":\"\",\"wifi.show.limit\":\"0\",\"wifi.show.manufacturer\":\"false\",\"wifi.show.sort\":\"rssi
+        asc\",\"wifi.skip-broken\":\"true\",\"wifi.source.file\":\"\",\"wifi.sta.ttl\":\"300\",\"wifi.txpower\":\"30\",\"zerogod.advertise.certificate\":\"~/.bettercap-zerogod.cert.pem\",\"zerogod.advertise.certificate.bits\":\"4096\",\"zerogod.advertise.certificate.commonname\":\"bettercap\",\"zerogod.advertise.certificate.country\":\"US\",\"zerogod.advertise.certificate.locality\":\"\",\"zerogod.advertise.certificate.organization\":\"bettercap
+        devteam\",\"zerogod.advertise.certificate.organizationalunit\":\"https://bettercap.org/\",\"zerogod.advertise.key\":\"~/.bettercap-zerogod.key.pem\",\"zerogod.ipp.save_path\":\"~/.bettercap/zerogod/documents/\",\"zerogod.verbose\":\"false\"}}\n"
+    headers:
+      Access-Control-Allow-Headers:
+      - Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization
+      Access-Control-Allow-Methods:
+      - POST, GET, OPTIONS, PUT, DELETE
+      Access-Control-Allow-Origin:
+      - '*'
+      Content-Type:
+      - application/json
+      Date:
+      - Fri, 22 Aug 2025 15:06:10 GMT
+      Referrer-Policy:
+      - same-origin
+      Transfer-Encoding:
+      - chunked
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - DENY
+      X-Xss-Protection:
+      - 1; mode=block
+    status:
+      code: 200
+      message: OK
+version: 1

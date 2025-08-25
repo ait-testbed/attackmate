@@ -1,0 +1,60 @@
+interactions:
+- request:
+    body: '{}'
+    headers:
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      authorization:
+      - Basic dXNlcjpwYXNz
+      connection:
+      - keep-alive
+      content-length:
+      - '2'
+      content-type:
+      - application/json
+      host:
+      - 127.0.0.1:8081
+      user-agent:
+      - AttackMate
+    method: GET
+    uri: http://127.0.0.1:8081/api/events
+  response:
+    body:
+      string: '[{"tag":"sys.log","time":"2025-08-22T15:02:03.176847181Z","data":{"Level":3,"Message":"executable
+        netstat not found in $PATH"}},{"tag":"sys.log","time":"2025-08-22T15:02:03.177002158Z","data":{"Level":3,"Message":"Could
+        not detect gateway."}},{"tag":"session.started","time":"2025-08-22T15:02:03.177790598Z","data":null},{"tag":"mod.started","time":"2025-08-22T15:02:03.177922032Z","data":"events.stream"},{"tag":"sys.log","time":"2025-08-22T15:02:11.83238332Z","data":{"Level":4,"Message":"unknown
+        or invalid syntax \"\u001b[1mrest.api on\u001b[0m\", type \u001b[1mhelp\u001b[0m
+        for the help menu"}},{"tag":"sys.log","time":"2025-08-22T15:02:18.331466287Z","data":{"Level":4,"Message":"unknown
+        or invalid syntax \"\u001b[1moptions\u001b[0m\", type \u001b[1mhelp\u001b[0m
+        for the help menu"}},{"tag":"mod.started","time":"2025-08-22T15:02:20.397599095Z","data":"api.rest"},{"tag":"sys.log","time":"2025-08-22T15:02:20.397821627Z","data":{"Level":1,"Message":"\u001b[104m\u001b[30mapi.rest\u001b[0m\u001b[0m
+        api server starting on http://127.0.0.1:8081"}},{"tag":"sys.log","time":"2025-08-22T15:02:27.480491194Z","data":{"Level":3,"Message":"\u001b[104m\u001b[30mapi.rest\u001b[0m\u001b[0m
+        Unauthorized authentication attempt from 127.0.0.1:33446 to /api/session/ble"}}]
+
+        '
+    headers:
+      Access-Control-Allow-Headers:
+      - Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization
+      Access-Control-Allow-Methods:
+      - POST, GET, OPTIONS, PUT, DELETE
+      Access-Control-Allow-Origin:
+      - '*'
+      Content-Length:
+      - '1270'
+      Content-Type:
+      - application/json
+      Date:
+      - Fri, 22 Aug 2025 15:06:10 GMT
+      Referrer-Policy:
+      - same-origin
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - DENY
+      X-Xss-Protection:
+      - 1; mode=block
+    status:
+      code: 200
+      message: OK
+version: 1
