@@ -1,3 +1,4 @@
+import json
 from attackmate.schemas.base import BaseCommand
 from attackmate.processmanager import ProcessManager
 from attackmate.result import Result
@@ -30,7 +31,8 @@ class Background:
 
     def exec_background(self, command: BaseCommand) -> Result:
         self.logger.info(f'Run in background: {getattr(command, "type", "")}({command.cmd})')
-
+        if command.metadata:
+            self.logger.info(f'Metadata: {json.dumps(command.metadata)}')
         queue = self._create_queue()
 
         if queue:

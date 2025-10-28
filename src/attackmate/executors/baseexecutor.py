@@ -81,12 +81,13 @@ class BaseExecutor(ExitOnError, CmdVars, Looper, Background):
         self.logger.debug(f"Template-Command: '{command.cmd}'")
         if command.background:
             # Background commands always return Result(None,None)
+            time_of_execution = datetime.now().isoformat()
+            self.log_json(self.json_logger, command, time_of_execution)
             result = self.exec_background(self.substitute_template_vars(command, self.substitute_cmd_vars))
         else:
             result = self.exec(self.substitute_template_vars(command, self.substitute_cmd_vars))
 
         return result
-
 
     def log_command(self, command):
         """Log starting-status of the command"""
