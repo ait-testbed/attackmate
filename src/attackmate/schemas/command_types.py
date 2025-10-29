@@ -1,14 +1,18 @@
 
 
-from typing import List, TypeAlias, Union
+from typing import List, Annotated, TypeAlias, Union
+from pydantic import Field
 from attackmate.schemas.command_subtypes import RemotelyExecutableCommand
 from attackmate.schemas.remote import AttackMateRemoteCommand
 
 
-Command: TypeAlias = Union[
+Command: TypeAlias = Annotated[
+    Union[
         RemotelyExecutableCommand,
         AttackMateRemoteCommand
-    ]
+    ],
+    Field(discriminator='type'),
+]
 
 
 Commands:  TypeAlias = List[Command]
