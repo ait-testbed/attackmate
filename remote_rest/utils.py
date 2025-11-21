@@ -5,8 +5,6 @@ from src.attackmate.variablestore import VariableStore
 
 from remote_rest.schemas import VariableStoreStateModel
 
-logger = logging.getLogger(__name__)
-
 
 def varstore_to_state_model(varstore: VariableStore) -> VariableStoreStateModel:
     """Converts AttackMate VariableStore to Pydantic VariableStoreStateModel."""
