@@ -101,9 +101,6 @@ class RemoteExecutor(BaseExecutor):
                 yaml_content = f.read()
             response = client.execute_remote_playbook_yaml(yaml_content, debug=debug)
 
-        elif command.cmd == 'execute_playbook_file' and command.playbook_file_path:
-            response = client.execute_remote_playbook_file(command.playbook_file_path, debug=debug)
-
         elif command.cmd == 'execute_command':
             response = client.execute_remote_command(command.remote_command, debug=debug)
 
