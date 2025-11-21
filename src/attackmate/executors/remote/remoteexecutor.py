@@ -96,7 +96,7 @@ class RemoteExecutor(BaseExecutor):
         debug = getattr(command, 'debug', False)
         self.logger.debug(f"Dispatching command '{command.cmd}' with debug={debug}")
 
-        if command.cmd == 'execute_playbook_yaml' and command.playbook_yaml_content:
+        if command.cmd == 'execute_playbook' and command.playbook_yaml_content:
             with open(command.playbook_yaml_content, 'r') as f:
                 yaml_content = f.read()
             response = client.execute_remote_playbook_yaml(yaml_content, debug=debug)
