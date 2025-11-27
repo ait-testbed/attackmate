@@ -88,6 +88,7 @@ class MsfModuleExecutor(BaseExecutor):
             for option, setting in command.options.items():
                 if setting.isnumeric():
                     exploit[option] = int(setting)
+                    continue
                 if setting.lower() in ['true', 'false', '1', '0', 'y', 'n', 'yes', 'no']:
                     exploit[option] = CmdVars.variable_to_bool(option, setting)
                 else:
