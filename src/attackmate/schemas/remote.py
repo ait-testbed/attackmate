@@ -18,7 +18,6 @@ class AttackMateRemoteCommand(BaseCommand):
     user: str
     password: str
     playbook_yaml_content: Optional[str] = None
-    playbook_file_path: Optional[str] = None
     remote_command: Optional[RemotelyExecutableCommand] = None
 
     # Common command parameters (like background, only_if) from BaseCommand
