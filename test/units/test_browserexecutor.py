@@ -1,8 +1,25 @@
 import pytest
 from pydantic import ValidationError
 from unittest.mock import patch, MagicMock
+from urllib.parse import quote
 from attackmate.executors.browser.sessionstore import BrowserSessionStore, SessionThread
 from attackmate.executors.browser.browserexecutor import BrowserExecutor, BrowserCommand
+
+
+# Minimal, stable inline HTML (no network needed)
+HTML_SIMPLE = "<h1>Hello World</h1>"
+HTML_WITH_LINK = """
+                 <!doctype html>
+                 <html>
+                   <body>
+                     <a id="test-link" href="#next">go</a>
+                     <button id="test-button">Click</button>
+                   </body>
+                 </html>
+                 """
+
+DATA_URL_SIMPLE = "data:text/html," + quote(HTML_SIMPLE)
+DATA_URL_WITH_LINK = "data:text/html," + quote(HTML_WITH_LINK)
 
 
 @pytest.fixture
@@ -89,7 +106,7 @@ def test_session_thread_lifecycle(mock_playwright):
     thread = SessionThread(session_name='test_session', headless=True)
 
     # Submit a command. This should go onto the queue, be processed, and return 'OK'
-    result = thread.submit_command('visit', url='http://example.org')
+    result = thread.submit_command('visit', url=DATA_URL_SIMPLE)
     assert result == 'OK', "Expected the visit command to return 'OK'"
 
     # Stop the thread
@@ -149,7 +166,7 @@ def test_browser_executor_ephemeral_session(browser_executor):
     command = BrowserCommand(
         type='browser',
         cmd='visit',
-        url='http://example.org',
+        url=DATA_URL_SIMPLE,
         headless=True
     )
     result = browser_executor._exec_cmd(command)
@@ -164,7 +181,7 @@ def test_browser_executor_named_session(browser_executor):
     create_cmd = BrowserCommand(
         type='browser',
         cmd='visit',
-        url='http://example.org',
+        url=DATA_URL_WITH_LINK,
         creates_session='my_session',
         headless=True
     )
@@ -176,7 +193,7 @@ def test_browser_executor_named_session(browser_executor):
     reuse_cmd = BrowserCommand(
         type='browser',
         cmd='click',
-        selector='a[href="https://www.iana.org/domains/example"]',
+        selector='#test-link',  # matches the anchor in DATA_URL_WITH_LINK
         session='my_session'
     )
     result2 = browser_executor._exec_cmd(reuse_cmd)
@@ -207,7 +224,7 @@ def test_browser_executor_recreate_same_session(browser_executor):
     cmd1 = BrowserCommand(
         type='browser',
         cmd='visit',
-        url='http://example.org',
+        url=DATA_URL_SIMPLE,
         creates_session='my_session',
         headless=True
     )
@@ -217,7 +234,7 @@ def test_browser_executor_recreate_same_session(browser_executor):
     cmd2 = BrowserCommand(
         type='browser',
         cmd='visit',
-        url='http://example.com',
+        url=DATA_URL_WITH_LINK,
         creates_session='my_session',
         headless=True
     )
@@ -236,5 +253,5 @@ def test_browser_executor_unknown_command_validation():
         BrowserCommand(
             type='browser',
             cmd='zoom',  # invalid literal, should be one of [visit, click, type, screenshot]
-            url='http://example.org'
+            url=DATA_URL_SIMPLE
         )

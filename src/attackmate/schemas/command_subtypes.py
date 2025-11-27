@@ -1,22 +1,24 @@
-from attackmate.schemas.base import BaseCommand
-from pydantic import field_validator
-from attackmate.command import CommandRegistry
-from typing import Literal, Union, Optional, List
+from __future__ import annotations
+from typing import Annotated, TypeAlias, Union
+from pydantic import Field
+# Core Commands
 from .sleep import SleepCommand
 from .shell import ShellCommand
-from .vnc import VncCommand
 from .setvar import SetVarCommand
 from .include import IncludeCommand
-from .ssh import SSHCommand, SFTPCommand
+from .loop import LoopCommand
 from .http import WebServCommand, HttpClientCommand
 from .father import FatherCommand
 from .tempfile import TempfileCommand
 from .debug import DebugCommand
 from .regex import RegExCommand
+from .vnc import VncCommand
+from .json import JsonCommand
 from .browser import BrowserCommand
-
+from .ssh import SSHCommand, SFTPCommand
+# Metasploit Commands
 from .metasploit import MsfModuleCommand, MsfSessionCommand, MsfPayloadCommand
-
+# Sliver Commands
 from .sliver import (
     SliverSessionCDCommand,
     SliverSessionLSCommand,
@@ -33,9 +35,30 @@ from .sliver import (
     SliverGenerateCommand,
 )
 
+SliverSessionCommands: TypeAlias = Annotated[Union[
+    SliverSessionCDCommand,
+    SliverSessionLSCommand,
+    SliverSessionNETSTATCommand,
+    SliverSessionEXECCommand,
+    SliverSessionMKDIRCommand,
+    SliverSessionSimpleCommand,
+    SliverSessionDOWNLOADCommand,
+    SliverSessionUPLOADCommand,
+    SliverSessionPROCDUMPCommand,
+    SliverSessionRMCommand,
+    SliverSessionTERMINATECommand], Field(discriminator='cmd')]
 
-Commands = List[
+
+SliverCommands: TypeAlias = Annotated[Union[
+    SliverHttpsListenerCommand,
+    SliverGenerateCommand], Field(discriminator='cmd')]
+
+
+# This excludes the AttackMateRemoteCommand type
+RemotelyExecutableCommand: TypeAlias = Annotated[
     Union[
+        SliverSessionCommands,
+        SliverCommands,
         BrowserCommand,
         ShellCommand,
         MsfModuleCommand,
@@ -48,36 +71,13 @@ Commands = List[
         DebugCommand,
         SetVarCommand,
         RegExCommand,
-        VncCommand,
         TempfileCommand,
         IncludeCommand,
+        LoopCommand,
         WebServCommand,
         HttpClientCommand,
-        SliverSessionCDCommand,
-        SliverSessionLSCommand,
-        SliverSessionNETSTATCommand,
-        SliverSessionEXECCommand,
-        SliverSessionMKDIRCommand,
-        SliverSessionSimpleCommand,
-        SliverSessionDOWNLOADCommand,
-        SliverSessionUPLOADCommand,
-        SliverSessionPROCDUMPCommand,
-        SliverSessionRMCommand,
-        SliverSessionTERMINATECommand,
-        SliverHttpsListenerCommand,
-        SliverGenerateCommand,
-    ]
+        JsonCommand,
+        VncCommand,
+    ],
+    Field(discriminator='type'),
 ]
-
-
-@CommandRegistry.register('loop')
-class LoopCommand(BaseCommand):
-    @field_validator('background')
-    @classmethod
-    def bg_not_implemented_yet(cls, v):
-        raise ValueError('background mode is unsupported for this command')
-
-    type: Literal['loop']
-    cmd: str = 'loop condition'
-    commands: Commands
-    break_if: Optional[str] = None

@@ -14,9 +14,10 @@ import logging
 from attackmate.result import Result
 import attackmate.executors as executors
 from attackmate.schemas.config import CommandConfig, Config, MsfConfig, SliverConfig
-from attackmate.schemas.playbook import Playbook, Commands, Command
-from .variablestore import VariableStore
-from .processmanager import ProcessManager
+from attackmate.schemas.playbook import Playbook
+from attackmate.schemas.command_types import Commands, Command
+from attackmate.variablestore import VariableStore
+from attackmate.processmanager import ProcessManager
 from attackmate.executors.baseexecutor import BaseExecutor
 from attackmate.executors.executor_factory import executor_factory
 import asyncio

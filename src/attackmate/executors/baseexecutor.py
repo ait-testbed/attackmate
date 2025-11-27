@@ -3,6 +3,8 @@ import json
 from datetime import datetime
 from typing import Any
 from collections import OrderedDict
+
+from pydantic import BaseModel
 from attackmate.executors.features.cmdvars import CmdVars
 from attackmate.executors.features.exitonerror import ExitOnError
 from attackmate.executors.features.looper import Looper
@@ -79,6 +81,8 @@ class BaseExecutor(ExitOnError, CmdVars, Looper, Background):
         self.logger.debug(f"Template-Command: '{command.cmd}'")
         if command.background:
             # Background commands always return Result(None,None)
+            time_of_execution = datetime.now().isoformat()
+            self.log_json(self.json_logger, command, time_of_execution)
             result = self.exec_background(self.substitute_template_vars(command, self.substitute_cmd_vars))
         else:
             result = self.exec(self.substitute_template_vars(command, self.substitute_cmd_vars))
@@ -116,14 +120,15 @@ class BaseExecutor(ExitOnError, CmdVars, Looper, Background):
 
         command_dict['parameters'] = dict()
         for key, value in command.__dict__.items():
-            if key not in command_dict and key != 'commands':
+            if key not in command_dict and key != 'commands' and key != 'remote_command':
                 command_dict['parameters'][key] = value
             # Handle nested "commands" recursively
             if key == 'commands' and isinstance(value, list):
                 command_dict['parameters']['commands'] = [
                     self.make_command_serializable(sub_command, time) for sub_command in value
                 ]
-
+            if key == 'remote_command' and isinstance(value, BaseModel):
+                command_dict['parameters']['remote_command'] = self.make_command_serializable(value, time)
         return command_dict
 
     def save_output(self, command: BaseCommand, result: Result):

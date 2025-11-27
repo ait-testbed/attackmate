@@ -1,5 +1,6 @@
 from .browser.browserexecutor import BrowserExecutor
 from .shell.shellexecutor import ShellExecutor
+from .remote.remoteexecutor import RemoteExecutor
 from .ssh.sshexecutor import SSHExecutor
 from .metasploit.msfsessionexecutor import MsfSessionExecutor
 from .metasploit.msfpayloadexecutor import MsfPayloadExecutor
@@ -23,6 +24,7 @@ from .common.jsonexecutor import JsonExecutor
 
 
 __all__ = [
+    'RemoteExecutor'
     'BrowserExecutor',
     'ShellExecutor',
     'SSHExecutor',

@@ -92,3 +92,10 @@ It includes condition checking, logging, and calling the actual execution logic.
 **Output Handling**
 
 The ``save_output()`` function manages saving output to a file. It can be overridden to implement alternative storage methods.
+
+
+executor __init__.py
+--------------------
+.. note::
+
+    Add the new executor to the ``__all__`` list in the ``__init__.py`` file of the ``attackmate.executors`` module.

@@ -11,7 +11,7 @@ from attackmate.executors.baseexecutor import BaseExecutor
 from attackmate.executors.features.conditional import Conditional
 from attackmate.result import Result
 from attackmate.schemas.loop import LoopCommand
-from attackmate.schemas.playbook import Commands, Command
+from attackmate.schemas.command_types import Commands, Command
 from attackmate.variablestore import VariableStore
 from attackmate.execexception import ExecException
 from attackmate.processmanager import ProcessManager
