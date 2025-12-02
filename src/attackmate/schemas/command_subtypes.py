@@ -1,6 +1,7 @@
 from __future__ import annotations
-from typing import Annotated, TypeAlias, Union
-from pydantic import Field
+from typing import Annotated, TypeAlias, Union, Literal
+from typing_extensions import TypeAliasType
+from pydantic import Field, BaseModel
 # Core Commands
 from .sleep import SleepCommand
 from .shell import ShellCommand
@@ -35,7 +36,13 @@ from .sliver import (
     SliverGenerateCommand,
 )
 
-SliverSessionCommands: TypeAlias = Annotated[Union[
+
+#   Pydantic nested discrimanated unions apply the OUTER discriminator ('type') to the *nested* union member.
+#   https://docs.pydantic.dev/latest/concepts/unions/#nested-discriminated-unions
+#   i.e Look for 'sliver-session' tag first (Outer discriminator).
+#   If found, then look for the 'cmd' tag (Inner discriminator).
+SliverSessionCommands: TypeAliasType = Annotated[
+    Union[
     SliverSessionCDCommand,
     SliverSessionLSCommand,
     SliverSessionNETSTATCommand,
@@ -46,15 +53,20 @@ SliverSessionCommands: TypeAlias = Annotated[Union[
     SliverSessionUPLOADCommand,
     SliverSessionPROCDUMPCommand,
     SliverSessionRMCommand,
-    SliverSessionTERMINATECommand], Field(discriminator='cmd')]
+    SliverSessionTERMINATECommand
+],
+    Field(discriminator='cmd') # Inner discriminator (cmd)
+]
 
 
-SliverCommands: TypeAlias = Annotated[Union[
+SliverCommands: TypeAlias = Annotated[
+    Union[
     SliverHttpsListenerCommand,
-    SliverGenerateCommand], Field(discriminator='cmd')]
+    SliverGenerateCommand], 
+    Field(discriminator='cmd') # Inner discriminator (cmd)
+]
 
-
-# This excludes the AttackMateRemoteCommand type
+# This excludes the AttackMateRemoteCommand 
 RemotelyExecutableCommand: TypeAlias = Annotated[
     Union[
         SliverSessionCommands,
@@ -79,5 +91,6 @@ RemotelyExecutableCommand: TypeAlias = Annotated[
         JsonCommand,
         VncCommand,
     ],
-    Field(discriminator='type'),
+    Field(discriminator='type'), # Outer discriminator (type)
 ]
+
