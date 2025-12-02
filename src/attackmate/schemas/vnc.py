@@ -1,13 +1,14 @@
 from typing import Optional, Literal
 from .base import BaseCommand, StringNumber
 from pydantic import model_validator
+from attackmate.command import CommandRegistry
 
-
+@CommandRegistry.register('vnc')
 class VncCommand(BaseCommand):
 
     type: Literal['vnc']
     cmd: Literal['key', 'type', 'move', 'capture', 'click', 'rightclick', 'expectscreen', 'close']
-    hostname: Optional[str] = None
+    hostname: Optional[str] = None 
     port: Optional[StringNumber] = None
     display: Optional[StringNumber] = None
     password: Optional[str] = None
