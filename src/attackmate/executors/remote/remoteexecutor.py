@@ -3,8 +3,7 @@ import json
 from typing import Dict, Any, Optional
 
 from attackmate.executors.executor_factory import executor_factory
-
-from attackmate.remote_client import RemoteAttackMateClient
+from attackmate_client import RemoteAttackMateClient
 from attackmate.result import Result
 from attackmate.execexception import ExecException
 from attackmate.schemas.remote import AttackMateRemoteCommand
