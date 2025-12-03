@@ -1,83 +1,44 @@
 from attackmate.command import CommandRegistry
 from attackmate.schemas.base import BaseCommand
 from typing import Literal, Optional, Dict, Any
-
-"""
-  BettercapGetCommand includes all API-GetCommands
-  that can be executed without any parameter.
-  for example: get_events()
-"""
+from pydantic import model_validator
 
 
-class BettercapGetCommand(BaseCommand):
-    type: Literal['bettercap']
-    connection: Optional[str] = None
-
-
-class BettercapGetWithMacCommand(BaseCommand):
+class BettercapCommand(BaseCommand):
+    cmd: Literal['get_events',
+                 'get_session_modules',
+                 'get_session_env',
+                 'get_session_gateway',
+                 'get_session_hid',
+                 'get_session_ble',
+                 'get_session_interface',
+                 'get_session_options',
+                 'get_session_lan',
+                 'get_session_packets',
+                 'get_session_started_at',
+                 'get_session_wifi',
+                 'delete_api_events',
+                 'get_file',
+                 'post_api_session']
     type: Literal['bettercap']
     connection: Optional[str] = None
     mac: Optional[str] = None
+    filename: Optional[str] = None
+    data: Optional[Dict[str, Any]] = None
 
+    @model_validator(mode='after')
+    def check_cmd_requirements(cls, values):
+        cmd = values.cmd
 
-@CommandRegistry.register('bettercap', 'get_events')
-class BettercapGetEventsCommand(BettercapGetCommand):
-    cmd: Literal['get_events']
+        if values.background:
+            raise ValueError('background mode is unsupported for VNC')
+        if cmd == 'post_api_session' and values.data is None:
+            raise ValueError('post_api_session requires the parameter data')
+        if cmd == 'get_file' and values.filename is None:
+            raise ValueError('get_file requires the parameter filename')
 
+        return values
 
-@CommandRegistry.register('bettercap', 'get_session_modules')
-class BettercapGetSessionModulesCommand(BettercapGetCommand):
-    cmd: Literal['get_session_modules']
-
-
-@CommandRegistry.register('bettercap', 'get_session_env')
-class BettercapGetSessionEnvCommand(BettercapGetCommand):
-    cmd: Literal['get_session_env']
-
-
-@CommandRegistry.register('bettercap', 'get_session_gateway')
-class BettercapGetSessionGatewayCommand(BettercapGetCommand):
-    cmd: Literal['get_session_gateway']
-
-
-@CommandRegistry.register('bettercap', 'get_session_hid')
-class BettercapGetSessionHidCommand(BettercapGetWithMacCommand):
-    cmd: Literal['get_session_hid']
-
-
-@CommandRegistry.register('bettercap', 'get_session_ble')
-class BettercapGetSessionBleCommand(BettercapGetWithMacCommand):
-    cmd: Literal['get_session_ble']
-
-
-@CommandRegistry.register('bettercap', 'get_session_interface')
-class BettercapGetSessionInterfaceCommand(BettercapGetCommand):
-    cmd: Literal['get_session_interface']
-
-
-@CommandRegistry.register('bettercap', 'get_session_lan')
-class BettercapGetSessionLanCommand(BettercapGetWithMacCommand):
-    cmd: Literal['get_session_lan']
-
-
-@CommandRegistry.register('bettercap', 'get_session_options')
-class BettercapGetSessionOptionsCommand(BettercapGetCommand):
-    cmd: Literal['get_session_options']
-
-
-@CommandRegistry.register('bettercap', 'get_session_packets')
-class BettercapGetSessionPacketsCommand(BettercapGetCommand):
-    cmd: Literal['get_session_packets']
-
-
-@CommandRegistry.register('bettercap', 'get_session_started_at')
-class BettercapGetSessionStartedAtCommand(BettercapGetCommand):
-    cmd: Literal['get_session_started_at']
-
-
-@CommandRegistry.register('bettercap', 'get_session_wifi')
-class BettercapGetSessionWifiCommand(BettercapGetWithMacCommand):
-    cmd: Literal['get_session_wifi']
 
 
 """
@@ -86,24 +47,18 @@ class BettercapGetSessionWifiCommand(BettercapGetWithMacCommand):
 """
 
 
-@CommandRegistry.register('bettercap', 'get_file')
-class BettercapGetFileCommand(BaseCommand):
-    cmd: Literal['get_file']
-    type: Literal['bettercap']
-    filename: str
-    connection: Optional[str] = None
+# @CommandRegistry.register('bettercap', 'get_file')
+# class BettercapGetFileCommand(BaseCommand):
+#     cmd: Literal['get_file']
+#     type: Literal['bettercap']
+#     filename: str
+#     connection: Optional[str] = None
+# 
+# 
+# @CommandRegistry.register('bettercap', 'post_api_session')
+# class BettercapPostApiSessionCommand(BaseCommand):
+#     cmd: Literal['post_api_session']
+#     type: Literal['bettercap']
+#     data: Optional[Dict[str, Any]] = None
+#     connection: Optional[str] = None
 
-
-@CommandRegistry.register('bettercap', 'post_api_session')
-class BettercapPostApiSessionCommand(BaseCommand):
-    cmd: Literal['post_api_session']
-    type: Literal['bettercap']
-    data: Optional[Dict[str, Any]] = None
-    connection: Optional[str] = None
-
-
-@CommandRegistry.register('bettercap', 'delete_api_events')
-class BettercapDeleteApiEventsCommand(BaseCommand):
-    cmd: Literal['delete_api_events']
-    type: Literal['bettercap']
-    connection: Optional[str] = None

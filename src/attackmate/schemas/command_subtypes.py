@@ -16,6 +16,8 @@ from .vnc import VncCommand
 from .json import JsonCommand
 from .browser import BrowserCommand
 from .ssh import SSHCommand, SFTPCommand
+# Bettercap Commands
+from .bettercap import BettercapCommand
 # Metasploit Commands
 from .metasploit import MsfModuleCommand, MsfSessionCommand, MsfPayloadCommand
 # Sliver Commands
@@ -78,6 +80,7 @@ RemotelyExecutableCommand: TypeAlias = Annotated[
         HttpClientCommand,
         JsonCommand,
         VncCommand,
+        BettercapCommand,
     ],
     Field(discriminator='type'),
 ]

@@ -5,10 +5,7 @@ from attackmate.schemas.base import BaseCommand
 from attackmate.schemas.config import BettercapConfig
 from attackmate.result import Result
 from attackmate.execexception import ExecException
-from attackmate.schemas.bettercap import (BettercapDeleteApiEventsCommand,
-                                          BettercapGetCommand,
-                                          BettercapGetFileCommand, BettercapGetWithMacCommand,
-                                          BettercapPostApiSessionCommand)
+from attackmate.schemas.bettercap import BettercapCommand
 from attackmate.executors.baseexecutor import BaseExecutor
 from attackmate.executors.bettercap.client import Client
 
@@ -30,11 +27,7 @@ class BettercapExecutor(BaseExecutor):
         self.client = Client('http://127.0.0.1:8081')
         self.client.user_agent('AttackMate')
 
-    def setup_connection(self, command: (BettercapGetCommand |
-                                         BettercapGetWithMacCommand |
-                                         BettercapGetFileCommand |
-                                         BettercapPostApiSessionCommand |
-                                         BettercapDeleteApiEventsCommand)) -> None:
+    def setup_connection(self, command: BettercapCommand) -> None:
         if self.bettercap_config is None:
             raise ExecException('Bettercap config is missing')
         if not isinstance(self.bettercap_config, dict):
@@ -62,25 +55,19 @@ class BettercapExecutor(BaseExecutor):
 
     def _exec_cmd(self, command: BaseCommand) -> Result:
         try:
-            if not isinstance(command, (BettercapGetCommand,
-                              BettercapGetFileCommand,
-                              BettercapGetWithMacCommand,
-                              BettercapPostApiSessionCommand,
-                              BettercapDeleteApiEventsCommand)):
+            if not isinstance(command, BettercapCommand):
                 raise ExecException('Wrong command-type')
             self.setup_connection(command)
-            if isinstance(command, BettercapGetWithMacCommand):
+            if command.cmd  in ['get_session_hid', 'get_session_ble', 'get_session_lan', 'get_session_wifi']:
                 (code, headers, result) = getattr(self.client, command.cmd)(command.mac)
-            elif isinstance(command, BettercapGetCommand):
-                (code, headers, result) = getattr(self.client, command.cmd)()
-            elif command.cmd == 'get_file' and isinstance(command, BettercapGetFileCommand):
+            elif command.cmd == 'get_file':
                 (code, headers, result) = self.client.get_file(command.filename)
-            elif command.cmd == 'post_api_session' and isinstance(command, BettercapPostApiSessionCommand):
+            elif command.cmd == 'post_api_session':
                 (code, headers, result) = self.client.post_api_session(command.data)
-            elif command.cmd == 'delete_api_events' and isinstance(command, BettercapDeleteApiEventsCommand):
+            elif command.cmd == 'delete_api_events':
                 (code, headers, result) = self.client.delete_api_events()
             else:
-                raise ExecException('Bettercap Command unknown or faulty Command-config')
+                (code, headers, result) = getattr(self.client, command.cmd)()
 
             self.logger.debug(headers)
             if code == 200:
