@@ -8,6 +8,7 @@ class SessionThread(threading.Thread):
     A dedicated thread that manages a single Playwright browser session (browser, context, page).
     All commands for this session are queued to make sure they run synchronously in this thread.
     """
+
     def __init__(self, session_name=None, headless=False):
         super().__init__()
         self.session_name = session_name
@@ -100,7 +101,7 @@ class SessionThread(threading.Thread):
             screenshot_path = kwargs['screenshot_path']
             self.page.screenshot(path=screenshot_path)
         else:
-            raise ValueError(f"Unknown command: {cmd_name}")
+            raise ValueError(f'Unknown command: {cmd_name}')
 
         return 'OK'
 
@@ -129,6 +130,7 @@ class BrowserSessionStore:
     """
     Manages named sessions. Each named session has its own SessionThread.
     """
+
     def __init__(self):
         self.sessions = {}
         self.lock = threading.Lock()

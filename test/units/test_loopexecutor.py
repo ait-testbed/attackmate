@@ -73,9 +73,13 @@ class TestLoopExecutor:
     def test_break_if_with_range(self, caplog_setup, loop_executor):
         caplog = caplog_setup
         lc = LoopCommand(
-            type='loop', cmd='range(1,5)', break_if='$LOOP_INDEX =~ 2',
-            commands=[DebugCommand(cmd='$LOOP_INDEX', type='debug')]
-        )
+            type='loop',
+            cmd='range(1,5)',
+            break_if='$LOOP_INDEX =~ 2',
+            commands=[
+                DebugCommand(
+                    cmd='$LOOP_INDEX',
+                    type='debug')])
         loop_executor.run(lc)
         assert 'Debug: \'1\'' in [rec.message for rec in caplog.records]
         assert 'Debug: \'2\'' not in [rec.message for rec in caplog.records]
