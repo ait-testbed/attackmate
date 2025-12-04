@@ -1,6 +1,4 @@
-from .browser.browserexecutor import BrowserExecutor
 from .shell.shellexecutor import ShellExecutor
-from .remote.remoteexecutor import RemoteExecutor
 from .ssh.sshexecutor import SSHExecutor
 from .metasploit.msfsessionexecutor import MsfSessionExecutor
 from .metasploit.msfpayloadexecutor import MsfPayloadExecutor
@@ -12,6 +10,7 @@ from .father.fatherexecutor import FatherExecutor
 from .http.webservexecutor import WebServExecutor
 from .http.httpclientexecutor import HttpClientExecutor
 from .vnc.vncexecutor import VncExecutor
+from .bettercap.bettercapexecutor import BettercapExecutor
 from .common.setvarexecutor import SetVarExecutor
 from .common.sleepexecutor import SleepExecutor
 from .common.tempfileexecutor import TempfileExecutor
@@ -45,4 +44,5 @@ __all__ = [
     'VncExecutor',
     'LoopExecutor',
     'JsonExecutor',
+    'BettercapExecutor',
 ]
