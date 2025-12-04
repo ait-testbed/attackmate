@@ -291,7 +291,7 @@ class SliverSessionExecutor(BaseExecutor):
                     await self.client.kill_beacon(beacon.ID)
             except Exception as e:
                 self.logger.error(f'Error cleaning up sliver sessions: {e}')
-                
+
     def _exec_cmd(self, command: SliverSessionCommand) -> Result:
         loop = asyncio.get_event_loop()
 

@@ -53,3 +53,6 @@ where = ["src"]
 
 [tool.setuptools.dynamic]
 version = {attr = "attackmate.metadata.__version__"}
+
+[tool.mypy]
+explicit_package_bases = true

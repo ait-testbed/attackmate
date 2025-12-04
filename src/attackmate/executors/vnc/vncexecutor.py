@@ -46,9 +46,9 @@ class VncExecutor(BaseExecutor):
             raise ExecException('Hostname is required for VNC connection.')
         connection_str = hostname
         if display is not None:
-            connection_str += f":{display}"
+            connection_str += f':{display}'
         elif port is not None:
-            connection_str += f"::{port}"
+            connection_str += f'::{port}'
         return connection_str
 
     def connect(self, command: VncCommand) -> api.ThreadedVNCClientProxy:
@@ -64,10 +64,10 @@ class VncExecutor(BaseExecutor):
         start_time = time.time()
         while time.time() - start_time < self.connection_timeout:
             if client and client.protocol and client.protocol.connected:
-                self.logger.info(f"Connected to VNC server: {connection_string}")
+                self.logger.info(f'Connected to VNC server: {connection_string}')
                 return client
             time.sleep(0.1)  # Poll every 100ms for connection status
-        self.logger.info(f"Could not connect to VNC server: {connection_string}")
+        self.logger.info(f'Could not connect to VNC server: {connection_string}')
         client.disconnect()
         return None
 
@@ -85,7 +85,7 @@ class VncExecutor(BaseExecutor):
             # If 'session' is specified, check if it exists, else raise an error
             if not self.session_store.has_session(command.session):
                 raise ExecException(
-                    f"VNC-Session not in Session-Store: {command.session}"
+                    f'VNC-Session not in Session-Store: {command.session}'
                 )
             else:
                 return self.session_store.get_client_by_session(command.session)
@@ -135,16 +135,16 @@ class VncExecutor(BaseExecutor):
                 action()
 
             else:
-                raise ExecException(f"Unknown VNC command: {command.cmd}")
+                raise ExecException(f'Unknown VNC command: {command.cmd}')
 
         except TimeoutError:
             self.cleanup()
             raise ExecException(
-                f"VNC Timeout Error after {command.expect_timeout} seconds"
+                f'VNC Timeout Error after {command.expect_timeout} seconds'
             )
 
         except (ValueError, AttributeError, AuthenticationError, OSError) as e:
-            raise ExecException(f"VNC Execution Error: {e}")
+            raise ExecException(f'VNC Execution Error: {e}')
 
         output = 'vnc_connected'
         return Result(output, 0)
@@ -156,7 +156,7 @@ class VncExecutor(BaseExecutor):
             if client:
                 try:
                     self.logger.info(
-                        f"Closing VNC connection for session: {session_name}"
+                        f'Closing VNC connection for session: {session_name}'
                     )
                     client.disconnect()
                     api.shutdown()
@@ -168,7 +168,7 @@ class VncExecutor(BaseExecutor):
                     self.logger.error(
                         f"Error closing VNC session '{session_name}': {str(e)}"
                     )
-                    raise ExecException(f"Error closing VNC connection: {e}")
+                    raise ExecException(f'Error closing VNC connection: {e}')
         else:
             self.logger.warning(
                 f"VNC session '{session_name}' not found in session store."

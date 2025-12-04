@@ -10,18 +10,18 @@ __maintainer__ = 'Wolfgang Hotwagner, Max Landauer, Markus Wurzenberger, Florian
 __status__ = 'Production'
 __version__ = '0.6.0'
 __version_string__ = (
-        f'(Austrian Institute of Technology)\t'
-        f'{__website__}\tVersion: {__version__}')
+    f'(Austrian Institute of Technology)\t'
+    f'{__website__}\tVersion: {__version__}')
 __all__ = [
-        '__authors__',
-        '__contact__',
-        '__copyright__',
-        '__date__',
-        '__deprecated__',
-        '__email__',
-        '__website__',
-        '__license__',
-        '__maintainer__',
-        '__status__',
-        '__version__',
-        '__version_string__']
+    '__authors__',
+    '__contact__',
+    '__copyright__',
+    '__date__',
+    '__deprecated__',
+    '__email__',
+    '__website__',
+    '__license__',
+    '__maintainer__',
+    '__status__',
+    '__version__',
+    '__version_string__']

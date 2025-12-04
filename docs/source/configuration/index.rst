@@ -15,6 +15,7 @@ The optional configuration-file is in yaml-format and is divided into three sect
 
 * **cmd_config**: defines settings for all commands
 * **msf_config**: connection settings for the msfrpcd
+* **bettercap_config**: connection settings for the bettercap rest-api
 * **sliver_config**: connection settings for the sliver-api
 
 The following configuration file is an example for a basic configuration with
@@ -26,6 +27,12 @@ sliver and metasploit:
    cmd_config:
      loop_sleep: 5
      command_delay: 0
+
+   bettercap_config:
+     default:
+       url: "http://localhost:8081"
+       username: user
+       password: password
 
    msf_config:
      password: securepassword
@@ -41,5 +48,6 @@ For detailed information about the config sections see:
 
    config_vars
    command_config
+   bettercap_config
    msf_config
    sliver_config

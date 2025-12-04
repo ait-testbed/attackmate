@@ -7,7 +7,7 @@ from attackmate.executors.browser.browserexecutor import BrowserExecutor, Browse
 
 
 # Minimal, stable inline HTML (no network needed)
-HTML_SIMPLE = "<h1>Hello World</h1>"
+HTML_SIMPLE = '<h1>Hello World</h1>'
 HTML_WITH_LINK = """
                  <!doctype html>
                  <html>
@@ -18,8 +18,8 @@ HTML_WITH_LINK = """
                  </html>
                  """
 
-DATA_URL_SIMPLE = "data:text/html," + quote(HTML_SIMPLE)
-DATA_URL_WITH_LINK = "data:text/html," + quote(HTML_WITH_LINK)
+DATA_URL_SIMPLE = 'data:text/html,' + quote(HTML_SIMPLE)
+DATA_URL_WITH_LINK = 'data:text/html,' + quote(HTML_WITH_LINK)
 
 
 @pytest.fixture

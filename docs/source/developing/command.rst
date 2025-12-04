@@ -4,14 +4,14 @@
 Adding a New Command
 ======================
 
-AttackMate supports extending its functionality by adding new commands. 
+AttackMate supports extending its functionality by adding new commands.
 This section details the steps required to integrate a new command.
 
 
 1. Define the Command Schema
 =============================
 
-All Commands in AttackMate inherit from ``BaseCommand``.  
+All Commands in AttackMate inherit from ``BaseCommand``.
 To create a new command, define a class in `/src/attackmate/schemas` and register it using the ``@CommandRegistry.register('<command_type>')`` decorator.
 
 For example, to add a ``debug`` command:
@@ -21,7 +21,7 @@ For example, to add a ``debug`` command:
     from typing import Literal
     from .base import BaseCommand
     from attackmate.command import CommandRegistry
-    
+
     @CommandRegistry.register('debug')
     class DebugCommand(BaseCommand):
         type: Literal['debug']
@@ -30,7 +30,7 @@ For example, to add a ``debug`` command:
         wait_for_key: bool = False
         cmd: str = ''
 
-Registering the command in the ``CommandRegistry`` allows the command to be also instantiated dynamically using the ``Command.create()`` method and is essential to 
+Registering the command in the ``CommandRegistry`` allows the command to be also instantiated dynamically using the ``Command.create()`` method and is essential to
 make them usable in external python scripts.
 
 
@@ -53,16 +53,16 @@ The new command should be handled by an executor in `src/attackmate/executors`` 
 
 3. Ensure the Executor Handles the New Command
 ==============================================
- 
-The ``ExecutorFactory`` class manages and creates executor instances based on command types.  
+
+The ``ExecutorFactory`` class manages and creates executor instances based on command types.
 It maintains a registry (``_executors``) that maps command type strings to executor classes, allowing for dynamic execution of different command types.
-Executors are registered using the ``register_executor`` method, which provides a decorator to associate a command type with a class.  
+Executors are registered using the ``register_executor`` method, which provides a decorator to associate a command type with a class.
 When a command is executed, the ``create_executor`` method retrieves the corresponding executor class, filters the constructor arguments based on the class's signature, and then creates an instance.
 
-Accordingly, executors must be registered using the ``@executor_factory.register_executor('<command_type>')`` decorator. 
+Accordingly, executors must be registered using the ``@executor_factory.register_executor('<command_type>')`` decorator.
 
-If the new executor class requires additional initialization arguments, these must be added to the ``_get_executor_config`` method in ``attackmate.py``. 
-All configurations are always passed to the ``ExecutorFactory``.  
+If the new executor class requires additional initialization arguments, these must be added to the ``_get_executor_config`` method in ``attackmate.py``.
+All configurations are always passed to the ``ExecutorFactory``.
 The factory filters the provided configurations based on the class constructor signature, ensuring that only the required parameters are used.
 
 ::
@@ -93,7 +93,7 @@ Update the ``LoopCommand`` schema to include the new command.
             DebugCommand,  # Newly added command
             # ... other command classes ...
         ]
-    
+
 
 5. Modify playbook.py to Include the New Command
 =====================================================
@@ -116,10 +116,3 @@ Once these steps are completed, the new command will be fully integrated into At
 =====================
 
 Finally, update the documentation in `docs/source/playbook/commands` to include the new command.
-
-
-
-
-      
-
-

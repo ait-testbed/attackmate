@@ -1,0 +1,53 @@
+interactions:
+- request:
+    body: '{}'
+    headers:
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      authorization:
+      - Basic dXNlcjpwYXNz
+      connection:
+      - keep-alive
+      content-length:
+      - '2'
+      content-type:
+      - application/json
+      host:
+      - 127.0.0.1:8081
+      user-agent:
+      - AttackMate
+    method: GET
+    uri: http://127.0.0.1:8081/api/session/interface
+  response:
+    body:
+      string: '{"ipv4":"192.168.233.117","ipv6":"fe80::a00:27ff:fe97:29fb","mac":"08:00:27:97:29:fb","hostname":"enp0s3","alias":"","vendor":"PCS
+        Systemtechnik GmbH","first_seen":"2025-08-25T15:57:00.461199657Z","last_seen":"2025-08-25T15:57:00.461199657Z","meta":{"values":{}}}
+
+        '
+    headers:
+      Access-Control-Allow-Headers:
+      - Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization
+      Access-Control-Allow-Methods:
+      - POST, GET, OPTIONS, PUT, DELETE
+      Access-Control-Allow-Origin:
+      - '*'
+      Content-Length:
+      - '264'
+      Content-Type:
+      - application/json
+      Date:
+      - Mon, 25 Aug 2025 16:04:10 GMT
+      Referrer-Policy:
+      - same-origin
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - DENY
+      X-Xss-Protection:
+      - 1; mode=block
+    status:
+      code: 200
+      message: OK
+version: 1

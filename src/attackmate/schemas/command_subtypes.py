@@ -1,7 +1,6 @@
 from __future__ import annotations
-from typing import Annotated, TypeAlias, Union, Literal
-from typing_extensions import TypeAliasType
-from pydantic import Field, BaseModel
+from typing import Annotated, TypeAlias, Union
+from pydantic import Field
 # Core Commands
 from .sleep import SleepCommand
 from .shell import ShellCommand
@@ -17,6 +16,8 @@ from .vnc import VncCommand
 from .json import JsonCommand
 from .browser import BrowserCommand
 from .ssh import SSHCommand, SFTPCommand
+# Bettercap Commands
+from .bettercap import BettercapCommand
 # Metasploit Commands
 from .metasploit import MsfModuleCommand, MsfSessionCommand, MsfPayloadCommand
 # Sliver Commands
@@ -41,32 +42,32 @@ from .sliver import (
 #   https://docs.pydantic.dev/latest/concepts/unions/#nested-discriminated-unions
 #   i.e Look for 'sliver-session' tag first (Outer discriminator).
 #   If found, then look for the 'cmd' tag (Inner discriminator).
-SliverSessionCommands: TypeAliasType = Annotated[
+SliverSessionCommands: TypeAlias = Annotated[
     Union[
-    SliverSessionCDCommand,
-    SliverSessionLSCommand,
-    SliverSessionNETSTATCommand,
-    SliverSessionEXECCommand,
-    SliverSessionMKDIRCommand,
-    SliverSessionSimpleCommand,
-    SliverSessionDOWNLOADCommand,
-    SliverSessionUPLOADCommand,
-    SliverSessionPROCDUMPCommand,
-    SliverSessionRMCommand,
-    SliverSessionTERMINATECommand
-],
-    Field(discriminator='cmd') # Inner discriminator (cmd)
+        SliverSessionCDCommand,
+        SliverSessionLSCommand,
+        SliverSessionNETSTATCommand,
+        SliverSessionEXECCommand,
+        SliverSessionMKDIRCommand,
+        SliverSessionSimpleCommand,
+        SliverSessionDOWNLOADCommand,
+        SliverSessionUPLOADCommand,
+        SliverSessionPROCDUMPCommand,
+        SliverSessionRMCommand,
+        SliverSessionTERMINATECommand
+    ],
+    Field(discriminator='cmd')  # Inner discriminator (cmd)
 ]
 
 
 SliverCommands: TypeAlias = Annotated[
     Union[
-    SliverHttpsListenerCommand,
-    SliverGenerateCommand], 
-    Field(discriminator='cmd') # Inner discriminator (cmd)
+        SliverHttpsListenerCommand,
+        SliverGenerateCommand],
+    Field(discriminator='cmd')  # Inner discriminator (cmd)
 ]
 
-# This excludes the AttackMateRemoteCommand 
+# This excludes the AttackMateRemoteCommand
 RemotelyExecutableCommand: TypeAlias = Annotated[
     Union[
         SliverSessionCommands,
@@ -90,7 +91,7 @@ RemotelyExecutableCommand: TypeAlias = Annotated[
         HttpClientCommand,
         JsonCommand,
         VncCommand,
+        BettercapCommand,
     ],
-    Field(discriminator='type'), # Outer discriminator (type)
+    Field(discriminator='type'),  # Outer discriminator (type)
 ]
-

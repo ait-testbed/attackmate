@@ -11,8 +11,6 @@ class ListParseException(Exception):
     goes wrong.
     """
 
-    pass
-
 
 class VariableNotFound(Exception):
     """Exception for all List-Parser
@@ -20,8 +18,6 @@ class VariableNotFound(Exception):
     This exception is raised by get_variable if the
     variable does not exist in the variablestore.
     """
-
-    pass
 
 
 class ListTemplate(Template):
@@ -127,7 +123,7 @@ class VariableStore:
             return data
 
     def get_prefixed_env_vars(self, prefix: str = 'ATTACKMATE_') -> dict[str, str]:
-        prefixed_env_vars = {k[len(prefix) :]: v for k, v in os.environ.items() if k.startswith(prefix)}
+        prefixed_env_vars = {k[len(prefix):]: v for k, v in os.environ.items() if k.startswith(prefix)}
         return prefixed_env_vars
 
     def replace_with_prefixed_env_vars(self):
