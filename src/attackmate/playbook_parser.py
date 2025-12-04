@@ -119,7 +119,7 @@ def parse_playbook(playbook_file: str, logger: logging.Logger) -> Playbook:
         else:
             logger.error(
                 "Error: Playbook file not found under '/non/existent/path/playbook.yml'"
-                + 'or in the current directory or in /etc/attackmate/playbooks'
+                + ' or in the current directory or in /etc/attackmate/playbooks'
             )
             exit(1)
 
