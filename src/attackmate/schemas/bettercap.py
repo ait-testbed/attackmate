@@ -30,7 +30,7 @@ class BettercapCommand(BaseCommand):
         cmd = values.cmd
 
         if values.background:
-            raise ValueError('background mode is unsupported for VNC')
+            raise ValueError('background mode is unsupported for bettercap commands')
         if cmd == 'post_api_session' and values.data is None:
             raise ValueError('post_api_session requires the parameter data')
         if cmd == 'get_file' and values.filename is None:
