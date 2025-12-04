@@ -36,11 +36,11 @@ class CmdVars:
         for attr_name in command.list_template_vars():
 
             # Skip variable substitution for "cmd"
-            if attr_name == 'cmd'  and not substitute_cmd_vars:
-                continue 
+            if attr_name == 'cmd' and not substitute_cmd_vars:
+                continue
 
-            if attr_name == "break_if":
-                continue 
+            if attr_name == 'break_if':
+                continue
 
             attr_value = getattr(command, attr_name)
 

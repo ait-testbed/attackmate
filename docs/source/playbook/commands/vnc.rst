@@ -151,8 +151,3 @@ Execute commands on a remote server via VNC. Uses the `vncdotool <https://github
 .. note::
 
    The vnc connection needs to be closed with the command ``close`` explicitely, otherwise attackmate will keep running.
-
-
-
-
-

@@ -6,9 +6,9 @@ from attackmate.schemas.remote import AttackMateRemoteCommand
 
 
 Command: TypeAlias = Union[
-        RemotelyExecutableCommand,
-        AttackMateRemoteCommand
-    ]
+    RemotelyExecutableCommand,
+    AttackMateRemoteCommand
+]
 
 
-Commands:  TypeAlias = List[Command]
+Commands: TypeAlias = List[Command]

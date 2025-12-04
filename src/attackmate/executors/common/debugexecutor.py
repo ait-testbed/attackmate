@@ -22,7 +22,7 @@ class DebugExecutor(BaseExecutor):
         self.setoutputvars = False
         ret = 0
         if command.wait_for_key:
-            self.logger.warning("Type enter to continue")
+            self.logger.warning('Type enter to continue')
             input()
         if command.exit:
             ret = 1

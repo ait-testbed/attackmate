@@ -32,7 +32,7 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
 
 def get_user_hash(username: str) -> Optional[str]:
     """Fetches the hashed password from environment variables."""
-    env_var_name = f"USER_{username.upper()}_HASH"
+    env_var_name = f'USER_{username.upper()}_HASH'
     return os.getenv(env_var_name)
 
 
@@ -84,7 +84,7 @@ async def get_current_user(token: str = Depends(api_key_header_scheme)) -> str:
 
     token_data = ACTIVE_TOKENS.get(token)
     if not token_data:
-        logger.warning(f"Token not found: {token[:5]}...")
+        logger.warning(f'Token not found: {token[:5]}...')
         raise credentials_exception
 
     username: str = token_data['username']
@@ -99,5 +99,5 @@ async def get_current_user(token: str = Depends(api_key_header_scheme)) -> str:
 
     renew_token_expiry(token)
 
-    logger.debug(f"Token validated successfully for user: {username}")
+    logger.debug(f'Token validated successfully for user: {username}')
     return username

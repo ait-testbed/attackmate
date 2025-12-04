@@ -36,7 +36,7 @@ def save_token(token: Optional[str]):
     if token:
         # This is pretty hacky, client mainly for testing purposes
         logger.info('updating env var')
-        logger.info(f"run in your shell: export ATTACKMATE_API_TOKEN={token}")
+        logger.info(f'run in your shell: export ATTACKMATE_API_TOKEN={token}')
     else:
         os.environ.pop(TOKEN_ENV_VAR, None)
 
@@ -67,14 +67,14 @@ def parse_key_value_pairs(items: List[str] | None) -> Dict[str, str]:
             key, value = item.split('=', 1)
             result[key.strip()] = value.strip()
         else:
-            logging.warning(f"Skipping malformed pair: {item}")
+            logging.warning(f'Skipping malformed pair: {item}')
     return result
 
 
 # Login
 def login(client: httpx.Client, base_url: str, username: str, password: str):
     """Logs in and saves the token."""
-    url = f"{base_url}/login"
+    url = f'{base_url}/login'
     logger.info(f"Attempting login for user '{username}' at {url}...")
     try:
         # standard form encoding for OAuth2PasswordRequestForm -> expected bei Fastapi
@@ -84,46 +84,46 @@ def login(client: httpx.Client, base_url: str, username: str, password: str):
         token = data.get('access_token')
         if token:
             save_token(token)  # workaround, export to env var in shell
-            print(f"Login successful. Token received: {token[:5]}...")
+            print(f'Login successful. Token received: {token[:5]}...')
         else:
             logger.error(' No access token received in response.')
             sys.exit(1)
     except httpx.RequestError as e:
-        logger.error(f"HTTP Request Error during login: {e}")
+        logger.error(f'HTTP Request Error during login: {e}')
         sys.exit(1)
     except httpx.HTTPStatusError as e:
-        logger.error(f"Login failed: {e.response.status_code}")
+        logger.error(f'Login failed: {e.response.status_code}')
         sys.exit(1)
     except Exception as e:
-        logger.error(f"Unexpected error during login: {e}", exc_info=True)
+        logger.error(f'Unexpected error during login: {e}', exc_info=True)
         sys.exit(1)
 
 
 def get_instance_state_from_server(client: httpx.Client, base_url: str, instance_id: str):
     """Requests the state of a specific instance."""
-    url = f"{base_url}/instances/{instance_id}/state"
-    logger.info(f"Requesting state for instance {instance_id} at {url}...")
+    url = f'{base_url}/instances/{instance_id}/state'
+    logger.info(f'Requesting state for instance {instance_id} at {url}...')
     try:
         response = client.get(url, headers=get_auth_headers())
         response.raise_for_status()
         data = response.json()
         update_token_from_response(data)
-        print(f"\n State for Instance {instance_id} ")
+        print(f'\n State for Instance {instance_id} ')
         print(yaml.dump(data.get('variables', {}), indent=2))
     except httpx.RequestError as e:
-        logger.error(f"HTTP Request Error getting state: {e}")
+        logger.error(f'HTTP Request Error getting state: {e}')
     except httpx.HTTPStatusError as e:
-        logger.error(f"HTTP Status Error getting state: {e.response.status_code} - {e.response.text}")
+        logger.error(f'HTTP Status Error getting state: {e.response.status_code} - {e.response.text}')
     except Exception as e:
-        logger.error(f"Unexpected error getting state: {e}", exc_info=True)
+        logger.error(f'Unexpected error getting state: {e}', exc_info=True)
 
 
 def run_playbook_yaml(
     client: httpx.Client, base_url: str, playbook_file: str, debug: bool = False
 ):
     """Sends playbook YAML content to the server."""
-    url = f"{base_url}/playbooks/execute/yaml"
-    logger.info(f"Attempting to execute playbook from local file: {playbook_file}")
+    url = f'{base_url}/playbooks/execute/yaml'
+    logger.info(f'Attempting to execute playbook from local file: {playbook_file}')
     try:
         with open(playbook_file, 'r') as f:
             playbook_yaml_content = f.read()
@@ -147,13 +147,13 @@ def run_playbook_yaml(
         if not data.get('success'):
             sys.exit(1)
     except httpx.RequestError as e:
-        logger.error(f"HTTP Request Error executing playbook YAML: {e}")
+        logger.error(f'HTTP Request Error executing playbook YAML: {e}')
         sys.exit(1)
     except httpx.HTTPStatusError as e:
-        logger.error(f"HTTP Status Error (YAML): {e.response.status_code} - {e.response.text}")
+        logger.error(f'HTTP Status Error (YAML): {e.response.status_code} - {e.response.text}')
         sys.exit(1)
     except Exception as e:
-        logger.error(f"Unexpected error (YAML): {e}", exc_info=True)
+        logger.error(f'Unexpected error (YAML): {e}', exc_info=True)
         sys.exit(1)
 
 
@@ -164,8 +164,8 @@ def run_playbook_file(
     debug: bool = False
 ):
     """Requests server to execute a playbook from local path."""
-    url = f"{base_url}/playbooks/execute/file"
-    logger.info(f"Requesting server execute playbook file: {playbook_file_path_on_server}")
+    url = f'{base_url}/playbooks/execute/file'
+    logger.info(f'Requesting server execute playbook file: {playbook_file_path_on_server}')
     payload = {'file_path': playbook_file_path_on_server}
     try:
         params = {'debug': True} if debug else {}
@@ -183,13 +183,13 @@ def run_playbook_file(
         if not data.get('success'):
             sys.exit(1)
     except httpx.RequestError as e:
-        logger.error(f"HTTP Request Error executing playbook file: {e}")
+        logger.error(f'HTTP Request Error executing playbook file: {e}')
         sys.exit(1)
     except httpx.HTTPStatusError as e:
-        logger.error(f"HTTP Status Error (File): {e.response.status_code} - {e.response.text}")
+        logger.error(f'HTTP Status Error (File): {e.response.status_code} - {e.response.text}')
         sys.exit(1)
     except Exception as e:
-        logger.error(f"Unexpected error (File): {e}", exc_info=True)
+        logger.error(f'Unexpected error (File): {e}', exc_info=True)
         sys.exit(1)
 
 
@@ -219,14 +219,14 @@ def run_command(client: httpx.Client, base_url: str, args):
                 body_dict[pydantic_field_name] = arg_value
 
     try:
-        logger.debug(f"Sending POST to {url}")
-        logger.debug(f"Request Body: {json.dumps(body_dict, indent=2)}")
+        logger.debug(f'Sending POST to {url}')
+        logger.debug(f'Request Body: {json.dumps(body_dict, indent=2)}')
         response = client.post(url, json=body_dict, headers=get_auth_headers())
         response.raise_for_status()
         data = response.json()
         update_token_from_response(data)
-        logger.info(f"Received response from /{type} endpoint.")
-        logger.debug(f"Response data: {data}")
+        logger.info(f'Received response from /{type} endpoint.')
+        logger.debug(f'Response data: {data}')
 
         result = data.get('result', {})
         state = data.get('state', {}).get('variables', {})
@@ -246,13 +246,13 @@ def run_command(client: httpx.Client, base_url: str, args):
             sys.exit(1)
 
     except httpx.RequestError as e:
-        logger.error(f"HTTP Request Error executing command: {e}")
+        logger.error(f'HTTP Request Error executing command: {e}')
         sys.exit(1)
     except httpx.HTTPStatusError as e:
-        logger.error(f"HTTP Status Error ({url}): {e.response.status_code} - {e.response.text}")
+        logger.error(f'HTTP Status Error ({url}): {e.response.status_code} - {e.response.text}')
         sys.exit(1)
     except Exception as e:
-        logger.error(f"Unexpected error executing command: {e}", exc_info=True)
+        logger.error(f'Unexpected error executing command: {e}', exc_info=True)
         sys.exit(1)
 
 
@@ -362,9 +362,9 @@ def main():
     if args.cacert:
         cert_path = os.path.abspath(args.cacert)  # Ensure absolute path
         if os.path.exists(cert_path):
-            logger.info(f"Configured httpx to verify using CA cert: {cert_path}")
+            logger.info(f'Configured httpx to verify using CA cert: {cert_path}')
         else:
-            logger.error(f"CA certificate file not found at specified path: {cert_path}")
+            logger.error(f'CA certificate file not found at specified path: {cert_path}')
             sys.exit(1)
 
     #  Create HTTP Client
@@ -388,12 +388,12 @@ def main():
                     sys.exit(1)
         except httpx.ConnectError as e:
             logger.error(
-                f"Connection Error: Could not connect to {args.base_url}. "
-                f"Is the server running with HTTPS? Did you provide cert? Details: {e}"
+                f'Connection Error: Could not connect to {args.base_url}. '
+                f'Is the server running with HTTPS? Did you provide cert? Details: {e}'
             )
             sys.exit(1)
         except Exception as main_err:
-            logger.error(f"Client execution failed: {main_err}", exc_info=True)
+            logger.error(f'Client execution failed: {main_err}', exc_info=True)
             sys.exit(1)
 
     logger.info('Client finished.')

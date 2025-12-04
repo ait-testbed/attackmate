@@ -31,7 +31,7 @@ def read_log_file(log_path: Optional[str]) -> Optional[str]:
             return f.read()
     except Exception as e:
         logger.error(f"Failed to read log file '{log_path}': {e}")
-        return f"Error reading log file: {e}"
+        return f'Error reading log file: {e}'
 
 # Playbook Execution
 
@@ -42,8 +42,8 @@ async def execute_playbook_from_yaml(playbook_yaml: str = Body(..., media_type='
                                          False,
                                          description="Enable debug logging for this request's instance log."
 ),
-                                     current_user: str = Depends(get_current_user),
-                                     x_auth_token: Optional[str] = Header(None, alias=API_KEY_HEADER_NAME)):
+        current_user: str = Depends(get_current_user),
+        x_auth_token: Optional[str] = Header(None, alias=API_KEY_HEADER_NAME)):
     """
     Executes a playbook provided as YAML content in the request body.
     Use a transient AttackMate instance.
@@ -58,20 +58,20 @@ async def execute_playbook_from_yaml(playbook_yaml: str = Body(..., media_type='
             if not playbook_dict:
                 raise ValueError('Received empty or invalid playbook YAML content.')
             playbook = Playbook.model_validate(playbook_dict)
-            logger.info(f"Creating transient AttackMate instance, ID: {instance_id}")
+            logger.info(f'Creating transient AttackMate instance, ID: {instance_id}')
             am_instance = AttackMate(playbook=playbook, config=attackmate_config, varstore=None)
             return_code = am_instance.main()
             final_state = varstore_to_state_model(am_instance.varstore)
-            logger.info(f"Transient playbook execution finished. return code {return_code}")
+            logger.info(f'Transient playbook execution finished. return code {return_code}')
             attackmate_log = read_log_file(attackmate_log_path)
             output_log = read_log_file(output_log_path)
             json_log = read_log_file(json_log_path)
         except (yaml.YAMLError, ValidationError, ValueError) as e:
-            logger.error(f"Playbook validation/parsing error: {e}")
-            raise HTTPException(status_code=422, detail=f"Invalid playbook YAML: {e}")
+            logger.error(f'Playbook validation/parsing error: {e}')
+            raise HTTPException(status_code=422, detail=f'Invalid playbook YAML: {e}')
         except Exception as e:
-            logger.error(f"Unexpected error during playbook execution: {e}", exc_info=True)
-            raise HTTPException(status_code=500, detail=f"Server error during playbook execution: {e}")
+            logger.error(f'Unexpected error during playbook execution: {e}', exc_info=True)
+            raise HTTPException(status_code=500, detail=f'Server error during playbook execution: {e}')
         finally:
             if am_instance:
                 logger.info('Cleaning up transient playbook instance.')
@@ -79,7 +79,7 @@ async def execute_playbook_from_yaml(playbook_yaml: str = Body(..., media_type='
                     am_instance.clean_session_stores()
                     am_instance.pm.kill_or_wait_processes()
                 except Exception as cleanup_e:
-                    logger.error(f"Error cleaning transient instance: {cleanup_e}", exc_info=True)
+                    logger.error(f'Error cleaning transient instance: {cleanup_e}', exc_info=True)
 
     return PlaybookResponseModel(
         success=(return_code == 0),
@@ -100,7 +100,7 @@ async def execute_playbook_from_file(request_body: PlaybookFileRequest,
                                          description=(
                                              "Enable debug level logging for this request's instance log."
                                          )
-                                                    ),
+                                     ),
                                      current_user: str = Depends(get_current_user),
                                      x_auth_token: Optional[str] = Header(None, alias=API_KEY_HEADER_NAME)
                                      ):
@@ -109,7 +109,7 @@ async def execute_playbook_from_file(request_body: PlaybookFileRequest,
     Uses a transient AttackMate instance.
     """
     # TODO ensure this only executes playbooks in certain locations -> read up on path traversal
-    logger.info(f"Received request to execute playbook from file: {request_body.file_path}")
+    logger.info(f'Received request to execute playbook from file: {request_body.file_path}')
     try:
         # base directory exists
         if not os.path.isdir(ALLOWED_PLAYBOOK_DIR):
@@ -130,13 +130,13 @@ async def execute_playbook_from_file(request_body: PlaybookFileRequest,
 
             # Check if the file exists
         if not os.path.isfile(full_path):
-            raise FileNotFoundError(f"Playbook file not found atpath: {full_path}")
+            raise FileNotFoundError(f'Playbook file not found atpath: {full_path}')
 
     except (ValueError, FileNotFoundError) as e:
-        logger.error(f"Invalid or non-existent playbook path requested: {request_body.file_path} -> {e}")
-        raise HTTPException(status_code=400, detail=f"Invalid or non-existent playbook file path: {e}")
+        logger.error(f'Invalid or non-existent playbook path requested: {request_body.file_path} -> {e}')
+        raise HTTPException(status_code=400, detail=f'Invalid or non-existent playbook file path: {e}')
     except Exception as e:
-        logger.error(f"Error processing playbook path: {e}", exc_info=True)
+        logger.error(f'Error processing playbook path: {e}', exc_info=True)
         raise HTTPException(status_code=500, detail='Server error processing file path.')
 
     instance_id = str(uuid.uuid4())
@@ -144,13 +144,13 @@ async def execute_playbook_from_file(request_body: PlaybookFileRequest,
     with instance_logging(instance_id, log_level) as log_files:
         attackmate_log_path, output_log_path, json_log_path = log_files
         try:
-            logger.info(f"Parsing playbook from: {full_path}")
+            logger.info(f'Parsing playbook from: {full_path}')
             playbook = parse_playbook(full_path, logger)
-            logger.info(f"Creating transient AttackMate instance, ID: {instance_id}")
+            logger.info(f'Creating transient AttackMate instance, ID: {instance_id}')
             am_instance = AttackMate(playbook=playbook, config=attackmate_config, varstore=None)
             return_code = am_instance.main()
             final_state = varstore_to_state_model(am_instance.varstore)
-            logger.info(f"Transient playbook execution finished. RC: {return_code}")
+            logger.info(f'Transient playbook execution finished. RC: {return_code}')
             attackmate_log = read_log_file(attackmate_log_path)
             output_log = read_log_file(output_log_path)
             json_log = read_log_file(json_log_path)
@@ -159,8 +159,8 @@ async def execute_playbook_from_file(request_body: PlaybookFileRequest,
             raise HTTPException(
                 status_code=400, detail=f"Invalid playbook content in file '{request_body.file_path}': {e}")
         except Exception as e:
-            logger.error(f"Unexpected error during playbook file execution: {e}", exc_info=True)
-            raise HTTPException(status_code=500, detail=f"Server error during playbook execution: {e}")
+            logger.error(f'Unexpected error during playbook file execution: {e}', exc_info=True)
+            raise HTTPException(status_code=500, detail=f'Server error during playbook execution: {e}')
         finally:
             if am_instance:
                 logger.info('Cleaning up transient playbook instance.')
@@ -168,7 +168,7 @@ async def execute_playbook_from_file(request_body: PlaybookFileRequest,
                 am_instance.clean_session_stores()
                 am_instance.pm.kill_or_wait_processes()
             except Exception as e:
-                logger.error(f"Cleanup error: {e}")
+                logger.error(f'Cleanup error: {e}')
 
     return PlaybookResponseModel(
         success=(return_code == 0),

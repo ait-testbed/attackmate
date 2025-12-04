@@ -1,11 +1,9 @@
 import pytest
-from unittest.mock import MagicMock, patch
+from unittest.mock import MagicMock
 from attackmate.executors.vnc.vncexecutor import VncExecutor
 from attackmate.schemas.vnc import VncCommand
 from attackmate.variablestore import VariableStore
 from attackmate.processmanager import ProcessManager
-from attackmate.execexception import ExecException
-from vncdotool.client import AuthenticationError
 
 
 @pytest.fixture
@@ -41,7 +39,7 @@ def test_vnc_connect_success(vnc_executor, mock_vnc_client, mocker):
     mock_vnc_client.protocol.connected = True  # Mock successful connection
 
     result = vnc_executor._exec_cmd(command)
-    
+
     assert result.stdout == 'vnc_connected'
     mock_vnc_client.keyPress.assert_called_once_with('a')
 
@@ -75,5 +73,3 @@ def test_vnc_create_and_use_session(vnc_executor, mock_vnc_client, mocker):
     assert result.stdout == 'vnc_connected'
     mock_vnc_client.keyPress.assert_any_call('a')
     mock_vnc_client.keyPress.assert_any_call('b')
-
-
