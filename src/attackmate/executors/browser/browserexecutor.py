@@ -13,7 +13,7 @@ class BrowserExecutor(BaseExecutor):
 
     def log_command(self, command: BrowserCommand):
         self.logger.info(
-            f"Executing Browser Command: {command.cmd}"
+            f'Executing Browser Command: {command.cmd}'
             f"{f' {command.selector}' if command.selector else ''}"
             f"{f' {command.url}' if command.url else ''}"
         )
@@ -35,7 +35,7 @@ class BrowserExecutor(BaseExecutor):
                 if self.session_store.has_session(command.creates_session):
                     self.logger.warning(
                         f"Session '{command.creates_session}' already exists! "
-                        f"Closing it before creating a new one."
+                        f'Closing it before creating a new one.'
                     )
                     self.session_store.close_session(command.creates_session)
                 session_thread = SessionThread(
@@ -57,7 +57,7 @@ class BrowserExecutor(BaseExecutor):
             elif command.cmd == 'screenshot':
                 session_thread.submit_command('screenshot', screenshot_path=command.screenshot_path)
             else:
-                return Result(f"Unknown browser command: {command.cmd}", 1)
+                return Result(f'Unknown browser command: {command.cmd}', 1)
 
             return Result('Browser command executed successfully.', 0)
 

@@ -34,11 +34,11 @@ def test_command_delay_is_applied():
     expected_maximum_time = expected_minimum_time + 0.5
 
     assert elapsed_time >= expected_minimum_time, (
-        f"Execution faster ({elapsed_time:.4f}s) than the minimum expected delay "
-        f"({expected_minimum_time:.4f}s)."
+        f'Execution faster ({elapsed_time:.4f}s) than the minimum expected delay '
+        f'({expected_minimum_time:.4f}s).'
     )
     assert elapsed_time < expected_maximum_time, (
-        f"Execution slower ({elapsed_time:.4f}s) than expected."
+        f'Execution slower ({elapsed_time:.4f}s) than expected.'
     )
 
 
@@ -62,7 +62,7 @@ def test_zero_command_delay():
 
     # With no delay, execution should be very fast.
     assert elapsed_time < 0.1, (
-        f"Execution with no delay took too long: {elapsed_time:.4f}s."
+        f'Execution with no delay took too long: {elapsed_time:.4f}s.'
     )
 
 
@@ -87,5 +87,5 @@ def test_delay_is_not_applied_for_exempt_commands():
     elapsed_time = end_time - start_time
 
     assert elapsed_time < 0.1, (
-        f"Execution with exempt commands took too long: {elapsed_time:.4f}s."
+        f'Execution with exempt commands took too long: {elapsed_time:.4f}s.'
     )

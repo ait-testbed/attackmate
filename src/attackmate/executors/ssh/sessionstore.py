@@ -50,7 +50,6 @@ class SessionStore:
         if self.has_session(session_name):
             self.set_session(session_name, client, channel)
 
-
     def clean_sessions(self):
         """
         Closes all active SSH sessions and their associated channels in the session store,
@@ -74,4 +73,3 @@ class SessionStore:
                     self.logger.error(f"Error closing client for ssh session '{session_name}': {e}")
 
         self.store.clear()
-
