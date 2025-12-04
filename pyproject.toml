@@ -27,8 +27,8 @@ dependencies = [
     "uvicorn",
     "dotenv",
     "passlib",
-    "python-multipart"
-    "attackmate_client @ git+https://github.com/ait-testbed/attackmate-client.git@main"
+    "python-multipart",
+    "attackmate_client"
 ]
 dynamic = ["version"]
 
