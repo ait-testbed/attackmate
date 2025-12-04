@@ -1,4 +1,3 @@
-from attackmate.command import CommandRegistry
 from attackmate.schemas.base import BaseCommand
 from typing import Literal, Optional, Dict, Any
 from pydantic import model_validator
@@ -38,27 +37,3 @@ class BettercapCommand(BaseCommand):
             raise ValueError('get_file requires the parameter filename')
 
         return values
-
-
-
-"""
-  Please note that get_file() needs a parameter and
-  therefor it is not a BettercapGetCommand!
-"""
-
-
-# @CommandRegistry.register('bettercap', 'get_file')
-# class BettercapGetFileCommand(BaseCommand):
-#     cmd: Literal['get_file']
-#     type: Literal['bettercap']
-#     filename: str
-#     connection: Optional[str] = None
-# 
-# 
-# @CommandRegistry.register('bettercap', 'post_api_session')
-# class BettercapPostApiSessionCommand(BaseCommand):
-#     cmd: Literal['post_api_session']
-#     type: Literal['bettercap']
-#     data: Optional[Dict[str, Any]] = None
-#     connection: Optional[str] = None
-

@@ -58,7 +58,7 @@ class BettercapExecutor(BaseExecutor):
             if not isinstance(command, BettercapCommand):
                 raise ExecException('Wrong command-type')
             self.setup_connection(command)
-            if command.cmd  in ['get_session_hid', 'get_session_ble', 'get_session_lan', 'get_session_wifi']:
+            if command.cmd in ['get_session_hid', 'get_session_ble', 'get_session_lan', 'get_session_wifi']:
                 (code, headers, result) = getattr(self.client, command.cmd)(command.mac)
             elif command.cmd == 'get_file':
                 (code, headers, result) = self.client.get_file(command.filename)

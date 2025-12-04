@@ -168,11 +168,13 @@ def test_bettercapexecutor_get_file(executor):
     assert result.stdout.startswith('# Network services, Internet')
     assert result.returncode == 0
 
+
 @vcr.use_cassette('test/fixtures/vcr_cassettes/bettercap_get_file-nofile.yaml')
 def test_bettercapexecutor_get_file_without_filename(executor):
     with pytest.raises(ValidationError) as e_info:
-        config = BettercapCommand(cmd='get_file', type='bettercap')
-    assert str( e_info.value).find( 'Value error, get_file requires the parameter filename')
+        BettercapCommand(cmd='get_file', type='bettercap')
+    assert str(e_info.value).find('Value error, get_file requires the parameter filename')
+
 
 @vcr.use_cassette('test/fixtures/vcr_cassettes/bettercap_post_api_session.yaml')
 def test_bettercapexecutor_post_api_session(executor):
@@ -182,11 +184,13 @@ def test_bettercapexecutor_post_api_session(executor):
     assert result.stdout.startswith('{"success":true,"msg":')
     assert result.returncode == 0
 
+
 @vcr.use_cassette('test/fixtures/vcr_cassettes/bettercap_post_api_session-nodata.yaml')
 def test_bettercapexecutor_post_api_session_without_data(executor):
     with pytest.raises(ValidationError) as e_info:
-        config = BettercapCommand(cmd='post_api_session', type='bettercap')
+        BettercapCommand(cmd='post_api_session', type='bettercap')
     assert str(e_info.value).find('Value error, post_api_session requires the parameter data')
+
 
 @vcr.use_cassette('test/fixtures/vcr_cassettes/bettercap_delete_api_events.yaml')
 def test_bettercapexecutor_delete_api_events(executor):
