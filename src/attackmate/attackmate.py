@@ -57,10 +57,10 @@ class AttackMate:
 
     def _default_config(self) -> Config:
         return Config(
-                cmd_config=CommandConfig(),
-                msf_config=MsfConfig(),
-                sliver_config=SliverConfig(),
-                bettercap_config={})
+            cmd_config=CommandConfig(),
+            msf_config=MsfConfig(),
+            sliver_config=SliverConfig(),
+            bettercap_config={})
 
     def _initialize_variable_parser(self, varstore: Optional[Dict] = None):
         """Initializes the variable-parser

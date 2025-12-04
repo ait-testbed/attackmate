@@ -12,8 +12,6 @@ class ConditionalError(Exception):
 
     """
 
-    pass
-
 
 class Conditional:
     """Evaluates conditional statements

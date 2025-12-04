@@ -31,6 +31,6 @@ class Client(Api):
                  json_data: dict = {}
                  ) -> Tuple[int, Mapping[str, str], bytes]:
         response = self._client.request(
-                method, url, headers=dict(headers), json=json_data
+            method, url, headers=dict(headers), json=json_data
         )
         return response.status_code, response.headers, response.content

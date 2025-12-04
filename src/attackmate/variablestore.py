@@ -11,8 +11,6 @@ class ListParseException(Exception):
     goes wrong.
     """
 
-    pass
-
 
 class VariableNotFound(Exception):
     """Exception for all List-Parser
@@ -20,8 +18,6 @@ class VariableNotFound(Exception):
     This exception is raised by get_variable if the
     variable does not exist in the variablestore.
     """
-
-    pass
 
 
 class ListTemplate(Template):

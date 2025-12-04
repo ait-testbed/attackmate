@@ -16,6 +16,7 @@ class RemoteAttackMateClient:
     Client to interact with a remote AttackMate REST API.
     Handles authentication and token management internally per server URL.
     """
+
     def __init__(
         self,
         server_url: str,
