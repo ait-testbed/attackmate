@@ -4,7 +4,7 @@ webserv
 
 Start a http-server and share a file. This command
 will return after the first HTTP-request. To keep serving the file instead set keep_serving to True.
-
+The webserv command has to be run in background mode, otherwise the playbook execution will halt until a request is received.
 .. code-block:: yaml
 
    ###
