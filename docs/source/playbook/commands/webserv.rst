@@ -3,7 +3,7 @@ webserv
 =======
 
 Start a http-server and share a file. This command
-will return after the first HTTP-request.
+will return after the first HTTP-request. To keep serving the file instead set keep_serving to True.
 
 .. code-block:: yaml
 
@@ -35,3 +35,10 @@ will return after the first HTTP-request.
 
    :type: str
    :default: ``0.0.0.0``
+
+.. confval:: keep_servng
+
+   Keep serving even after a request has been processed
+
+   :type: bool
+   :default: False
