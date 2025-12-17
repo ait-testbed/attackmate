@@ -10,6 +10,7 @@ class WebServCommand(BaseCommand):
     local_path: str
     port: StringNumber = '8000'
     address: str = '0.0.0.0'  # nosec
+    keep_serving: bool = False
 
 
 @CommandRegistry.register('http-client')
