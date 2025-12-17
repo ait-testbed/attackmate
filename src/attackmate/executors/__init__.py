@@ -19,7 +19,7 @@ from .common.includeexecutor import IncludeExecutor
 from .common.loopexecutor import LoopExecutor
 from .common.regexexecutor import RegExExecutor
 from .common.jsonexecutor import JsonExecutor
-
+from .remote.remoteexecutor import RemoteExecutor
 
 __all__ = [
     'RemoteExecutor'
