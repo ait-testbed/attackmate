@@ -10,7 +10,6 @@ PLAYBOOK_LOG_FILE = 'attackmate.log'
 JSON_LOG_FILE = 'attackmate.json'
 
 PLAYBOOK_CONSOLE_FORMAT = '  %(asctime)s %(log_color)s%(levelname)-8s%(reset)s | %(log_color)s%(message)s%(reset)s'
-API_CONSOLE_FORMAT = '  %(asctime)s %(log_color)s%(levelname)-8s%(reset)s | API | %(log_color)s%(message)s%(reset)s'
 DEFAULT_FILE_FORMAT = '%(asctime)s %(levelname)s - %(message)s'
 OUTPUT_FILE_FORMAT = '--- %(asctime)s %(levelname)s: ---\n\n%(message)s'
 
@@ -53,28 +52,6 @@ def initialize_json_logger(json: bool, append_logs: bool):
     json_logger.addHandler(file_handler)
 
     return json_logger
-
-
-def initialize_api_logger(debug: bool, append_logs: bool):
-    api_logger = logging.getLogger('attackmate_api')
-    api_logger.setLevel(logging.DEBUG if debug else logging.INFO)
-
-    # Console handler for API logs
-    if not has_stdout_handler(api_logger):
-        console_handler = logging.StreamHandler(sys.stdout)
-        formatter = ColoredFormatter(API_CONSOLE_FORMAT, datefmt=DATE_FORMAT)
-        console_handler.setFormatter(formatter)
-        api_logger.addHandler(console_handler)
-
-    #  File handler for API logs ?
-    # api_file_formatter = logging.Formatter(API_CONSOLE_FORMAT, datefmt=DATE_FORMAT)
-    # api_file_handler = create_file_handler('attackmate_api.log', append_logs, api_file_formatter)
-    # api_logger.addHandler(api_file_handler)
-
-    # Prevent propagation to avoid duplicate logs if root logger also has handlers
-    api_logger.propagate = False
-
-    return api_logger
 
 
 def create_file_handler(
