@@ -32,8 +32,10 @@ pipeline {
         	        }
                         dir("docs") {
                                 sh "id"
+                                sh "useradd --system --uid=112 -U --home /home/jenkins -m --shell /bin/bash jenkins"
                                 sh "ls -la /docs"
-        	                sh "make html"
+                                sh "make html"
+                                sh "chown -R jenkins *"
                         }
                 }
         }
