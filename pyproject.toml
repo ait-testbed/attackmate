@@ -27,7 +27,8 @@ dependencies = [
     "uvicorn",
     "dotenv",
     "passlib",
-    "python-multipart"
+    "python-multipart",
+    "attackmate_client"
 ]
 dynamic = ["version"]
 
@@ -35,7 +36,7 @@ dynamic = ["version"]
 attackmate = "attackmate.__main__:main"
 
 [build-system]
-requires = ["setuptools"]
+requires = ["setuptools>=61.0.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 # [tool.setuptools]
