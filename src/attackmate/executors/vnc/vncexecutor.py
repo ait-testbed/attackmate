@@ -110,7 +110,7 @@ class VncExecutor(BaseExecutor):
         for k in keys:
             client.keyPress(k)
 
-    def _exec_cmd(self, command: VncCommand) -> Result:
+    async def _exec_cmd(self, command: VncCommand) -> Result:
         output = ''
 
         try:

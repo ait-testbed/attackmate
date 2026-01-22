@@ -32,7 +32,7 @@ class SetVarExecutor(BaseExecutor):
     def log_command(self, command: SetVarCommand):
         self.logger.warning(f"Setting Variable: '{command.variable}'")
 
-    def _exec_cmd(self, command: SetVarCommand) -> Result:
+    async def _exec_cmd(self, command: SetVarCommand) -> Result:
         self.setoutputvars = False
         content = command.cmd
         if command.encoder:

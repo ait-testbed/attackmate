@@ -1,4 +1,5 @@
 import json
+import asyncio
 from attackmate.schemas.base import BaseCommand
 from attackmate.processmanager import ProcessManager
 from attackmate.result import Result
@@ -29,7 +30,7 @@ class Background:
     def _create_queue(self) -> Optional[Queue]:
         return None
 
-    def exec_background(self, command: BaseCommand) -> Result:
+    async def exec_background(self, command: BaseCommand) -> Result:
         self.logger.info(f'Run in background: {getattr(command, "type", "")}({command.cmd})')
         if command.metadata:
             self.logger.info(f'Metadata: {json.dumps(command.metadata)}')
@@ -49,10 +50,10 @@ class Background:
         self.is_child_proc = True
         if queue:
             self.child_queue = queue
-        self.exec(command)
+        asyncio.run(self.exec(command))
 
-    def _exec_cmd(self, command: Any) -> Result:
+    async def _exec_cmd(self, command: Any) -> Result:
         return Result(None, None)
 
-    def exec(self, command: BaseCommand):
-        self._exec_cmd(command)
+    async def exec(self, command: BaseCommand):
+        return await self._exec_cmd(command)

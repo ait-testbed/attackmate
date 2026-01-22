@@ -65,7 +65,7 @@ class HttpClientExecutor(BaseExecutor):
             verify=command.verify,
         )
 
-    def _exec_cmd(self, command: HttpClientCommand) -> Result:
+    async def _exec_cmd(self, command: HttpClientCommand) -> Result:
         try:
             if command.http2:
                 response = self.request_http2(command)

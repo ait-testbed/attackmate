@@ -40,7 +40,7 @@ Example:
     from attackmate.result import Result
 
     class CustomExecutor(BaseExecutor):
-        def _exec_cmd(self, command) -> Result:
+        async def _exec_cmd(self, command) -> Result:
             self.logger.info(f"Executing custom command: {command.cmd}")
             return Result(stdout="Execution complete", returncode=0)
 
@@ -68,7 +68,7 @@ The following methods can be overridden in custom executors to modify behavior:
 
 .. code-block:: python
 
-    def _exec_cmd(self, command: BaseCommand) -> Result:
+    async def _exec_cmd(self, command: BaseCommand) -> Result:
         return Result(None, None)
 
 This is the core execution function and must be implemented in subclasses.

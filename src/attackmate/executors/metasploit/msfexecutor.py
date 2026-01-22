@@ -109,7 +109,7 @@ class MsfModuleExecutor(BaseExecutor):
         exploit.target = CmdVars.variable_to_int('target', command.target)
         return exploit
 
-    def _exec_cmd(self, command: MsfModuleCommand) -> Result:
+    async def _exec_cmd(self, command: MsfModuleCommand) -> Result:
         if self.msf is None:
             raise ExecException('ConnectionError')
 

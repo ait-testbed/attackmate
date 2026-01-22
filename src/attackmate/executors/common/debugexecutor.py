@@ -18,7 +18,7 @@ class DebugExecutor(BaseExecutor):
         if command.varstore:
             self.logger.warning(self.varstore.variables)
 
-    def _exec_cmd(self, command: DebugCommand) -> Result:
+    async def _exec_cmd(self, command: DebugCommand) -> Result:
         self.setoutputvars = False
         ret = 0
         if command.wait_for_key:

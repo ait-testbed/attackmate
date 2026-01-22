@@ -130,7 +130,7 @@ class LoopExecutor(BaseExecutor):
 
         self.logger.warning('No valid loop condition found in command: %s', command.cmd)
 
-    def _exec_cmd(self, command: LoopCommand) -> Result:
+    async def _exec_cmd(self, command: LoopCommand) -> Result:
         # idea: use runfunc with one command only
         # in that way it is possible to replace context-variables first
         # runfunc will replace global variables then

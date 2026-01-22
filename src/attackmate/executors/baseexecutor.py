@@ -32,8 +32,12 @@ class BaseExecutor(ExitOnError, CmdVars, Looper, Background):
     """
 
     def __init__(
-        self, pm: ProcessManager, varstore: VariableStore, cmdconfig=CommandConfig(), substitute_cmd_vars=True
-    ):
+            self,
+            pm: ProcessManager,
+            varstore: VariableStore,
+            cmdconfig=CommandConfig(),
+            substitute_cmd_vars=True,
+            is_api_instance: bool = False):
         """Constructor for BaseExecutor
         Parameters
         ----------
@@ -56,8 +60,9 @@ class BaseExecutor(ExitOnError, CmdVars, Looper, Background):
         self.cmdconfig = cmdconfig
         self.output = logging.getLogger('output')
         self.substitute_cmd_vars = substitute_cmd_vars
+        self.is_api_instance = is_api_instance
 
-    def run(self, command: BaseCommand) -> Result:
+    async def run(self, command: BaseCommand, is_api_instance: bool = False) -> Result:
         """Execute the command
 
         This method is executed by AttackMate and
@@ -72,7 +77,7 @@ class BaseExecutor(ExitOnError, CmdVars, Looper, Background):
             The settings for the command to execute
 
         """
-
+        self.is_api_instance = is_api_instance
         if command.only_if:
             if not Conditional.test(self.varstore.substitute(command.only_if, True)):
                 self.logger.info(f'Skipping {getattr(command, "type", "")}({command.cmd})')
@@ -83,9 +88,13 @@ class BaseExecutor(ExitOnError, CmdVars, Looper, Background):
             # Background commands always return Result(None,None)
             time_of_execution = datetime.now().isoformat()
             self.log_json(self.json_logger, command, time_of_execution)
-            result = self.exec_background(self.substitute_template_vars(command, self.substitute_cmd_vars))
+            result = await self.exec_background(
+                self.substitute_template_vars(command, self.substitute_cmd_vars)
+            )
         else:
-            result = self.exec(self.substitute_template_vars(command, self.substitute_cmd_vars))
+            result = await self.exec(
+                self.substitute_template_vars(command, self.substitute_cmd_vars)
+            )
 
         return result
 
@@ -143,28 +152,29 @@ class BaseExecutor(ExitOnError, CmdVars, Looper, Background):
             except Exception as e:
                 self.logger.warning(f'Unable to write output to file {command.save}: {e}')
 
-    def exec(self, command: BaseCommand) -> Result:
+    async def exec(self, command: BaseCommand) -> Result:
         try:
             self.log_command(command)
             self.log_metadata(self.logger, command)
             time_of_execution = datetime.now().isoformat()
-            result = self._exec_cmd(command)
+            result = await self._exec_cmd(command)
         except ExecException as error:
-            result = Result(error, 1)
+            result = Result(str(error), 1)
         self.log_json(self.json_logger, command, time_of_execution)
         self.save_output(command, result)
         if not command.background:
-            self.exit_on_error(command, result)
+            if not self.is_api_instance:
+                self.exit_on_error(command, result)
             self.set_result_vars(result)
             self.output.info(f'Command: {command.cmd}\n{result.stdout}')
             self.error_if_or_not(command, result)
-        self.loop_if(command, result)
-        self.loop_if_not(command, result)
+        await self.loop_if(command, result)
+        await self.loop_if_not(command, result)
         return result
 
-    def _loop_exec(self, command: BaseCommand) -> Result:
-        result = self.exec(command)
+    async def _loop_exec(self, command: BaseCommand) -> Result:
+        result = await self.exec(command)
         return result
 
-    def _exec_cmd(self, command: Any) -> Result:
+    async def _exec_cmd(self, command: Any) -> Result:
         return Result(None, None)

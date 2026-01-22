@@ -35,18 +35,18 @@ class RemoteExecutor(BaseExecutor):
             f"Remote Command'{remote_command_json}' sent to server {command.server_url}'"
         )
 
-    def _exec_cmd(self, command: AttackMateRemoteCommand) -> Result:
+    async def _exec_cmd(self, command: AttackMateRemoteCommand) -> Result:
         try:
             client = self._get_remote_client(command)
             response_data = self._dispatch_remote_command(client, command)
             success, error_msg, stdout, return_code = self._process_response(response_data)
 
         except (ExecException, IOError, FileNotFoundError) as e:
-            self.logger.error(f"Execution failed: {e}", exc_info=True)
+            self.logger.error(f'Execution failed: {e}', exc_info=True)
             success, error_msg, stdout, return_code = False, str(e), None, 1
 
         except Exception as e:
-            error_message = f"Remote executor encountered an unexpected error: {e}"
+            error_message = f'Remote executor encountered an unexpected error: {e}'
             self.logger.error(error_message, exc_info=True)
             success, error_msg, stdout, return_code = False, error_message, None, 1
 
@@ -62,7 +62,7 @@ class RemoteExecutor(BaseExecutor):
             return self._clients_cache[server_url]
         else:
             self.logger.info(
-                f"Creating new remote client for server: {server_url}"
+                f'Creating new remote client for server: {server_url}'
             )
             new_remote_client = self._create_remote_client(command_config)
             self._clients_cache[server_url] = new_remote_client
@@ -123,7 +123,7 @@ class RemoteExecutor(BaseExecutor):
             self.logger.error(error_message)
             return success, error_message, stdout_str, return_code
 
-        self.logger.debug(f"Processing response data: {json.dumps(response_data)}")
+        self.logger.debug(f'Processing response data: {json.dumps(response_data)}')
 
         # Prioritize 'result' key for command-like responses
         cmd_result = response_data.get('result', {})
@@ -133,9 +133,9 @@ class RemoteExecutor(BaseExecutor):
             return_code = cmd_result.get('returncode', 1 if not success else 0)
             if not success and 'error_message' in cmd_result:
                 error_message = cmd_result['error_message']
-                self.logger.error(f"Remote command reported error: {error_message}")
+                self.logger.error(f'Remote command reported error: {error_message}')
             else:
-                self.logger.info(f"Remote command execution success: {success}, return code: {return_code}")
+                self.logger.info(f'Remote command execution success: {success}, return code: {return_code}')
 
         # Fallback to 'success' key for playbook-like responses
         elif 'success' in response_data:
@@ -144,15 +144,15 @@ class RemoteExecutor(BaseExecutor):
             return_code = 0 if success else 1
             if not success:
                 error_message = response_data.get('message', 'Unknown error during playbook execution.')
-                self.logger.error(f"Remote playbook execution failed: {error_message}")
+                self.logger.error(f'Remote playbook execution failed: {error_message}')
             else:
-                self.logger.info(f"Remote playbook execution success: {success}")
+                self.logger.info(f'Remote playbook execution success: {success}')
 
         # Catch all for unexpected response structures
         else:
             error_message = 'Received unexpected response structure from remote server.'
             stdout_str = json.dumps(response_data, indent=2)
-            self.logger.warning(f"{error_message}: {stdout_str}")
+            self.logger.warning(f'{error_message}: {stdout_str}')
 
         return success, error_message, stdout_str, return_code
 
@@ -160,8 +160,8 @@ class RemoteExecutor(BaseExecutor):
         """Creates the final stdout string based on the execution result."""
         if error:
             # Prepend the error to the standard output if both exist
-            header = f"Error: {error}"
-            return f"{header}\n\nOutput/Response:\n{stdout}" if stdout else header
+            header = f'Error: {error}'
+            return f'{header}\n\nOutput/Response:\n{stdout}' if stdout else header
 
         if stdout is not None:
             return stdout

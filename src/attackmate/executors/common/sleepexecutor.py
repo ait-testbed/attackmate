@@ -14,6 +14,6 @@ class SleepExecutor(BaseExecutor):
     def log_command(self, command):
         self.logger.info(f'Sleeping {command.sleep_time} seconds')
 
-    def _exec_cmd(self, command):
+    async def _exec_cmd(self, command):
         time.sleep(command.sleep_time)
         return Result('Awake O_O', 0)

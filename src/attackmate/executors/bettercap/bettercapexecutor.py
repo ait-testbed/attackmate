@@ -34,10 +34,10 @@ class BettercapExecutor(BaseExecutor):
             raise ExecException('Bettercap config is not a dictionary')
         if command.connection is None:
             connection_name: str = next(iter(self.bettercap_config))
-            self.logger.debug(f"Using default connection: {connection_name}")
+            self.logger.debug(f'Using default connection: {connection_name}')
         else:
             connection_name = command.connection
-            self.logger.debug(f"Using connection: {connection_name}")
+            self.logger.debug(f'Using connection: {connection_name}')
         if connection_name in self.bettercap_config:
             connection_config: BettercapConfig = self.bettercap_config[connection_name]
             self.client.server = connection_config.url
@@ -45,15 +45,15 @@ class BettercapExecutor(BaseExecutor):
                 self.logger.debug('Using basic auth')
                 self.client.basic_auth(connection_config.username, connection_config.password)
             if connection_config.cafile:
-                self.logger.debug(f"Using cafile: {connection_config.cafile}")
+                self.logger.debug(f'Using cafile: {connection_config.cafile}')
                 self.client.ca_file(connection_config.cafile)
 
     def log_command(self, command: BaseCommand):
         self.logger.info(
-            f"Executing Bettercap Command: {command.cmd}"
+            f'Executing Bettercap Command: {command.cmd}'
         )
 
-    def _exec_cmd(self, command: BaseCommand) -> Result:
+    async def _exec_cmd(self, command: BaseCommand) -> Result:
         try:
             if not isinstance(command, BettercapCommand):
                 raise ExecException('Wrong command-type')
@@ -73,7 +73,7 @@ class BettercapExecutor(BaseExecutor):
             if code == 200:
                 result = Result(result.decode(), 0)
             else:
-                raise ExecException(f"Bettercap Command Status: {code} Returned: {result.decode()} ")
+                raise ExecException(f'Bettercap Command Status: {code} Returned: {result.decode()} ')
             return result
         except Exception as e:
             raise ExecException(e)
