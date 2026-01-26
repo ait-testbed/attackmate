@@ -28,7 +28,8 @@ def mock_playwright():
     A pytest fixture that patches sync_playwright to avoid launching a real browser.
     It yields a configurable mock.
     """
-    with patch('playwright.sync_api.sync_playwright') as mock_sync_playwright:
+    target = 'attackmate.executors.browser.sessionstore.sync_playwright'
+    with patch(target) as mock_sync_playwright:
         # Create mock for the playwright object
         mock_playwright_instance = MagicMock()
         mock_browser = MagicMock()
@@ -129,13 +130,19 @@ def test_session_thread_invalid_command(mock_playwright):
     thread.stop_thread()
 
 
-def test_session_thread_click_selector_not_found(mock_playwright):
-    """
-    Submitting a click command for a missing selector should raise an Exception.
-    """
-    # Make the mock page return None for query_selector => simulates "element not found"
+@pytest.mark.asyncio
+async def test_session_thread_click_selector_not_found(mock_playwright):
     mock_page = mock_playwright['mock_page']
-    mock_page.query_selector.return_value = None
+
+    # mock for the locator object
+    mock_locator = MagicMock()
+
+    # return this mock when .locator() is called
+    mock_page.locator.return_value = mock_locator
+
+    # side effect on wait_for (which is called before click first)
+    error_msg = 'Locator.wait_for: Timeout 10000ms exceeded'
+    mock_locator.wait_for.side_effect = Exception(error_msg)
 
     thread = SessionThread(session_name='test_session', headless=True)
     with pytest.raises(Exception) as excinfo:
@@ -159,7 +166,8 @@ def browser_executor(mock_playwright):
     return BrowserExecutor(pm=None, varstore=None)
 
 
-def test_browser_executor_ephemeral_session(browser_executor):
+@pytest.mark.asyncio
+async def test_browser_executor_ephemeral_session(browser_executor):
     """
     Tests that an ephemeral session is created and destroyed when no session is specified.
     """
@@ -169,12 +177,13 @@ def test_browser_executor_ephemeral_session(browser_executor):
         url=DATA_URL_SIMPLE,
         headless=True
     )
-    result = browser_executor._exec_cmd(command)
+    result = await browser_executor._exec_cmd(command)
     assert result.returncode == 0
     assert 'Browser command executed successfully.' in result.stdout
 
 
-def test_browser_executor_named_session(browser_executor):
+@pytest.mark.asyncio
+async def test_browser_executor_named_session(browser_executor):
     """
     Tests that a named session is created and remains available, then can be reused.
     """
@@ -185,7 +194,7 @@ def test_browser_executor_named_session(browser_executor):
         creates_session='my_session',
         headless=True
     )
-    result1 = browser_executor._exec_cmd(create_cmd)
+    result1 = await browser_executor._exec_cmd(create_cmd)
     assert result1.returncode == 0
     assert 'executed successfully' in result1.stdout
 
@@ -196,12 +205,13 @@ def test_browser_executor_named_session(browser_executor):
         selector='#test-link',  # matches the anchor in DATA_URL_WITH_LINK
         session='my_session'
     )
-    result2 = browser_executor._exec_cmd(reuse_cmd)
+    result2 = await browser_executor._exec_cmd(reuse_cmd)
     assert result2.returncode == 0
     assert 'executed successfully' in result2.stdout
 
 
-def test_browser_executor_no_such_session(browser_executor):
+@pytest.mark.asyncio
+async def test_browser_executor_no_such_session(browser_executor):
     """
     If we specify a session that doesn't exist, we should get an error result.
     """
@@ -211,12 +221,13 @@ def test_browser_executor_no_such_session(browser_executor):
         selector='#some-button',
         session='nonexistent_session'
     )
-    result = browser_executor._exec_cmd(bad_cmd)
+    result = await browser_executor._exec_cmd(bad_cmd)
     assert result.returncode == 1
     assert "Session 'nonexistent_session' not found!" in result.stdout
 
 
-def test_browser_executor_recreate_same_session(browser_executor):
+@pytest.mark.asyncio
+async def test_browser_executor_recreate_same_session(browser_executor):
     """
     If we specify creates_session with the same name again,
     it should close the old one and create a fresh session.
@@ -228,7 +239,7 @@ def test_browser_executor_recreate_same_session(browser_executor):
         creates_session='my_session',
         headless=True
     )
-    res1 = browser_executor._exec_cmd(cmd1)
+    res1 = await browser_executor._exec_cmd(cmd1)
     assert res1.returncode == 0
 
     cmd2 = BrowserCommand(
@@ -239,7 +250,7 @@ def test_browser_executor_recreate_same_session(browser_executor):
         headless=True
     )
     # This should close the old 'my_session' and create a new one
-    res2 = browser_executor._exec_cmd(cmd2)
+    res2 = await browser_executor._exec_cmd(cmd2)
     assert res2.returncode == 0
     assert 'executed successfully' in res2.stdout
 
