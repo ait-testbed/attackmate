@@ -40,6 +40,7 @@ class SetVarExecutor(BaseExecutor):
                 content = self.encode(command.encoder, command.cmd)
             except Exception as e:
                 self.logger.warning(f'Encoding failed. Fallback to plain: {e}')
+        content = self.varstore.substitute(content)
         self.varstore.set_variable(command.variable, content)
 
         return Result('', 0)
