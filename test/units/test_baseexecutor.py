@@ -16,7 +16,7 @@ class DummyCommand(BaseCommand):
 
 
 class DummyExecutor(BaseExecutor):
-    def _exec_cmd(self, command: DummyCommand):
+    async def _exec_cmd(self, command: DummyCommand):
         if command.return_except:
             raise ExecException('Failed')
         return Result(command.return_str, command.return_val)
@@ -90,59 +90,63 @@ class TestBaseExecutor:
         with pytest.raises(ExecException):
             be.variable_to_int('foo', '$var')
 
-    def test_dummy__exec(self):
+    @pytest.mark.asyncio
+    async def test_dummy__exec(self):
         varstore = VariableStore()
         executor = DummyExecutor(ProcessManager(), varstore)
         dc = DummyCommand(cmd='dummy')
         assert dc.return_str == 'back'
 
         assert dc.return_val == 0
-        result = executor._exec_cmd(dc)
+        result = await executor._exec_cmd(dc)
         assert result.returncode == dc.return_val
         assert result.stdout == dc.return_str
         dc.return_except = True
         with pytest.raises(ExecException):
-            executor._exec_cmd(dc)
+            await executor._exec_cmd(dc)
 
-    def test_dummy_set_variables(self):
+    @pytest.mark.asyncio
+    async def test_dummy_set_variables(self):
         varstore = VariableStore()
         executor = DummyExecutor(ProcessManager(), varstore)
         dc = DummyCommand(cmd='dummy')
-        executor.exec(dc)
+        await executor.exec(dc)
         assert varstore.get_variable('RESULT_STDOUT') == dc.return_str
         assert varstore.get_variable('RESULT_RETURNCODE') == str(dc.return_val)
 
-    def test_dummy_exit_on_error(self):
+    @pytest.mark.asyncio
+    async def test_dummy_exit_on_error(self):
         varstore = VariableStore()
         executor = DummyExecutor(ProcessManager(), varstore)
         dc = DummyCommand(cmd='dummy')
         dc.error_if = '.*back.*'
         with pytest.raises(SystemExit):
-            executor.exec(dc)
+            await executor.exec(dc)
         dc.error_if = None
         dc.error_if_not = 'forward'
         with pytest.raises(SystemExit):
-            executor.exec(dc)
+            await executor.exec(dc)
         dc.error_if = None
         dc.error_if_not = 'forward'
 
-    def test_dummy_loop(self):
+    @pytest.mark.asyncio
+    async def test_dummy_loop(self):
         varstore = VariableStore()
         executor = DummyExecutor(ProcessManager(), varstore)
         executor.run_count = 1
         dc = DummyCommand(cmd='dummy', loop_if='back')
         with pytest.raises(SystemExit):
-            executor.exec(dc)
+            await executor.exec(dc)
         dc = DummyCommand(cmd='dummy', loop_if='forward')
         try:
-            executor.exec(dc)
+            await executor.exec(dc)
         except SystemExit:
             pytest.fail('Unexpected Exit')
         dc = DummyCommand(cmd='dummy', loop_if_not='forward')
         with pytest.raises(SystemExit):
-            executor.exec(dc)
+            await executor.exec(dc)
         dc = DummyCommand(cmd='dummy', loop_if_not='back')
         try:
-            executor.exec(dc)
+            await executor.exec(dc)
         except SystemExit:
             pytest.fail('Unexpected Exit')
