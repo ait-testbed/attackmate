@@ -1,3 +1,4 @@
+import pytest
 from unittest.mock import MagicMock
 from attackmate.variablestore import VariableStore
 from attackmate.processmanager import ProcessManager
@@ -54,7 +55,8 @@ class TestRegExExecutor:
         assert self.varstore.get_variable('output_var') == 'Matched: test'
         assert self.varstore.get_variable('REGEX_MATCHES_LIST') == ['test']
 
-    def test_exec_cmd_findall(self):
+    @pytest.mark.asyncio
+    async def test_exec_cmd_findall(self):
         # Test mode "findall"
         self.varstore.set_variable('input_var', 'test1 test2 test3')
         command = RegExCommand(
@@ -64,11 +66,12 @@ class TestRegExExecutor:
             input='input_var',
             output={'output_var': 'Found: $MATCH_0, $MATCH_1, $MATCH_2'},
         )
-        self.executor._exec_cmd(command)
+        await self.executor._exec_cmd(command)
         assert self.varstore.get_variable('output_var') == 'Found: test1, test2, test3'
         assert self.varstore.get_variable('REGEX_MATCHES_LIST') == ['test1', 'test2', 'test3']
 
-    def test_exec_cmd_split(self):
+    @pytest.mark.asyncio
+    async def test_exec_cmd_split(self):
         # Test mode "split"
         self.varstore.set_variable('input_var', 'test1 test2 test3')
         command = RegExCommand(
@@ -78,11 +81,12 @@ class TestRegExExecutor:
             input='input_var',
             output={'output_var': 'First: $MATCH_0, Second: $MATCH_1, Third: $MATCH_2'},
         )
-        self.executor._exec_cmd(command)
+        await self.executor._exec_cmd(command)
         assert self.varstore.get_variable('output_var') == 'First: test1, Second: test2, Third: test3'
         assert self.varstore.get_variable('REGEX_MATCHES_LIST') == ['test1', 'test2', 'test3']
 
-    def test_exec_cmd_search(self):
+    @pytest.mark.asyncio
+    async def test_exec_cmd_search(self):
         # Test mode "search"
         self.varstore.set_variable('input_var', 'test1 test2 test3')
         command = RegExCommand(
@@ -92,11 +96,12 @@ class TestRegExExecutor:
             input='input_var',
             output={'output_var': 'Found: $MATCH_0'},
         )
-        self.executor._exec_cmd(command)
+        await self.executor._exec_cmd(command)
         assert self.varstore.get_variable('output_var') == 'Found: test1'
         assert self.varstore.get_variable('REGEX_MATCHES_LIST') == ['test1']
 
-    def test_exec_cmd_sub(self):
+    @pytest.mark.asyncio
+    async def test_exec_cmd_sub(self):
         # Test mode "sub"
         # emulates behaviour of re.sub, if no match is found input string is returned
         self.varstore.set_variable('input_var', 'test1 test2 test3')
@@ -108,11 +113,12 @@ class TestRegExExecutor:
             input='input_var',
             output={'output_var': 'Replaced: $MATCH_0'},
         )
-        self.executor._exec_cmd(command)
+        await self.executor._exec_cmd(command)
         assert self.varstore.get_variable('output_var') == 'Replaced: TEST1 TEST2 TEST3'
         assert self.varstore.get_variable('REGEX_MATCHES_LIST') == ['TEST1 TEST2 TEST3']
 
-    def test_exec_cmd_findall_no_match(self):
+    @pytest.mark.asyncio
+    async def test_exec_cmd_findall_no_match(self):
         # Test mode "findall" without matches
         self.varstore.set_variable('input_var', 'no matches here')
         command = RegExCommand(
@@ -122,22 +128,24 @@ class TestRegExExecutor:
             input='input_var',
             output={'output_var': 'Found: $MATCH_0'},
         )
-        self.executor._exec_cmd(command)
+        await self.executor._exec_cmd(command)
         assert 'output_var' not in self.varstore.variables
         assert self.varstore.get_variable('REGEX_MATCHES_LIST') == []
 
-    def test_exec_cmd_split_no_match(self):
+    @pytest.mark.asyncio
+    async def test_exec_cmd_split_no_match(self):
         # Test mode "split" without matches
         # emulates behaviour of re.split, if no match is found input string is returned
         self.varstore.set_variable('input_var', 'no matches here')
         command = RegExCommand(
             type='regex', cmd='\\d', mode='split', input='input_var', output={'output_var': 'First: $MATCH_0'}
         )
-        self.executor._exec_cmd(command)
+        await self.executor._exec_cmd(command)
         assert self.varstore.get_variable('output_var') == 'First: no matches here'
         assert self.varstore.get_variable('REGEX_MATCHES_LIST') == ['no matches here']
 
-    def test_exec_cmd_search_no_match(self):
+    @pytest.mark.asyncio
+    async def test_exec_cmd_search_no_match(self):
         # Test mode "search" without matches
         self.varstore.set_variable('input_var', 'no matches here')
         command = RegExCommand(
@@ -147,11 +155,12 @@ class TestRegExExecutor:
             input='input_var',
             output={'output_var': 'Found: $MATCH_0'},
         )
-        self.executor._exec_cmd(command)
+        await self.executor._exec_cmd(command)
         assert 'output_var' not in self.varstore.variables
         assert self.varstore.get_variable('REGEX_MATCHES_LIST') == []
 
-    def test_exec_cmd_sub_no_match(self):
+    @pytest.mark.asyncio
+    async def test_exec_cmd_sub_no_match(self):
         # Test mode "sub" without matches
         # emulates behaviour of re.sub, if no match is found input string is returned
         self.varstore.set_variable('input_var', 'no matches here')
@@ -163,6 +172,6 @@ class TestRegExExecutor:
             input='input_var',
             output={'output_var': 'Replaced: $MATCH_0'},
         )
-        self.executor._exec_cmd(command)
+        await self.executor._exec_cmd(command)
         assert self.varstore.get_variable('output_var') == 'Replaced: no matches here'
         assert self.varstore.get_variable('REGEX_MATCHES_LIST') == ['no matches here']
