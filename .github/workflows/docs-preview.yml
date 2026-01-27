@@ -1,0 +1,33 @@
+name: Docs Preview
+
+on:
+  push:
+    branches:
+      - feature/**
+      - docs/**
+
+jobs:
+  preview:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: astral-sh/setup-uv@v5
+        with:
+          python-version: "3.12"
+
+      - name: Build docs
+        run: |
+          uv run --with sphinx-multiversion sphinx-multiversion docs/source docs/build/html
+
+      - name: Deploy preview
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages-preview
+          publish_dir: docs/build/html
