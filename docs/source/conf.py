@@ -18,7 +18,17 @@ release = '0.6.0'
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
-extensions = ['sphinx.ext.autodoc', 'sphinx.ext.napoleon', 'myst_parser', 'sphinx_toolbox.confval']
+extensions = [
+    'sphinx_multiversion',
+    'sphinx.ext.autodoc',
+    'sphinx.ext.napoleon',
+    'myst_parser',
+    'sphinx_toolbox.confval']
+
+# Configure what branches/tags to include
+smv_tag_whitelist = r'^v?\d+\.\d+\.\d+$'  # Includes tags like v1.0.0
+smv_branch_whitelist = r'^main$'         # Includes the main branch
+smv_remote_whitelist = r'^origin$'       # Only look at origin
 
 templates_path = ['_templates']
 exclude_patterns = []  # type: ignore
@@ -33,4 +43,15 @@ html_theme_options = {
     'logo_only': False,
     'navigation_depth': 2,
     'collapse_navigation': True,
+}
+
+templates_path = ['_templates']
+html_sidebars = {
+    '**': [
+        'about.html',
+        'navigation.html',
+        'relations.html',
+        'searchbox.html',
+        'versioning.html',
+    ],
 }

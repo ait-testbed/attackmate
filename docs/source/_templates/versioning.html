@@ -1,0 +1,23 @@
+{% if versions %}
+<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+        <span class="fa fa-book"> Versions</span>
+        v: {{ current_version.name }}
+        <span class="fa fa-caret-down"></span>
+    </span>
+    <div class="rst-other-versions">
+        <dl>
+            <dt>Branches</dt>
+            {% for version in versions.branches %}
+            <dd><a href="{{ v_relpath(version.name) }}">{{ version.name }}</a></dd>
+            {% endfor %}
+        </dl>
+        <dl>
+            <dt>Tags</dt>
+            {% for version in versions.tags %}
+            <dd><a href="{{ v_relpath(version.name) }}">{{ version.name }}</a></dd>
+            {% endfor %}
+        </dl>
+    </div>
+</div>
+{% endif %}
