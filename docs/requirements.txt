@@ -1,5 +1,5 @@
-"sphinx-toolbox>=4.1.2"
-"myst-parser>=1.0.0"
-"sphinx<7.0"
-"sphinx-rtd-theme>=2.0.0"
-"sphinx-multiversion>=0.2.4"
+sphinx-toolbox>=4.1.2
+myst-parser>=1.0.0
+sphinx<7.0
+sphinx-rtd-theme>=2.0.0
+sphinx-multiversion>=0.2.4
