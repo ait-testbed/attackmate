@@ -3,6 +3,7 @@ name: Docs Preview
 on:
   push:
     branches:
+      - main
       - feature_github_pages
       - feature/**
       - docs/**
@@ -26,6 +27,11 @@ jobs:
         run: |
           uv run pip install -r docs/requirements.txt
           uv run sphinx-multiversion docs/source docs/build/html
+
+      - name: Create Redirect Root
+        run: |
+          # Redirects root URL (repo.io/) to the main branch docs (repo.io/main/)
+          echo '<meta http-equiv="refresh" content="0; url=main/index.html">' > docs/build/html/index.html
 
       - name: Deploy preview
         uses: peaceiris/actions-gh-pages@v4
