@@ -1,0 +1,20 @@
+{% if versions %}
+<div class="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version">
+        <span class="fa fa-book"> Version</span>
+        {{ current_version.name }}
+        <span class="fa fa-caret-down"></span>
+    </span>
+
+    <div class="rst-other-versions">
+        <dl>
+            <dt>Versions</dt>
+            {% for v in versions %}
+            <dd>
+                <a href="{{ v.url }}">{{ v.name }}</a>
+            </dd>
+            {% endfor %}
+        </dl>
+    </div>
+</div>
+{% endif %}

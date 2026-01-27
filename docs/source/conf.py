@@ -27,8 +27,8 @@ extensions = [
 
 # Configure what branches/tags to include
 smv_tag_whitelist = r'^v?\d+\.\d+\.\d+$'  # Includes tags like v1.0.0
-smv_branch_whitelist = r'^main$'         # Includes the main branch
-smv_remote_whitelist = r'^origin$'       # Only look at origin
+smv_branch_whitelist = r'^(main|feature_github_pages)$'        # Includes the main branch
+smv_remote_whitelist = None      # Only look at origin
 
 templates_path = ['_templates']
 exclude_patterns = []  # type: ignore
@@ -45,13 +45,15 @@ html_theme_options = {
     'collapse_navigation': True,
 }
 
-templates_path = ['_templates']
 html_sidebars = {
     '**': [
-        'about.html',
         'navigation.html',
         'relations.html',
         'searchbox.html',
-        'versioning.html',
+        'versions.html',
     ],
+}
+
+html_context = {
+    'display_lower_left': True,
 }
