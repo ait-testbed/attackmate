@@ -24,7 +24,8 @@ jobs:
 
       - name: Build docs
         run: |
-          uv run --with sphinx-multiversion sphinx-multiversion docs/source docs/build/html
+          uv run pip install -r docs/requirements.txt
+          uv run sphinx-multiversion docs/source docs/build/html
 
       - name: Deploy preview
         uses: peaceiris/actions-gh-pages@v4
