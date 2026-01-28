@@ -26,7 +26,7 @@ jobs:
 
       - name: Build Multi-version Docs
         run: |
-          uv run --with-requirements docs/requirements.txt sphinx-multiversionl
+          uv run --with-requirements docs/requirements.txt sphinx-multiversion docs/source docs/build/html
 
 
       - name: Create Redirect Root
