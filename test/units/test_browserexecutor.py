@@ -193,11 +193,11 @@ def test_browser_executor_named_session(browser_executor):
     reuse_cmd = BrowserCommand(
         type='browser',
         cmd='click',
-        selector='a[href="http://www.iana.org/domains/example"]',
+        selector='a[href="https://www.iana.org/domains/example"]',
         session='my_session'
     )
     result2 = browser_executor._exec_cmd(reuse_cmd)
-    assert result2.returncode == 0
+    assert result2.returncode == 0, f'STDOUT: {result1.stdout}'
     assert 'executed successfully' in result2.stdout
 
 
