@@ -1,0 +1,406 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>shell &mdash; AttackMate 0.5.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css" />
+
+  
+      <script src="../../_static/jquery.js"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+      <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+      <script src="../../_static/doctools.js"></script>
+      <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="sftp" href="sftp.html" />
+    <link rel="prev" title="setvar" href="setvar.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            AttackMate
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+
+<div class="version-switcher" style="margin: 0.5em 0;">
+    <select onchange="if (this.value) window.location.href=this.value;" style="width: 100%; padding: 0.2em;">
+        
+        <option value="../../../v0.1.0/index.html" >
+            v0.1.0
+        </option>
+        
+        <option value="../../../v0.2.0/playbook/commands/shell.html" >
+            v0.2.0
+        </option>
+        
+        <option value="../../../v0.3.0/playbook/commands/shell.html" >
+            v0.3.0
+        </option>
+        
+        <option value="../../../v0.3.1/playbook/commands/shell.html" >
+            v0.3.1
+        </option>
+        
+        <option value="../../../v0.4.0/playbook/commands/shell.html" >
+            v0.4.0
+        </option>
+        
+        <option value="shell.html" selected>
+            v0.5.0
+        </option>
+        
+        <option value="../../../v0.6.0/playbook/commands/shell.html" >
+            v0.6.0
+        </option>
+        
+        <option value="../../../development/playbook/commands/shell.html" >
+            development
+        </option>
+        
+        <option value="../../../main/playbook/commands/shell.html" >
+            main
+        </option>
+        
+    </select>
+</div>
+
+
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">General:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html">AttackMate <img alt="Logo" src="/images/AttackMate_logo_no_logo.png" align="right" height="90"></a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Getting Started:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../about.html">About</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../how.html">How it works</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation/index.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../preparation/index.html">Preparation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../configuration/index.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../basic.html">Basic Usage</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Playbook:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../structure.html">Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../vars.html">Variables</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Commands</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="debug.html">debug</a></li>
+<li class="toctree-l2"><a class="reference internal" href="father.html">father</a></li>
+<li class="toctree-l2"><a class="reference internal" href="httpclient.html">http-client</a></li>
+<li class="toctree-l2"><a class="reference internal" href="include.html">include</a></li>
+<li class="toctree-l2"><a class="reference internal" href="json.html">json</a></li>
+<li class="toctree-l2"><a class="reference internal" href="loop.html">loop</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mktemp.html">mktemp</a></li>
+<li class="toctree-l2"><a class="reference internal" href="msf-module.html">msf-module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="msf-session.html">msf-session</a></li>
+<li class="toctree-l2"><a class="reference internal" href="payload.html">msf-payload</a></li>
+<li class="toctree-l2"><a class="reference internal" href="regex.html">regex</a></li>
+<li class="toctree-l2"><a class="reference internal" href="setvar.html">setvar</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">shell</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sftp.html">sftp</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sleep.html">sleep</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sliver.html">sliver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sliver-session.html">sliver-session</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ssh.html">ssh</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vnc.html">vnc</a></li>
+<li class="toctree-l2"><a class="reference internal" href="webserv.html">webserv</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../session/index.html">Sessions, Interactive</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples.html">Examples</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developing:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../developing/command.html">Adding a New Command</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../developing/baseexecutor.html">Adding a New Executor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../developing/integration.html">Using AttackMate in a Python Script</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Package:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../attackmate/attackmate.html">attackmate package</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">AttackMate</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Commands</a></li>
+      <li class="breadcrumb-item active">shell</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/playbook/commands/shell.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="shell">
+<h1>shell<a class="headerlink" href="#shell" title="Permalink to this heading"></a></h1>
+<p>Execute local shell-commands.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1">###</span>
+<span class="nt">vars</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">$SERVER_ADDRESS</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.42.0.254</span>
+<span class="w">  </span><span class="nt">$NMAP</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/usr/bin/nmap</span>
+
+<span class="nt">commands</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">shell</span>
+<span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">$NMAP $SERVER_ADDRESS</span>
+</pre></div>
+</div>
+<dl class="std confval">
+<dt class="sig sig-object std" id="confval-cmd">
+<span class="sig-name descname"><span class="pre">cmd</span></span><a class="headerlink" href="#confval-cmd" title="Permalink to this definition"></a></dt>
+<dd><p>The command-line that should be executed locally.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="std confval">
+<dt class="sig sig-object std" id="confval-creates_session">
+<span class="sig-name descname"><span class="pre">creates_session</span></span><a class="headerlink" href="#confval-creates_session" title="Permalink to this definition"></a></dt>
+<dd><p>A session name that identifies the session that is created when
+executing this command. This session-name can be used by using the
+option “session”.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="std confval">
+<dt class="sig sig-object std" id="confval-session">
+<span class="sig-name descname"><span class="pre">session</span></span><a class="headerlink" href="#confval-session" title="Permalink to this definition"></a></dt>
+<dd><p>Reuse an existing interactive session. This setting works only if another
+shell-command was executed with the command-option “creates_session” and “interactive” true</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="std confval">
+<dt class="sig sig-object std" id="confval-interactive">
+<span class="sig-name descname"><span class="pre">interactive</span></span><a class="headerlink" href="#confval-interactive" title="Permalink to this definition"></a></dt>
+<dd><p>When the shell-command is executed, the command will block until the execution finishes.
+However, for some exploits it is necessary to run a command and send keystrokes to an
+interactive session. For example run with the first command “vim” and with the second command
+send keystrokes to the open vim-session. In interactive-mode the command will try reading the
+output until no output is written for a certain amount of seconds.</p>
+<p>This mode works only on unix and unix-like operating systems!</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Please note that you <strong>MUST</strong> send a newline when you execute a ssh-command interactively.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+<dt class="field-even">Default<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">False</span></code></p>
+</dd>
+</dl>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">commands</span><span class="p">:</span>
+<span class="w">  </span><span class="c1"># creates new ssh-connection and session</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">shell</span>
+<span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;nmap</span><span class="nv"> </span><span class="s">--interactive\n&quot;</span>
+<span class="w">    </span><span class="nt">interactive</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">    </span><span class="nt">creates_session</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;attacker&quot;</span>
+
+<span class="w">  </span><span class="c1"># break out of the nmap-interactive-mode</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">shell</span>
+<span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;!sh\n&quot;</span>
+<span class="w">    </span><span class="nt">interactive</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">    </span><span class="nt">session</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;attacker&quot;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="std confval">
+<dt class="sig sig-object std" id="confval-command_timeout">
+<span class="sig-name descname"><span class="pre">command_timeout</span></span><a class="headerlink" href="#confval-command_timeout" title="Permalink to this definition"></a></dt>
+<dd><p>The interactive-mode works with timeouts while reading the output. If there is no output for some seconds,
+the command will stop reading.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+<dt class="field-even">Default<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">15</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="std confval">
+<dt class="sig sig-object std" id="confval-read">
+<span class="sig-name descname"><span class="pre">read</span></span><a class="headerlink" href="#confval-read" title="Permalink to this definition"></a></dt>
+<dd><p>Wait for output. This option is useful for interactive commands that do not return any output.
+Normally attackmate will wait until the command_timeout was reached. With read is False, attackmate
+will not wait for any output and simply return an empty string.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+<dt class="field-even">Default<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="std confval">
+<dt class="sig sig-object std" id="confval-command_shell">
+<span class="sig-name descname"><span class="pre">command_shell</span></span><a class="headerlink" href="#confval-command_shell" title="Permalink to this definition"></a></dt>
+<dd><p>Use this shell when executing commands.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+<dt class="field-even">Default<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">/bin/sh</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="std confval">
+<dt class="sig sig-object std" id="confval-bin">
+<span class="sig-name descname"><span class="pre">bin</span></span><a class="headerlink" href="#confval-bin" title="Permalink to this definition"></a></dt>
+<dd><p>Enable binary mode. In this mode only hex-characters are allowed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+<dt class="field-even">Default<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">False</span></code></p>
+</dd>
+</dl>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">commands</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">shell</span>
+<span class="w">    </span><span class="c1"># hex-code for &quot;id&quot;</span>
+<span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;6964&quot;</span>
+<span class="w">    </span><span class="nt">bin</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="setvar.html" class="btn btn-neutral float-left" title="setvar" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="sftp.html" class="btn btn-neutral float-right" title="sftp" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Wolfgang Hotwagner.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  
+<div class="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version">
+        <span class="fa fa-book"> Version</span>
+        v0.5.0
+    </span>
+
+    <div class="rst-other-versions">
+        <dl>
+            <dt>Versions</dt>
+            
+            <dd>
+                <a href="../../../v0.1.0/index.html">v0.1.0</a>
+            </dd>
+            
+            <dd>
+                <a href="../../../v0.2.0/playbook/commands/shell.html">v0.2.0</a>
+            </dd>
+            
+            <dd>
+                <a href="../../../v0.3.0/playbook/commands/shell.html">v0.3.0</a>
+            </dd>
+            
+            <dd>
+                <a href="../../../v0.3.1/playbook/commands/shell.html">v0.3.1</a>
+            </dd>
+            
+            <dd>
+                <a href="../../../v0.4.0/playbook/commands/shell.html">v0.4.0</a>
+            </dd>
+            
+            <dd>
+                <a href="shell.html">v0.5.0</a>
+            </dd>
+            
+            <dd>
+                <a href="../../../v0.6.0/playbook/commands/shell.html">v0.6.0</a>
+            </dd>
+            
+            <dd>
+                <a href="../../../development/playbook/commands/shell.html">development</a>
+            </dd>
+            
+            <dd>
+                <a href="../../../main/playbook/commands/shell.html">main</a>
+            </dd>
+            
+        </dl>
+    </div>
+</div>
+<script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

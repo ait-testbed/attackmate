@@ -1,0 +1,340 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Basic Usage &mdash; AttackMate 0.6.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css" />
+
+  
+      <script src="_static/jquery.js"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+      <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+      <script src="_static/doctools.js"></script>
+      <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Structure" href="playbook/structure.html" />
+    <link rel="prev" title="sliver_config" href="configuration/sliver_config.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            AttackMate
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+
+<div class="version-switcher" style="margin: 0.5em 0;">
+    <select onchange="if (this.value) window.location.href=this.value;" style="width: 100%; padding: 0.2em;">
+        
+        <option value="../v0.1.0/index.html" >
+            v0.1.0
+        </option>
+        
+        <option value="../v0.2.0/basic.html" >
+            v0.2.0
+        </option>
+        
+        <option value="../v0.3.0/basic.html" >
+            v0.3.0
+        </option>
+        
+        <option value="../v0.3.1/basic.html" >
+            v0.3.1
+        </option>
+        
+        <option value="../v0.4.0/basic.html" >
+            v0.4.0
+        </option>
+        
+        <option value="../v0.5.0/basic.html" >
+            v0.5.0
+        </option>
+        
+        <option value="basic.html" selected>
+            v0.6.0
+        </option>
+        
+        <option value="../development/basic.html" >
+            development
+        </option>
+        
+        <option value="../main/basic.html" >
+            main
+        </option>
+        
+    </select>
+</div>
+
+
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">General:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="readme_link.html">AttackMate <img alt="Logo" src="/images/AttackMate_logo_no_logo.png" align="right" height="90"></a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Getting Started:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="about.html">About</a></li>
+<li class="toctree-l1"><a class="reference internal" href="how.html">How it works</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation/index.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="preparation/index.html">Preparation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration/index.html">Configuration</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Basic Usage</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#sample-playbook">Sample Playbook</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#first-run">First Run</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#explanation">Explanation</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Playbook:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="playbook/structure.html">Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="playbook/vars.html">Variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="playbook/commands/index.html">Commands</a></li>
+<li class="toctree-l1"><a class="reference internal" href="playbook/session/index.html">Sessions, Interactive</a></li>
+<li class="toctree-l1"><a class="reference internal" href="playbook/examples.html">Examples</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developing:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="developing/command.html">Adding a New Command</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developing/baseexecutor.html">Adding a New Executor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developing/integration.html">Using AttackMate in a Python Script</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Package:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="attackmate/attackmate.html">attackmate package</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">AttackMate</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Basic Usage</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/basic.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="basic-usage">
+<h1>Basic Usage<a class="headerlink" href="#basic-usage" title="Permalink to this heading"></a></h1>
+<p>AttackMate ships with a executable stub called “attackmate” that can be called like follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">attackmate</span> <span class="o">-</span><span class="n">h</span>
+<span class="n">usage</span><span class="p">:</span> <span class="n">attackmate</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="o">--</span><span class="n">config</span> <span class="n">CONFIG</span> <span class="p">[</span><span class="o">--</span><span class="n">debug</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">version</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">json</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">append_logs</span><span class="p">]</span>
+
+<span class="n">AttackMate</span> <span class="ow">is</span> <span class="n">an</span> <span class="n">attack</span> <span class="n">orchestration</span> <span class="n">tool</span> <span class="n">that</span> <span class="n">executes</span> <span class="n">full</span> <span class="n">attack</span><span class="o">-</span><span class="n">chains</span> <span class="n">based</span> <span class="n">on</span> <span class="n">playbooks</span><span class="o">.</span>
+
+<span class="n">options</span><span class="p">:</span>
+  <span class="o">-</span><span class="n">h</span><span class="p">,</span> <span class="o">--</span><span class="n">help</span>       <span class="n">show</span> <span class="n">this</span> <span class="n">help</span> <span class="n">message</span> <span class="ow">and</span> <span class="n">exit</span>
+  <span class="o">--</span><span class="n">config</span> <span class="n">CONFIG</span>  <span class="n">Attack</span><span class="o">-</span><span class="n">Playbook</span> <span class="ow">in</span> <span class="n">yaml</span><span class="o">-</span><span class="nb">format</span>
+  <span class="o">--</span><span class="n">debug</span>          <span class="n">Enable</span> <span class="n">verbose</span> <span class="n">output</span>
+  <span class="o">--</span><span class="n">version</span>        <span class="n">show</span> <span class="n">program</span><span class="s1">&#39;s version number and exit</span>
+  <span class="o">--</span><span class="n">json</span>           <span class="n">log</span> <span class="n">commands</span> <span class="n">to</span> <span class="n">attackmate</span><span class="o">.</span><span class="n">json</span>
+  <span class="o">--</span><span class="n">append_logs</span>    <span class="n">append</span> <span class="n">logs</span> <span class="n">to</span> <span class="n">attackmate</span><span class="o">.</span><span class="n">log</span><span class="p">,</span> <span class="n">output</span><span class="o">.</span><span class="n">log</span> <span class="ow">and</span> <span class="n">attackmate</span><span class="o">.</span><span class="n">json</span> <span class="n">instead</span> <span class="n">of</span> <span class="n">overwriting</span>
+
+<span class="p">(</span><span class="n">Austrian</span> <span class="n">Institute</span> <span class="n">of</span> <span class="n">Technology</span><span class="p">)</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">aecid</span><span class="o">.</span><span class="n">ait</span><span class="o">.</span><span class="n">ac</span><span class="o">.</span><span class="n">at</span> <span class="n">Version</span><span class="p">:</span> <span class="mf">0.2.0</span>
+</pre></div>
+</div>
+<section id="sample-playbook">
+<h2>Sample Playbook<a class="headerlink" href="#sample-playbook" title="Permalink to this heading"></a></h2>
+<p>In our first example we use the following playbook.yml:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">vars</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">NMAP</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/usr/bin/nmap</span>
+<span class="w">  </span><span class="nt">TARGET</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">localhost</span>
+<span class="w">  </span><span class="nt">WEBPORT</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;8000&quot;</span>
+
+<span class="nt">commands</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">shell</span>
+<span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">$NMAP -sC -p $WEBPORT $TARGET</span>
+
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">regex</span>
+<span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">(\d+)/tcp open\s+http</span>
+<span class="w">    </span><span class="nt">input</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">RESULT_STDOUT</span>
+<span class="w">    </span><span class="nt">output</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">PORT</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">$MATCH_0</span>
+
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">shell</span>
+<span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nikto -host $TARGET -port $PORT</span>
+<span class="w">    </span><span class="nt">only_if</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">$PORT == 8000</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>For this playbook it is required to have nmap and nikto installed!
+This playbook also needs a webserver at localhost on port 8000.
+You can run <code class="docutils literal notranslate"><span class="pre">python3</span> <span class="pre">-mhttp.server</span></code> in a seperate shell to start
+the webserver.</p>
+</div>
+</section>
+<section id="first-run">
+<h2>First Run<a class="headerlink" href="#first-run" title="Permalink to this heading"></a></h2>
+<p>Now we can run the playbook using the following command:
+(We can supply the full path to the playbook, otherwise the parser tries to find it in the current working directory or in the folder /etc/attackmate/playbooks)</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ attackmate --debug playbook.yml
+  2023-09-24 20:17:36 DEBUG   | No config-file found. Using empty default-config
+  2023-09-24 20:17:36 DEBUG   | Template-Command: &#39;$NMAP -sC -p $WEBPORT $TARGET&#39;
+  2023-09-24 20:17:36 INFO    | Executing Shell-Command: &#39;/usr/bin/nmap -sC -p 8000 localhost&#39;
+  2023-09-24 20:17:37 DEBUG   | Template-Command: &#39;(\d+)/tcp open\s+http&#39;
+  2023-09-24 20:17:37 WARNING | RegEx: &#39;(\d+)/tcp open\s+http&#39;
+  2023-09-24 20:17:37 DEBUG   | {&#39;MATCH_0&#39;: &#39;8000&#39;}
+  2023-09-24 20:17:37 DEBUG   | Template-Command: &#39;nikto -host $TARGET -port $PORT&#39;
+  2023-09-24 20:17:37 INFO    | Executing Shell-Command: &#39;nikto -host localhost -port 8000&#39;
+</pre></div>
+</div>
+</section>
+<section id="explanation">
+<h2>Explanation<a class="headerlink" href="#explanation" title="Permalink to this heading"></a></h2>
+<p>In the <strong>vars</strong>-section we have three variables That can be used later in the <strong>commands</strong>-section.
+The nmap-binary is expected at the location <em>/usr/bin/nmap</em>. The target to attack is <em>localhost</em> and
+the web-port to attack is <em>8000</em>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">vars</span><span class="p">:</span>
+  <span class="n">NMAP</span><span class="p">:</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">nmap</span>
+  <span class="n">TARGET</span><span class="p">:</span> <span class="n">localhost</span>
+  <span class="n">WEBPORT</span><span class="p">:</span> <span class="s2">&quot;8000&quot;</span>
+</pre></div>
+</div>
+<p>The first command executes an nmap-script-scan on port <em>8000</em> at <em>localhost</em>. This command illustrates
+how to use variables:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>commands:
+  - type: shell
+    cmd: $NMAP -sC -p $WEBPORT $TARGET
+</pre></div>
+</div>
+<p>As soon as nmap finishes, it automatically stores the output the the built-in variable <code class="docutils literal notranslate"><span class="pre">RESULT_STDOUT</span></code>.
+The regex command executes a regex search using the content of the nmap output. The regular expression is
+<cite>(d+)/tcp opens+http</cite>. If the expression matches, it will “group” the port number in the variable
+<code class="docutils literal notranslate"><span class="pre">$MATCH_0</span></code> which is a volatile variable and is deleted after the regex-command finishes. In the setting
+<em>output</em> is a variable defined with the name <code class="docutils literal notranslate"><span class="pre">PORT</span></code> and it will be set with the value of <code class="docutils literal notranslate"><span class="pre">$MATCH_0</span></code>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>- type: regex
+  cmd: (\d+)/tcp open\s+http
+  input: RESULT_STDOUT
+  output:
+    PORT: $MATCH_0
+</pre></div>
+</div>
+<p>The final command is again a shell command that is supposed to execute a nikto scan using the previously
+parsed variable <code class="docutils literal notranslate"><span class="pre">$PORT</span></code>. This command will only be executed if the condition <code class="docutils literal notranslate"><span class="pre">$PORT</span> <span class="pre">==</span> <span class="pre">8000</span></code> is <strong>True</strong>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>- type: shell
+  cmd: nikto -host $TARGET -port $PORT
+  only_if: $PORT == 8000
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="configuration/sliver_config.html" class="btn btn-neutral float-left" title="sliver_config" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="playbook/structure.html" class="btn btn-neutral float-right" title="Structure" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Wolfgang Hotwagner.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  
+<div class="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version">
+        <span class="fa fa-book"> Version</span>
+        v0.6.0
+    </span>
+
+    <div class="rst-other-versions">
+        <dl>
+            <dt>Versions</dt>
+            
+            <dd>
+                <a href="../v0.1.0/index.html">v0.1.0</a>
+            </dd>
+            
+            <dd>
+                <a href="../v0.2.0/basic.html">v0.2.0</a>
+            </dd>
+            
+            <dd>
+                <a href="../v0.3.0/basic.html">v0.3.0</a>
+            </dd>
+            
+            <dd>
+                <a href="../v0.3.1/basic.html">v0.3.1</a>
+            </dd>
+            
+            <dd>
+                <a href="../v0.4.0/basic.html">v0.4.0</a>
+            </dd>
+            
+            <dd>
+                <a href="../v0.5.0/basic.html">v0.5.0</a>
+            </dd>
+            
+            <dd>
+                <a href="basic.html">v0.6.0</a>
+            </dd>
+            
+            <dd>
+                <a href="../development/basic.html">development</a>
+            </dd>
+            
+            <dd>
+                <a href="../main/basic.html">main</a>
+            </dd>
+            
+        </dl>
+    </div>
+</div>
+<script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

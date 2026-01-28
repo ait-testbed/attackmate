@@ -1,0 +1,312 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Adding a New Executor &mdash; AttackMate 0.6.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css" />
+
+  
+      <script src="../_static/jquery.js"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+      <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+      <script src="../_static/doctools.js"></script>
+      <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Using AttackMate in a Python Script" href="integration.html" />
+    <link rel="prev" title="Adding a New Command" href="command.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            AttackMate
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+
+<div class="version-switcher" style="margin: 0.5em 0;">
+    <select onchange="if (this.value) window.location.href=this.value;" style="width: 100%; padding: 0.2em;">
+        
+        <option value="../../v0.1.0/index.html" >
+            v0.1.0
+        </option>
+        
+        <option value="../../v0.2.0/index.html" >
+            v0.2.0
+        </option>
+        
+        <option value="../../v0.3.0/index.html" >
+            v0.3.0
+        </option>
+        
+        <option value="../../v0.3.1/index.html" >
+            v0.3.1
+        </option>
+        
+        <option value="../../v0.4.0/index.html" >
+            v0.4.0
+        </option>
+        
+        <option value="../../v0.5.0/developing/baseexecutor.html" >
+            v0.5.0
+        </option>
+        
+        <option value="baseexecutor.html" selected>
+            v0.6.0
+        </option>
+        
+        <option value="../../development/developing/baseexecutor.html" >
+            development
+        </option>
+        
+        <option value="../../main/developing/baseexecutor.html" >
+            main
+        </option>
+        
+    </select>
+</div>
+
+
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">General:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html">AttackMate <img alt="Logo" src="/images/AttackMate_logo_no_logo.png" align="right" height="90"></a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Getting Started:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../about.html">About</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../how.html">How it works</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation/index.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../preparation/index.html">Preparation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration/index.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basic.html">Basic Usage</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Playbook:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../playbook/structure.html">Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../playbook/vars.html">Variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../playbook/commands/index.html">Commands</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../playbook/session/index.html">Sessions, Interactive</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../playbook/examples.html">Examples</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developing:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="command.html">Adding a New Command</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Adding a New Executor</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#base-executor">Base Executor</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="integration.html">Using AttackMate in a Python Script</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Package:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../attackmate/attackmate.html">attackmate package</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">AttackMate</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Adding a New Executor</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/developing/baseexecutor.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="adding-a-new-executor">
+<h1>Adding a New Executor<a class="headerlink" href="#adding-a-new-executor" title="Permalink to this heading"></a></h1>
+<section id="base-executor">
+<span id="id1"></span><h2>Base Executor<a class="headerlink" href="#base-executor" title="Permalink to this heading"></a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">BaseExecutor</span></code> is the core class from which all executors in AttackMate inherit.
+It provides a structured approach to implementing custom executors.</p>
+<section id="key-features">
+<h3>Key Features<a class="headerlink" href="#key-features" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><p><strong>Command Execution Handling</strong>: Defines the execution flow for commands, including logging, metadata processing, and error handling.</p></li>
+<li><p><strong>Variable Substitution</strong>: Supports dynamic replacement of variables in command execution using <code class="docutils literal notranslate"><span class="pre">CmdVars</span></code>.</p></li>
+<li><p><strong>Looping &amp; Conditional Execution</strong>: Implements logic to repeat commands or execute them based on conditions.</p></li>
+<li><p><strong>Background Execution</strong>: Allows certain commands to run asynchronously.</p></li>
+<li><p><strong>Error Handling</strong>: Supports stopping execution on errors via <code class="docutils literal notranslate"><span class="pre">ExitOnError</span></code>.</p></li>
+<li><p><strong>Logging &amp; Output Management</strong>: Tracks execution details, metadata, and output results.</p></li>
+</ul>
+</section>
+<section id="execution-flow">
+<h3>Execution Flow<a class="headerlink" href="#execution-flow" title="Permalink to this heading"></a></h3>
+<ol class="arabic simple">
+<li><p><strong>Command Logging</strong>: Logs execution details, metadata, and JSON-formatted information.</p></li>
+<li><p><strong>Command Processing</strong>: Substitutes variables, applies looping logic, and checks execution conditions.</p></li>
+<li><p><strong>Execution and Result Handling</strong>: Calls <code class="docutils literal notranslate"><span class="pre">_exec_cmd()</span></code>, processes results, and manages errors.</p></li>
+<li><p><strong>Output Saving</strong>: If specified, saves command output to a file.</p></li>
+</ol>
+</section>
+<section id="implementing-a-custom-executor">
+<h3>Implementing a Custom Executor<a class="headerlink" href="#implementing-a-custom-executor" title="Permalink to this heading"></a></h3>
+<p>To create a custom executor, inherit from <code class="docutils literal notranslate"><span class="pre">BaseExecutor</span></code> and implement the <code class="docutils literal notranslate"><span class="pre">_exec_cmd()</span></code> method. Other methods can be overriden as needed.</p>
+<p>Example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">attackmate.executors.base_executor</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseExecutor</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">attackmate.result</span><span class="w"> </span><span class="kn">import</span> <span class="n">Result</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">CustomExecutor</span><span class="p">(</span><span class="n">BaseExecutor</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_exec_cmd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">command</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Result</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Executing custom command: </span><span class="si">{</span><span class="n">command</span><span class="o">.</span><span class="n">cmd</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Result</span><span class="p">(</span><span class="n">stdout</span><span class="o">=</span><span class="s2">&quot;Execution complete&quot;</span><span class="p">,</span> <span class="n">returncode</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="constructor">
+<h3>Constructor<a class="headerlink" href="#constructor" title="Permalink to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">,</span> <span class="n">pm</span><span class="p">:</span> <span class="n">ProcessManager</span><span class="p">,</span> <span class="n">varstore</span><span class="p">:</span> <span class="n">VariableStore</span><span class="p">,</span> <span class="n">cmdconfig</span><span class="o">=</span><span class="n">CommandConfig</span><span class="p">(),</span> <span class="n">substitute_cmd_vars</span><span class="o">=</span><span class="kc">True</span>
+<span class="p">):</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">pm</span></code>: Instance of <code class="docutils literal notranslate"><span class="pre">ProcessManager</span></code> to handle process execution.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">varstore</span></code>: Instance of <code class="docutils literal notranslate"><span class="pre">VariableStore</span></code> to manage variables.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">cmdconfig</span></code>: Optional configuration settings for command execution.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">substitute_cmd_vars</span></code>: Enables variable substitution in command strings, defaults to <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p></li>
+</ul>
+</section>
+<section id="overridable-methods">
+<h3>Overridable Methods<a class="headerlink" href="#overridable-methods" title="Permalink to this heading"></a></h3>
+<p>The following methods can be overridden in custom executors to modify behavior:</p>
+<p><strong>Command Execution</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">_exec_cmd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">command</span><span class="p">:</span> <span class="n">BaseCommand</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Result</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">Result</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This is the core execution function and must be implemented in subclasses.
+It should return a <code class="docutils literal notranslate"><span class="pre">Result</span></code> object containing the execution outcome.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">_exec_cmd()</span></code> method <strong>must</strong> be implemented in any subclass of <code class="docutils literal notranslate"><span class="pre">BaseExecutor</span></code>.
+This method defines the core execution logic for the command and is responsible for returning a <code class="docutils literal notranslate"><span class="pre">Result</span></code> object.</p>
+</div>
+<p><strong>Logging Functions</strong></p>
+<p>The methods <code class="docutils literal notranslate"><span class="pre">log_command</span></code>, <code class="docutils literal notranslate"><span class="pre">log_matadata</span></code> and <code class="docutils literal notranslate"><span class="pre">log_json</span></code> log command execution details and can be overridden for custom logging formats.</p>
+<p><strong>Command Execution Flow</strong></p>
+<p>The <code class="docutils literal notranslate"><span class="pre">run()</span></code> method defines the high-level execution flow of a command.
+It includes condition checking, logging, and calling the actual execution logic.</p>
+<p><strong>Output Handling</strong></p>
+<p>The <code class="docutils literal notranslate"><span class="pre">save_output()</span></code> function manages saving output to a file. It can be overridden to implement alternative storage methods.</p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="command.html" class="btn btn-neutral float-left" title="Adding a New Command" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="integration.html" class="btn btn-neutral float-right" title="Using AttackMate in a Python Script" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Wolfgang Hotwagner.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  
+<div class="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version">
+        <span class="fa fa-book"> Version</span>
+        v0.6.0
+    </span>
+
+    <div class="rst-other-versions">
+        <dl>
+            <dt>Versions</dt>
+            
+            <dd>
+                <a href="../../v0.1.0/index.html">v0.1.0</a>
+            </dd>
+            
+            <dd>
+                <a href="../../v0.2.0/index.html">v0.2.0</a>
+            </dd>
+            
+            <dd>
+                <a href="../../v0.3.0/index.html">v0.3.0</a>
+            </dd>
+            
+            <dd>
+                <a href="../../v0.3.1/index.html">v0.3.1</a>
+            </dd>
+            
+            <dd>
+                <a href="../../v0.4.0/index.html">v0.4.0</a>
+            </dd>
+            
+            <dd>
+                <a href="../../v0.5.0/developing/baseexecutor.html">v0.5.0</a>
+            </dd>
+            
+            <dd>
+                <a href="baseexecutor.html">v0.6.0</a>
+            </dd>
+            
+            <dd>
+                <a href="../../development/developing/baseexecutor.html">development</a>
+            </dd>
+            
+            <dd>
+                <a href="../../main/developing/baseexecutor.html">main</a>
+            </dd>
+            
+        </dl>
+    </div>
+</div>
+<script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

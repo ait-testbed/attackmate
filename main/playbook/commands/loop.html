@@ -1,0 +1,397 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>loop &mdash; AttackMate 0.6.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css" />
+
+  
+      <script src="../../_static/jquery.js"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+      <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+      <script src="../../_static/doctools.js"></script>
+      <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="mktemp" href="mktemp.html" />
+    <link rel="prev" title="json" href="json.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            AttackMate
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+
+<div class="version-switcher" style="margin: 0.5em 0;">
+    <select onchange="if (this.value) window.location.href=this.value;" style="width: 100%; padding: 0.2em;">
+        
+        <option value="../../../v0.1.0/index.html" >
+            v0.1.0
+        </option>
+        
+        <option value="../../../v0.2.0/index.html" >
+            v0.2.0
+        </option>
+        
+        <option value="../../../v0.3.0/index.html" >
+            v0.3.0
+        </option>
+        
+        <option value="../../../v0.3.1/index.html" >
+            v0.3.1
+        </option>
+        
+        <option value="../../../v0.4.0/playbook/commands/loop.html" >
+            v0.4.0
+        </option>
+        
+        <option value="../../../v0.5.0/playbook/commands/loop.html" >
+            v0.5.0
+        </option>
+        
+        <option value="../../../v0.6.0/playbook/commands/loop.html" >
+            v0.6.0
+        </option>
+        
+        <option value="../../../development/playbook/commands/loop.html" >
+            development
+        </option>
+        
+        <option value="loop.html" selected>
+            main
+        </option>
+        
+    </select>
+</div>
+
+
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">General:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html">AttackMate <img alt="Logo" src="/images/AttackMate_logo_no_logo.png" align="right" height="90"></a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Getting Started:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../about.html">About</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../how.html">How it works</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation/index.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../preparation/index.html">Preparation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../configuration/index.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../basic.html">Basic Usage</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Playbook:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../structure.html">Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../vars.html">Variables</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Commands</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="browser.html">browser</a></li>
+<li class="toctree-l2"><a class="reference internal" href="debug.html">debug</a></li>
+<li class="toctree-l2"><a class="reference internal" href="father.html">father</a></li>
+<li class="toctree-l2"><a class="reference internal" href="httpclient.html">http-client</a></li>
+<li class="toctree-l2"><a class="reference internal" href="include.html">include</a></li>
+<li class="toctree-l2"><a class="reference internal" href="json.html">json</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">loop</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mktemp.html">mktemp</a></li>
+<li class="toctree-l2"><a class="reference internal" href="msf-module.html">msf-module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="msf-session.html">msf-session</a></li>
+<li class="toctree-l2"><a class="reference internal" href="payload.html">msf-payload</a></li>
+<li class="toctree-l2"><a class="reference internal" href="regex.html">regex</a></li>
+<li class="toctree-l2"><a class="reference internal" href="setvar.html">setvar</a></li>
+<li class="toctree-l2"><a class="reference internal" href="shell.html">shell</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sftp.html">sftp</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sleep.html">sleep</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sliver.html">sliver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sliver-session.html">sliver-session</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ssh.html">ssh</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vnc.html">vnc</a></li>
+<li class="toctree-l2"><a class="reference internal" href="webserv.html">webserv</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../session/index.html">Sessions, Interactive</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples.html">Examples</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developing:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../developing/command.html">Adding a New Command</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../developing/baseexecutor.html">Adding a New Executor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../developing/integration.html">Using AttackMate in a Python Script</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Package:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../attackmate/attackmate.html">attackmate package</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">AttackMate</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Commands</a></li>
+      <li class="breadcrumb-item active">loop</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/playbook/commands/loop.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="loop">
+<h1>loop<a class="headerlink" href="#loop" title="Permalink to this heading"></a></h1>
+<p>Execute a set of commands in a loop, based on a condition or iteration over a list of values.</p>
+<p>The <cite>loop</cite> command allows dynamic iteration over lists or ranges of values, executing a sequence of commands for each iteration. It provides flexibility when working with variable data such as network scans, enabling the execution of different commands depending on the results, without prior knowledge of the number of iterations.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The loop command works with two primary loop conditions: iterating over a list of values (<cite>items</cite>) or iterating over a numerical range (<cite>range</cite>).</p>
+</div>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">vars</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">LISTA</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">one</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">two</span>
+
+<span class="nt">commands</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">loop</span>
+<span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;items(LISTA)&quot;</span>
+<span class="w">    </span><span class="nt">commands</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">shell</span>
+<span class="w">        </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">echo hello</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">debug</span>
+<span class="w">        </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">$LOOP_ITEM</span>
+
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">loop</span>
+<span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;range(0,</span><span class="nv"> </span><span class="s">3)&quot;</span>
+<span class="w">    </span><span class="nt">commands</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">shell</span>
+<span class="w">        </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">echo &quot;Index $LOOP_INDEX&quot;</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">debug</span>
+<span class="w">        </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">$LOOP_INDEX</span>
+</pre></div>
+</div>
+<p><strong>Loop with items</strong>:
+This mode iterates over the elements of a list and substitutes each element into the commands.
+The current item is accessible as the <cite>$LOOP_ITEM</cite> variable.</p>
+<p><strong>Loop with range</strong>:
+This mode iterates over a range of integers. The current index is accessible as the <cite>$LOOP_INDEX</cite> variable.</p>
+<p><strong>Loop until condition is fulfilled</strong>
+This mode iterates indefinitely until the condition is fulfilled. (Checked before every command within the loop)
+Variables in cmd settings of an until loop command until($VAR1 == $VAR2) will be substituted from the variable store on every iteration of the loop.
+The current index/iteration of the loop is also accessible as the <cite>$LOOP_INDEX</cite> variable for the until() condition.</p>
+<dl class="std confval">
+<dt class="sig sig-object std" id="confval-cmd">
+<span class="sig-name descname"><span class="pre">cmd</span></span><a class="headerlink" href="#confval-cmd" title="Permalink to this definition"></a></dt>
+<dd><p>The loop condition. This defines how the loop should iterate, either over a list or a range of values, or idefinitely until the
+condition defined in until() is rached.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+<dt class="field-even">Required<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code></p>
+</dd>
+</dl>
+<p>Examples:</p>
+<ul class="simple">
+<li><p><strong>items(LISTA)</strong>: Iterate over the elements of a list named <cite>LISTA</cite>.</p></li>
+<li><p><strong>range(0, 10)</strong>: Iterate over a range from 0 to 9.</p></li>
+<li><p><a href="#id1"><span class="problematic" id="id2">**</span></a>until($PORT == 7)</p></li>
+</ul>
+</dd></dl>
+
+<dl class="std confval">
+<dt class="sig sig-object std" id="confval-break_if">
+<span class="sig-name descname"><span class="pre">break_if</span></span><a class="headerlink" href="#confval-break_if" title="Permalink to this definition"></a></dt>
+<dd><p>If defined, this condition is checked before every command in the loop.
+If the condition evaluates to <cite>True</cite>, break out of the loop.
+Supports the same operators as <a class="reference internal" href="index.html#confval-only_if"><code class="xref std std-confval docutils literal notranslate"><span class="pre">only_if</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+<dt class="field-even">Required<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">False</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="std confval">
+<dt class="sig sig-object std" id="confval-commands">
+<span class="sig-name descname"><span class="pre">commands</span></span><a class="headerlink" href="#confval-commands" title="Permalink to this definition"></a></dt>
+<dd><p>The list of commands to execute during each iteration of the loop. These commands are executed once per iteration, with loop-specific variables (<cite>$LOOP_ITEM</cite> or <cite>$LOOP_INDEX</cite>) available for substitution.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list[Command]</p>
+</dd>
+<dt class="field-even">Required<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code></p>
+</dd>
+</dl>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">vars</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">LISTA</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">port1</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">port2</span>
+
+<span class="nt">commands</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">loop</span>
+<span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;items(LISTA)&quot;</span>
+<span class="w">    </span><span class="nt">commands</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">shell</span>
+<span class="w">        </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;nmap</span><span class="nv"> </span><span class="s">-p</span><span class="nv"> </span><span class="s">$LOOP_ITEM</span><span class="nv"> </span><span class="s">10.10.10.10&quot;</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">debug</span>
+<span class="w">        </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">$LOOP_ITEM</span>
+</pre></div>
+</div>
+<p>In the above example, each element of <cite>LISTA</cite> (port1, port2) is substituted into the loop, and an Nmap scan is run for each port.</p>
+<p>Example of looping over a range:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">vars</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">INDEX_START</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span>
+<span class="w">  </span><span class="nt">INDEX_END</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5</span>
+
+<span class="nt">commands</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">loop</span>
+<span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;range($INDEX_START,</span><span class="nv"> </span><span class="s">$INDEX_END)&quot;</span>
+<span class="w">    </span><span class="nt">commands</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">shell</span>
+<span class="w">        </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">echo &quot;Index is $LOOP_INDEX&quot;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="std confval">
+<dt class="sig sig-object std" id="confval-LOOP_ITEM">
+<span class="sig-name descname"><span class="pre">LOOP_ITEM</span></span><a class="headerlink" href="#confval-LOOP_ITEM" title="Permalink to this definition"></a></dt>
+<dd><p>In <cite>items</cite> loops, this variable holds the current item from the list being iterated over.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="std confval">
+<dt class="sig sig-object std" id="confval-LOOP_INDEX">
+<span class="sig-name descname"><span class="pre">LOOP_INDEX</span></span><a class="headerlink" href="#confval-LOOP_INDEX" title="Permalink to this definition"></a></dt>
+<dd><p>In <cite>range</cite> loops, this variable holds the current index of the iteration.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="json.html" class="btn btn-neutral float-left" title="json" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="mktemp.html" class="btn btn-neutral float-right" title="mktemp" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Wolfgang Hotwagner.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  
+<div class="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version">
+        <span class="fa fa-book"> Version</span>
+        main
+    </span>
+
+    <div class="rst-other-versions">
+        <dl>
+            <dt>Versions</dt>
+            
+            <dd>
+                <a href="../../../v0.1.0/index.html">v0.1.0</a>
+            </dd>
+            
+            <dd>
+                <a href="../../../v0.2.0/index.html">v0.2.0</a>
+            </dd>
+            
+            <dd>
+                <a href="../../../v0.3.0/index.html">v0.3.0</a>
+            </dd>
+            
+            <dd>
+                <a href="../../../v0.3.1/index.html">v0.3.1</a>
+            </dd>
+            
+            <dd>
+                <a href="../../../v0.4.0/playbook/commands/loop.html">v0.4.0</a>
+            </dd>
+            
+            <dd>
+                <a href="../../../v0.5.0/playbook/commands/loop.html">v0.5.0</a>
+            </dd>
+            
+            <dd>
+                <a href="../../../v0.6.0/playbook/commands/loop.html">v0.6.0</a>
+            </dd>
+            
+            <dd>
+                <a href="../../../development/playbook/commands/loop.html">development</a>
+            </dd>
+            
+            <dd>
+                <a href="loop.html">main</a>
+            </dd>
+            
+        </dl>
+    </div>
+</div>
+<script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

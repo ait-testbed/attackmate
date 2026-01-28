@@ -1,0 +1,382 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>penpal &mdash; AttackMate 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css" />
+
+  
+      <script src="../_static/jquery.js"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+      <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+      <script src="../_static/doctools.js"></script>
+      <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            AttackMate
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+
+<div class="version-switcher" style="margin: 0.5em 0;">
+    <select onchange="if (this.value) window.location.href=this.value;" style="width: 100%; padding: 0.2em;">
+        
+        <option value="modules.html" selected>
+            v0.1.0
+        </option>
+        
+        <option value="../../v0.2.0/index.html" >
+            v0.2.0
+        </option>
+        
+        <option value="../../v0.3.0/index.html" >
+            v0.3.0
+        </option>
+        
+        <option value="../../v0.3.1/index.html" >
+            v0.3.1
+        </option>
+        
+        <option value="../../v0.4.0/index.html" >
+            v0.4.0
+        </option>
+        
+        <option value="../../v0.5.0/index.html" >
+            v0.5.0
+        </option>
+        
+        <option value="../../v0.6.0/index.html" >
+            v0.6.0
+        </option>
+        
+        <option value="../../development/index.html" >
+            development
+        </option>
+        
+        <option value="../../main/index.html" >
+            main
+        </option>
+        
+    </select>
+</div>
+
+
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">General:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html">PenPal</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#requirements">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#installation">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#execute">Execute</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#documentation">Documentation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Configuration:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../configuration/configuration.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration/config_vars.html">vars</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration/command_config.html">cmd_config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration/msf_config.html">msf_config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration/commands.html">commands</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Development:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="penpal.html">penpal package</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">AttackMate</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">penpal</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/penpal/modules.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="penpal">
+<h1>penpal<a class="headerlink" href="#penpal" title="Permalink to this heading"></a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="penpal.html">penpal package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="penpal.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="penpal.html#module-penpal.baseexecutor">penpal.baseexecutor module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="penpal.html#penpal.baseexecutor.BaseExecutor"><code class="docutils literal notranslate"><span class="pre">BaseExecutor</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="penpal.html#penpal.baseexecutor.BaseExecutor.error_if"><code class="docutils literal notranslate"><span class="pre">BaseExecutor.error_if()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="penpal.html#penpal.baseexecutor.BaseExecutor.error_if_not"><code class="docutils literal notranslate"><span class="pre">BaseExecutor.error_if_not()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="penpal.html#penpal.baseexecutor.BaseExecutor.exec"><code class="docutils literal notranslate"><span class="pre">BaseExecutor.exec()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="penpal.html#penpal.baseexecutor.BaseExecutor.log_command"><code class="docutils literal notranslate"><span class="pre">BaseExecutor.log_command()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="penpal.html#penpal.baseexecutor.BaseExecutor.loop_if"><code class="docutils literal notranslate"><span class="pre">BaseExecutor.loop_if()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="penpal.html#penpal.baseexecutor.BaseExecutor.loop_if_not"><code class="docutils literal notranslate"><span class="pre">BaseExecutor.loop_if_not()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="penpal.html#penpal.baseexecutor.BaseExecutor.run"><code class="docutils literal notranslate"><span class="pre">BaseExecutor.run()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="penpal.html#penpal.baseexecutor.ExecException"><code class="docutils literal notranslate"><span class="pre">ExecException</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="penpal.html#penpal.baseexecutor.Result"><code class="docutils literal notranslate"><span class="pre">Result</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="penpal.html#penpal.baseexecutor.Result.returncode"><code class="docutils literal notranslate"><span class="pre">Result.returncode</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="penpal.html#penpal.baseexecutor.Result.stdout"><code class="docutils literal notranslate"><span class="pre">Result.stdout</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="penpal.html#module-penpal.metadata">penpal.metadata module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="penpal.html#module-penpal.msfexecutor">penpal.msfexecutor module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="penpal.html#penpal.msfexecutor.MsfModuleExecutor"><code class="docutils literal notranslate"><span class="pre">MsfModuleExecutor</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="penpal.html#penpal.msfexecutor.MsfModuleExecutor.connect"><code class="docutils literal notranslate"><span class="pre">MsfModuleExecutor.connect()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="penpal.html#penpal.msfexecutor.MsfModuleExecutor.log_command"><code class="docutils literal notranslate"><span class="pre">MsfModuleExecutor.log_command()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="penpal.html#penpal.msfexecutor.MsfModuleExecutor.prepare_exploit"><code class="docutils literal notranslate"><span class="pre">MsfModuleExecutor.prepare_exploit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="penpal.html#penpal.msfexecutor.MsfModuleExecutor.prepare_payload"><code class="docutils literal notranslate"><span class="pre">MsfModuleExecutor.prepare_payload()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="penpal.html#module-penpal.penpal">penpal.penpal module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="penpal.html#penpal.penpal.PenPal"><code class="docutils literal notranslate"><span class="pre">PenPal</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="penpal.html#penpal.penpal.PenPal.initialize_executors"><code class="docutils literal notranslate"><span class="pre">PenPal.initialize_executors()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="penpal.html#penpal.penpal.PenPal.initialize_variable_parser"><code class="docutils literal notranslate"><span class="pre">PenPal.initialize_variable_parser()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="penpal.html#penpal.penpal.PenPal.main"><code class="docutils literal notranslate"><span class="pre">PenPal.main()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="penpal.html#penpal.penpal.PenPal.parse_config"><code class="docutils literal notranslate"><span class="pre">PenPal.parse_config()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="penpal.html#module-penpal.schemas">penpal.schemas module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="penpal.html#penpal.schemas.BaseCommand"><code class="docutils literal notranslate"><span class="pre">BaseCommand</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="penpal.html#penpal.schemas.BaseCommand.cmd"><code class="docutils literal notranslate"><span class="pre">BaseCommand.cmd</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="penpal.html#penpal.schemas.BaseCommand.error_if"><code class="docutils literal notranslate"><span class="pre">BaseCommand.error_if</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="penpal.html#penpal.schemas.BaseCommand.error_if_not"><code class="docutils literal notranslate"><span class="pre">BaseCommand.error_if_not</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="penpal.html#penpal.schemas.BaseCommand.exit_on_error"><code class="docutils literal notranslate"><span class="pre">BaseCommand.exit_on_error</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="penpal.html#penpal.schemas.BaseCommand.loop_count"><code class="docutils literal notranslate"><span class="pre">BaseCommand.loop_count</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="penpal.html#penpal.schemas.BaseCommand.loop_if"><code class="docutils literal notranslate"><span class="pre">BaseCommand.loop_if</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="penpal.html#penpal.schemas.BaseCommand.loop_if_not"><code class="docutils literal notranslate"><span class="pre">BaseCommand.loop_if_not</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="penpal.html#penpal.schemas.BaseCommand.model_config"><code class="docutils literal notranslate"><span class="pre">BaseCommand.model_config</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="penpal.html#penpal.schemas.CommandConfig"><code class="docutils literal notranslate"><span class="pre">CommandConfig</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="penpal.html#penpal.schemas.CommandConfig.loop_sleep"><code class="docutils literal notranslate"><span class="pre">CommandConfig.loop_sleep</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="penpal.html#penpal.schemas.CommandConfig.model_config"><code class="docutils literal notranslate"><span class="pre">CommandConfig.model_config</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="penpal.html#penpal.schemas.Config"><code class="docutils literal notranslate"><span class="pre">Config</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="penpal.html#penpal.schemas.Config.cmd_config"><code class="docutils literal notranslate"><span class="pre">Config.cmd_config</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="penpal.html#penpal.schemas.Config.commands"><code class="docutils literal notranslate"><span class="pre">Config.commands</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="penpal.html#penpal.schemas.Config.model_config"><code class="docutils literal notranslate"><span class="pre">Config.model_config</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="penpal.html#penpal.schemas.Config.msf_config"><code class="docutils literal notranslate"><span class="pre">Config.msf_config</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="penpal.html#penpal.schemas.Config.vars"><code class="docutils literal notranslate"><span class="pre">Config.vars</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="penpal.html#penpal.schemas.MsfConfig"><code class="docutils literal notranslate"><span class="pre">MsfConfig</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="penpal.html#penpal.schemas.MsfConfig.model_config"><code class="docutils literal notranslate"><span class="pre">MsfConfig.model_config</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="penpal.html#penpal.schemas.MsfConfig.password"><code class="docutils literal notranslate"><span class="pre">MsfConfig.password</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="penpal.html#penpal.schemas.MsfConfig.port"><code class="docutils literal notranslate"><span class="pre">MsfConfig.port</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="penpal.html#penpal.schemas.MsfConfig.server"><code class="docutils literal notranslate"><span class="pre">MsfConfig.server</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="penpal.html#penpal.schemas.MsfConfig.ssl"><code class="docutils literal notranslate"><span class="pre">MsfConfig.ssl</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="penpal.html#penpal.schemas.MsfConfig.uri"><code class="docutils literal notranslate"><span class="pre">MsfConfig.uri</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="penpal.html#penpal.schemas.MsfModuleCommand"><code class="docutils literal notranslate"><span class="pre">MsfModuleCommand</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="penpal.html#penpal.schemas.MsfModuleCommand.cmd"><code class="docutils literal notranslate"><span class="pre">MsfModuleCommand.cmd</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="penpal.html#penpal.schemas.MsfModuleCommand.creates_session"><code class="docutils literal notranslate"><span class="pre">MsfModuleCommand.creates_session</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="penpal.html#penpal.schemas.MsfModuleCommand.is_interactive"><code class="docutils literal notranslate"><span class="pre">MsfModuleCommand.is_interactive()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="penpal.html#penpal.schemas.MsfModuleCommand.model_config"><code class="docutils literal notranslate"><span class="pre">MsfModuleCommand.model_config</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="penpal.html#penpal.schemas.MsfModuleCommand.module_path"><code class="docutils literal notranslate"><span class="pre">MsfModuleCommand.module_path()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="penpal.html#penpal.schemas.MsfModuleCommand.module_type"><code class="docutils literal notranslate"><span class="pre">MsfModuleCommand.module_type()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="penpal.html#penpal.schemas.MsfModuleCommand.options"><code class="docutils literal notranslate"><span class="pre">MsfModuleCommand.options</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="penpal.html#penpal.schemas.MsfModuleCommand.payload"><code class="docutils literal notranslate"><span class="pre">MsfModuleCommand.payload</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="penpal.html#penpal.schemas.MsfModuleCommand.payload_options"><code class="docutils literal notranslate"><span class="pre">MsfModuleCommand.payload_options</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="penpal.html#penpal.schemas.MsfModuleCommand.session"><code class="docutils literal notranslate"><span class="pre">MsfModuleCommand.session</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="penpal.html#penpal.schemas.MsfModuleCommand.target"><code class="docutils literal notranslate"><span class="pre">MsfModuleCommand.target</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="penpal.html#penpal.schemas.MsfModuleCommand.type"><code class="docutils literal notranslate"><span class="pre">MsfModuleCommand.type</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="penpal.html#penpal.schemas.MsfSessionCommand"><code class="docutils literal notranslate"><span class="pre">MsfSessionCommand</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="penpal.html#penpal.schemas.MsfSessionCommand.cmd"><code class="docutils literal notranslate"><span class="pre">MsfSessionCommand.cmd</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="penpal.html#penpal.schemas.MsfSessionCommand.end_str"><code class="docutils literal notranslate"><span class="pre">MsfSessionCommand.end_str</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="penpal.html#penpal.schemas.MsfSessionCommand.model_config"><code class="docutils literal notranslate"><span class="pre">MsfSessionCommand.model_config</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="penpal.html#penpal.schemas.MsfSessionCommand.read"><code class="docutils literal notranslate"><span class="pre">MsfSessionCommand.read</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="penpal.html#penpal.schemas.MsfSessionCommand.session"><code class="docutils literal notranslate"><span class="pre">MsfSessionCommand.session</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="penpal.html#penpal.schemas.MsfSessionCommand.stdapi"><code class="docutils literal notranslate"><span class="pre">MsfSessionCommand.stdapi</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="penpal.html#penpal.schemas.MsfSessionCommand.type"><code class="docutils literal notranslate"><span class="pre">MsfSessionCommand.type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="penpal.html#penpal.schemas.MsfSessionCommand.write"><code class="docutils literal notranslate"><span class="pre">MsfSessionCommand.write</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="penpal.html#penpal.schemas.SSHCommand"><code class="docutils literal notranslate"><span class="pre">SSHCommand</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="penpal.html#penpal.schemas.SSHCommand.clear_cache"><code class="docutils literal notranslate"><span class="pre">SSHCommand.clear_cache</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="penpal.html#penpal.schemas.SSHCommand.creates_session"><code class="docutils literal notranslate"><span class="pre">SSHCommand.creates_session</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="penpal.html#penpal.schemas.SSHCommand.hostname"><code class="docutils literal notranslate"><span class="pre">SSHCommand.hostname</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="penpal.html#penpal.schemas.SSHCommand.jmp_hostname"><code class="docutils literal notranslate"><span class="pre">SSHCommand.jmp_hostname</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="penpal.html#penpal.schemas.SSHCommand.jmp_port"><code class="docutils literal notranslate"><span class="pre">SSHCommand.jmp_port</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="penpal.html#penpal.schemas.SSHCommand.jmp_username"><code class="docutils literal notranslate"><span class="pre">SSHCommand.jmp_username</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="penpal.html#penpal.schemas.SSHCommand.key_filename"><code class="docutils literal notranslate"><span class="pre">SSHCommand.key_filename</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="penpal.html#penpal.schemas.SSHCommand.model_config"><code class="docutils literal notranslate"><span class="pre">SSHCommand.model_config</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="penpal.html#penpal.schemas.SSHCommand.passphrase"><code class="docutils literal notranslate"><span class="pre">SSHCommand.passphrase</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="penpal.html#penpal.schemas.SSHCommand.password"><code class="docutils literal notranslate"><span class="pre">SSHCommand.password</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="penpal.html#penpal.schemas.SSHCommand.port"><code class="docutils literal notranslate"><span class="pre">SSHCommand.port</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="penpal.html#penpal.schemas.SSHCommand.session"><code class="docutils literal notranslate"><span class="pre">SSHCommand.session</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="penpal.html#penpal.schemas.SSHCommand.timeout"><code class="docutils literal notranslate"><span class="pre">SSHCommand.timeout</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="penpal.html#penpal.schemas.SSHCommand.type"><code class="docutils literal notranslate"><span class="pre">SSHCommand.type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="penpal.html#penpal.schemas.SSHCommand.username"><code class="docutils literal notranslate"><span class="pre">SSHCommand.username</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="penpal.html#penpal.schemas.ShellCommand"><code class="docutils literal notranslate"><span class="pre">ShellCommand</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="penpal.html#penpal.schemas.ShellCommand.model_config"><code class="docutils literal notranslate"><span class="pre">ShellCommand.model_config</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="penpal.html#penpal.schemas.ShellCommand.type"><code class="docutils literal notranslate"><span class="pre">ShellCommand.type</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="penpal.html#penpal.schemas.SleepCommand"><code class="docutils literal notranslate"><span class="pre">SleepCommand</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="penpal.html#penpal.schemas.SleepCommand.cmd"><code class="docutils literal notranslate"><span class="pre">SleepCommand.cmd</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="penpal.html#penpal.schemas.SleepCommand.min_sec"><code class="docutils literal notranslate"><span class="pre">SleepCommand.min_sec</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="penpal.html#penpal.schemas.SleepCommand.model_config"><code class="docutils literal notranslate"><span class="pre">SleepCommand.model_config</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="penpal.html#penpal.schemas.SleepCommand.random"><code class="docutils literal notranslate"><span class="pre">SleepCommand.random</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="penpal.html#penpal.schemas.SleepCommand.seconds"><code class="docutils literal notranslate"><span class="pre">SleepCommand.seconds</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="penpal.html#penpal.schemas.SleepCommand.type"><code class="docutils literal notranslate"><span class="pre">SleepCommand.type</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="penpal.html#module-penpal.shellexecutor">penpal.shellexecutor module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="penpal.html#shellexecutor-py">shellexecutor.py</a></li>
+<li class="toctree-l3"><a class="reference internal" href="penpal.html#penpal.shellexecutor.ShellExecutor"><code class="docutils literal notranslate"><span class="pre">ShellExecutor</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="penpal.html#penpal.shellexecutor.ShellExecutor.log_command"><code class="docutils literal notranslate"><span class="pre">ShellExecutor.log_command()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="penpal.html#module-penpal.sleepexecutor">penpal.sleepexecutor module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="penpal.html#penpal.sleepexecutor.SleepExecutor"><code class="docutils literal notranslate"><span class="pre">SleepExecutor</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="penpal.html#penpal.sleepexecutor.SleepExecutor.log_command"><code class="docutils literal notranslate"><span class="pre">SleepExecutor.log_command()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="penpal.html#penpal.sleepexecutor.SleepExecutor.set_sleeptime"><code class="docutils literal notranslate"><span class="pre">SleepExecutor.set_sleeptime()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="penpal.html#module-penpal.varparse">penpal.varparse module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="penpal.html#penpal.varparse.VarParse"><code class="docutils literal notranslate"><span class="pre">VarParse</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="penpal.html#penpal.varparse.VarParse.parse_command"><code class="docutils literal notranslate"><span class="pre">VarParse.parse_command()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="penpal.html#module-penpal">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Wolfgang Hotwagner.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  
+<div class="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version">
+        <span class="fa fa-book"> Version</span>
+        v0.1.0
+    </span>
+
+    <div class="rst-other-versions">
+        <dl>
+            <dt>Versions</dt>
+            
+            <dd>
+                <a href="modules.html">v0.1.0</a>
+            </dd>
+            
+            <dd>
+                <a href="../../v0.2.0/index.html">v0.2.0</a>
+            </dd>
+            
+            <dd>
+                <a href="../../v0.3.0/index.html">v0.3.0</a>
+            </dd>
+            
+            <dd>
+                <a href="../../v0.3.1/index.html">v0.3.1</a>
+            </dd>
+            
+            <dd>
+                <a href="../../v0.4.0/index.html">v0.4.0</a>
+            </dd>
+            
+            <dd>
+                <a href="../../v0.5.0/index.html">v0.5.0</a>
+            </dd>
+            
+            <dd>
+                <a href="../../v0.6.0/index.html">v0.6.0</a>
+            </dd>
+            
+            <dd>
+                <a href="../../development/index.html">development</a>
+            </dd>
+            
+            <dd>
+                <a href="../../main/index.html">main</a>
+            </dd>
+            
+        </dl>
+    </div>
+</div>
+<script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

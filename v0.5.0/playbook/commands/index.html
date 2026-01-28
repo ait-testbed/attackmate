@@ -1,0 +1,515 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Commands &mdash; AttackMate 0.5.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css" />
+
+  
+      <script src="../../_static/jquery.js"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+      <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+      <script src="../../_static/doctools.js"></script>
+      <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="debug" href="debug.html" />
+    <link rel="prev" title="Variables" href="../vars.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            AttackMate
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+
+<div class="version-switcher" style="margin: 0.5em 0;">
+    <select onchange="if (this.value) window.location.href=this.value;" style="width: 100%; padding: 0.2em;">
+        
+        <option value="../../../v0.1.0/index.html" >
+            v0.1.0
+        </option>
+        
+        <option value="../../../v0.2.0/playbook/commands/index.html" >
+            v0.2.0
+        </option>
+        
+        <option value="../../../v0.3.0/playbook/commands/index.html" >
+            v0.3.0
+        </option>
+        
+        <option value="../../../v0.3.1/playbook/commands/index.html" >
+            v0.3.1
+        </option>
+        
+        <option value="../../../v0.4.0/playbook/commands/index.html" >
+            v0.4.0
+        </option>
+        
+        <option value="index.html" selected>
+            v0.5.0
+        </option>
+        
+        <option value="../../../v0.6.0/playbook/commands/index.html" >
+            v0.6.0
+        </option>
+        
+        <option value="../../../development/playbook/commands/index.html" >
+            development
+        </option>
+        
+        <option value="../../../main/playbook/commands/index.html" >
+            main
+        </option>
+        
+    </select>
+</div>
+
+
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">General:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html">AttackMate <img alt="Logo" src="/images/AttackMate_logo_no_logo.png" align="right" height="90"></a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Getting Started:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../about.html">About</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../how.html">How it works</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation/index.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../preparation/index.html">Preparation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../configuration/index.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../basic.html">Basic Usage</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Playbook:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../structure.html">Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../vars.html">Variables</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Commands</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="debug.html">debug</a></li>
+<li class="toctree-l2"><a class="reference internal" href="father.html">father</a></li>
+<li class="toctree-l2"><a class="reference internal" href="httpclient.html">http-client</a></li>
+<li class="toctree-l2"><a class="reference internal" href="include.html">include</a></li>
+<li class="toctree-l2"><a class="reference internal" href="json.html">json</a></li>
+<li class="toctree-l2"><a class="reference internal" href="loop.html">loop</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mktemp.html">mktemp</a></li>
+<li class="toctree-l2"><a class="reference internal" href="msf-module.html">msf-module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="msf-session.html">msf-session</a></li>
+<li class="toctree-l2"><a class="reference internal" href="payload.html">msf-payload</a></li>
+<li class="toctree-l2"><a class="reference internal" href="regex.html">regex</a></li>
+<li class="toctree-l2"><a class="reference internal" href="setvar.html">setvar</a></li>
+<li class="toctree-l2"><a class="reference internal" href="shell.html">shell</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sftp.html">sftp</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sleep.html">sleep</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sliver.html">sliver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sliver-session.html">sliver-session</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ssh.html">ssh</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vnc.html">vnc</a></li>
+<li class="toctree-l2"><a class="reference internal" href="webserv.html">webserv</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../session/index.html">Sessions, Interactive</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples.html">Examples</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developing:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../developing/command.html">Adding a New Command</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../developing/baseexecutor.html">Adding a New Executor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../developing/integration.html">Using AttackMate in a Python Script</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Package:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../attackmate/attackmate.html">attackmate package</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">AttackMate</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Commands</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/playbook/commands/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="commands">
+<span id="id1"></span><h1>Commands<a class="headerlink" href="#commands" title="Permalink to this heading"></a></h1>
+<p>The <em>‘commands-section’</em> holds a list of AttackMate-commands that are executed sequentially from
+top to bottom.</p>
+<p>Every command, regardless of the type has the following general options:</p>
+<dl class="std confval">
+<dt class="sig sig-object std" id="confval-cmd">
+<span class="sig-name descname"><span class="pre">cmd</span></span><a class="headerlink" href="#confval-cmd" title="Permalink to this definition"></a></dt>
+<dd><p><em>cmd</em> defines the command that should be executed. The purpose of this option varies depending on the type of command.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="std confval">
+<dt class="sig sig-object std" id="confval-save">
+<span class="sig-name descname"><span class="pre">save</span></span><a class="headerlink" href="#confval-save" title="Permalink to this definition"></a></dt>
+<dd><p>Save the output of the command to a file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">commands</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">shell</span>
+<span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nmap localhost</span>
+<span class="w">    </span><span class="nt">save</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/tmp/nmap_localhost.txt</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="std confval">
+<dt class="sig sig-object std" id="confval-exit_on_error">
+<span class="sig-name descname"><span class="pre">exit_on_error</span></span><a class="headerlink" href="#confval-exit_on_error" title="Permalink to this definition"></a></dt>
+<dd><p>If this option is true, attackmate will exit with an error if the command returns with a return code
+that is not zero.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+<dt class="field-even">Default<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="std confval">
+<dt class="sig sig-object std" id="confval-error_if">
+<span class="sig-name descname"><span class="pre">error_if</span></span><a class="headerlink" href="#confval-error_if" title="Permalink to this definition"></a></dt>
+<dd><p>If this option is set, an error will be raised if the string was found in the <strong>output</strong>
+of the command.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str(regex)</p>
+</dd>
+</dl>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">commands</span><span class="p">:</span>
+<span class="w">  </span><span class="c1"># throw an error</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http-client</span>
+<span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">get</span>
+<span class="w">    </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://www.google.com</span>
+<span class="w">    </span><span class="nt">error_if</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;.*bing.*&quot;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="std confval">
+<dt class="sig sig-object std" id="confval-error_if_not">
+<span class="sig-name descname"><span class="pre">error_if_not</span></span><a class="headerlink" href="#confval-error_if_not" title="Permalink to this definition"></a></dt>
+<dd><p>If this option is set, an error will be raised if the string was not found in the <strong>output</strong>
+of the command.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str(regex)</p>
+</dd>
+</dl>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">commands</span><span class="p">:</span>
+<span class="w">  </span><span class="c1"># throw an error</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http-client</span>
+<span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">get</span>
+<span class="w">    </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://www.google.com</span>
+<span class="w">    </span><span class="nt">error_if_not</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;.*bing.*&quot;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="std confval">
+<dt class="sig sig-object std" id="confval-loop_if">
+<span class="sig-name descname"><span class="pre">loop_if</span></span><a class="headerlink" href="#confval-loop_if" title="Permalink to this definition"></a></dt>
+<dd><p>If this option is set, the command will be executed again if the string was found in the
+<strong>output</strong> of the command.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str(regex)</p>
+</dd>
+</dl>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">commands</span><span class="p">:</span>
+<span class="w">  </span><span class="c1"># loop until max-loop-count reached:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http-client</span>
+<span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">get</span>
+<span class="w">    </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://www.google.com</span>
+<span class="w">    </span><span class="nt">loop_if_not</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;.*google.*&quot;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="std confval">
+<dt class="sig sig-object std" id="confval-loop_if_not">
+<span class="sig-name descname"><span class="pre">loop_if_not</span></span><a class="headerlink" href="#confval-loop_if_not" title="Permalink to this definition"></a></dt>
+<dd><p>If this option is set, the command will be executed again if the string was not found in the
+<strong>output</strong> of the command.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str(regex)</p>
+</dd>
+</dl>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">commands</span><span class="p">:</span>
+<span class="w">  </span><span class="c1"># loop until max-loop-count reached:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http-client</span>
+<span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">get</span>
+<span class="w">    </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://www.google.com</span>
+<span class="w">    </span><span class="nt">loop_if_not</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;.*bing.*&quot;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="std confval">
+<dt class="sig sig-object std" id="confval-loop_count">
+<span class="sig-name descname"><span class="pre">loop_count</span></span><a class="headerlink" href="#confval-loop_count" title="Permalink to this definition"></a></dt>
+<dd><p>Number of Repetitions if <em>loop_if</em> or <em>loop_if_not</em> matches.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ini</p>
+</dd>
+<dt class="field-even">Default<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">3</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="std confval">
+<dt class="sig sig-object std" id="confval-only_if">
+<span class="sig-name descname"><span class="pre">only_if</span></span><a class="headerlink" href="#confval-only_if" title="Permalink to this definition"></a></dt>
+<dd><p>Execute this command only if the condition is true. The following operators are supported:</p>
+<ul class="simple">
+<li><p>var1 == var2</p></li>
+<li><p>var1 != var2</p></li>
+<li><p>var1 is var2</p></li>
+<li><p>var1 is not var2</p></li>
+<li><p>var1 &lt; var2</p></li>
+<li><p>var1 &lt;= var2</p></li>
+<li><p>var1 &gt; var2</p></li>
+<li><p>var1 &gt;= var2</p></li>
+<li><p>string !~ pattern</p></li>
+<li><p>string =~ pattern</p></li>
+<li><p>not var</p></li>
+<li><p>var</p></li>
+<li><p>None</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str(condition)</p>
+</dd>
+</dl>
+<p>The =~ operator is used to check if a string matches a regular expression pattern.
+The !~ operator is used to check if a string does not match a regular expression pattern.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">commands</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">shell</span>
+<span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pgrep mysqld</span>
+
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">regex</span>
+<span class="w">    </span><span class="nt">mode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">split</span>
+<span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;\n&quot;</span>
+<span class="w">    </span><span class="nt">output</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">KILLPID</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">$MATCH_0</span>
+
+<span class="w">  </span><span class="c1"># Execute this command only</span>
+<span class="w">  </span><span class="c1"># if it is not the init-process</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">shell</span>
+<span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kill $KILLPID</span>
+<span class="w">    </span><span class="nt">only_if</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">$KILLPID &gt; 1</span>
+
+<span class="w">  </span><span class="c1"># Execute this command only if the regex pattern is found</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">shell</span>
+<span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">echo &quot;regex match found&quot;</span>
+<span class="w">    </span><span class="nt">only_if</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">some_string =~ some[_]?string</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="std confval">
+<dt class="sig sig-object std" id="confval-background">
+<span class="sig-name descname"><span class="pre">background</span></span><a class="headerlink" href="#confval-background" title="Permalink to this definition"></a></dt>
+<dd><p>Execute the command as a subprocess in background. If set to <em>True</em>,
+the functionality for <em>error_if</em> and <em>error_if_not</em> as well as printing
+the output is disabled.</p>
+<p>Background-Mode is currently not implemented for the following commands:</p>
+<ul class="simple">
+<li><p>SSHCommand</p></li>
+<li><p>SFTPCommand</p></li>
+<li><p>MsfModuleCommand</p></li>
+<li><p>IncludeCommand</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+<dt class="field-even">Default<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">False</span></code></p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The command in background-mode will not change global variables like
+RESULT_STDOUT or RESULT_CODE.</p>
+</div>
+</dd></dl>
+
+<dl class="std confval">
+<dt class="sig sig-object std" id="confval-kill_on_exit">
+<span class="sig-name descname"><span class="pre">kill_on_exit</span></span><a class="headerlink" href="#confval-kill_on_exit" title="Permalink to this definition"></a></dt>
+<dd><p>If this command runs in background-mode, the option <em>kill_on_exit</em> controls
+if the main process will wait for this subprocess before exitting or if the
+main process will simply kill the subprocess.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+<dt class="field-even">Default<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="std confval">
+<dt class="sig sig-object std" id="confval-metadata">
+<span class="sig-name descname"><span class="pre">metadata</span></span><a class="headerlink" href="#confval-metadata" title="Permalink to this definition"></a></dt>
+<dd><p>The option <em>metadata</em> can be used to pass a dictionary of key value pairs.
+These are not used in command execution but are logged together with the command.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Dict</p>
+</dd>
+<dt class="field-even">Default<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">commands</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">debug</span>
+<span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Come on, Cat</span>
+<span class="w">    </span><span class="nt">metadata</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="w">      </span><span class="nt">author</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Ellen Ripley</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<p>The next pages will describe all possible commands in detail.</p>
+<div class="toctree-wrapper compound">
+</div>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../vars.html" class="btn btn-neutral float-left" title="Variables" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="debug.html" class="btn btn-neutral float-right" title="debug" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Wolfgang Hotwagner.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  
+<div class="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version">
+        <span class="fa fa-book"> Version</span>
+        v0.5.0
+    </span>
+
+    <div class="rst-other-versions">
+        <dl>
+            <dt>Versions</dt>
+            
+            <dd>
+                <a href="../../../v0.1.0/index.html">v0.1.0</a>
+            </dd>
+            
+            <dd>
+                <a href="../../../v0.2.0/playbook/commands/index.html">v0.2.0</a>
+            </dd>
+            
+            <dd>
+                <a href="../../../v0.3.0/playbook/commands/index.html">v0.3.0</a>
+            </dd>
+            
+            <dd>
+                <a href="../../../v0.3.1/playbook/commands/index.html">v0.3.1</a>
+            </dd>
+            
+            <dd>
+                <a href="../../../v0.4.0/playbook/commands/index.html">v0.4.0</a>
+            </dd>
+            
+            <dd>
+                <a href="index.html">v0.5.0</a>
+            </dd>
+            
+            <dd>
+                <a href="../../../v0.6.0/playbook/commands/index.html">v0.6.0</a>
+            </dd>
+            
+            <dd>
+                <a href="../../../development/playbook/commands/index.html">development</a>
+            </dd>
+            
+            <dd>
+                <a href="../../../main/playbook/commands/index.html">main</a>
+            </dd>
+            
+        </dl>
+    </div>
+</div>
+<script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

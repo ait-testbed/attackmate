@@ -1,0 +1,514 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>sftp &mdash; AttackMate 0.6.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css" />
+
+  
+      <script src="../../_static/jquery.js"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+      <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+      <script src="../../_static/doctools.js"></script>
+      <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="sleep" href="sleep.html" />
+    <link rel="prev" title="shell" href="shell.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            AttackMate
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+
+<div class="version-switcher" style="margin: 0.5em 0;">
+    <select onchange="if (this.value) window.location.href=this.value;" style="width: 100%; padding: 0.2em;">
+        
+        <option value="../../../v0.1.0/index.html" >
+            v0.1.0
+        </option>
+        
+        <option value="../../../v0.2.0/playbook/commands/sftp.html" >
+            v0.2.0
+        </option>
+        
+        <option value="../../../v0.3.0/playbook/commands/sftp.html" >
+            v0.3.0
+        </option>
+        
+        <option value="../../../v0.3.1/playbook/commands/sftp.html" >
+            v0.3.1
+        </option>
+        
+        <option value="../../../v0.4.0/playbook/commands/sftp.html" >
+            v0.4.0
+        </option>
+        
+        <option value="../../../v0.5.0/playbook/commands/sftp.html" >
+            v0.5.0
+        </option>
+        
+        <option value="sftp.html" selected>
+            v0.6.0
+        </option>
+        
+        <option value="../../../development/playbook/commands/sftp.html" >
+            development
+        </option>
+        
+        <option value="../../../main/playbook/commands/sftp.html" >
+            main
+        </option>
+        
+    </select>
+</div>
+
+
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">General:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html">AttackMate <img alt="Logo" src="/images/AttackMate_logo_no_logo.png" align="right" height="90"></a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Getting Started:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../about.html">About</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../how.html">How it works</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation/index.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../preparation/index.html">Preparation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../configuration/index.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../basic.html">Basic Usage</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Playbook:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../structure.html">Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../vars.html">Variables</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Commands</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="browser.html">browser</a></li>
+<li class="toctree-l2"><a class="reference internal" href="debug.html">debug</a></li>
+<li class="toctree-l2"><a class="reference internal" href="father.html">father</a></li>
+<li class="toctree-l2"><a class="reference internal" href="httpclient.html">http-client</a></li>
+<li class="toctree-l2"><a class="reference internal" href="include.html">include</a></li>
+<li class="toctree-l2"><a class="reference internal" href="json.html">json</a></li>
+<li class="toctree-l2"><a class="reference internal" href="loop.html">loop</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mktemp.html">mktemp</a></li>
+<li class="toctree-l2"><a class="reference internal" href="msf-module.html">msf-module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="msf-session.html">msf-session</a></li>
+<li class="toctree-l2"><a class="reference internal" href="payload.html">msf-payload</a></li>
+<li class="toctree-l2"><a class="reference internal" href="regex.html">regex</a></li>
+<li class="toctree-l2"><a class="reference internal" href="setvar.html">setvar</a></li>
+<li class="toctree-l2"><a class="reference internal" href="shell.html">shell</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">sftp</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sleep.html">sleep</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sliver.html">sliver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sliver-session.html">sliver-session</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ssh.html">ssh</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vnc.html">vnc</a></li>
+<li class="toctree-l2"><a class="reference internal" href="webserv.html">webserv</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../session/index.html">Sessions, Interactive</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples.html">Examples</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developing:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../developing/command.html">Adding a New Command</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../developing/baseexecutor.html">Adding a New Executor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../developing/integration.html">Using AttackMate in a Python Script</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Package:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../attackmate/attackmate.html">attackmate package</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">AttackMate</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Commands</a></li>
+      <li class="breadcrumb-item active">sftp</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/playbook/commands/sftp.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="sftp">
+<h1>sftp<a class="headerlink" href="#sftp" title="Permalink to this heading"></a></h1>
+<p>Upload or download files using SSH. This command is
+also executed by the SSHExecutor and therefor all
+ssh-related settings can be used. SSH-sessions can also
+be used with the sftp-command!</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This command caches all the settings so
+that they only need to be defined once.</p>
+</div>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">vars</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">$SERVER_ADDRESS</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.42.0.254</span>
+<span class="w">  </span><span class="nt">$SSH_SERVER</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10.10.10.19</span>
+
+<span class="nt">commands</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sftp</span>
+<span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">put</span>
+<span class="w">    </span><span class="nt">local_path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/tmp/linpeas.sh</span>
+<span class="w">    </span><span class="nt">remote_path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/tmp/linpeas.sh</span>
+<span class="w">    </span><span class="nt">hostname</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">$SSH_SERVER</span>
+<span class="w">    </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">aecid</span>
+<span class="w">    </span><span class="nt">key_filename</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/home/alice/.ssh/id_rsa&quot;</span>
+<span class="w">    </span><span class="nt">creates_session</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;attacker&quot;</span>
+
+<span class="w">  </span><span class="c1"># cached ssh-settings. creates new ssh-connection</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sftp</span>
+<span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">get</span>
+<span class="w">    </span><span class="nt">remote_path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/etc/passwd</span>
+<span class="w">    </span><span class="nt">local_path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/tmp/remote_passwd</span>
+
+<span class="w">  </span><span class="c1"># reuses existing session &quot;attacker&quot;</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ssh</span>
+<span class="w">    </span><span class="nt">session</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;attacker&quot;</span>
+<span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;id&quot;</span>
+</pre></div>
+</div>
+<dl class="std confval">
+<dt class="sig sig-object std" id="confval-cmd">
+<span class="sig-name descname"><span class="pre">cmd</span></span><a class="headerlink" href="#confval-cmd" title="Permalink to this definition"></a></dt>
+<dd><p>SFTP-command to use. Valid commands are <em>put</em> or <em>get</em>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+<dt class="field-even">Required<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="std confval">
+<dt class="sig sig-object std" id="confval-remote_path">
+<span class="sig-name descname"><span class="pre">remote_path</span></span><a class="headerlink" href="#confval-remote_path" title="Permalink to this definition"></a></dt>
+<dd><p>The filepath on the remote machine.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+<dt class="field-even">Required<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="std confval">
+<dt class="sig sig-object std" id="confval-local_path">
+<span class="sig-name descname"><span class="pre">local_path</span></span><a class="headerlink" href="#confval-local_path" title="Permalink to this definition"></a></dt>
+<dd><p>The filepath on the local machine.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+<dt class="field-even">Required<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="std confval">
+<dt class="sig sig-object std" id="confval-mode">
+<span class="sig-name descname"><span class="pre">mode</span></span><a class="headerlink" href="#confval-mode" title="Permalink to this definition"></a></dt>
+<dd><p>The file permissions on the remote file(e.g. <em>755</em>).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="std confval">
+<dt class="sig sig-object std" id="confval-hostname">
+<span class="sig-name descname"><span class="pre">hostname</span></span><a class="headerlink" href="#confval-hostname" title="Permalink to this definition"></a></dt>
+<dd><p>This option sets the hostname or ip-address of the
+remote ssh-server.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="std confval">
+<dt class="sig sig-object std" id="confval-port">
+<span class="sig-name descname"><span class="pre">port</span></span><a class="headerlink" href="#confval-port" title="Permalink to this definition"></a></dt>
+<dd><p>Port to connect to on the remote host.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+<dt class="field-even">Default<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">22</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="std confval">
+<dt class="sig sig-object std" id="confval-username">
+<span class="sig-name descname"><span class="pre">username</span></span><a class="headerlink" href="#confval-username" title="Permalink to this definition"></a></dt>
+<dd><p>Specifies the user to log in as on the remote machine.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="std confval">
+<dt class="sig sig-object std" id="confval-password">
+<span class="sig-name descname"><span class="pre">password</span></span><a class="headerlink" href="#confval-password" title="Permalink to this definition"></a></dt>
+<dd><p>Specifies the password to use. An alternative would be to use a key_file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="std confval">
+<dt class="sig sig-object std" id="confval-passphrase">
+<span class="sig-name descname"><span class="pre">passphrase</span></span><a class="headerlink" href="#confval-passphrase" title="Permalink to this definition"></a></dt>
+<dd><p>Use this passphrase to decrypt the key_file. This is only necessary if the
+keyfile is protected by a passphrase.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="std confval">
+<dt class="sig sig-object std" id="confval-key_filename">
+<span class="sig-name descname"><span class="pre">key_filename</span></span><a class="headerlink" href="#confval-key_filename" title="Permalink to this definition"></a></dt>
+<dd><p>Path to the keyfile.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="std confval">
+<dt class="sig sig-object std" id="confval-timeout">
+<span class="sig-name descname"><span class="pre">timeout</span></span><a class="headerlink" href="#confval-timeout" title="Permalink to this definition"></a></dt>
+<dd><p>The timeout to drop a connection attempt in seconds.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="std confval">
+<dt class="sig sig-object std" id="confval-clear_cache">
+<span class="sig-name descname"><span class="pre">clear_cache</span></span><a class="headerlink" href="#confval-clear_cache" title="Permalink to this definition"></a></dt>
+<dd><p>Normally all settings for ssh-connections are cached. This allows to defined
+all settings in one command and all following commands can reuse these settings
+without set them in every single command. If a new connection with different
+settings should be configured, this setting allows to reset the cache to default
+values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+<dt class="field-even">Default<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">False</span></code></p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This setting will not clear the session store.</p>
+</div>
+</dd></dl>
+
+<dl class="std confval">
+<dt class="sig sig-object std" id="confval-creates_session">
+<span class="sig-name descname"><span class="pre">creates_session</span></span><a class="headerlink" href="#confval-creates_session" title="Permalink to this definition"></a></dt>
+<dd><p>A session name that identifies the session that is created when
+executing this command. This session-name can be used by using the
+option “session”</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="std confval">
+<dt class="sig sig-object std" id="confval-session">
+<span class="sig-name descname"><span class="pre">session</span></span><a class="headerlink" href="#confval-session" title="Permalink to this definition"></a></dt>
+<dd><p>Reuse an existing ssh-session. This setting works only if another
+ssh-command was executed with the command-option “creates_session”</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="std confval">
+<dt class="sig sig-object std" id="confval-jmp_hostname">
+<span class="sig-name descname"><span class="pre">jmp_hostname</span></span><a class="headerlink" href="#confval-jmp_hostname" title="Permalink to this definition"></a></dt>
+<dd><p>This option sets the hostname or ip-address of the
+remote jump server.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="std confval">
+<dt class="sig sig-object std" id="confval-jmp_port">
+<span class="sig-name descname"><span class="pre">jmp_port</span></span><a class="headerlink" href="#confval-jmp_port" title="Permalink to this definition"></a></dt>
+<dd><p>Port to connect to on the jump-host.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+<dt class="field-even">Default<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">22</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="std confval">
+<dt class="sig sig-object std" id="confval-jmp_username">
+<span class="sig-name descname"><span class="pre">jmp_username</span></span><a class="headerlink" href="#confval-jmp_username" title="Permalink to this definition"></a></dt>
+<dd><p>Specifies the user to log in as on the jmp-host.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+<dt class="field-even">Default<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">same</span> <span class="pre">as</span> <span class="pre">username</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="shell.html" class="btn btn-neutral float-left" title="shell" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="sleep.html" class="btn btn-neutral float-right" title="sleep" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Wolfgang Hotwagner.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  
+<div class="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version">
+        <span class="fa fa-book"> Version</span>
+        v0.6.0
+    </span>
+
+    <div class="rst-other-versions">
+        <dl>
+            <dt>Versions</dt>
+            
+            <dd>
+                <a href="../../../v0.1.0/index.html">v0.1.0</a>
+            </dd>
+            
+            <dd>
+                <a href="../../../v0.2.0/playbook/commands/sftp.html">v0.2.0</a>
+            </dd>
+            
+            <dd>
+                <a href="../../../v0.3.0/playbook/commands/sftp.html">v0.3.0</a>
+            </dd>
+            
+            <dd>
+                <a href="../../../v0.3.1/playbook/commands/sftp.html">v0.3.1</a>
+            </dd>
+            
+            <dd>
+                <a href="../../../v0.4.0/playbook/commands/sftp.html">v0.4.0</a>
+            </dd>
+            
+            <dd>
+                <a href="../../../v0.5.0/playbook/commands/sftp.html">v0.5.0</a>
+            </dd>
+            
+            <dd>
+                <a href="sftp.html">v0.6.0</a>
+            </dd>
+            
+            <dd>
+                <a href="../../../development/playbook/commands/sftp.html">development</a>
+            </dd>
+            
+            <dd>
+                <a href="../../../main/playbook/commands/sftp.html">main</a>
+            </dd>
+            
+        </dl>
+    </div>
+</div>
+<script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

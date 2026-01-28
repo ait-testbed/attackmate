@@ -1,0 +1,485 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>vnc &mdash; AttackMate 0.6.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css" />
+
+  
+      <script src="../../_static/jquery.js"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+      <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+      <script src="../../_static/doctools.js"></script>
+      <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="webserv" href="webserv.html" />
+    <link rel="prev" title="ssh" href="ssh.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            AttackMate
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+
+<div class="version-switcher" style="margin: 0.5em 0;">
+    <select onchange="if (this.value) window.location.href=this.value;" style="width: 100%; padding: 0.2em;">
+        
+        <option value="../../../v0.1.0/index.html" >
+            v0.1.0
+        </option>
+        
+        <option value="../../../v0.2.0/index.html" >
+            v0.2.0
+        </option>
+        
+        <option value="../../../v0.3.0/index.html" >
+            v0.3.0
+        </option>
+        
+        <option value="../../../v0.3.1/index.html" >
+            v0.3.1
+        </option>
+        
+        <option value="../../../v0.4.0/index.html" >
+            v0.4.0
+        </option>
+        
+        <option value="../../../v0.5.0/playbook/commands/vnc.html" >
+            v0.5.0
+        </option>
+        
+        <option value="../../../v0.6.0/playbook/commands/vnc.html" >
+            v0.6.0
+        </option>
+        
+        <option value="vnc.html" selected>
+            development
+        </option>
+        
+        <option value="../../../main/playbook/commands/vnc.html" >
+            main
+        </option>
+        
+    </select>
+</div>
+
+
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">General:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html">AttackMate <img alt="Logo" src="/images/AttackMate_logo_no_logo.png" align="right" height="90"></a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Getting Started:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../about.html">About</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../how.html">How it works</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation/index.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../preparation/index.html">Preparation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../configuration/index.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../basic.html">Basic Usage</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Playbook:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../structure.html">Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../vars.html">Variables</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Commands</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="bettercap.html">bettercap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="browser.html">browser</a></li>
+<li class="toctree-l2"><a class="reference internal" href="debug.html">debug</a></li>
+<li class="toctree-l2"><a class="reference internal" href="father.html">father</a></li>
+<li class="toctree-l2"><a class="reference internal" href="httpclient.html">http-client</a></li>
+<li class="toctree-l2"><a class="reference internal" href="include.html">include</a></li>
+<li class="toctree-l2"><a class="reference internal" href="json.html">json</a></li>
+<li class="toctree-l2"><a class="reference internal" href="loop.html">loop</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mktemp.html">mktemp</a></li>
+<li class="toctree-l2"><a class="reference internal" href="msf-module.html">msf-module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="msf-session.html">msf-session</a></li>
+<li class="toctree-l2"><a class="reference internal" href="payload.html">msf-payload</a></li>
+<li class="toctree-l2"><a class="reference internal" href="regex.html">regex</a></li>
+<li class="toctree-l2"><a class="reference internal" href="setvar.html">setvar</a></li>
+<li class="toctree-l2"><a class="reference internal" href="shell.html">shell</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sftp.html">sftp</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sleep.html">sleep</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sliver.html">sliver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sliver-session.html">sliver-session</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ssh.html">ssh</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">vnc</a></li>
+<li class="toctree-l2"><a class="reference internal" href="webserv.html">webserv</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../session/index.html">Sessions, Interactive</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples.html">Examples</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developing:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../developing/architecture.html">System Architecture (C4)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../developing/command.html">Adding a New Command</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../developing/baseexecutor.html">Adding a New Executor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../developing/integration.html">Using AttackMate in a Python Script</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Package:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../attackmate/attackmate.html">attackmate package</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">AttackMate</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Commands</a></li>
+      <li class="breadcrumb-item active">vnc</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/playbook/commands/vnc.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="vnc">
+<h1>vnc<a class="headerlink" href="#vnc" title="Permalink to this heading"></a></h1>
+<p>Execute commands on a remote server via VNC. Uses the <a class="reference external" href="https://github.com/sibson/vncdotool">vncdotool</a> library.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This command caches all the settings so
+that they only need to be defined once.</p>
+</div>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">vars</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">$SERVER_ADDRESS</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.42.0.254</span>
+<span class="w">  </span><span class="nt">$PORT</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5900</span>
+<span class="w">  </span><span class="nt">$DISPLAY</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="w">  </span><span class="nt">$PASSWORD</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">password</span>
+
+<span class="nt">commands</span><span class="p">:</span>
+<span class="w">  </span><span class="c1"># creates new vnc-connection and session. If creates_session is omitted, a session named &quot;default&quot; is created</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">vnc</span>
+<span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">capture</span>
+<span class="w">    </span><span class="nt">filename</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">screenshot.png</span>
+<span class="w">    </span><span class="nt">hostname</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">$SERVER_ADDRESS</span>
+<span class="w">    </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">$PORT</span>
+<span class="w">    </span><span class="nt">display</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">$DISPLAY</span>
+<span class="w">    </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">$PASSWORD</span>
+<span class="w">    </span><span class="nt">creates_session</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my_session</span>
+
+<span class="w">  </span><span class="c1"># reuses existing session &quot;my_session</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">vnc</span>
+<span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">type</span>
+<span class="w">    </span><span class="nt">input</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;echo</span><span class="nv"> </span><span class="s">hello</span><span class="nv"> </span><span class="s">world&quot;</span>
+<span class="w">    </span><span class="nt">session</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my_session</span>
+
+<span class="w">  </span><span class="c1"># closes existing session &quot;my_session&quot; and deletes from session store</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">vnc</span>
+<span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">close</span>
+<span class="w">    </span><span class="nt">session</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my_session</span>
+</pre></div>
+</div>
+<dl class="std confval">
+<dt class="sig sig-object std" id="confval-cmd">
+<span class="sig-name descname"><span class="pre">cmd</span></span><a class="headerlink" href="#confval-cmd" title="Permalink to this definition"></a></dt>
+<dd><p>One of <code class="docutils literal notranslate"><span class="pre">type</span></code>, <code class="docutils literal notranslate"><span class="pre">key</span></code>, <code class="docutils literal notranslate"><span class="pre">capture</span></code>, <code class="docutils literal notranslate"><span class="pre">move</span></code>, <code class="docutils literal notranslate"><span class="pre">expectscreen</span></code>, <code class="docutils literal notranslate"><span class="pre">close</span></code>, <code class="docutils literal notranslate"><span class="pre">click</span></code>, <code class="docutils literal notranslate"><span class="pre">rightclick</span></code></p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="std confval">
+<dt class="sig sig-object std" id="confval-hostname">
+<span class="sig-name descname"><span class="pre">hostname</span></span><a class="headerlink" href="#confval-hostname" title="Permalink to this definition"></a></dt>
+<dd><p>This option sets the hostname or ip-address of the
+remote ssh-server.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="std confval">
+<dt class="sig sig-object std" id="confval-port">
+<span class="sig-name descname"><span class="pre">port</span></span><a class="headerlink" href="#confval-port" title="Permalink to this definition"></a></dt>
+<dd><p>Port to connect to on the remote host.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+<dt class="field-even">Default<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">5900</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="std confval">
+<dt class="sig sig-object std" id="confval-display">
+<span class="sig-name descname"><span class="pre">display</span></span><a class="headerlink" href="#confval-display" title="Permalink to this definition"></a></dt>
+<dd><p>Specifies the display to use on the remote machine.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+<dt class="field-even">Default<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">1</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="std confval">
+<dt class="sig sig-object std" id="confval-password">
+<span class="sig-name descname"><span class="pre">password</span></span><a class="headerlink" href="#confval-password" title="Permalink to this definition"></a></dt>
+<dd><p>Specifies the password to use</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="std confval">
+<dt class="sig sig-object std" id="confval-filename">
+<span class="sig-name descname"><span class="pre">filename</span></span><a class="headerlink" href="#confval-filename" title="Permalink to this definition"></a></dt>
+<dd><p>Path where a screenshot <code class="docutils literal notranslate"><span class="pre">capture</span></code> should be saved, or file to compare a screenshot with <code class="docutils literal notranslate"><span class="pre">expectscreen</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="std confval">
+<dt class="sig sig-object std" id="confval-maxrms">
+<span class="sig-name descname"><span class="pre">maxrms</span></span><a class="headerlink" href="#confval-maxrms" title="Permalink to this definition"></a></dt>
+<dd><p>Metric to compare a screen with <code class="docutils literal notranslate"><span class="pre">expectscreen</span></code>. Only continue if the screen matches.
+Maximum RMS (root mean square) error allowed (set a small value for near-exact match)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="std confval">
+<dt class="sig sig-object std" id="confval-input">
+<span class="sig-name descname"><span class="pre">input</span></span><a class="headerlink" href="#confval-input" title="Permalink to this definition"></a></dt>
+<dd><p>text to type with the command <code class="docutils literal notranslate"><span class="pre">type</span></code></p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="std confval">
+<dt class="sig sig-object std" id="confval-key">
+<span class="sig-name descname"><span class="pre">key</span></span><a class="headerlink" href="#confval-key" title="Permalink to this definition"></a></dt>
+<dd><p>key to press with the command <code class="docutils literal notranslate"><span class="pre">key</span></code></p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="std confval">
+<dt class="sig sig-object std" id="confval-x">
+<span class="sig-name descname"><span class="pre">x</span></span><a class="headerlink" href="#confval-x" title="Permalink to this definition"></a></dt>
+<dd><p>x position to move the cursor to with the command <code class="docutils literal notranslate"><span class="pre">move</span></code></p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="std confval">
+<dt class="sig sig-object std" id="confval-y">
+<span class="sig-name descname"><span class="pre">y</span></span><a class="headerlink" href="#confval-y" title="Permalink to this definition"></a></dt>
+<dd><p>y position to move the cursor to with the command <code class="docutils literal notranslate"><span class="pre">move</span></code></p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="std confval">
+<dt class="sig sig-object std" id="confval-creates_session">
+<span class="sig-name descname"><span class="pre">creates_session</span></span><a class="headerlink" href="#confval-creates_session" title="Permalink to this definition"></a></dt>
+<dd><p>A session name that identifies the session that is created when
+executing this command. This session name can be used by using the
+option <code class="docutils literal notranslate"><span class="pre">session</span></code> in another vnc-command.
+If no <code class="docutils literal notranslate"><span class="pre">creates_session</span></code> name is defined and no previous session is used a session named <code class="docutils literal notranslate"><span class="pre">default</span></code> is created.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="std confval">
+<dt class="sig sig-object std" id="confval-session">
+<span class="sig-name descname"><span class="pre">session</span></span><a class="headerlink" href="#confval-session" title="Permalink to this definition"></a></dt>
+<dd><p>Reuse an existing session. This setting works only if another
+vnc-command was executed with the command-option <code class="docutils literal notranslate"><span class="pre">creates_session</span></code></p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="std confval">
+<dt class="sig sig-object std" id="confval-connection_timeout">
+<span class="sig-name descname"><span class="pre">connection_timeout</span></span><a class="headerlink" href="#confval-connection_timeout" title="Permalink to this definition"></a></dt>
+<dd><p>timeout in seconds for the connection to be established</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+<dt class="field-even">Default<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">10</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="std confval">
+<dt class="sig sig-object std" id="confval-expect_timeout">
+<span class="sig-name descname"><span class="pre">expect_timeout</span></span><a class="headerlink" href="#confval-expect_timeout" title="Permalink to this definition"></a></dt>
+<dd><p>timeout in seconds for a command to finish. <strong>Gets passed as an argument to the client the first time a connection is established</strong>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+<dt class="field-even">Default<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">60</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">connection_timeout</span></code> and <cite>expect_timeout`</cite> need to be set in the first command that establishes the connection</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The vnc connection needs to be closed with the command <code class="docutils literal notranslate"><span class="pre">close</span></code> explicitely, otherwise attackmate will keep running.</p>
+</div>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="ssh.html" class="btn btn-neutral float-left" title="ssh" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="webserv.html" class="btn btn-neutral float-right" title="webserv" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Wolfgang Hotwagner.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  
+<div class="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version">
+        <span class="fa fa-book"> Version</span>
+        development
+    </span>
+
+    <div class="rst-other-versions">
+        <dl>
+            <dt>Versions</dt>
+            
+            <dd>
+                <a href="../../../v0.1.0/index.html">v0.1.0</a>
+            </dd>
+            
+            <dd>
+                <a href="../../../v0.2.0/index.html">v0.2.0</a>
+            </dd>
+            
+            <dd>
+                <a href="../../../v0.3.0/index.html">v0.3.0</a>
+            </dd>
+            
+            <dd>
+                <a href="../../../v0.3.1/index.html">v0.3.1</a>
+            </dd>
+            
+            <dd>
+                <a href="../../../v0.4.0/index.html">v0.4.0</a>
+            </dd>
+            
+            <dd>
+                <a href="../../../v0.5.0/playbook/commands/vnc.html">v0.5.0</a>
+            </dd>
+            
+            <dd>
+                <a href="../../../v0.6.0/playbook/commands/vnc.html">v0.6.0</a>
+            </dd>
+            
+            <dd>
+                <a href="vnc.html">development</a>
+            </dd>
+            
+            <dd>
+                <a href="../../../main/playbook/commands/vnc.html">main</a>
+            </dd>
+            
+        </dl>
+    </div>
+</div>
+<script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,333 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Adding a New Command &mdash; AttackMate 0.5.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css" />
+
+  
+      <script src="../_static/jquery.js"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+      <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+      <script src="../_static/doctools.js"></script>
+      <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Adding a New Executor" href="baseexecutor.html" />
+    <link rel="prev" title="Examples" href="../playbook/examples.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            AttackMate
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+
+<div class="version-switcher" style="margin: 0.5em 0;">
+    <select onchange="if (this.value) window.location.href=this.value;" style="width: 100%; padding: 0.2em;">
+        
+        <option value="../../v0.1.0/index.html" >
+            v0.1.0
+        </option>
+        
+        <option value="../../v0.2.0/index.html" >
+            v0.2.0
+        </option>
+        
+        <option value="../../v0.3.0/index.html" >
+            v0.3.0
+        </option>
+        
+        <option value="../../v0.3.1/index.html" >
+            v0.3.1
+        </option>
+        
+        <option value="../../v0.4.0/index.html" >
+            v0.4.0
+        </option>
+        
+        <option value="command.html" selected>
+            v0.5.0
+        </option>
+        
+        <option value="../../v0.6.0/developing/command.html" >
+            v0.6.0
+        </option>
+        
+        <option value="../../development/developing/command.html" >
+            development
+        </option>
+        
+        <option value="../../main/developing/command.html" >
+            main
+        </option>
+        
+    </select>
+</div>
+
+
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">General:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html">AttackMate <img alt="Logo" src="/images/AttackMate_logo_no_logo.png" align="right" height="90"></a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Getting Started:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../about.html">About</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../how.html">How it works</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation/index.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../preparation/index.html">Preparation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration/index.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basic.html">Basic Usage</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Playbook:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../playbook/structure.html">Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../playbook/vars.html">Variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../playbook/commands/index.html">Commands</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../playbook/session/index.html">Sessions, Interactive</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../playbook/examples.html">Examples</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developing:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Adding a New Command</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#define-the-command-schema">1. Define the Command Schema</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#implement-the-command-execution">2. Implement the Command Execution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ensure-the-executor-handles-the-new-command">3. Ensure the Executor Handles the New Command</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#modify-the-loop-command-to-include-the-new-command">4. Modify the Loop Command to Include the New Command</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#modify-playbook-py-to-include-the-new-command">5. Modify playbook.py to Include the New Command</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#add-documentation">6. Add Documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="baseexecutor.html">Adding a New Executor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="integration.html">Using AttackMate in a Python Script</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Package:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../attackmate/attackmate.html">attackmate package</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">AttackMate</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Adding a New Command</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/developing/command.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="adding-a-new-command">
+<span id="command"></span><h1>Adding a New Command<a class="headerlink" href="#adding-a-new-command" title="Permalink to this heading"></a></h1>
+<p>AttackMate supports extending its functionality by adding new commands.
+This section details the steps required to integrate a new command.</p>
+<section id="define-the-command-schema">
+<h2>1. Define the Command Schema<a class="headerlink" href="#define-the-command-schema" title="Permalink to this heading"></a></h2>
+<p>All Commands in AttackMate inherit from <code class="docutils literal notranslate"><span class="pre">BaseCommand</span></code>.
+To create a new command, define a class in <cite>/src/attackmate/schemas</cite> and register it using the <code class="docutils literal notranslate"><span class="pre">&#64;CommandRegistry.register('&lt;command_type&gt;')</span></code> decorator.</p>
+<p>For example, to add a <code class="docutils literal notranslate"><span class="pre">debug</span></code> command:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Literal</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseCommand</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">attackmate.command</span><span class="w"> </span><span class="kn">import</span> <span class="n">CommandRegistry</span>
+
+<span class="nd">@CommandRegistry</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="s1">&#39;debug&#39;</span><span class="p">)</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">DebugCommand</span><span class="p">(</span><span class="n">BaseCommand</span><span class="p">):</span>
+    <span class="nb">type</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s1">&#39;debug&#39;</span><span class="p">]</span>
+    <span class="n">varstore</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">exit</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">wait_for_key</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">cmd</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+</pre></div>
+</div>
+<p>Registering the command in the <code class="docutils literal notranslate"><span class="pre">CommandRegistry</span></code> allows the command to be also instantiated dynamically using the <code class="docutils literal notranslate"><span class="pre">Command.create()</span></code> method and is essential to
+make them usable in external python scripts.</p>
+</section>
+<section id="implement-the-command-execution">
+<h2>2. Implement the Command Execution<a class="headerlink" href="#implement-the-command-execution" title="Permalink to this heading"></a></h2>
+<p>The new command should be handled by an executor in <cite>src/attackmate/executors`</cite> that extends <code class="docutils literal notranslate"><span class="pre">BaseExecutor</span></code> and implements the <code class="docutils literal notranslate"><span class="pre">_exec_cmd()</span></code> method. For example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">attackmate.executors.base_executor</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseExecutor</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">attackmate.result</span><span class="w"> </span><span class="kn">import</span> <span class="n">Result</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">attackmate.executors.executor_factory</span><span class="w"> </span><span class="kn">import</span> <span class="n">executor_factory</span>
+
+<span class="nd">@executor_factory</span><span class="o">.</span><span class="n">register_executor</span><span class="p">(</span><span class="s1">&#39;debug&#39;</span><span class="p">)</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">DebugExecutor</span><span class="p">(</span><span class="n">BaseExecutor</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_exec_cmd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">command</span><span class="p">:</span> <span class="n">DebugCommand</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Result</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Executing debug command: </span><span class="si">{</span><span class="n">command</span><span class="o">.</span><span class="n">cmd</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Result</span><span class="p">(</span><span class="n">stdout</span><span class="o">=</span><span class="s2">&quot;Debug executed&quot;</span><span class="p">,</span> <span class="n">returncode</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="ensure-the-executor-handles-the-new-command">
+<h2>3. Ensure the Executor Handles the New Command<a class="headerlink" href="#ensure-the-executor-handles-the-new-command" title="Permalink to this heading"></a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">ExecutorFactory</span></code> class manages and creates executor instances based on command types.
+It maintains a registry (<code class="docutils literal notranslate"><span class="pre">_executors</span></code>) that maps command type strings to executor classes, allowing for dynamic execution of different command types.
+Executors are registered using the <code class="docutils literal notranslate"><span class="pre">register_executor</span></code> method, which provides a decorator to associate a command type with a class.
+When a command is executed, the <code class="docutils literal notranslate"><span class="pre">create_executor</span></code> method retrieves the corresponding executor class, filters the constructor arguments based on the class’s signature, and then creates an instance.</p>
+<p>Accordingly, executors must be registered using the <code class="docutils literal notranslate"><span class="pre">&#64;executor_factory.register_executor('&lt;command_type&gt;')</span></code> decorator.</p>
+<p>If the new executor class requires additional initialization arguments, these must be added to the <code class="docutils literal notranslate"><span class="pre">_get_executor_config</span></code> method in <code class="docutils literal notranslate"><span class="pre">attackmate.py</span></code>.
+All configurations are always passed to the <code class="docutils literal notranslate"><span class="pre">ExecutorFactory</span></code>.
+The factory filters the provided configurations based on the class constructor signature, ensuring that only the required parameters are used.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">_get_executor_config</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="n">config</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;pm&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">pm</span><span class="p">,</span>
+    <span class="s1">&#39;varstore&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">varstore</span><span class="p">,</span>
+    <span class="s1">&#39;cmdconfig&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">pyconfig</span><span class="o">.</span><span class="n">cmd_config</span><span class="p">,</span>
+    <span class="s1">&#39;msfconfig&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">pyconfig</span><span class="o">.</span><span class="n">msf_config</span><span class="p">,</span>
+    <span class="s1">&#39;msfsessionstore&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">msfsessionstore</span><span class="p">,</span>
+    <span class="s1">&#39;sliver_config&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">pyconfig</span><span class="o">.</span><span class="n">sliver_config</span><span class="p">,</span>
+    <span class="s1">&#39;runfunc&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_run_commands</span><span class="p">,</span>
+    <span class="c1"># if necessary add new config here</span>
+<span class="p">}</span>
+<span class="k">return</span> <span class="n">config</span>
+</pre></div>
+</div>
+</section>
+<section id="modify-the-loop-command-to-include-the-new-command">
+<h2>4. Modify the Loop Command to Include the New Command<a class="headerlink" href="#modify-the-loop-command-to-include-the-new-command" title="Permalink to this heading"></a></h2>
+<p>Update the <code class="docutils literal notranslate"><span class="pre">LoopCommand</span></code> schema to include the new command.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Command</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span>
+        <span class="n">ShellCommand</span><span class="p">,</span>
+        <span class="n">DebugCommand</span><span class="p">,</span>  <span class="c1"># Newly added command</span>
+        <span class="c1"># ... other command classes ...</span>
+    <span class="p">]</span>
+</pre></div>
+</div>
+</section>
+<section id="modify-playbook-py-to-include-the-new-command">
+<h2>5. Modify playbook.py to Include the New Command<a class="headerlink" href="#modify-playbook-py-to-include-the-new-command" title="Permalink to this heading"></a></h2>
+<p>Update the <code class="docutils literal notranslate"><span class="pre">Playbook</span></code> schema to include the new command.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Commands</span> <span class="o">=</span> <span class="n">List</span><span class="p">[</span>
+    <span class="n">Union</span><span class="p">[</span>
+        <span class="n">ShellCommand</span><span class="p">,</span>
+        <span class="n">DebugCommand</span><span class="p">,</span>  <span class="c1"># Newly added command</span>
+        <span class="c1"># ... other command classes ...</span>
+    <span class="p">]</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p>Once these steps are completed, the new command will be fully integrated into AttackMate and available for execution.</p>
+</section>
+<section id="add-documentation">
+<h2>6. Add Documentation<a class="headerlink" href="#add-documentation" title="Permalink to this heading"></a></h2>
+<p>Finally, update the documentation in <cite>docs/source/playbook/commands</cite> to include the new command.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../playbook/examples.html" class="btn btn-neutral float-left" title="Examples" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="baseexecutor.html" class="btn btn-neutral float-right" title="Adding a New Executor" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Wolfgang Hotwagner.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  
+<div class="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version">
+        <span class="fa fa-book"> Version</span>
+        v0.5.0
+    </span>
+
+    <div class="rst-other-versions">
+        <dl>
+            <dt>Versions</dt>
+            
+            <dd>
+                <a href="../../v0.1.0/index.html">v0.1.0</a>
+            </dd>
+            
+            <dd>
+                <a href="../../v0.2.0/index.html">v0.2.0</a>
+            </dd>
+            
+            <dd>
+                <a href="../../v0.3.0/index.html">v0.3.0</a>
+            </dd>
+            
+            <dd>
+                <a href="../../v0.3.1/index.html">v0.3.1</a>
+            </dd>
+            
+            <dd>
+                <a href="../../v0.4.0/index.html">v0.4.0</a>
+            </dd>
+            
+            <dd>
+                <a href="command.html">v0.5.0</a>
+            </dd>
+            
+            <dd>
+                <a href="../../v0.6.0/developing/command.html">v0.6.0</a>
+            </dd>
+            
+            <dd>
+                <a href="../../development/developing/command.html">development</a>
+            </dd>
+            
+            <dd>
+                <a href="../../main/developing/command.html">main</a>
+            </dd>
+            
+        </dl>
+    </div>
+</div>
+<script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

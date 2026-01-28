@@ -1,0 +1,297 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>attackmate package &mdash; AttackMate 0.2.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css" />
+
+  
+      <script src="../_static/jquery.js"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+      <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+      <script src="../_static/doctools.js"></script>
+      <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="Examples" href="../playbook/examples.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            AttackMate
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+
+<div class="version-switcher" style="margin: 0.5em 0;">
+    <select onchange="if (this.value) window.location.href=this.value;" style="width: 100%; padding: 0.2em;">
+        
+        <option value="../../v0.1.0/index.html" >
+            v0.1.0
+        </option>
+        
+        <option value="../../v0.2.0/attackmate/attackmate.html" >
+            v0.2.0
+        </option>
+        
+        <option value="../../v0.3.0/attackmate/attackmate.html" >
+            v0.3.0
+        </option>
+        
+        <option value="attackmate.html" selected>
+            v0.3.1
+        </option>
+        
+        <option value="../../v0.4.0/attackmate/attackmate.html" >
+            v0.4.0
+        </option>
+        
+        <option value="../../v0.5.0/attackmate/attackmate.html" >
+            v0.5.0
+        </option>
+        
+        <option value="../../v0.6.0/attackmate/attackmate.html" >
+            v0.6.0
+        </option>
+        
+        <option value="../../development/attackmate/attackmate.html" >
+            development
+        </option>
+        
+        <option value="../../main/attackmate/attackmate.html" >
+            main
+        </option>
+        
+    </select>
+</div>
+
+
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">General:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html">AttackMate <img alt="Logo" src="/images/AttackMate_logo.svg" align="right" height="90"></a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Getting Started:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../about.html">About</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../how.html">How it works</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation/index.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../preparation/index.html">Preparation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration/index.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basic.html">Basic Usage</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Playbook:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../playbook/structure.html">Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../playbook/vars.html">Variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../playbook/commands/index.html">Commands</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../playbook/session/index.html">Sessions, Interactive</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../playbook/examples.html">Examples</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Development:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">attackmate package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#attackmate-baseexecutor-module">attackmate.baseexecutor module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#attackmate-metadata-module">attackmate.metadata module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#attackmate-msfexecutor-module">attackmate.msfexecutor module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#attackmate-attackmate-module">attackmate.attackmate module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#attackmate-schemas-module">attackmate.schemas module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#attackmate-shellexecutor-module">attackmate.shellexecutor module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#attackmate-sleepexecutor-module">attackmate.sleepexecutor module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#attackmate-varparse-module">attackmate.varparse module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-attackmate">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">AttackMate</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">attackmate package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/attackmate/attackmate.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="attackmate-package">
+<h1>attackmate package<a class="headerlink" href="#attackmate-package" title="Permalink to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading"></a></h2>
+</section>
+<section id="attackmate-baseexecutor-module">
+<h2>attackmate.baseexecutor module<a class="headerlink" href="#attackmate-baseexecutor-module" title="Permalink to this heading"></a></h2>
+</section>
+<section id="attackmate-metadata-module">
+<h2>attackmate.metadata module<a class="headerlink" href="#attackmate-metadata-module" title="Permalink to this heading"></a></h2>
+<span class="target" id="module-attackmate.metadata"></span></section>
+<section id="attackmate-msfexecutor-module">
+<h2>attackmate.msfexecutor module<a class="headerlink" href="#attackmate-msfexecutor-module" title="Permalink to this heading"></a></h2>
+</section>
+<section id="attackmate-attackmate-module">
+<h2>attackmate.attackmate module<a class="headerlink" href="#attackmate-attackmate-module" title="Permalink to this heading"></a></h2>
+<span class="target" id="module-attackmate.attackmate"></span><p>AttackMate reads a playbook and executes the attack</p>
+<p>A playbook stored in a dictionary with a list of attacks. Attacks
+are executed by “Executors”. There are many different
+Executors like: ShellExecutor, SleepExecutor or MsfModuleExecutor
+This class creates instances of all possible Executors, iterates
+over all attacks and runs the specific Executor with the given
+configuration.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="attackmate.attackmate.AttackMate">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">attackmate.attackmate.</span></span><span class="sig-name descname"><span class="pre">AttackMate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">playbook</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Playbook</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Config</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">varstore</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#attackmate.attackmate.AttackMate" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="attackmate.attackmate.AttackMate.clean_session_stores">
+<span class="sig-name descname"><span class="pre">clean_session_stores</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#attackmate.attackmate.AttackMate.clean_session_stores" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="attackmate.attackmate.AttackMate.main">
+<span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#attackmate.attackmate.AttackMate.main" title="Permalink to this definition"></a></dt>
+<dd><p>The main function</p>
+<p>Passes the main playbook-commands to run_commands</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="attackmate.attackmate.AttackMate.run_command">
+<span class="sig-name descname"><span class="pre">run_command</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">command</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SliverSessionCDCommand</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">SliverSessionLSCommand</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">SliverSessionNETSTATCommand</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">SliverSessionEXECCommand</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">SliverSessionMKDIRCommand</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">SliverSessionSimpleCommand</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">SliverSessionDOWNLOADCommand</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">SliverSessionUPLOADCommand</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">SliverSessionPROCDUMPCommand</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">SliverSessionRMCommand</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">SliverSessionTERMINATECommand</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">SliverHttpsListenerCommand</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">SliverGenerateCommand</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">BrowserCommand</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ShellCommand</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">MsfModuleCommand</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">MsfSessionCommand</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">MsfPayloadCommand</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">SleepCommand</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">SSHCommand</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">FatherCommand</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">SFTPCommand</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">DebugCommand</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">SetVarCommand</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">RegExCommand</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">TempfileCommand</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">IncludeCommand</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">LoopCommand</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">WebServCommand</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">HttpClientCommand</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">JsonCommand</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">VncCommand</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">BettercapCommand</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">AttackMateRemoteCommand</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Result</span></span></span><a class="headerlink" href="#attackmate.attackmate.AttackMate.run_command" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="attackmate-schemas-module">
+<h2>attackmate.schemas module<a class="headerlink" href="#attackmate-schemas-module" title="Permalink to this heading"></a></h2>
+<span class="target" id="module-attackmate.schemas"></span></section>
+<section id="attackmate-shellexecutor-module">
+<h2>attackmate.shellexecutor module<a class="headerlink" href="#attackmate-shellexecutor-module" title="Permalink to this heading"></a></h2>
+</section>
+<section id="attackmate-sleepexecutor-module">
+<h2>attackmate.sleepexecutor module<a class="headerlink" href="#attackmate-sleepexecutor-module" title="Permalink to this heading"></a></h2>
+</section>
+<section id="attackmate-varparse-module">
+<h2>attackmate.varparse module<a class="headerlink" href="#attackmate-varparse-module" title="Permalink to this heading"></a></h2>
+</section>
+<section id="module-attackmate">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-attackmate" title="Permalink to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../playbook/examples.html" class="btn btn-neutral float-left" title="Examples" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Wolfgang Hotwagner.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  
+<div class="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version">
+        <span class="fa fa-book"> Version</span>
+        v0.3.1
+    </span>
+
+    <div class="rst-other-versions">
+        <dl>
+            <dt>Versions</dt>
+            
+            <dd>
+                <a href="../../v0.1.0/index.html">v0.1.0</a>
+            </dd>
+            
+            <dd>
+                <a href="../../v0.2.0/attackmate/attackmate.html">v0.2.0</a>
+            </dd>
+            
+            <dd>
+                <a href="../../v0.3.0/attackmate/attackmate.html">v0.3.0</a>
+            </dd>
+            
+            <dd>
+                <a href="attackmate.html">v0.3.1</a>
+            </dd>
+            
+            <dd>
+                <a href="../../v0.4.0/attackmate/attackmate.html">v0.4.0</a>
+            </dd>
+            
+            <dd>
+                <a href="../../v0.5.0/attackmate/attackmate.html">v0.5.0</a>
+            </dd>
+            
+            <dd>
+                <a href="../../v0.6.0/attackmate/attackmate.html">v0.6.0</a>
+            </dd>
+            
+            <dd>
+                <a href="../../development/attackmate/attackmate.html">development</a>
+            </dd>
+            
+            <dd>
+                <a href="../../main/attackmate/attackmate.html">main</a>
+            </dd>
+            
+        </dl>
+    </div>
+</div>
+<script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
