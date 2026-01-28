@@ -28,7 +28,7 @@ extensions = [
 # Configure what branches/tags to include
 smv_tag_whitelist = r'^v?\d+\.\d+\.\d+$'  # Includes tags like v1.0.0
 smv_branch_whitelist = r'^(main|development)$'        # Includes the main branch
-smv_remote_whitelist = None      # Only look at origin
+smv_remote_whitelist = r'^origin$'    # Only look at origin
 
 templates_path = ['_templates']
 exclude_patterns = []  # type: ignore

@@ -16,8 +16,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # Crucial: sphinx-multiversion needs git history to find tags/branches
-
+          fetch-depth: 0
       - name: Set up uv
         uses: astral-sh/setup-uv@v5
         with:
