@@ -28,8 +28,7 @@ jobs:
 
       - name: Build docs
         run: |
-          uv run pip install -r docs/requirements.txt
-          uv run sphinx-multiversion docs/source docs/build/html
+          uv run --with-requirements docs/requirements.txt sphinx-multiversion docs/source docs/build/html
 
       - name: Create Redirect Root
         run: |
