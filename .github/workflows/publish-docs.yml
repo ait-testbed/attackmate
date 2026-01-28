@@ -1,0 +1,42 @@
+name: Publish Docs
+on:
+  push:
+    branches:
+      - main
+      - development
+  release:
+    types: [published]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Crucial: sphinx-multiversion needs git history to find tags/branches
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          python-version: "3.12"
+          enable-cache: true
+
+      - name: Build Multi-version Docs
+        run: |
+          uv run --with-requirements docs/requirements.txt sphinx-multiversionl
+
+
+      - name: Create Redirect Root
+        run: |
+          # Redirects root URL (repo.io/) to the main branch docs (repo.io/main/)
+          echo '<meta http-equiv="refresh" content="0; url=main/index.html">' > docs/build/html/index.html
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: docs/build/html
