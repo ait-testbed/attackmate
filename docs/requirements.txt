@@ -1,5 +1,5 @@
-sphinx
-sphinx_rtd_theme
-sphinx_toolbox
-myst_parser
-sphinx-multiversion
+sphinx-multiversion>=0.2.4
+sphinx<7.0
+myst-parser>=1.0.0
+sphinx-toolbox>=4.1.2
+sphinx-rtd-theme>=2.0.0
