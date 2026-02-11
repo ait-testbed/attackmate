@@ -28,7 +28,8 @@ dependencies = [
     "dotenv",
     "passlib",
     "python-multipart",
-    "attackmate_client"
+    "attackmate-client @ git+https://github.com/ait-testbed/attackmate-client.git",
+
 ]
 dynamic = ["version"]
 
