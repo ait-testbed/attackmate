@@ -26,14 +26,13 @@ class BettercapCommand(BaseCommand):
     data: Optional[Dict[str, Any]] = None
 
     @model_validator(mode='after')
-    def check_cmd_requirements(cls, values):
-        cmd = values.cmd
+    def check_cmd_requirements(self) -> 'BettercapCommand':
 
-        if values.background:
+        if self.background:
             raise ValueError('background mode is unsupported for bettercap commands')
-        if cmd == 'post_api_session' and values.data is None:
+        if self.cmd == 'post_api_session' and self.data is None:
             raise ValueError('post_api_session requires the parameter data')
-        if cmd == 'get_file' and values.filename is None:
+        if self.cmd == 'get_file' and self.filename is None:
             raise ValueError('get_file requires the parameter filename')
 
-        return values
+        return self
