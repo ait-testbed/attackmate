@@ -45,7 +45,9 @@ class RemoteExecutor(BaseExecutor):
             raise ExecException(f"Remote connection '{conn_name}' not found in config.")
 
         config = self.remote_config[conn_name]
-
+        self.logger.debug(
+            f"Resolved connection '{conn_name}' with URL: {config.url}, "
+            f'User: {config.username}, CA Cert: {config.cafile}')
         return {
             'name': conn_name,
             'url': self.varstore.substitute(config.url),
@@ -72,7 +74,9 @@ class RemoteExecutor(BaseExecutor):
             return self._clients_cache[conn_name]
 
         self.logger.debug(f'Creating new remote client for: {conn_name} ({info["url"]})')
-
+        self.logger.debug(
+            f'Attempting to connect to remote AttackMate server at {info["url"]} '
+            f'with user {info["user"]}, certificate={info["cafile"]}')
         try:
             client = RemoteAttackMateClient(
                 server_url=info['url'],
