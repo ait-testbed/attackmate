@@ -132,6 +132,8 @@ class AttackMate:
         # sliver
         if (sliver_executor := self.executors.get('sliver-session')):
             await sliver_executor.cleanup()
+        if (remote_executor := self.executors.get('remote')):
+            await remote_executor.cleanup()
 
     async def main(self):
         """The main function
