@@ -61,7 +61,9 @@ class AttackMate:
             cmd_config=CommandConfig(),
             msf_config=MsfConfig(),
             sliver_config=SliverConfig(),
-            bettercap_config={})
+            bettercap_config={},
+            remote_config={}
+        )
 
     def _initialize_variable_parser(self, varstore: Optional[Dict] = None):
         """Initializes the variable-parser
@@ -81,6 +83,7 @@ class AttackMate:
             'cmdconfig': self.pyconfig.cmd_config,
             'msfconfig': self.pyconfig.msf_config,
             'bettercap_config': self.pyconfig.bettercap_config,
+            'remote_config': self.pyconfig.remote_config,
             'msfsessionstore': self.msfsessionstore,
             'sliver_config': self.pyconfig.sliver_config,
             'runfunc': self._run_commands,

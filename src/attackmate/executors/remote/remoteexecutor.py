@@ -6,6 +6,7 @@ from attackmate.executors.executor_factory import executor_factory
 from attackmate_client import RemoteAttackMateClient
 from attackmate.result import Result
 from attackmate.execexception import ExecException
+from attackmate.schemas.config import RemoteConfig
 from attackmate.schemas.remote import AttackMateRemoteCommand
 from attackmate.executors.baseexecutor import BaseExecutor
 from attackmate.processmanager import ProcessManager
@@ -16,28 +17,83 @@ output_logger = logging.getLogger('output')
 
 @executor_factory.register_executor('remote')
 class RemoteExecutor(BaseExecutor):
-    def __init__(self, pm: ProcessManager, varstore: VariableStore, cmdconfig=None):
+    def __init__(self, pm: ProcessManager, varstore: VariableStore, cmdconfig=None, *,
+                 remote_config: Dict[str, RemoteConfig] = {}):
         super().__init__(pm, varstore, cmdconfig)
         self.logger = logging.getLogger('playbook')
-        # Client class is instantiated per command execution with server_url context and chached in
+        self.remote_config = remote_config
         # client_cache
         self._clients_cache: Dict[str, RemoteAttackMateClient] = {}
 
+    def _get_connection_info(self, command: AttackMateRemoteCommand) -> Dict[str, Any]:
+        """
+        Helper to resolve configuration details without instantiating a client.
+        """
+        if command.connection:
+            conn_name = command.connection
+        elif self.remote_config:
+            conn_name = next(iter(self.remote_config))
+        else:
+            raise ExecException('No remote connections configured in AttackMate config.')
+
+        if conn_name not in self.remote_config:
+            raise ExecException(f"Remote connection '{conn_name}' not found in config.")
+
+        config = self.remote_config[conn_name]
+
+        return {
+            'name': conn_name,
+            'url': self.varstore.substitute(config.url),
+            'user': self.varstore.substitute(config.username) if config.username else None,
+            'pass': self.varstore.substitute(config.password) if config.password else None,
+            'cafile': self.varstore.substitute(config.cafile) if config.cafile else None
+        }
+
+    def setup_connection(self, command: AttackMateRemoteCommand) -> RemoteAttackMateClient:
+        """
+        Resolves info and returns a cached or new client.
+        """
+        info = self._get_connection_info(command)
+        conn_name = info['name']
+
+        if conn_name in self._clients_cache:
+            return self._clients_cache[conn_name]
+
+        self.logger.debug(f'Creating new remote client for: {conn_name} ({info["url"]})')
+
+        client = RemoteAttackMateClient(
+            server_url=info['url'],
+            username=info['user'],
+            password=info['pass'],
+            cacert=info['cafile']
+        )
+
+        self._clients_cache[conn_name] = client
+        return client
+
     def log_command(self, command: AttackMateRemoteCommand):
+        try:
+            # Resolve the URL and Name for the log without creating a client
+            info = self._get_connection_info(command)
+            target_str = f"{info['name']} ({info['url']})"
+        except Exception:
+            target_str = command.connection or 'unknown connection'
+
         self.logger.info(
             f"Executing REMOTE AttackMate command: Type='{command.type}', "
-            f"RemoteCmd='{command.cmd}' on server {command.server_url}'"
+            f"RemoteCmd='{command.cmd}' on server {target_str}"
         )
+
         remote_command_json = (
             command.remote_command.model_dump() if command.remote_command else ' '
         )
         output_logger.info(
-            f"Remote Command'{remote_command_json}' sent to server {command.server_url}'"
+            f"Remote Command '{remote_command_json}' sent to {target_str}"
         )
 
     async def _exec_cmd(self, command: AttackMateRemoteCommand) -> Result:
         try:
-            client = self._get_remote_client(command)
+            client = self.setup_connection(command)
             response_data = self._dispatch_remote_command(client, command)
             success, error_msg, stdout, return_code = self._process_response(response_data)
 
@@ -55,37 +111,6 @@ class RemoteExecutor(BaseExecutor):
 
         return Result(final_stdout, final_return_code)
 
-    def _get_remote_client(self, command_config: AttackMateRemoteCommand) -> RemoteAttackMateClient:
-        """Gets or creates a client instance for the given server URL."""
-        server_url = self.varstore.substitute(command_config.server_url)
-        if server_url in self._clients_cache:
-            return self._clients_cache[server_url]
-        else:
-            self.logger.info(
-                f'Creating new remote client for server: {server_url}'
-            )
-            new_remote_client = self._create_remote_client(command_config)
-            self._clients_cache[server_url] = new_remote_client
-        return self._clients_cache[server_url]
-
-    def _create_remote_client(self, command_config: AttackMateRemoteCommand) -> RemoteAttackMateClient:
-        """
-        Creates and configures a new RemoteAttackMateClient
-        """
-        server_url = self.varstore.substitute(command_config.server_url)
-        username = self.varstore.substitute(command_config.user) if command_config.user else None
-        password = (
-            self.varstore.substitute(command_config.password)
-            if command_config.password else None
-        )
-        cacert = self.varstore.substitute(command_config.cacert) if command_config.cacert else None
-        return RemoteAttackMateClient(
-            server_url=server_url,
-            username=username,
-            password=password,  # noqa: E501
-            cacert=cacert
-        )
-
     def _dispatch_remote_command(
         self, client: 'RemoteAttackMateClient', command: AttackMateRemoteCommand
     ) -> Dict[str, Any]:
@@ -95,8 +120,8 @@ class RemoteExecutor(BaseExecutor):
         debug = getattr(command, 'debug', False)
         self.logger.debug(f"Dispatching command '{command.cmd}' with debug={debug}")
 
-        if command.cmd == 'execute_playbook' and command.playbook_yaml_content:
-            with open(command.playbook_yaml_content, 'r') as f:
+        if command.cmd == 'execute_playbook' and command.playbook_yaml_path:
+            with open(command.playbook_yaml_path, 'r') as f:
                 yaml_content = f.read()
             response = client.execute_remote_playbook_yaml(yaml_content, debug=debug)
 
