@@ -41,10 +41,10 @@ $ attackmate playbook.yml
 
 Please take a look at our documentation for how to install and use attackmate:
 
-* [Installation](https://aeciddocs.ait.ac.at/attackmate/current/installation/index.html)
-* [Documentation](https://aeciddocs.ait.ac.at/attackmate/current)
-* [Command Reference](https://aeciddocs.ait.ac.at/attackmate/current/playbook/commands/index.html)
-* [Example Playbooks](https://aeciddocs.ait.ac.at/attackmate/current/playbook/examples.html)
+* [Installation](https://ait-testbed.github.io/attackmate/main/installation/index.html)
+* [Documentation](https://ait-testbed.github.io/attackmate/main/index.html)
+* [Command Reference](https://ait-testbed.github.io/attackmate/main/playbook/commands/index.html)
+* [Example Playbooks](https://ait-testbed.github.io/attackmate/main/playbook/examples.html)
 
 ## Disclaimer
 
