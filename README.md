@@ -45,6 +45,7 @@ Please take a look at our documentation for how to install and use attackmate:
 * [Documentation](https://aeciddocs.ait.ac.at/attackmate/current)
 * [Command Reference](https://aeciddocs.ait.ac.at/attackmate/current/playbook/commands/index.html)
 * [Example Playbooks](https://aeciddocs.ait.ac.at/attackmate/current/playbook/examples.html)
+* [Arxiv Paper](https://arxiv.org/pdf/2601.14108)
 
 ## Disclaimer
 
