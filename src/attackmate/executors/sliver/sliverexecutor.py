@@ -135,6 +135,33 @@ class SliverExecutor(BaseExecutor):
         self.logger.debug(f'Saved {implant.File.Name} to {implant_path}')
         self.result.returncode = 0
 
+    async def cleanup(self):
+        """
+        Cleans up listeners (jobs), sessions, and beacons to release ports and resources.
+        """
+        if not self.client:
+            return
+        try:
+            if not self.client.is_connected:
+                await self.client.connect()
+            # 1. Kill Jobs (releases ports)
+            jobs = await self.client.jobs()
+            for job in jobs:
+                self.logger.debug(f'Killing sliver job {job}')
+                await self.client.kill_job(job.ID)
+            # 2. Kill Sessions
+            sessions = await self.client.sessions()
+            for session in sessions:
+                self.logger.debug(f'Killing sliver session {session.ID}')
+                await self.client.kill_session(session.ID)
+            # 3. Kill Beacons
+            beacons = await self.client.beacons()
+            for beacon in beacons:
+                self.logger.debug(f'Killing sliver beacon {beacon.ID}')
+                await self.client.kill_beacon(beacon.ID)
+        except Exception as e:
+            self.logger.error(f'Error during SliverExecutor cleanup: {e}')
+
     def log_command(self, command: BaseCommand):
         self.logger.info(f"Executing Sliver-command: '{command.cmd}'")
 

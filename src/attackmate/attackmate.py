@@ -130,8 +130,11 @@ class AttackMate:
         if (vnc_executor := self.executors.get('vnc')):
             vnc_executor.cleanup()
         # sliver
-        if (sliver_executor := self.executors.get('sliver-session')):
+        if (sliver_executor := self.executors.get('sliver')):
             await sliver_executor.cleanup()
+        # sliver
+        if (sliver_session_executor := self.executors.get('sliver-session')):
+            await sliver_session_executor.cleanup()
         if (remote_executor := self.executors.get('remote')):
             remote_executor.cleanup()
 
