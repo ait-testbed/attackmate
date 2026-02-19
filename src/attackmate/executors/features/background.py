@@ -1,5 +1,6 @@
 import json
 import asyncio
+from attackmate.execexception import ExecException
 from attackmate.schemas.base import BaseCommand
 from attackmate.processmanager import ProcessManager
 from attackmate.result import Result
@@ -41,7 +42,15 @@ class Background:
         else:
             p = self.pm.ctx.Process(target=self._exec_bg_cmd, args=(command,))
         p.start()
-        p.join(5)
+
+        # Wait a little bit to actually spawn the process
+        # and add it to the ProcessManager before the API response is sent.
+        await asyncio.sleep(0.2)
+        if not p.is_alive():
+            # The process died immediately!
+            exit_code = p.exitcode
+            raise ExecException(f'Background process died immediately with code {exit_code}')
+
         self.pm.add_process(p, command.kill_on_exit)
         # background commands always return None Result
         return Result(None, None)
