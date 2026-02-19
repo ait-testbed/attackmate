@@ -52,8 +52,7 @@ class Background:
             raise ExecException(f'Background process died immediately with code {exit_code}')
 
         self.pm.add_process(p, command.kill_on_exit)
-        # background commands always return None Result
-        return Result(None, None)
+        return Result('Command started in background', 0)
 
     def _exec_bg_cmd(self, command: Any, queue: Optional[Queue] = None):
         self.is_child_proc = True
