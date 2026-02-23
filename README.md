@@ -46,6 +46,12 @@ Please take a look at our documentation for how to install and use attackmate:
 * [Command Reference](https://ait-testbed.github.io/attackmate/main/playbook/commands/index.html)
 * [Example Playbooks](https://ait-testbed.github.io/attackmate/main/playbook/examples.html)
 
+## Contribution
+
+We're happily taking patches and other contributions. Please see the following links for how to get started:
+
+- [Contribution Guide](https://ait-testbed.github.io/attackmate/main/developing/contribution.html)
+
 ## Disclaimer
 
 AttackMate is purely for educational and academic purposes. The software is provided "as is"
