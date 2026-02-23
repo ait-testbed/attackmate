@@ -63,7 +63,7 @@ Please make sure that you commit only improvements that are related to the workp
 
 .. note::
 
-  `attackmate` uses `prek`_ to ensure code quality. Make sure that you use it properly
+  `attackmate` uses `prek`_ to ensure code quality. Make sure that you use it properly.
 
 .. _prek: https://github.com/j178/prek
 
