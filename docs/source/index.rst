@@ -37,6 +37,8 @@ Welcome to AttackMate's documentation!
    :maxdepth: 1
    :caption: Developing:
 
+   developing/contribution
+   developing/development
    developing/architecture
    developing/command
    developing/baseexecutor

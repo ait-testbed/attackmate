@@ -1,0 +1,17 @@
+{% extends "!layout.html" %}
+
+{% block sidebartitle %}
+{{ super() }}
+
+{% if versions %}
+<div class="version-switcher" style="margin: 0.5em 0;">
+    <select onchange="if (this.value) window.location.href=this.value;" style="width: 100%; padding: 0.2em;">
+        {% for v in versions %}
+        <option value="{{ v.url }}" {% if v.name==current_version.name %}selected{% endif %}>
+            {{ v.name }}
+        </option>
+        {% endfor %}
+    </select>
+</div>
+{% endif %}
+{% endblock %}
