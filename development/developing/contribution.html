@@ -1,0 +1,351 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contributing &mdash; AttackMate 0.6.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css" />
+
+  
+      <script src="../_static/jquery.js"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+      <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+      <script src="../_static/doctools.js"></script>
+      <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Development" href="development.html" />
+    <link rel="prev" title="Examples" href="../playbook/examples.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            AttackMate
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+
+<div class="version-switcher" style="margin: 0.5em 0;">
+    <select onchange="if (this.value) window.location.href=this.value;" style="width: 100%; padding: 0.2em;">
+        
+        <option value="../../v0.1.0/index.html" >
+            v0.1.0
+        </option>
+        
+        <option value="../../v0.2.0/index.html" >
+            v0.2.0
+        </option>
+        
+        <option value="../../v0.3.0/index.html" >
+            v0.3.0
+        </option>
+        
+        <option value="../../v0.3.1/index.html" >
+            v0.3.1
+        </option>
+        
+        <option value="../../v0.4.0/index.html" >
+            v0.4.0
+        </option>
+        
+        <option value="../../v0.5.0/index.html" >
+            v0.5.0
+        </option>
+        
+        <option value="../../v0.6.0/index.html" >
+            v0.6.0
+        </option>
+        
+        <option value="contribution.html" selected>
+            development
+        </option>
+        
+        <option value="../../main/index.html" >
+            main
+        </option>
+        
+    </select>
+</div>
+
+
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">General:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html">AttackMate <img alt="Logo" src="/images/AttackMate_logo_no_logo.png" align="right" height="90"></a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Getting Started:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../about.html">About</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../how.html">How it works</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation/index.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../preparation/index.html">Preparation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration/index.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basic.html">Basic Usage</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Playbook:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../playbook/structure.html">Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../playbook/vars.html">Variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../playbook/commands/index.html">Commands</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../playbook/session/index.html">Sessions, Interactive</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../playbook/examples.html">Examples</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developing:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Contributing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#bug-reports-and-enhancement-requests">Bug reports and enhancement requests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#working-on-the-codebase">Working on the codebase</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">System Architecture (C4)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="command.html">Adding a New Command</a></li>
+<li class="toctree-l1"><a class="reference internal" href="baseexecutor.html">Adding a New Executor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="integration.html">Using AttackMate in a Python Script</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Package:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../attackmate/attackmate.html">attackmate package</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">AttackMate</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Contributing</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/developing/contribution.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="contributing">
+<span id="contribution"></span><h1>Contributing<a class="headerlink" href="#contributing" title="Permalink to this heading"></a></h1>
+<p>We’re happily taking patches and other contributions. Below is a summary of the processes we follow for any contribution.</p>
+<section id="bug-reports-and-enhancement-requests">
+<h2>Bug reports and enhancement requests<a class="headerlink" href="#bug-reports-and-enhancement-requests" title="Permalink to this heading"></a></h2>
+<p>Bug reports and enhancement requests are an important part of making <cite>attackmate</cite> more stable and are curated through Github issues.
+Before reporting an issue, check our backlog of open issues to see if anybody else has already reported it.
+If that is the case, you might be able to give additional information on that issue.
+Bug reports are very helpful to us in improving the software, and therefore, they are very welcome. It is very important to give us
+at least the following information in a bug report:</p>
+<ol class="arabic simple">
+<li><p>Description of the bug. Describe the problem clearly.</p></li>
+<li><p>Steps to reproduce. With the following configuration, go to.., click.., see error</p></li>
+<li><p>Expected behavoir. What should happen?</p></li>
+<li><p>Environment. What was the environment for the test(version, browser, etc..)</p></li>
+</ol>
+<p>For reporting security-related issues, see <a class="reference external" href="https://github.com/ait-testbed/attackmate/blob/main/SECURITY.md">SECURITY.md</a></p>
+</section>
+<section id="working-on-the-codebase">
+<h2>Working on the codebase<a class="headerlink" href="#working-on-the-codebase" title="Permalink to this heading"></a></h2>
+<p>To contribute to this project, you must fork the project and create a pull request to the upstream repository. The following figure shows the workflow:</p>
+<img alt="../_images/GitHub-Contrib.drawio.png" src="../_images/GitHub-Contrib.drawio.png" />
+<section id="fork">
+<h3>1. Fork<a class="headerlink" href="#fork" title="Permalink to this heading"></a></h3>
+<p>Go to <a class="reference external" href="https://github.com/ait-testbed/attackmate.git">https://github.com/ait-testbed/attackmate.git</a> and click on fork. Please note that you must login first to GitHub.</p>
+</section>
+<section id="clone">
+<h3>2. Clone<a class="headerlink" href="#clone" title="Permalink to this heading"></a></h3>
+<p>After forking the repository into your own workspace, clone the development branch of that repository.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="o">-</span><span class="n">b</span> <span class="n">development</span> <span class="n">git</span><span class="nd">@github</span><span class="o">.</span><span class="n">com</span><span class="p">:</span><span class="n">YOURUSERNAME</span><span class="o">/</span><span class="n">attackmate</span><span class="o">.</span><span class="n">git</span>
+</pre></div>
+</div>
+</section>
+<section id="create-a-feature-branch">
+<h3>3. Create a feature branch<a class="headerlink" href="#create-a-feature-branch" title="Permalink to this heading"></a></h3>
+<p>Every single workpackage should be developed in it’s own feature-branch. Use a name that describes the feature:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">attackmate</span>
+<span class="n">git</span> <span class="n">checkout</span> <span class="o">-</span><span class="n">b</span> <span class="n">feature</span><span class="o">-</span><span class="n">some_important_work</span>
+</pre></div>
+</div>
+</section>
+<section id="develop-your-feature-and-improvements-in-the-feature-branch">
+<h3>4. Develop your feature and improvements in the feature-branch<a class="headerlink" href="#develop-your-feature-and-improvements-in-the-feature-branch" title="Permalink to this heading"></a></h3>
+<p>Please make sure that you commit only improvements that are related to the workpage you created the feature-branch for. See the section <a class="reference internal" href="development.html#development"><span class="std std-ref">Development</span></a> for detailed information about how to develope code for <cite>attackmate</cite>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><cite>attackmate</cite> uses <a class="reference external" href="https://github.com/j178/prek">prek</a> to ensure code quality. Make sure that you use it properly.</p>
+</div>
+</section>
+<section id="fetch-and-merge-from-the-upstream">
+<h3>5. Fetch and merge from the upstream<a class="headerlink" href="#fetch-and-merge-from-the-upstream" title="Permalink to this heading"></a></h3>
+<p>If your work on this feature-branch is done, make sure that you are in sync with the branch of the upstream:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">remote</span> <span class="n">add</span> <span class="n">upstream</span> <span class="n">git</span><span class="nd">@github</span><span class="o">.</span><span class="n">com</span><span class="p">:</span><span class="n">ait</span><span class="o">-</span><span class="n">testbed</span><span class="o">/</span><span class="n">attackmate</span><span class="o">.</span><span class="n">git</span>
+<span class="n">git</span> <span class="n">pull</span> <span class="n">upstream</span> <span class="n">development</span>
+</pre></div>
+</div>
+<p>If any conflicts occur, fix them and add them using <cite>git add</cite> and continue with the merge or fast-forward.</p>
+<p>Additional infos:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://www.atlassian.com/git/tutorials/merging-vs-rebasing">https://www.atlassian.com/git/tutorials/merging-vs-rebasing</a></p></li>
+<li><p><a class="reference external" href="https://www.atlassian.com/git/tutorials/merging-vs-rebasing#the-golden-rule-of-rebasing">https://www.atlassian.com/git/tutorials/merging-vs-rebasing#the-golden-rule-of-rebasing</a></p></li>
+<li><p><a class="reference external" href="https://dev.to/toogoodyshoes/mastering-rebasing-and-fast-forwarding-in-git-2j19">https://dev.to/toogoodyshoes/mastering-rebasing-and-fast-forwarding-in-git-2j19</a></p></li>
+</ul>
+</section>
+<section id="push-the-changes-to-your-github-repository">
+<h3>6. Push the changes to your GitHub-repository<a class="headerlink" href="#push-the-changes-to-your-github-repository" title="Permalink to this heading"></a></h3>
+<p>Before we can push our changes, we have to make sure that we don’t have unnecessary commits. First checkout our commits:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">log</span>
+</pre></div>
+</div>
+<p>After that we can squash the last n commits together:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">rebase</span> <span class="o">-</span><span class="n">i</span> <span class="n">HEAD</span><span class="o">~</span><span class="n">n</span>
+</pre></div>
+</div>
+<p>Finally you can push the changes to YOUR github-repository:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">push</span>
+</pre></div>
+</div>
+<p>Additional documentation:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://www.atlassian.com/git/tutorials/merging-vs-rebasing">https://www.atlassian.com/git/tutorials/merging-vs-rebasing</a></p></li>
+</ul>
+</section>
+<section id="submit-your-pull-request">
+<h3>7. Submit your pull-request<a class="headerlink" href="#submit-your-pull-request" title="Permalink to this heading"></a></h3>
+<p>Use the GitHub-Webinterface to create a pull-request. Make sure that the target-repository is <cite>ait-testbed/attackmate</cite>.</p>
+<p>If your pull-request was accepted and merged into the development branch continue with <a class="reference internal" href="#update-local-branch"><span class="std std-ref">Update your local main branch</span></a>. If it wasn’t accepted, read the comments and fix the problems. Before pushing the changes make sure that you squashed them with your last commit:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">rebase</span> <span class="o">-</span><span class="n">i</span> <span class="n">HEAD</span><span class="o">~</span><span class="mi">2</span>
+</pre></div>
+</div>
+<p>Delete your local feature-branch after the pull-request was merged into the development branch.</p>
+</section>
+<section id="update-your-local-main-branch">
+<span id="update-local-branch"></span><h3>8. Update your local main branch<a class="headerlink" href="#update-your-local-main-branch" title="Permalink to this heading"></a></h3>
+<p>Update your local development branch:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">fetch</span> <span class="n">upstream</span> <span class="n">development</span>
+<span class="n">git</span> <span class="n">checkout</span> <span class="o">-</span><span class="n">b</span> <span class="n">development</span>
+<span class="n">git</span> <span class="n">rebase</span> <span class="n">upstream</span><span class="o">/</span><span class="n">development</span>
+</pre></div>
+</div>
+<p>Additional infos:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://www.atlassian.com/git/tutorials/merging-vs-rebasing">https://www.atlassian.com/git/tutorials/merging-vs-rebasing</a></p></li>
+</ul>
+</section>
+<section id="update-your-main-branch-in-your-github-repository">
+<h3>9. Update your main branch in your github-repository<a class="headerlink" href="#update-your-main-branch-in-your-github-repository" title="Permalink to this heading"></a></h3>
+<p>Please make sure that you updated your local development branch as described in section 8. above. After that push the changes to your github-repository to keep it up2date:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">push</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../playbook/examples.html" class="btn btn-neutral float-left" title="Examples" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="development.html" class="btn btn-neutral float-right" title="Development" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Wolfgang Hotwagner.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  
+<div class="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version">
+        <span class="fa fa-book"> Version</span>
+        development
+    </span>
+
+    <div class="rst-other-versions">
+        <dl>
+            <dt>Versions</dt>
+            
+            <dd>
+                <a href="../../v0.1.0/index.html">v0.1.0</a>
+            </dd>
+            
+            <dd>
+                <a href="../../v0.2.0/index.html">v0.2.0</a>
+            </dd>
+            
+            <dd>
+                <a href="../../v0.3.0/index.html">v0.3.0</a>
+            </dd>
+            
+            <dd>
+                <a href="../../v0.3.1/index.html">v0.3.1</a>
+            </dd>
+            
+            <dd>
+                <a href="../../v0.4.0/index.html">v0.4.0</a>
+            </dd>
+            
+            <dd>
+                <a href="../../v0.5.0/index.html">v0.5.0</a>
+            </dd>
+            
+            <dd>
+                <a href="../../v0.6.0/index.html">v0.6.0</a>
+            </dd>
+            
+            <dd>
+                <a href="contribution.html">development</a>
+            </dd>
+            
+            <dd>
+                <a href="../../main/index.html">main</a>
+            </dd>
+            
+        </dl>
+    </div>
+</div>
+<script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
