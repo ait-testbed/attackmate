@@ -176,14 +176,20 @@
   <section id="webserv">
 <h1>webserv<a class="headerlink" href="#webserv" title="Permalink to this heading"></a></h1>
 <p>Start a http-server and share a file. This command
-will return after the first HTTP-request.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1">###</span>
-<span class="nt">commands</span><span class="p">:</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">webserv</span>
-<span class="w">    </span><span class="nt">local_path</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/tmp/webshell.php&quot;</span>
-<span class="w">    </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8000</span>
-</pre></div>
-</div>
+will return after the first HTTP-request. To keep serving the file instead set keep_serving to True.
+The webserv command has to be run in background mode, otherwise the playbook execution will halt until a request is received.
+.. code-block:: yaml</p>
+<blockquote>
+<div><p>###
+commands:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>type: webserv
+local_path: “/tmp/webshell.php”
+port: 8000</p></li>
+</ul>
+</div></blockquote>
+</div></blockquote>
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-local_path">
 <span class="sig-name descname"><span class="pre">local_path</span></span><a class="headerlink" href="#confval-local_path" title="Permalink to this definition"></a></dt>
@@ -222,6 +228,20 @@ will return after the first HTTP-request.</p>
 </dd>
 <dt class="field-even">Default<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">0.0.0.0</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="std confval">
+<dt class="sig sig-object std" id="confval-keep_servng">
+<span class="sig-name descname"><span class="pre">keep_servng</span></span><a class="headerlink" href="#confval-keep_servng" title="Permalink to this definition"></a></dt>
+<dd><p>Keep serving even after a request has been processed</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+<dt class="field-even">Default<span class="colon">:</span></dt>
+<dd class="field-even"><p>False</p>
 </dd>
 </dl>
 </dd></dl>
