@@ -61,7 +61,14 @@ class WebServExecutor(BaseExecutor):
         address = (command.address, CmdVars.variable_to_int('Port', command.port))
         try:
             server = WebServe(address, WebRequestHandler, local_path=command.local_path)
-            server.handle_request()
+            if command.keep_serving:
+                self.logger.info('Keeping server alive to serve multiple requests')
+                try:
+                    server.serve_forever()
+                except KeyboardInterrupt:
+                    server.server_close()
+            else:
+                server.handle_request()
         except Exception as e:
             raise ExecException(e)
 
