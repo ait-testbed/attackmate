@@ -45,12 +45,14 @@ Please take a look at our documentation for how to install and use attackmate:
 * [Documentation](https://ait-testbed.github.io/attackmate/main/index.html)
 * [Command Reference](https://ait-testbed.github.io/attackmate/main/playbook/commands/index.html)
 * [Example Playbooks](https://ait-testbed.github.io/attackmate/main/playbook/examples.html)
+* [Arxiv Paper](https://arxiv.org/pdf/2601.14108)
 
 ## Contribution
 
 We're happily taking patches and other contributions. Please see the following links for how to get started:
 
 - [Contribution Guide](https://ait-testbed.github.io/attackmate/main/developing/contribution.html)
+
 
 ## Disclaimer
 
