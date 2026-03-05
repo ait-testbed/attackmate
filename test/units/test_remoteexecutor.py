@@ -50,7 +50,7 @@ def mock_remote_command():
     command.type = 'remote'
     command.remote_command = MagicMock()
     command.remote_command.model_dump = MagicMock(return_value={'cmd': 'test'})
-    command.playbook_yaml_path = None
+    command.playbook_path = None
     command.debug = False
     return command
 
@@ -227,7 +227,7 @@ class TestDispatchRemoteCommand:
         mock_client = MagicMock()
         mock_client.execute_remote_playbook_yaml = MagicMock(return_value={'success': True})
         mock_remote_command.cmd = 'execute_playbook'
-        mock_remote_command.playbook_yaml_path = temp_yaml_file
+        mock_remote_command.playbook_path = temp_yaml_file
 
         response = executor._dispatch_remote_command(mock_client, mock_remote_command)
 
@@ -242,7 +242,7 @@ class TestDispatchRemoteCommand:
         executor = setup_executor
         mock_client = MagicMock()
         mock_remote_command.cmd = 'execute_playbook'
-        mock_remote_command.playbook_yaml_path = '/nonexistent/file.yaml'
+        mock_remote_command.playbook_path = '/nonexistent/file.yaml'
 
         with pytest.raises(ExecException, match='Playbook file not found'):
             executor._dispatch_remote_command(mock_client, mock_remote_command)
@@ -252,7 +252,7 @@ class TestDispatchRemoteCommand:
         executor = setup_executor
         mock_client = MagicMock()
         mock_remote_command.cmd = 'execute_playbook'
-        mock_remote_command.playbook_yaml_path = '/path/to/file.yaml'
+        mock_remote_command.playbook_path = '/path/to/file.yaml'
 
         with patch('builtins.open', side_effect=IOError('Permission denied')):
             with pytest.raises(ExecException, match='Failed to read playbook file'):

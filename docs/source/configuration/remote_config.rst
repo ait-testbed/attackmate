@@ -37,7 +37,7 @@ Like other executors, the configuration uses unique identifiers (names) for each
    # Executed on 'remote_server' (defaults to first remote_config entry))
    - type: remote
      cmd: execute_playbook
-     playbook_yaml_path: path/to/playbook.yml
+     playbook_path: path/to/playbook.yml
 
 .. confval:: url
 
