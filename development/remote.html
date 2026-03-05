@@ -1,0 +1,308 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Remote Execution &mdash; AttackMate 0.6.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css" />
+
+  
+      <script src="_static/jquery.js"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+      <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+      <script src="_static/doctools.js"></script>
+      <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            AttackMate
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+
+<div class="version-switcher" style="margin: 0.5em 0;">
+    <select onchange="if (this.value) window.location.href=this.value;" style="width: 100%; padding: 0.2em;">
+        
+        <option value="../v0.1.0/index.html" >
+            v0.1.0
+        </option>
+        
+        <option value="../v0.2.0/index.html" >
+            v0.2.0
+        </option>
+        
+        <option value="../v0.3.0/index.html" >
+            v0.3.0
+        </option>
+        
+        <option value="../v0.3.1/index.html" >
+            v0.3.1
+        </option>
+        
+        <option value="../v0.4.0/index.html" >
+            v0.4.0
+        </option>
+        
+        <option value="../v0.5.0/index.html" >
+            v0.5.0
+        </option>
+        
+        <option value="../v0.6.0/index.html" >
+            v0.6.0
+        </option>
+        
+        <option value="remote.html" selected>
+            development
+        </option>
+        
+        <option value="../main/index.html" >
+            main
+        </option>
+        
+    </select>
+</div>
+
+
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">General:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="readme_link.html">AttackMate <img alt="Logo" src="/images/AttackMate_logo_no_logo.png" align="right" height="90"></a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Getting Started:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="about.html">About</a></li>
+<li class="toctree-l1"><a class="reference internal" href="how.html">How it works</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation/index.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="preparation/index.html">Preparation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration/index.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="basic.html">Basic Usage</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Playbook:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="playbook/structure.html">Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="playbook/vars.html">Variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="playbook/commands/index.html">Commands</a></li>
+<li class="toctree-l1"><a class="reference internal" href="playbook/session/index.html">Sessions, Interactive</a></li>
+<li class="toctree-l1"><a class="reference internal" href="playbook/examples.html">Examples</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developing:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="developing/contribution.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developing/development.html">Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developing/architecture.html">System Architecture (C4)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developing/command.html">Adding a New Command</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developing/baseexecutor.html">Adding a New Executor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developing/integration.html">Using AttackMate in a Python Script</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Package:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="attackmate/attackmate.html">attackmate package</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">AttackMate</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Remote Execution</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/remote.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="remote-execution">
+<h1>Remote Execution<a class="headerlink" href="#remote-execution" title="Permalink to this heading"></a></h1>
+<p>AttackMate can be used for remote command execution.
+This section explains hoe the server handles authentication, logging, and AttackMate instances.</p>
+<section id="authentication">
+<h2>Authentication<a class="headerlink" href="#authentication" title="Permalink to this heading"></a></h2>
+<p>The AttackMate API server secures its endpoints using <strong>token-based authentication</strong>.</p>
+<ul class="simple">
+<li><p><strong>Login Endpoint</strong>: Clients must first authenticate by sending a username and password to the <cite>/login</cite> endpoint (e.g., <cite>https://localhost:8445/login</cite>). This endpoint is defined in <cite>main.py</cite> and uses FastAPI’s <cite>OAuth2PasswordRequestForm</cite> for standard form encoding.</p></li>
+<li><p><strong>Token Generation</strong>: Upon successful authentication, the server generates an access token and returns it to the client.</p></li>
+<li><dl class="simple">
+<dt><strong>Token Storage and Usage</strong>:</dt><dd><ul>
+<li><p>The provided token is received and then stored globally (<cite>CURRENT_TOKEN</cite>) and optionally in an environment variable (<cite>ATTACKMATE_API_TOKEN</cite>).</p></li>
+<li><p>For subsequent requests to protected endpoints (like <cite>/command</cite> or <cite>/playbooks</cite>), the client include this token in the <cite>X-Auth-Token</cite> header.</p></li>
+<li><p>The <cite>update_token_from_response</cite> function in <cite>client.py</cite> also suggests a mechanism for token renewal, where the server might return a new token in a response.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><p><strong>SSL/TLS</strong>: The <cite>main.py</cite> server is configured to run with HTTPS on port <cite>8443</cite>, requiring <cite>key.pem</cite> and <cite>cert.pem</cite> files for SSL/TLS encryption. Clients should specify the path to the server’s public certificate.</p></li>
+</ul>
+</section>
+<section id="logging">
+<h2>Logging<a class="headerlink" href="#logging" title="Permalink to this heading"></a></h2>
+<p>The AttackMate API server provides the following logging features:</p>
+<ul class="simple">
+<li><p><strong>Centralized Logging</strong>: <cite>main.py</cite> initializes several loggers (<cite>attackmate_api</cite>, <cite>playbook</cite>, <cite>output</cite>, <cite>json</cite>) at startup.</p></li>
+<li><dl class="simple">
+<dt><strong>Instance-Specific Logging</strong>: For remote command and playbook executions, AttackMate implements instance-specific logging.</dt><dd><ul>
+<li><p>The <cite>instance_logging</cite> context manager (from <cite>log_utils.py</cite>) creates dedicated log files for each AttackMate instance based on its <cite>instance_id</cite>.</p></li>
+<li><p>These logs are stored in a <cite>attackmate_server_logs</cite> directory (relative to the project root, or a configurable absolute path like <cite>/var/log/attackmate_instances</cite>).</p></li>
+<li><p>Each remote command or playbook execution within an instance generates new timestamped log files (e.g., <cite>20240715_123456_my_instance_output.log</cite>).</p></li>
+<li><p>This ensures that logs from different concurrent AttackMate instances remain separate.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><p><strong>Log Levels</strong>: Log levels can be adjusted for debugging, providing more verbose output when needed.</p></li>
+</ul>
+</section>
+<section id="attackmate-instances">
+<h2>AttackMate Instances<a class="headerlink" href="#attackmate-instances" title="Permalink to this heading"></a></h2>
+<p>The AttackMate API server manages AttackMate instances to handle multiple execution contexts.</p>
+<ul class="simple">
+<li><p><strong>Default Instance</strong>: On startup, <cite>main.py</cite> initializes a single default AttackMate instance named <cite>default_context</cite>. This instance handles request to process entire playbooks.</p></li>
+<li><dl class="simple">
+<dt><strong>Instance Management</strong>:</dt><dd><ul>
+<li><p>The server can create and manage multiple AttackMate instances, each identified by a unique <cite>instance_id</cite>.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><strong>Instance Lifecycle</strong>:</dt><dd><ul>
+<li><p>Instances are stored in a global dictionary (<cite>state.INSTANCES</cite>).</p></li>
+<li><p>When the API server starts (<cite>lifespan</cite> function in <cite>main.py</cite>), it loads a global AttackMate configuration and creates the <cite>default_context</cite> instance.</p></li>
+<li><p>When the API server shuts down, it iterates through all active instances, performing cleanup operations like <cite>clean_session_stores()</cite> and <cite>kill_or_wait_processes()</cite> to ensure resources are properly released.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><strong>Command and Playbook Execution</strong>:</dt><dd><ul>
+<li><p>The API routes (<cite>commands</cite>, <cite>playbooks</cite> routers included in <cite>main.py</cite>) receive client requests.</p></li>
+<li><p>These requests specify an <cite>instance_id</cite> (or implicitly use <cite>default_context</cite>).</p></li>
+<li><p>The API then dispatches the command or playbook to the designated AttackMate instance for execution. This allows for isolated execution environments, where variables and session data for one instance do not interfere with another.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><strong>State Management</strong>:</dt><dd><ul>
+<li><p>Each AttackMate instance maintains its own internal state, including a <cite>VariableStore</cite>.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Wolfgang Hotwagner.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  
+<div class="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version">
+        <span class="fa fa-book"> Version</span>
+        development
+    </span>
+
+    <div class="rst-other-versions">
+        <dl>
+            <dt>Versions</dt>
+            
+            <dd>
+                <a href="../v0.1.0/index.html">v0.1.0</a>
+            </dd>
+            
+            <dd>
+                <a href="../v0.2.0/index.html">v0.2.0</a>
+            </dd>
+            
+            <dd>
+                <a href="../v0.3.0/index.html">v0.3.0</a>
+            </dd>
+            
+            <dd>
+                <a href="../v0.3.1/index.html">v0.3.1</a>
+            </dd>
+            
+            <dd>
+                <a href="../v0.4.0/index.html">v0.4.0</a>
+            </dd>
+            
+            <dd>
+                <a href="../v0.5.0/index.html">v0.5.0</a>
+            </dd>
+            
+            <dd>
+                <a href="../v0.6.0/index.html">v0.6.0</a>
+            </dd>
+            
+            <dd>
+                <a href="remote.html">development</a>
+            </dd>
+            
+            <dd>
+                <a href="../main/index.html">main</a>
+            </dd>
+            
+        </dl>
+    </div>
+</div>
+<script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
