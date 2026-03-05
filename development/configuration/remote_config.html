@@ -160,47 +160,34 @@
 <span id="id1"></span><h1>remote_config<a class="headerlink" href="#remote-config" title="Permalink to this heading"></a></h1>
 <p>The remote_config section defines connections to remote AttackMate instances. This allows one AttackMate instance to act as a controller, dispatching playbooks or commands to remote nodes.</p>
 <p>Like other executors, the configuration uses unique identifiers (names) for each connection. If a command in a playbook does not explicitly specify a connection, the first entry defined in this configuration is used as the default.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">remote_config</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">remote_server</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;https://10.0.0.5:5000&quot;</span>
+<span class="w">    </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">admin</span>
+<span class="w">    </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">securepassword</span>
+<span class="w">    </span><span class="nt">cafile</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/path/to/cert.pem&quot;</span>
+<span class="w">  </span><span class="nt">another_server</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;https://10.0.0.6:5000&quot;</span>
+<span class="w">    </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">user</span>
+<span class="w">    </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">anotherpassword</span>
+<span class="w">    </span><span class="nt">cafile</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/path/to/another_cert.pem&quot;</span>
 </pre></div>
 </div>
-<dl class="simple">
-<dt>remote_config:</dt><dd><dl class="simple">
-<dt>remote_server:</dt><dd><p>url: “<a class="reference external" href="https://10.0.0.5:5000">https://10.0.0.5:5000</a>”
-username: admin
-password: securepassword
-cafile: “/path/to/cert.pem”</p>
-</dd>
-<dt>another_server:</dt><dd><p>url: “<a class="reference external" href="https://10.0.0.6:5000">https://10.0.0.6:5000</a>”
-username: user
-password: anotherpassword
-cafile: “/path/to/another_cert.pem”</p>
-</dd>
-</dl>
-</dd>
-</dl>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">commands</span><span class="p">:</span>
+<span class="c1"># Executed on &#39;another_server&#39;</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">remote</span>
+<span class="w">  </span><span class="nt">connection</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">another_server</span>
+<span class="w">  </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">execute_command</span>
+<span class="w">  </span><span class="nt">remote_command</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">shell</span>
+<span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;whoami&quot;</span>
+
+<span class="w"> </span><span class="c1"># Executed on &#39;remote_server&#39; (defaults to first remote_config entry))</span>
+<span class="w w-Error"> </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">remote</span>
+<span class="w">   </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">execute_playbook</span>
+<span class="w">   </span><span class="nt">playbook_path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">path/to/playbook.yml</span>
 </pre></div>
 </div>
-<p>commands:
-# Executed on ‘another_server’
-- type: remote</p>
-<blockquote>
-<div><blockquote>
-<div><p>connection: another_server
-cmd: execute_command
-remote_command:</p>
-<blockquote>
-<div><p>type: shell
-cmd: “whoami”</p>
-</div></blockquote>
-</div></blockquote>
-<p># Executed on ‘remote_server’ (defaults to first remote_config entry))
-- type: remote</p>
-<blockquote>
-<div><p>cmd: execute_playbook
-playbook_yaml_path: path/to/playbook.yml</p>
-</div></blockquote>
-</div></blockquote>
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-url">
 <span class="sig-name descname"><span class="pre">url</span></span><a class="headerlink" href="#confval-url" title="Permalink to this definition"></a></dt>
