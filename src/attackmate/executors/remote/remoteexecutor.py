@@ -148,15 +148,15 @@ class RemoteExecutor(BaseExecutor):
         debug = getattr(command, 'debug', False)
         self.logger.debug(f"Dispatching command '{command.cmd}' with debug={debug}")
 
-        if command.cmd == 'execute_playbook' and command.playbook_yaml_path:
+        if command.cmd == 'execute_playbook' and command.playbook_path:
             try:
-                with open(command.playbook_yaml_path, 'r', encoding='utf-8') as f:
+                with open(command.playbook_path, 'r', encoding='utf-8') as f:
                     yaml_content = f.read()
                 response = client.execute_remote_playbook_yaml(yaml_content, debug=debug)
             except FileNotFoundError as e:
-                raise ExecException(f'Playbook file not found: {command.playbook_yaml_path}') from e
+                raise ExecException(f'Playbook file not found: {command.playbook_path}') from e
             except IOError as e:
-                raise ExecException(f'Failed to read playbook file {command.playbook_yaml_path}: {e}') from e
+                raise ExecException(f'Failed to read playbook file {command.playbook_path}: {e}') from e
 
         elif command.cmd == 'execute_command':
             response = client.execute_remote_command(command.remote_command, debug=debug)

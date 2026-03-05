@@ -229,6 +229,7 @@ The next pages will describe all possible commands in detail.
    msf-session
    payload
    regex
+   remote
    setvar
    shell
    sftp

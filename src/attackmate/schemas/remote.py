@@ -13,7 +13,7 @@ class AttackMateRemoteCommand(BaseCommand):
     type: Literal['remote']
     cmd: Literal['execute_command', 'execute_playbook']
     connection: Optional[str] = None
-    playbook_yaml_path: Optional[str] = None
+    playbook_path: Optional[str] = None
     remote_command: Optional[RemotelyExecutableCommand] = None
 
     # Common command parameters (like background, only_if) from BaseCommand
@@ -23,6 +23,6 @@ class AttackMateRemoteCommand(BaseCommand):
     def check_remote_command(self) -> 'AttackMateRemoteCommand':
         if self.cmd == 'execute_command' and not self.remote_command:
             raise ValueError("remote_command must be provided when cmd is 'execute_command'")
-        if self.cmd == 'execute_playbook' and not self.playbook_yaml_path:
-            raise ValueError("playbook_yaml_path must be provided when cmd is 'execute_playbook_yaml'")
+        if self.cmd == 'execute_playbook' and not self.playbook_path:
+            raise ValueError("playbook_path must be provided when cmd is 'execute_playbook_yaml'")
         return self
