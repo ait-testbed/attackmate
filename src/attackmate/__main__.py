@@ -5,6 +5,7 @@ __main__.py
 The main-file of AttackMate
 """
 import sys
+import asyncio
 import argparse
 from attackmate.attackmate import AttackMate
 from attackmate.metadata import __version_string__
@@ -37,7 +38,13 @@ def main():
     initialize_output_logger(args.debug, args.append_logs)
     initialize_json_logger(args.json, args.append_logs)
     hacky = AttackMate(parse_playbook(args.playbook, logger), parse_config(args.config, logger))
-    sys.exit(hacky.main())
+
+    try:
+        exit_code = asyncio.run(hacky.main())
+        sys.exit(exit_code)
+    except Exception as e:
+        logger.error(f'An error occurred: {e}')
+        sys.exit(1)
 
 
 if __name__ == '__main__':

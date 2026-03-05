@@ -47,7 +47,7 @@ The new command should be handled by an executor in `src/attackmate/executors`` 
 
     @executor_factory.register_executor('debug')
     class DebugExecutor(BaseExecutor):
-        def _exec_cmd(self, command: DebugCommand) -> Result:
+        async def _exec_cmd(self, command: DebugCommand) -> Result:
             self.logger.info(f"Executing debug command: {command.cmd}")
             return Result(stdout="Debug executed", returncode=0)
 

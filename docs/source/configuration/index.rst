@@ -11,12 +11,13 @@ is not used, attackmate will search at the following locations for the config-fi
 #. **$HOME/.config/attackmate.yml**
 #. **/etc/attackmate.yml**
 
-The optional configuration-file is in yaml-format and is divided into three sections:
+The optional configuration-file is in yaml-format and is divided into five sections:
 
 * **cmd_config**: defines settings for all commands
 * **msf_config**: connection settings for the msfrpcd
 * **bettercap_config**: connection settings for the bettercap rest-api
 * **sliver_config**: connection settings for the sliver-api
+* **remote_config**: connection settings for the remote attackmate server
 
 The following configuration file is an example for a basic configuration with
 sliver and metasploit:
@@ -51,3 +52,4 @@ For detailed information about the config sections see:
    bettercap_config
    msf_config
    sliver_config
+   remote_config

@@ -40,7 +40,7 @@ class IncludeExecutor(BaseExecutor):
     def log_command(self, command: IncludeCommand):
         self.logger.info(f"Executing commands from '{command.local_path}'")
 
-    def _exec_cmd(self, command: IncludeCommand) -> Result:
+    async def _exec_cmd(self, command: IncludeCommand) -> Result:
         playbook = self.load_file(command.local_path)
         self.runfunc(playbook.commands)
         return Result('', 0)

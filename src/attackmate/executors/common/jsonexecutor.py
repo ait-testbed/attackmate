@@ -53,7 +53,7 @@ class JsonExecutor(BaseExecutor):
 
         return dict(items)
 
-    def _exec_cmd(self, command: JsonCommand) -> Result:
+    async def _exec_cmd(self, command: JsonCommand) -> Result:
         try:
             if not command.local_path and command.cmd:
                 input_var = self.varstore.get_variable(command.cmd)

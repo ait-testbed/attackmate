@@ -37,26 +37,37 @@ from .sliver import (
     SliverGenerateCommand,
 )
 
-SliverSessionCommands: TypeAlias = Annotated[Union[
-    SliverSessionCDCommand,
-    SliverSessionLSCommand,
-    SliverSessionNETSTATCommand,
-    SliverSessionEXECCommand,
-    SliverSessionMKDIRCommand,
-    SliverSessionSimpleCommand,
-    SliverSessionDOWNLOADCommand,
-    SliverSessionUPLOADCommand,
-    SliverSessionPROCDUMPCommand,
-    SliverSessionRMCommand,
-    SliverSessionTERMINATECommand], Field(discriminator='cmd')]
+
+#   Pydantic nested discrimanated unions apply the OUTER discriminator ('type') to the *nested* union member.
+#   https://docs.pydantic.dev/latest/concepts/unions/#nested-discriminated-unions
+#   i.e Look for 'sliver-session' tag first (Outer discriminator).
+#   If found, then look for the 'cmd' tag (Inner discriminator).
+SliverSessionCommands: TypeAlias = Annotated[
+    Union[
+        SliverSessionCDCommand,
+        SliverSessionLSCommand,
+        SliverSessionNETSTATCommand,
+        SliverSessionEXECCommand,
+        SliverSessionMKDIRCommand,
+        SliverSessionSimpleCommand,
+        SliverSessionDOWNLOADCommand,
+        SliverSessionUPLOADCommand,
+        SliverSessionPROCDUMPCommand,
+        SliverSessionRMCommand,
+        SliverSessionTERMINATECommand
+    ],
+    Field(discriminator='cmd')  # Inner discriminator (cmd)
+]
 
 
-SliverCommands: TypeAlias = Annotated[Union[
-    SliverHttpsListenerCommand,
-    SliverGenerateCommand], Field(discriminator='cmd')]
+SliverCommands: TypeAlias = Annotated[
+    Union[
+        SliverHttpsListenerCommand,
+        SliverGenerateCommand],
+    Field(discriminator='cmd')  # Inner discriminator (cmd)
+]
 
-
-# This excludes the AttackMateRemoteCommand type
+# This excludes the AttackMateRemoteCommand
 RemotelyExecutableCommand: TypeAlias = Annotated[
     Union[
         SliverSessionCommands,
@@ -82,5 +93,5 @@ RemotelyExecutableCommand: TypeAlias = Annotated[
         VncCommand,
         BettercapCommand,
     ],
-    Field(discriminator='type'),
+    Field(discriminator='type'),  # Outer discriminator (type)
 ]

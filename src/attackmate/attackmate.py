@@ -20,7 +20,6 @@ from attackmate.variablestore import VariableStore
 from attackmate.processmanager import ProcessManager
 from attackmate.executors.baseexecutor import BaseExecutor
 from attackmate.executors.executor_factory import executor_factory
-import asyncio
 
 
 class AttackMate:
@@ -29,6 +28,7 @@ class AttackMate:
         playbook: Optional[Playbook] = None,
         config: Optional[Config] = None,
         varstore: Optional[Dict] = None,
+        is_api_instance: bool = False,
     ) -> None:
         """Constructor for AttackMate
 
@@ -51,6 +51,7 @@ class AttackMate:
         self.msfsessionstore = executors.MsfSessionStore(self.varstore)
         self.executor_config = self._get_executor_config()
         self.executors: Dict[str, BaseExecutor] = {}
+        self.is_api_instance = is_api_instance
 
     def _default_playbook(self) -> Playbook:
         return Playbook(commands=[], vars={})
@@ -60,7 +61,9 @@ class AttackMate:
             cmd_config=CommandConfig(),
             msf_config=MsfConfig(),
             sliver_config=SliverConfig(),
-            bettercap_config={})
+            bettercap_config={},
+            remote_config={}
+        )
 
     def _initialize_variable_parser(self, varstore: Optional[Dict] = None):
         """Initializes the variable-parser
@@ -80,6 +83,7 @@ class AttackMate:
             'cmdconfig': self.pyconfig.cmd_config,
             'msfconfig': self.pyconfig.msf_config,
             'bettercap_config': self.pyconfig.bettercap_config,
+            'remote_config': self.pyconfig.remote_config,
             'msfsessionstore': self.msfsessionstore,
             'sliver_config': self.pyconfig.sliver_config,
             'runfunc': self._run_commands,
@@ -94,7 +98,7 @@ class AttackMate:
 
         return self.executors[command_type]
 
-    def _run_commands(self, commands: Commands):
+    async def _run_commands(self, commands: Commands):
         delay = self.pyconfig.cmd_config.command_delay or 0
         self.logger.info(f'Delay before commands: {delay} seconds')
         for command in commands:
@@ -103,16 +107,16 @@ class AttackMate:
             if executor:
                 if command.type not in ('sleep', 'debug', 'setvar'):
                     time.sleep(delay)
-                executor.run(command)
+                await executor.run(command, is_api_instance=self.is_api_instance)
 
-    def run_command(self, command: Command) -> Result:
+    async def run_command(self, command: Command) -> Result:
         command_type = 'ssh' if command.type == 'sftp' else command.type
         executor = self._get_executor(command_type)
         if executor:
-            result = executor.run(command)
+            result = await executor.run(command, self.is_api_instance)
         return result if result else Result(None, None)
 
-    def clean_session_stores(self):
+    async def clean_session_stores(self):
         self.logger.warning('Cleaning up session stores')
         # msf
         if (msf_module_executor := self.executors.get('msf-module')):
@@ -126,19 +130,23 @@ class AttackMate:
         if (vnc_executor := self.executors.get('vnc')):
             vnc_executor.cleanup()
         # sliver
-        if (sliver_executor := self.executors.get('sliver-session')):
-            loop = asyncio.get_event_loop()
-            loop.run_until_complete(sliver_executor.cleanup())
+        if (sliver_executor := self.executors.get('sliver')):
+            await sliver_executor.cleanup()
+        # sliver
+        if (sliver_session_executor := self.executors.get('sliver-session')):
+            await sliver_session_executor.cleanup()
+        if (remote_executor := self.executors.get('remote')):
+            remote_executor.cleanup()
 
-    def main(self):
+    async def main(self):
         """The main function
 
         Passes the main playbook-commands to run_commands
 
         """
         try:
-            self._run_commands(self.playbook.commands)
-            self.clean_session_stores()
+            await self._run_commands(self.playbook.commands)
+            await self.clean_session_stores()
             self.pm.kill_or_wait_processes()
         except KeyboardInterrupt:
             self.logger.warning('Program stopped manually')

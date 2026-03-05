@@ -125,7 +125,7 @@ class SSHExecutor(BaseExecutor, SFTPFeature, Interactive):
     def cleanup(self):
         self.session_store.clean_sessions()
 
-    def _exec_cmd(self, command: SFTPCommand | SSHCommand) -> Result:
+    async def _exec_cmd(self, command: SFTPCommand | SSHCommand) -> Result:
         error = None
         output = ''
 

@@ -18,7 +18,7 @@ class BrowserExecutor(BaseExecutor):
             f"{f' {command.url}' if command.url else ''}"
         )
 
-    def _exec_cmd(self, command: BrowserCommand) -> Result:
+    async def _exec_cmd(self, command: BrowserCommand) -> Result:
         session_thread = None
         # Determine if this should be an ephemeral session (no session name set or created)
         ephemeral = not command.session and not command.creates_session

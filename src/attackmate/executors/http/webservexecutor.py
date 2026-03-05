@@ -57,7 +57,7 @@ class WebServExecutor(BaseExecutor):
     def log_command(self, command: WebServCommand):
         self.logger.info(f'Serving {command.local_path} via HTTP on Port {command.port}')
 
-    def _exec_cmd(self, command: WebServCommand) -> Result:
+    async def _exec_cmd(self, command: WebServCommand) -> Result:
         address = (command.address, CmdVars.variable_to_int('Port', command.port))
         try:
             server = WebServe(address, WebRequestHandler, local_path=command.local_path)

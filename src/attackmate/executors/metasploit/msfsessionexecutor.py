@@ -45,7 +45,7 @@ class MsfSessionExecutor(BaseExecutor):
             self.connect(self.msfconfig)
         self.logger.info(f"Executing Msf-Session-Command: '{command.cmd}'")
 
-    def _exec_cmd(self, command: MsfSessionCommand) -> Result:
+    async def _exec_cmd(self, command: MsfSessionCommand) -> Result:
         if self.msf is None:
             raise ExecException('ConnectionError')
 

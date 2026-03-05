@@ -98,7 +98,7 @@ class ShellExecutor(BaseExecutor):
 
         return outline.decode()
 
-    def _exec_cmd(self, command: ShellCommand) -> Result:
+    async def _exec_cmd(self, command: ShellCommand) -> Result:
         try:
             proc = self.open_proc(command)
         except KeyError as e:

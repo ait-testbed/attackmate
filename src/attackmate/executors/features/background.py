@@ -1,4 +1,6 @@
 import json
+import asyncio
+from attackmate.execexception import ExecException
 from attackmate.schemas.base import BaseCommand
 from attackmate.processmanager import ProcessManager
 from attackmate.result import Result
@@ -29,7 +31,7 @@ class Background:
     def _create_queue(self) -> Optional[Queue]:
         return None
 
-    def exec_background(self, command: BaseCommand) -> Result:
+    async def exec_background(self, command: BaseCommand) -> Result:
         self.logger.info(f'Run in background: {getattr(command, "type", "")}({command.cmd})')
         if command.metadata:
             self.logger.info(f'Metadata: {json.dumps(command.metadata)}')
@@ -40,19 +42,26 @@ class Background:
         else:
             p = self.pm.ctx.Process(target=self._exec_bg_cmd, args=(command,))
         p.start()
-        p.join(5)
+
+        # Wait a little bit to actually spawn the process
+        # and add it to the ProcessManager before the API response is sent.
+        await asyncio.sleep(0.2)
+        if not p.is_alive():
+            # The process died immediately!
+            exit_code = p.exitcode
+            raise ExecException(f'Background process died immediately with code {exit_code}')
+
         self.pm.add_process(p, command.kill_on_exit)
-        # background commands always return None Result
-        return Result(None, None)
+        return Result('Command started in background', 0)
 
     def _exec_bg_cmd(self, command: Any, queue: Optional[Queue] = None):
         self.is_child_proc = True
         if queue:
             self.child_queue = queue
-        self.exec(command)
+        asyncio.run(self.exec(command))
 
-    def _exec_cmd(self, command: Any) -> Result:
+    async def _exec_cmd(self, command: Any) -> Result:
         return Result(None, None)
 
-    def exec(self, command: BaseCommand):
-        self._exec_cmd(command)
+    async def exec(self, command: BaseCommand):
+        return await self._exec_cmd(command)

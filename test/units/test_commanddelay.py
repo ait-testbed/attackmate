@@ -1,4 +1,5 @@
 import time
+import pytest
 from attackmate.attackmate import AttackMate
 from attackmate.schemas.config import Config, CommandConfig
 from attackmate.schemas.playbook import Playbook
@@ -8,7 +9,8 @@ from attackmate.schemas.shell import ShellCommand
 from attackmate.schemas.sleep import SleepCommand
 
 
-def test_command_delay_is_applied():
+@pytest.mark.asyncio
+async def test_command_delay_is_applied():
     """
     Tests that command_delay is applied between applicable commands.
     """
@@ -25,7 +27,7 @@ def test_command_delay_is_applied():
     attackmate_instance = AttackMate(playbook=playbook, config=config)
 
     start_time = time.monotonic()
-    attackmate_instance._run_commands(attackmate_instance.playbook.commands)
+    await attackmate_instance._run_commands(attackmate_instance.playbook.commands)
     end_time = time.monotonic()
     elapsed_time = end_time - start_time
 
@@ -42,7 +44,8 @@ def test_command_delay_is_applied():
     )
 
 
-def test_zero_command_delay():
+@pytest.mark.asyncio
+async def test_zero_command_delay():
     """
     Tests that no delay is applied when command_delay is 0.
     """
@@ -56,7 +59,7 @@ def test_zero_command_delay():
     attackmate_instance = AttackMate(playbook=playbook, config=config)
 
     start_time = time.monotonic()
-    attackmate_instance._run_commands(attackmate_instance.playbook.commands)
+    await attackmate_instance._run_commands(attackmate_instance.playbook.commands)
     end_time = time.monotonic()
     elapsed_time = end_time - start_time
 
@@ -66,7 +69,8 @@ def test_zero_command_delay():
     )
 
 
-def test_delay_is_not_applied_for_exempt_commands():
+@pytest.mark.asyncio
+async def test_delay_is_not_applied_for_exempt_commands():
     """
     Tests that delay is skipped for 'sleep', 'debug', and 'setvar' commands.
     """
@@ -82,7 +86,7 @@ def test_delay_is_not_applied_for_exempt_commands():
     attackmate_instance = AttackMate(playbook=playbook, config=config)
 
     start_time = time.monotonic()
-    attackmate_instance._run_commands(attackmate_instance.playbook.commands)
+    await attackmate_instance._run_commands(attackmate_instance.playbook.commands)
     end_time = time.monotonic()
     elapsed_time = end_time - start_time
 

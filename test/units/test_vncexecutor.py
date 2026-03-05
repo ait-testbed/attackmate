@@ -26,7 +26,8 @@ def mock_vnc_client():
     return MagicMock()
 
 
-def test_vnc_connect_success(vnc_executor, mock_vnc_client, mocker):
+@pytest.mark.asyncio
+async def test_vnc_connect_success(vnc_executor, mock_vnc_client, mocker):
     command = VncCommand(
         type='vnc',
         cmd='key',
@@ -38,13 +39,14 @@ def test_vnc_connect_success(vnc_executor, mock_vnc_client, mocker):
     mocker.patch('vncdotool.api.connect', return_value=mock_vnc_client)
     mock_vnc_client.protocol.connected = True  # Mock successful connection
 
-    result = vnc_executor._exec_cmd(command)
+    result = await vnc_executor._exec_cmd(command)
 
     assert result.stdout == 'vnc_connected'
     mock_vnc_client.keyPress.assert_called_once_with('a')
 
 
-def test_vnc_create_and_use_session(vnc_executor, mock_vnc_client, mocker):
+@pytest.mark.asyncio
+async def test_vnc_create_and_use_session(vnc_executor, mock_vnc_client, mocker):
     command_create = VncCommand(
         type='vnc',
         cmd='key',
@@ -65,10 +67,10 @@ def test_vnc_create_and_use_session(vnc_executor, mock_vnc_client, mocker):
     mock_vnc_client.protocol.connected = True  # Mock successful connection
 
     # Create session
-    vnc_executor._exec_cmd(command_create)
+    await vnc_executor._exec_cmd(command_create)
 
     # Use session
-    result = vnc_executor._exec_cmd(command_use)
+    result = await vnc_executor._exec_cmd(command_use)
 
     assert result.stdout == 'vnc_connected'
     mock_vnc_client.keyPress.assert_any_call('a')

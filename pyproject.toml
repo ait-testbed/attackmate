@@ -5,7 +5,7 @@ authors = [
 ]
 description = "AttackMate is an attack orchestration tool that executes full attack-chains based on playbooks."
 readme = "README.md"
-requires-python = ">=3.7"
+requires-python = ">=3.10"
 keywords = ["Pentest", "Attack", "Orchestration", "Hacking", "Simulating", "Attackchain"]
 license = {text = "GPL-3.0"}
 dependencies = [
@@ -27,7 +27,8 @@ dependencies = [
     "uvicorn",
     "dotenv",
     "passlib",
-    "python-multipart"
+    "python-multipart",
+    "attackmate-client @ git+https://github.com/ait-testbed/attackmate-client.git",
 ]
 dynamic = ["version"]
 
@@ -35,7 +36,7 @@ dynamic = ["version"]
 attackmate = "attackmate.__main__:main"
 
 [build-system]
-requires = ["setuptools"]
+requires = ["setuptools>=61.0.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 # [tool.setuptools]
@@ -55,3 +56,9 @@ version = {attr = "attackmate.metadata.__version__"}
 
 [tool.mypy]
 explicit_package_bases = true
+
+[dependency-groups]
+dev = [
+    "pytest-asyncio>=1.3.0",
+    "vcrpy>=8.1.1",
+]
