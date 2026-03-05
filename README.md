@@ -10,7 +10,7 @@ AttackMate is a tool to automate cyber attack scenarios that supports scripting 
 
 ## Requirements
 
-* python >= 3.10
+* python >= 3.12
 * libmagic
 
 ## Installation
