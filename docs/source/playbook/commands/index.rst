@@ -180,8 +180,8 @@ Every command, regardless of the type has the following general options:
 
    .. note::
 
-      The command in background-mode will not change global variables like
-      RESULT_STDOUT or RESULT_CODE.
+      The command in background-mode will change global variables like
+      RESULT_STDOUT to "Command started in Background" and RESULT_CODE to 0.
 
 .. confval:: kill_on_exit
 
