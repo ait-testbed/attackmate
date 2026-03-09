@@ -37,7 +37,7 @@ make them usable in external python scripts.
 2. Implement the Command Execution
 ===================================
 
-The new command should be handled by an executor in `src/attackmate/executors`` that extends ``BaseExecutor`` and implements the ``_exec_cmd()`` method. For example:
+The new command should be handled by an executor in `src/attackmate/executors` that extends ``BaseExecutor`` and implements the ``_exec_cmd()`` method. For example:
 
 ::
 
