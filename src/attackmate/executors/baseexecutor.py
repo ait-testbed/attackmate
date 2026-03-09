@@ -85,13 +85,13 @@ class BaseExecutor(ExitOnError, CmdVars, Looper, Background):
         self.reset_run_count()
         self.logger.debug(f"Template-Command: '{command.cmd}'")
         if command.background:
-            # Background commands always return Result(None,None)
+            # Background commands always return Result('Command started in background', 0)
             time_of_execution = datetime.now().isoformat()
             self.log_json(self.json_logger, command, time_of_execution)
             await self.exec_background(
                 self.substitute_template_vars(command, self.substitute_cmd_vars)
             )
-            # the background command will return immidiately with Result(None, None)
+            # the background command will return immidiately with Result('Command started in background', 0)
             # Return 0 instead of None so the API/Remote Client sees success
             result = Result('Command started in background', 0)
         else:
