@@ -65,7 +65,7 @@ Post a command to the interactive Bettercap session.
 get_file
 --------
 
-Retrieve a file from the Bettercap API server.
+Get a file from the Bettercap API server.
 
 .. confval:: filename
 
@@ -94,7 +94,7 @@ Clear the events buffer.
 get_events
 ----------
 
-Retrieve all events from the current session.
+Get all events from the current session.
 
 .. code-block:: yaml
 
@@ -105,7 +105,7 @@ Retrieve all events from the current session.
 get_session_modules
 -------------------
 
-Retrieve all modules active in the current session.
+Get all modules active in the current session.
 
 .. code-block:: yaml
 
@@ -116,7 +116,7 @@ Retrieve all modules active in the current session.
 get_session_env
 ---------------
 
-Retrieve the environment variables of the current session.
+Get the environment variables of the current session.
 
 .. code-block:: yaml
 
@@ -127,7 +127,7 @@ Retrieve the environment variables of the current session.
 get_session_gateway
 -------------------
 
-Retrieve gateway information for the current session.
+Get gateway information for the current session.
 
 .. code-block:: yaml
 
@@ -138,7 +138,7 @@ Retrieve gateway information for the current session.
 get_session_interface
 ---------------------
 
-Retrieve network interface information for the current session.
+Get network interface information for the current session.
 
 .. code-block:: yaml
 
@@ -149,7 +149,7 @@ Retrieve network interface information for the current session.
 get_session_options
 -------------------
 
-Retrieve the configured options for the current session.
+Get the configured options for the current session.
 
 .. code-block:: yaml
 
@@ -160,7 +160,7 @@ Retrieve the configured options for the current session.
 get_session_packets
 -------------------
 
-Retrieve packet statistics for the current session.
+Get packet statistics for the current session.
 
 .. code-block:: yaml
 
@@ -171,7 +171,7 @@ Retrieve packet statistics for the current session.
 get_session_started_at
 ----------------------
 
-Retrieve the timestamp of when the current session was started.
+Get the timestamp of when the current session was started.
 
 .. code-block:: yaml
 
@@ -182,7 +182,7 @@ Retrieve the timestamp of when the current session was started.
 get_session_hid
 ---------------
 
-Retrieve a JSON list of HID devices discovered in the current session.
+Get a JSON list of HID devices discovered in the current session.
 
 .. confval:: mac
 
@@ -204,7 +204,7 @@ Retrieve a JSON list of HID devices discovered in the current session.
 get_session_ble
 ---------------
 
-Retrieve a JSON list of BLE devices discovered in the current session.
+Get a JSON list of BLE devices discovered in the current session.
 
 
 .. code-block:: yaml
