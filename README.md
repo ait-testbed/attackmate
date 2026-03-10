@@ -24,15 +24,27 @@ $ pip3 install .
 ```
 
 Using pip:
-
 ```
 $ pip3 install attackmate
 ```
 
+Using uv:
+```
+$ git clone https://github.com/ait-aecid/attackmate.git
+$ cd attackmate
+$ uv sync
+```
+
 ## Execute
 
+With pip:
 ```
 $ attackmate playbook.yml
+```
+
+With uv:
+```
+$ uv run attackmate playbook.yml
 ```
 
 ![AttackMate Demo](docs/source/images/Demo.gif "AttackMate Demo")
