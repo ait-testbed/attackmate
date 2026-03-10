@@ -2,13 +2,14 @@
 browser
 =======
 
-Execute commands using a Playwright-managed browser (Chromium). This executor can launch a browser, navigate to pages, click elements, type into fields, and take screenshots.
+Execute commands using a Playwright-managed Chromium browser. This executor can launch a browser, navigate to pages, click elements, type into fields, and take screenshots.
 
 .. note::
 
-   By default, if no session is provided or created, the command will run in an ephemeral browser session
-   (launched and destroyed for each command). If you want to persist browser state (cookies, localStorage,
-   etc.) across multiple commands, use the :confval:`creates_session` or :confval:`session` options.
+   By default, each command runs in an ephemeral browser session that is launched and
+   destroyed automatically. To persist browser state (cookies, localStorage,
+   etc.) across multiple commands, use the :confval:`creates_session` to open a named
+   session and :confval:`session` to reuse it.
 
 .. code-block:: yaml
 
@@ -22,26 +23,26 @@ Execute commands using a Playwright-managed browser (Chromium). This executor ca
        url: $URL
        creates_session: my_session
 
-     # Reuse the existing "my_session" to type text into an input field
+     # Type into a field, reusing the named session:
      - type: browser
        cmd: type
        selector: "input[id='searchInput']"
        text: "Test"
        session: "my_session"
 
-     # Click on the "submit" button, still reusing "my_session"
+     # Click on the "submit" button, reusing the named session:
      - type: browser
        cmd: click
        selector: "button[type='submit']"
        session: "my_session"
 
-    # Take a screenshot of the current page in the "my_session"
+    # Take a screenshot of the current page, reusing the named session:
      - type: browser
        cmd: screenshot
        screenshot_path: "example.png"
        session: "my_session"
 
-     # Open a page in an ephemeral session (automatically closed)
+     # Open a page in an ephemeral session (automatically closed after command)
      - type: browser
        cmd: visit
        url: "https://www.google.com"
@@ -54,13 +55,13 @@ Execute commands using a Playwright-managed browser (Chromium). This executor ca
 
 .. confval:: url
 
-   URL to visit for the ``visit`` command.
+   URL to navigate to for the ``visit`` command.
 
    :type: str
 
 .. confval:: selector
 
-   CSS selector identifying the element to interact with for the ``click`` or ``type`` commands.
+   CSS selector identifying the target element to interact with for the ``click`` or ``type`` commands.
 
    :type: str
 
@@ -72,16 +73,16 @@ Execute commands using a Playwright-managed browser (Chromium). This executor ca
 
 .. confval:: screenshot_path
 
-   Specifies the file path where a screenshot should be saved for the ``screenshot`` command.
+   Filepath where a screenshot should be saved for the ``screenshot`` command.
 
    :type: str
 
 .. confval:: creates_session
 
-   A session name to create when running this command. Once created, the session is retained in the
+   Name of a new browser session to create. Once created, the session is retained in the
    session store for reuse by subsequent ``browser`` commands that specify ``session``.
 
-   If a session of the same name already exists, it is automatically closed before creating the new one.
+   If a session with the same name already exists, it is automatically closed and replaced.
 
    :type: str
 

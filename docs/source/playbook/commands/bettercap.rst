@@ -4,13 +4,14 @@
 bettercap
 =========
 
-This command communicates with the bettercap rest-api. It supports all
-endpoints of the official api. Please see `Bettercap Rest-Api Docs  <https://www.bettercap.org/modules/core/apirest/>`_
+This command communicates with the Bettercap REST API. It supports all
+endpoints of the official API. Please see `Bettercap Rest-Api Docs  <https://www.bettercap.org/modules/core/apirest/>`_
 for additional information. All commands return a json-formatted string.
 
-All commands support the setting: `connection`. This settings allows to query a api-command on a specific host. The name
-of the connection must be set in attackmate.yml. If connection is not set, the command will be executed on the first
-connection in attackmate.yml:
+All ``bettercap`` commands support the ``connection`` field, which specifies which configured
+host to target. Connection profiles are defined in ``attackmate.yml`` under
+:ref:`bettercap_config`. If ``connection`` is omitted, the first profile in the configuration
+is used as the default.
 
 .. code-block:: yaml
 
@@ -33,54 +34,51 @@ connection in attackmate.yml:
        data:
          cmd: "net.sniff on"
        connection: remote
-     # this is executed on localhost:
+     # this is executed on localhost (default):
      - type: bettercap
        cmd: get_events
 
 .. note::
 
-   To configure the connection to the bettercap rest-api see :ref:`bettercap_config`
+   To configure the connection to the bettercap REST API see :ref:`bettercap_config`
 
 
 post_api_session
 ----------------
 
-Post a command to the interactive session.
+Post a command to the interactive Bettercap session.
+
+.. confval:: data
+
+   Key-value pairs of POST data to send to the session endpoint.
+
+   :type: Dict[str, str]
 
 .. code-block:: yaml
 
-   ###
    commands:
      - type: bettercap
        cmd: post_api_session
        data:
          cmd: "net.sniff on"
 
-.. confval:: data
-
-   Dict(key/values) of post-data:
-
-   :type: Dict[str,str]
-
 get_file
 --------
 
-Get a file from the api-server.
+Retrieve a file from the Bettercap API server.
+
+.. confval:: filename
+
+   Full path of the file to retrieve from the API server.
+
+   :type: str
 
 .. code-block:: yaml
 
-   ###
    commands:
      - type: bettercap
        cmd: get_file
        filename: "/etc/passwd"
-
-.. confval:: filename
-
-   Full path of the filename on the api-server.
-
-   :type: str
-
 
 delete_api_events
 -----------------
@@ -89,33 +87,28 @@ Clear the events buffer.
 
 .. code-block:: yaml
 
-   ###
    commands:
      - type: bettercap
        cmd: delete_api_events
 
-
 get_events
 ----------
 
-Get all events
+Retrieve all events from the current session.
 
 .. code-block:: yaml
 
-   ###
    commands:
      - type: bettercap
        cmd: get_events
 
-
 get_session_modules
 -------------------
 
-Get session modules
+Retrieve all modules active in the current session.
 
 .. code-block:: yaml
 
-   ###
    commands:
      - type: bettercap
        cmd: get_session_modules
@@ -123,11 +116,10 @@ Get session modules
 get_session_env
 ---------------
 
-Get session environment
+Retrieve the environment variables of the current session.
 
 .. code-block:: yaml
 
-   ###
    commands:
      - type: bettercap
        cmd: get_session_env
@@ -135,11 +127,10 @@ Get session environment
 get_session_gateway
 -------------------
 
-Get session gateway
+Retrieve gateway information for the current session.
 
 .. code-block:: yaml
 
-   ###
    commands:
      - type: bettercap
        cmd: get_session_gateway
@@ -147,11 +138,10 @@ Get session gateway
 get_session_interface
 ---------------------
 
-Get session interface
+Retrieve network interface information for the current session.
 
 .. code-block:: yaml
 
-   ###
    commands:
      - type: bettercap
        cmd: get_session_interface
@@ -159,11 +149,10 @@ Get session interface
 get_session_options
 -------------------
 
-Get session options
+Retrieve the configured options for the current session.
 
 .. code-block:: yaml
 
-   ###
    commands:
      - type: bettercap
        cmd: get_session_options
@@ -171,11 +160,10 @@ Get session options
 get_session_packets
 -------------------
 
-Get session packets
+Retrieve packet statistics for the current session.
 
 .. code-block:: yaml
 
-   ###
    commands:
      - type: bettercap
        cmd: get_session_packets
@@ -183,11 +171,10 @@ Get session packets
 get_session_started_at
 ----------------------
 
-Get session started at
+Retrieve the timestamp of when the current session was started.
 
 .. code-block:: yaml
 
-   ###
    commands:
      - type: bettercap
        cmd: get_session_started_at
@@ -195,25 +182,21 @@ Get session started at
 get_session_hid
 ---------------
 
-Get a JSON of the HID devices in the current session
-
-.. code-block:: yaml
-
-   ###
-   commands:
-     - type: bettercap
-       cmd: get_session_hid
+Retrieve a JSON list of HID devices discovered in the current session.
 
 .. confval:: mac
 
-   Optional parameter to return the info of a specific endpoint
+   Optional. Filter results to a specific device by MAC address.
 
    :type: str
 
 .. code-block:: yaml
 
-   ###
    commands:
+     - type: bettercap
+       cmd: get_session_hid
+
+     # Filter by MAC address:
      - type: bettercap
        cmd: get_session_hid
        mac: "32:26:9f:a4:08"
@@ -221,24 +204,23 @@ Get a JSON of the HID devices in the current session
 get_session_ble
 ---------------
 
-Get a JSON of the BLE devices in the current session.
+Retrieve a JSON list of BLE devices discovered in the current session.
+
 
 .. code-block:: yaml
 
-   ###
    commands:
      - type: bettercap
        cmd: get_session_ble
 
 .. confval:: mac
 
-   Optional parameter to return the info of a specific endpoint
+   Optional parameter to return the info of a specific device by MAC address.
 
    :type: str
 
 .. code-block:: yaml
 
-   ###
    commands:
      - type: bettercap
        cmd: get_session_ble
@@ -247,24 +229,22 @@ Get a JSON of the BLE devices in the current session.
 get_session_lan
 ---------------
 
-Get a JSON of the lan devices in the current session
+Get a JSON of the lan devices in the current session.
 
 .. code-block:: yaml
 
-   ###
    commands:
      - type: bettercap
        cmd: get_session_lan
 
 .. confval:: mac
 
-   Optional parameter to return the info of a specific endpoint
+   Optional parameter to return the info of a specific device by MAC address.
 
    :type: str
 
 .. code-block:: yaml
 
-   ###
    commands:
      - type: bettercap
        cmd: get_session_lan
@@ -273,24 +253,22 @@ Get a JSON of the lan devices in the current session
 get_session_wifi
 ----------------
 
-Get a JSON of the wifi devices (clients and access points) in the current session
+Get a JSON of the wifi devices (clients and access points) in the current session.
 
 .. code-block:: yaml
 
-   ###
    commands:
      - type: bettercap
        cmd: get_session_wifi
 
 .. confval:: mac
 
-   Optional parameter to return the info of a specific endpoint
+   Optional parameter to return the info of a specific device by MAC address.
 
    :type: str
 
 .. code-block:: yaml
 
-   ###
    commands:
      - type: bettercap
        cmd: get_session_wifi
