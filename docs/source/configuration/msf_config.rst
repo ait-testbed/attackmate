@@ -4,8 +4,7 @@
 msf_config
 ==========
 
-msf_config holds settings for the Metasploit modules and sessions.
-Most of these settings control the Metsaploit RPC connection.
+``msf_config`` holds connection settings for the Metasploit RPC daemon (``msfrpcd``).
 
 .. code-block:: yaml
 
@@ -14,33 +13,18 @@ Most of these settings control the Metsaploit RPC connection.
      password: securepassword
      server: 10.18.3.86
 
+
 .. confval:: server
 
-   This option stores the servername or ip-address of the msfrpcd
+   The servername or IP address of the ``msfrpcd``.
 
    :type: str
    :default: 127.0.0.1
 
 
-.. confval:: password
-
-   This option stores the password of the rpc-connection.
-
-   :type: str
-   :default: None
-
-
-.. confval:: ssl
-
-   This option enables encryption for the rpc-connection
-
-   :type: bool
-   :default: True
-
-
 .. confval:: port
 
-   This option sets the port for the rpc-connection.
+   Port on which ``msfrpcd`` is listening.
 
    :type: int
    :default: 55553
@@ -48,4 +32,20 @@ Most of these settings control the Metsaploit RPC connection.
 
 .. confval:: uri
 
-   This option sets uri of the rpc-api.
+   URI of the RPC API.
+
+
+.. confval:: ssl
+
+   Enables encryption for the RPC connection.
+
+   :type: bool
+   :default: True
+
+
+.. confval:: password
+
+   The password for the RPC connection.
+
+   :type: str
+   :default: None
