@@ -12,7 +12,6 @@ Father can be found at `this GitHub-Page <https://github.com/mav8557/Father>`_
 
 .. code-block:: yaml
 
-   ###
    commands:
      - type: father
        cmd: generate
@@ -41,7 +40,7 @@ Father can be found at `this GitHub-Page <https://github.com/mav8557/Father>`_
 
 .. confval:: epochtime
 
-   Time for timebomb() to go off, in seconds since 1970-01-01
+   Time for ``timebomb()`` to go off, in seconds since 1970-01-01.
 
    :type: int
    :default: ``0000000000``
@@ -63,7 +62,7 @@ Father can be found at `this GitHub-Page <https://github.com/mav8557/Father>`_
 
 .. confval:: preload_file
 
-   Hide this preload file(hide the rootkit)
+   Hide this preload file (hide the rootkit).
 
    :type: str
    :default: ``ld.so.preload``
@@ -77,14 +76,14 @@ Father can be found at `this GitHub-Page <https://github.com/mav8557/Father>`_
 
 .. confval:: shell_pass
 
-   Password for accept() backdoor shell
+   Password for ``accept()`` backdoor shell.
 
    :type: str
    :default: ``lobster``
 
 .. confval:: install_path
 
-   Location of rootkit on disk
+   Location of rootkit on disk.
 
    :type: str
    :default: ``/lib/selinux.so.3``
