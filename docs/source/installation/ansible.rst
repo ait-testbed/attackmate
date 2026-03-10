@@ -9,7 +9,7 @@ Ansible. The `ansible-role <https://github.com/ait-aecid/attackmate-ansible>`_ a
 
 .. note::
 
-   Currently the ansible role only works with Debian and Ubuntu distributions.
+   Currently the ansible role only works with Kali, Debian and Ubuntu distributions.
 
 
 Installation Steps
@@ -32,8 +32,8 @@ Installation Steps
      $ cd my-attackmate
      $ touch install_attackmate.yml
 
-Open the `install_attackmate.yml` file and fill it with this sample playbook (it also can be found on the README-page
-of the `github-repository <https://github.com/ait-aecid/attackmate-ansible>`_), which installs AttackMate on localhost:
+Open the `install_attackmate.yml` file and fill it with this sample playbook to AttackMate on localhost. The playbook can also can be found on the README-page
+of the `github-repository <https://github.com/ait-aecid/attackmate-ansible>`_, have a look at the role variables there for further configuration options.
 
 ::
 
@@ -66,7 +66,7 @@ of the `github-repository <https://github.com/ait-aecid/attackmate-ansible>`_), 
 
 3. Clone the Ansible Role
 
-   Ansible expects all roles to be in the **roles** directory. Create this directory and clone the repository:
+   Ansible expects all roles to be in the **roles** directory. Create this directory and clone the ansible role repository:
 
 ::
 
