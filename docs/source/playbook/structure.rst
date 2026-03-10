@@ -13,8 +13,8 @@ AttackMate playbooks must be written in valid `YAML-format <https://yaml.org/>`_
      - type: shell
        cmd: nikto -host www.vulnerable-system.tld
 
-Usually playbooks also contain a :ref:`variable section <variables>` which contains all the placeholders
-that can be used to build commands:
+Usually playbooks also contain a :ref:`vars <variables>` section to define reusable
+placeholders that can be referenced throughout the ``commands`` section:
 
 .. code-block:: yaml
 
@@ -23,6 +23,7 @@ that can be used to build commands:
      TARGET: www.vulnerable-system.tld
      NMAP: /usr/bin/nmap
      NIKTO: /usr/bin/nikto
+
 
    commands:
      - type: shell
