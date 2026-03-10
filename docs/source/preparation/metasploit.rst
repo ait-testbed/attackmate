@@ -21,4 +21,4 @@ starts the msfrpcd with a password:
 
   $ msfrpcd -P securepassword
 
-After starting the msfrpcd it will listen on all interface at port ``55553``.
+After starting the msfrpcd, it will listen on all interfaces on port ``55553``.
