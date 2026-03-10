@@ -91,6 +91,9 @@ class SliverSessionEXECCommand(SliverSessionCommand):
     output: bool = True
 
 
+@CommandRegistry.register('sliver-session', 'ifconfig')
+@CommandRegistry.register('sliver-session', 'ps')
+@CommandRegistry.register('sliver-session', 'pwd')
 class SliverSessionSimpleCommand(SliverSessionCommand):
     cmd: Literal['ifconfig', 'ps', 'pwd']
 
