@@ -70,6 +70,7 @@ File Transfer
    File permissions to set on the remote file after upload (e.g. ``755``).
 
    :type: str
+   :required: False
 
 Connection
 ----------
@@ -126,6 +127,7 @@ Connection
 
    :type: bool
    :default: ``False``
+   :required: False
 
 Sessions
 --------
@@ -143,6 +145,7 @@ Sessions
    via :confval:`creates_session` in an ``sftp`` or ``ssh`` command.
 
    :type: str
+   :required: False
 
 Jump Host
 ---------

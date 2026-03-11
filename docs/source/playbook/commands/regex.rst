@@ -61,15 +61,17 @@ Using ``mode: split``, a string can be tokenized by a delimiter, in this case, w
    * ``split`` - split the string by occurrences of the pattern
    * ``sub`` - replace occurrences of the pattern with :confval:`replace`
 
-   :type: str
-   :default: ``findall``
+  :type: str
+  :default: ``findall``
+  :required: False
 
 .. confval:: replace
-``
-   This variable must be set for ``mode: sub``. It holds the replacement-string for the substitution.
 
-   :type: str
-   :default: ``None``
+  This variable must be set for ``mode: sub``. It holds the replacement-string for the substitution.
+
+  :type: str
+  :default: ``None``
+  :required: when ``mode: sub``
 
    .. code-block:: yaml
 
@@ -97,23 +99,25 @@ Using ``mode: split``, a string can be tokenized by a delimiter, in this case, w
 
    :type: str
    :default: ``RESULT_STDOUT``
+   :required: False
 
 .. confval:: output
 
    Mapping of variable names to match references (e.g. ``MYVAR: $MATCH_0``).
+
+   :type: dict[str,str]
+   :required: True
+
    Matches are indexed as ``$MATCH_0``, ``$MATCH_1``, etc. For nested results
    (lists of tuples), matches are indexed as ``$MATCH_0_0``, ``$MATCH_0_1``, etc.
 
    If the pattern does not match, no output variables are set. If ``sub`` or
    ``split`` find no match, the original input string is returned.
 
-   The builtin variable ``REGEX_MATCHES_LIST`` is also populated with a list of
+   The :ref:`builtin variables <builtin-variables>` ``REGEX_MATCHES_LIST`` is also populated with a list of
    all matches whenever the command produces results.
 
 
    .. note::
 
-       Running AttackMate in debug mode prints a full dump of all matches.
-
-   :type: dict[str,str]
-   :required: True
+       Running AttackMate in debug mode (--debug) prints a full dump of all matches.

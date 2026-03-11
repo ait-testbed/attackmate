@@ -31,6 +31,7 @@ handling the first request. Set :confval:`keep_serving` to ``True`` to continue 
 
    :type: int
    :default: ``8000``
+   :required: False
 
 .. confval:: address
 
@@ -38,6 +39,7 @@ handling the first request. Set :confval:`keep_serving` to ``True`` to continue 
 
    :type: str
    :default: ``0.0.0.0``
+   :required: False
 
 .. confval:: keep_serving
 
@@ -45,3 +47,4 @@ handling the first request. Set :confval:`keep_serving` to ``True`` to continue 
 
    :type: bool
    :default: ``False``
+   :required: False

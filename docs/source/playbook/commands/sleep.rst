@@ -29,6 +29,7 @@ Pause execution for a fixed or randomised number of seconds.
 
   :type: bool
   :default: ``False``
+  :required: False
 
 
 .. confval:: min_sec
@@ -38,6 +39,7 @@ Pause execution for a fixed or randomised number of seconds.
 
    :type: int
    :default: ``0``
+   :required: False
 
   .. code-block:: yaml
 

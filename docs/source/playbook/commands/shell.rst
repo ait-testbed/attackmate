@@ -27,6 +27,7 @@ Execute local shell commands.
 
    :type: str
    :default: ``/bin/sh``
+   :required: False
 
 Interactive Mode
 ----------------
@@ -37,6 +38,7 @@ Interactive Mode
 
    :type: bool
    :default: ``False``
+   :required: False
 
    Instead of waiting for the command to finish,
    AttackMate reads output until no new output appears for :confval:`command_timeout`
@@ -72,6 +74,7 @@ Interactive Mode
    Only meaningful when :confval:`interactive` is ``True``.
 
    :type: str
+   :required: False
 
 .. confval:: session
 
@@ -80,6 +83,7 @@ Interactive Mode
    set to ``True``.
 
    :type: str
+   :required: False
 
 .. confval:: command_timeout
 
@@ -87,6 +91,7 @@ Interactive Mode
 
    :type: int
    :default: ``15``
+   :required: False
 
 .. confval:: read
 
@@ -96,6 +101,7 @@ Interactive Mode
 
    :type: bool
    :default: ``True``
+   :required: False
 
 Binary Mode
 -----------
@@ -107,6 +113,7 @@ Binary Mode
 
    :type: bool
    :default: ``False``
+   :required: False
 
    .. code-block:: yaml
 

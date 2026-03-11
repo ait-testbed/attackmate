@@ -40,6 +40,7 @@ Send HTTP requests with support for common methods, custom headers, cookies, and
 
    :type: str
    :default: ``GET``
+   :required: False
 
 .. confval:: url
 
@@ -54,18 +55,21 @@ Send HTTP requests with support for common methods, custom headers, cookies, and
 
    :type: str
    :default: ``False``
+   :required: False
 
 .. confval:: headers
 
    Additional HTTP headers to include in the request.
 
    :type: dict[str,str]
+   :required: False
 
 .. confval:: cookies
 
    Cookies to send in the ``Cookie`` header.
 
    :type: dict[str,str]
+   :required: False
 
 .. confval:: data
 
@@ -73,6 +77,7 @@ Send HTTP requests with support for common methods, custom headers, cookies, and
    Typically used with ``POST``.
 
    :type: dict[str,str]
+   :required: False
 
 .. confval:: local_path
 
@@ -80,6 +85,7 @@ Send HTTP requests with support for common methods, custom headers, cookies, and
    for WebDAV uploads.
 
    :type: str
+   :required: False
 
 .. confval:: useragent
 
@@ -87,6 +93,7 @@ Send HTTP requests with support for common methods, custom headers, cookies, and
 
    :type: str
    :default: ``AttackMate``
+   :required: False
 
 .. confval:: follow
 
@@ -94,6 +101,7 @@ Send HTTP requests with support for common methods, custom headers, cookies, and
 
    :type: bool
    :default: ``False``
+   :required: False
 
 .. confval:: verify
 
@@ -102,6 +110,7 @@ Send HTTP requests with support for common methods, custom headers, cookies, and
 
    :type: bool
    :default: ``False``
+   :required: False
 
 .. confval:: http2
 
@@ -109,3 +118,4 @@ Send HTTP requests with support for common methods, custom headers, cookies, and
 
    :type: bool
    :default: ``False``
+   :required: False

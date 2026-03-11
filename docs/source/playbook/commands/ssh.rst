@@ -78,6 +78,8 @@ Connection
    Timeout in seconds for connection attempts.
 
    :type: float
+   :default: ``60``
+   :required: False
 
 .. confval:: clear_cache
 
@@ -87,6 +89,7 @@ Connection
 
    :type: bool
    :default: ``False``
+   :required: False
 
 Sessions
 --------
@@ -137,6 +140,7 @@ Interactive Mode
 
    :type: bool
    :default: ``False``
+   :required: False
 
    Instead of waiting for the command to finish,
    AttackMate reads output until no new output appears for :confval:`command_timeout`
@@ -179,6 +183,7 @@ Interactive Mode
 
    :type: int
    :default: ``15``
+   :required: False
 
 .. confval:: prompts
 
@@ -188,6 +193,7 @@ Interactive Mode
 
    :type: list[str]
    :default: ``["$ ", "# ", "> "]``
+   :required: False
 
    .. code-block:: yaml
 
@@ -230,6 +236,7 @@ Binary Mode
 
    :type: bool
    :default: ``False``
+   :required: False
 
    .. code-block:: yaml
 

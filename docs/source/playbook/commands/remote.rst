@@ -72,6 +72,7 @@ Options
      Requires ``playbook_path``
 
    :type: str (``execute_command`` | ``execute_playbook``)
+   :required: True
 
 .. confval:: connection
 
@@ -80,6 +81,7 @@ Options
 
    :type: str
    :default: first entry in ``remote_config``
+   :required: False
 
 .. confval:: playbook_path
 
@@ -87,6 +89,7 @@ Options
    Required when ``cmd`` is ``execute_playbook``.
 
    :type: str
+   :required: when ``cmd: execute_playbook``
 
 .. confval:: remote_command
 
@@ -95,6 +98,7 @@ Options
    (e.g., ``type: shell``, ``type: sliver``, etc., EXCEPT ``type: remote``  itself). Required when ``cmd`` is ``execute_command``.
 
    :type: RemotelyExecutableCommand
+   :required: when ``cmd: execute_command``
 
 
 Examples

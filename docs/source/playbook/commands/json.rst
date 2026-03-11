@@ -83,6 +83,7 @@ Configuration
    Path to a JSON file to parse. Takes precedence over ``cmd`` if both are set.
 
    :type: str
+   :required: Either ``local_path`` or ``cmd`` must be provided.
 
 .. confval:: cmd
 
@@ -90,6 +91,7 @@ Configuration
    is a valid JSON string.
 
    :type: str
+   :required: Either ``local_path`` or ``cmd`` must be provided.
 
 .. confval:: varstore
 
@@ -97,6 +99,7 @@ Configuration
 
    :type: bool
    :default: ``False``
+   :required: False
 
 Examples
 --------

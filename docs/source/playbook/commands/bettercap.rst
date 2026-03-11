@@ -189,6 +189,7 @@ Get a JSON list of HID devices discovered in the current session.
    Optional. Filter results to a specific device by MAC address.
 
    :type: str
+   :required: False
 
 .. code-block:: yaml
 
@@ -215,9 +216,10 @@ Get a JSON list of BLE devices discovered in the current session.
 
 .. confval:: mac
 
-   Optional parameter to return the info of a specific device by MAC address.
+   Optional. Return the info of a specific device by MAC address.
 
    :type: str
+   :required: False
 
 .. code-block:: yaml
 
@@ -239,9 +241,10 @@ Get a JSON of the lan devices in the current session.
 
 .. confval:: mac
 
-   Optional parameter to return the info of a specific device by MAC address.
+   Optional. Return the info of a specific device by MAC address.
 
    :type: str
+   :required: False
 
 .. code-block:: yaml
 
@@ -263,9 +266,10 @@ Get a JSON of the wifi devices (clients and access points) in the current sessio
 
 .. confval:: mac
 
-   Optional parameter to return the info of a specific device by MAC address.
+   Optional. Return the info of a specific device by MAC address.
 
    :type: str
+   :required: False
 
 .. code-block:: yaml
 

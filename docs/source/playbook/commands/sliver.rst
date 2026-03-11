@@ -109,7 +109,7 @@ generate_implant
 ----------------
 
 Generates a new sliver binary and saves the implant to a given path or to /tmp/<name>.
-The path to the implant is saved and can be retrieved from the builtin variable ``$LAST_SLIVER_IMPLANT``.
+The path to the implant is saved and can be retrieved from the :ref:`builtin variable <builtin-variables>` ``$LAST_SLIVER_IMPLANT``.
 
 .. code-block:: yaml
 

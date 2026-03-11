@@ -3,7 +3,7 @@ debug
 =====
 
 The ``debug`` command prints messages and variables to the console. It is intended for
-troubleshooting playbooks and does not modify ``RESULT_STDOUT``.
+troubleshooting playbooks and does not modify ``RESULT_STDOUT`` (:ref:`builtin variables <builtin-variables>`).
 
    .. code-block:: yaml
 
@@ -22,6 +22,7 @@ troubleshooting playbooks and does not modify ``RESULT_STDOUT``.
 
    :type: str
    :default: ``empty_string``
+   :required: False
 
 
 .. confval:: varstore
@@ -30,6 +31,7 @@ troubleshooting playbooks and does not modify ``RESULT_STDOUT``.
 
    :type: bool
    :default: ``False``
+   :required: False
 
 .. confval:: exit
 
@@ -39,6 +41,7 @@ troubleshooting playbooks and does not modify ``RESULT_STDOUT``.
 
    :type: bool
    :default: ``False``
+   :required: False
 
 .. confval:: wait_for_key
 
@@ -47,3 +50,4 @@ troubleshooting playbooks and does not modify ``RESULT_STDOUT``.
 
    :type: bool
    :default: ``False``
+   :required: False

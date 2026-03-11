@@ -52,30 +52,35 @@ Execute commands using a Playwright-managed Chromium browser. This executor can 
    Specifies the browser action to execute. One of ``visit``, ``click``, ``type``, ``screenshot``.
 
    :type: str
+   :default: ``visit``
 
 .. confval:: url
 
    URL to navigate to for the ``visit`` command.
 
    :type: str
+   :required: when ``cmd: visit``
 
 .. confval:: selector
 
    CSS selector identifying the target element to interact with for the ``click`` or ``type`` commands.
 
    :type: str
+   :required: when ``cmd: click`` OR ``cmd: type``
 
 .. confval:: text
 
    Text to type into the specified element for the ``type`` command.
 
    :type: str
+   :required: when ``cmd: type``
 
 .. confval:: screenshot_path
 
    Filepath where a screenshot should be saved for the ``screenshot`` command.
 
    :type: str
+   :required: when ``cmd: screenshot``
 
 .. confval:: creates_session
 
@@ -85,6 +90,7 @@ Execute commands using a Playwright-managed Chromium browser. This executor can 
    If a session with the same name already exists, it is automatically closed and replaced.
 
    :type: str
+   :required: False
 
 .. confval:: session
 
@@ -95,12 +101,17 @@ Execute commands using a Playwright-managed Chromium browser. This executor can 
 
    :type: str
 
+   :required: False
+
 .. confval:: headless
 
    Run the browser in headless mode.
    Useful for CI/CD pipelines or servers without a GUI.
 
    :type: bool
+
+   :required: False
+
    :default: ``False``
 
    Example:
