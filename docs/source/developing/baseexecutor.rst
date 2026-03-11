@@ -31,6 +31,7 @@ Implementing a Custom Executor
 -------------------------------
 
 To create a custom executor, inherit from ``BaseExecutor`` and implement the ``_exec_cmd()`` method. Other methods can be overriden as needed.
+New executors must be registered using the @executor_factory.register_executor('<command_type>') decorator.
 
 Example:
 
@@ -99,4 +100,20 @@ executor __init__.py
 --------------------
 .. note::
 
-    Add the new executor to the ``__all__`` list in the ``__init__.py`` file of the ``attackmate.executors`` module.
+    Add the new executor to the ``__all__`` list in the ``__init__.py`` file of the ``attackmate.executors`` module so it can be imported elsewhere.
+
+.. code-block:: python
+
+    # src/attackmate/executors/__init__.py
+    # other imports
+    from .shell.shellexecutor import ShellExecutor
+    from .metasploit.msfsessionexecutor import CustomExecutor # new executor
+    # other imports
+
+    __all__ = [
+        'RemoteExecutor',
+        'BrowserExecutor',
+        'ShellExecutor',
+        'CustomExecutor', # new executor
+        # other executors
+    ]
