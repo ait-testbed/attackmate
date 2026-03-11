@@ -1,13 +1,11 @@
-
 =====
 shell
 =====
 
-Execute local shell-commands.
+Execute local shell commands.
 
 .. code-block:: yaml
 
-   ###
    vars:
      $SERVER_ADDRESS: 192.42.0.254
      $NMAP: /usr/bin/nmap
@@ -18,38 +16,33 @@ Execute local shell-commands.
 
 .. confval:: cmd
 
-   The command-line that should be executed locally.
+   The command line to execute locally. Supports variable substitution.
 
    :type: str
+   :required: True
 
-.. confval:: creates_session
+.. confval:: command_shell
 
-   A session name that identifies the session that is created when
-   executing this command. This session-name can be used by using the
-   option "session".
-
-   :type: str
-
-.. confval:: session
-
-   Reuse an existing interactive session. This setting works only if another
-   shell-command was executed with the command-option "creates_session" and "interactive" true
+   The shell used to execute commands.
 
    :type: str
+   :default: ``/bin/sh``
+
+Interactive Mode
+----------------
 
 .. confval:: interactive
 
-   When the shell-command is executed, the command will block until the execution finishes.
-   However, for some exploits it is necessary to run a command and send keystrokes to an
-   interactive session. For example run with the first command "vim" and with the second command
-   send keystrokes to the open vim-session. In interactive-mode the command will try reading the
-   output until no output is written for a certain amount of seconds.
+   Run the command in interactive mode. Instead of waiting for the command to finish,
+   AttackMate reads output until no new output appears for :confval:`command_timeout`
+   seconds. Useful for commands that require follow-up keystrokes (e.g. opening ``vim``
+   and sending input in a subsequent command).
 
-   This mode works only on unix and unix-like operating systems!
+   This mode works only on Unix and Unix-like systems.
 
    .. warning::
 
-      Please note that you **MUST** send a newline when you execute a ssh-command interactively.
+      Commands executed in interactive mode **MUST** end with a newline character (``\n``).
 
    :type: bool
    :default: ``False``
@@ -57,45 +50,58 @@ Execute local shell-commands.
    .. code-block:: yaml
 
       commands:
-        # creates new ssh-connection and session
+        # Open nmap in interactive mode and create a named session:
         - type: shell
           cmd: "nmap --interactive\n"
           interactive: True
-          creates_session: "attacker"
+          creates_session: attacker
 
-        # break out of the nmap-interactive-mode
+        # Send a command to the open interactive session:
         - type: shell
           cmd: "!sh\n"
           interactive: True
-          session: "attacker"
+          session: attacker
+
+.. confval:: creates_session
+
+   Name to assign to the interactive session opened by this command. Can be reused
+   in subsequent commands via :confval:`session`.
+
+   Only meaningful when :confval:`interactive` is ``True``.
+
+   :type: str
+
+.. confval:: session
+
+   Name of an existing interactive session to reuse. The session must have been
+   created previously via :confval:`creates_session` with :confval:`interactive`
+   set to ``True``.
+
+   :type: str
 
 .. confval:: command_timeout
 
-   The interactive-mode works with timeouts while reading the output. If there is no output for some seconds,
-   the command will stop reading.
+   Seconds to wait for new output before stopping in interactive mode.
 
    :type: int
    :default: ``15``
 
 .. confval:: read
 
-   Wait for output. This option is useful for interactive commands that do not return any output.
-   Normally attackmate will wait until the command_timeout was reached. With read is False, attackmate
-   will not wait for any output and simply return an empty string.
+   Wait for output after executing the command. Set to ``False`` to return
+   immediately with an empty result, useful for fire-and-forget interactive
+   commands that produce no output.
 
    :type: bool
    :default: ``True``
 
-.. confval:: command_shell
-
-   Use this shell when executing commands.
-
-   :type: str
-   :default: ``/bin/sh``
+Binary Mode
+-----------
 
 .. confval:: bin
 
-   Enable binary mode. In this mode only hex-characters are allowed.
+   Enable binary mode. In this mode, ``cmd`` must be a hex-encoded string representing
+   the raw bytes to execute.
 
    :type: bool
    :default: ``False``
@@ -103,7 +109,7 @@ Execute local shell-commands.
    .. code-block:: yaml
 
       commands:
+        # "6964" is the hex encoding of "id":
         - type: shell
-          # hex-code for "id"
           cmd: "6964"
-          bin: True
+          bin: true
