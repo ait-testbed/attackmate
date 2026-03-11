@@ -4,12 +4,13 @@
 Development
 ===========
 
-This section describes how to setup a development environment and how to contribute to `attackmate`.
+This section describes how to setup a development environment and how to contribute to AttackMate.
 
 .. note::
 
-    Read the :ref:`Contribution Guide <contribution>` to follow and understand the development workflow.
-    
+    Read the :ref:`Contribution Guide <contribution>` to follow and understand the development workflow, and familiarise yourself with :ref:`Adding a New Command <command>`
+    and :ref:`Adding a New Executor <base_executor>` before getting started.
+
 
 
 Setup a development environment

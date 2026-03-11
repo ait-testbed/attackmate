@@ -2,12 +2,12 @@
 mktemp
 ======
 
-Create temporary files or directories that are deleted when the programm exits.
-The path to the file or directory is storen in a given variable.
+Create a temporary file or directory that is automatically deleted when AttackMate exits.
+The path to the file or directory is stored in a variable for use in subsequent
+commands.
 
 .. code-block:: yaml
 
-   ###
    commands:
      - type: mktemp
        cmd: file
@@ -26,17 +26,21 @@ The path to the file or directory is storen in a given variable.
 
 .. confval:: cmd
 
-   Define if a file or directory will be created. Valid
-   options are: *file* or *dir*.
+   Whether to create a temporary file or directory.
 
    :type: str
    :default: ``file``
 
+   Valid values:
+
+   * ``file`` — create a temporary file
+   * ``dir`` — create a temporary directory
+
 
 .. confval:: variable
 
-   This setting defines a variable where the path of the
-   temporary file or directory will be stored.
+   Name of the variable where the path of the
+   temporary file or directory will be stored (without the leading ``$``).
 
    :type: str
-   :required: ``True``
+   :required: True

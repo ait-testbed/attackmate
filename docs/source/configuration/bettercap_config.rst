@@ -4,14 +4,13 @@
 bettercap_config
 ================
 
-bettercap_config holds settings for the Bettercap rest-api. The configuration
-always starts with an identifier for the connection. This identifier can be
-selected when executing a command in a playbook. The first connection in this
-file is the default if no explicit connection was selected in the command.
+``bettercap_config`` holds connection profiles for the Bettercap REST API. Each profile
+is identified by a user-defined name that can be referenced in playbook commands via the
+``connection`` field. If no connection is specified, the first profile in the configuration
+is used as the default.
 
 .. code-block:: yaml
 
-   ###
    bettercap_config:
      default:
        url: "http://localhost:8081"
@@ -22,9 +21,13 @@ file is the default if no explicit connection was selected in the command.
        username: btrcp
        password: somepass
 
+
+
+The following playbook example shows how to target a specific connection, and how the
+default connection is used when none is specified:
+
 .. code-block:: yaml
 
-   # bettercap-playbook.yml:
    commands:
      # this is executed on the remote host:
      - type: bettercap
@@ -39,24 +42,24 @@ file is the default if no explicit connection was selected in the command.
 
 .. confval:: url
 
-   This option stores the url to the rest-api
+   URL of the Bettercap REST API.
 
    :type: str
 
 .. confval:: username
 
-   The http basic username for the rest-api
+   HTTP Basic Auth username for the Bettercap REST API.
 
    :type: str
 
 .. confval:: password
 
-   The http basic password for the rest-api
+   HTTP Basic Auth password for the Bettercap REST API.
 
    :type: str
 
 .. confval:: cafile
 
-   The path to the ca-file for the encryption if https is in use.
+   Path to the CA certificate file used for TLS verification when connecting via HTTPS.
 
    :type: str

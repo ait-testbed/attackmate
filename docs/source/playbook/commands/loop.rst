@@ -1,14 +1,16 @@
+.. _loop:
+
 ====
 loop
 ====
 
-Execute a set of commands in a loop, based on a condition or iteration over a list of values.
+Execute a sequence of commands repeatedly, either by iterating over a list of values, a numerical range, or until a condition is met.
 
-The `loop` command allows dynamic iteration over lists or ranges of values, executing a sequence of commands for each iteration. It provides flexibility when working with variable data such as network scans, enabling the execution of different commands depending on the results, without prior knowledge of the number of iterations.
+This is useful when the number of iterations is not known in advance, for example, when processing results from a network scan.
 
 .. note::
 
-   The loop command works with two primary loop conditions: iterating over a list of values (`items`) or iterating over a numerical range (`range`).
+   The loop command works with two primary loop conditions: iterating over a list of values (``items()``) or iterating over a numerical range (``range()``).
 
 .. code-block:: yaml
 
@@ -18,6 +20,7 @@ The `loop` command allows dynamic iteration over lists or ranges of values, exec
        - two
 
    commands:
+     # Iterate over a list:
      - type: loop
        cmd: "items(LISTA)"
        commands:
@@ -26,6 +29,7 @@ The `loop` command allows dynamic iteration over lists or ranges of values, exec
          - type: debug
            cmd: $LOOP_ITEM
 
+     # Iterate over a range:
      - type: loop
        cmd: "range(0, 3)"
        commands:
@@ -34,67 +38,98 @@ The `loop` command allows dynamic iteration over lists or ranges of values, exec
          - type: debug
            cmd: $LOOP_INDEX
 
-**Loop with items**:
-This mode iterates over the elements of a list and substitutes each element into the commands.
-The current item is accessible as the `$LOOP_ITEM` variable.
 
-**Loop with range**:
-This mode iterates over a range of integers. The current index is accessible as the `$LOOP_INDEX` variable.
+Loop Modes
+----------
 
-**Loop until condition is fulfilled**
-This mode iterates indefinitely until the condition is fulfilled. (Checked before every command within the loop)
-Variables in cmd settings of an until loop command until($VAR1 == $VAR2) will be substituted from the variable store on every iteration of the loop.
-The current index/iteration of the loop is also accessible as the `$LOOP_INDEX` variable for the until() condition.
+**items(LIST)**:
+Iterates over the elements of a list and substitutes each element into the commands.
+The current item is accessible as the ``$LOOP_ITEM`` variable.
+
+**range(start, end)**
+Iterates over a range of integers ``start`` (inclusive) to ``end`` (exclusive). The current index is accessible as the ``$LOOP_INDEX`` variable.
+
+**until(condition)**
+Iterates indefinitely until the condition is evaluates to ``True``, checked before every command in the loop body.
+Variables in cmd section of an until loop command until(``$VAR1 == $VAR2``) will be substituted from the variable store on every iteration of the loop.
+The current iteration count is available as ``$LOOP_INDEX``.
+
+Example: ``until($PORT == 7)``
+
+Configuration
+-------------
 
 .. confval:: cmd
 
-   The loop condition. This defines how the loop should iterate, either over a list or a range of values, or idefinitely until the
-   condition defined in until() is rached.
+   The loop condition. Defines how the loop iterates, either over a list or a range of values, or idefinitely until the
+   condition defined in ``until()`` is met.
 
    :type: str
-   :required: ``True``
+   :required: True
 
    Examples:
 
-   - **items(LISTA)**: Iterate over the elements of a list named `LISTA`.
+   - **items(LISTA)**: Iterate over the elements of a list named ``LISTA``.
    - **range(0, 10)**: Iterate over a range from 0 to 9.
-   - **until($PORT == 7)
+   - **until($PORT == 7)**: Iterate until the condition is met
 
 .. confval:: break_if
 
-   If defined, this condition is checked before every command in the loop.
-   If the condition evaluates to `True`, break out of the loop.
+   A condition checked before every command in the loop.
+   If it evaluates to `True`, the loop exits immediately
    Supports the same operators as :confval:`only_if`.
 
    :type: str
-   :required: ``False``
+   :required: False
 
 .. confval:: commands
 
-   The list of commands to execute during each iteration of the loop. These commands are executed once per iteration, with loop-specific variables (`$LOOP_ITEM` or `$LOOP_INDEX`) available for substitution.
+   The list of commands to execute during each iteration of the loop. These commands are executed once per iteration, with loop-specific variables (``$LOOP_ITEM`` or ``$LOOP_INDEX``) available for substitution within these commands.
 
    :type: list[Command]
-   :required: ``True``
+   :required: True
+
+
+Loop Variables
+--------------
+
+.. confval:: LOOP_ITEM
+
+   In `items` loops, this variable holds the current item from the list being iterated over.
+
+   :type: str
+
+.. confval:: LOOP_INDEX
+
+   In `range` loops, this variable holds the current index of the iteration.
+
+   :type: int
+
+
+Examples
+--------
+
+
+Iterate over a list and run an Nmap scan for each element:
 
    .. code-block:: yaml
 
       vars:
-        LISTA:
+        PORTS:
           - port1
           - port2
 
       commands:
         - type: loop
-          cmd: "items(LISTA)"
+          cmd: "items(PORTS)"
           commands:
             - type: shell
               cmd: "nmap -p $LOOP_ITEM 10.10.10.10"
             - type: debug
               cmd: $LOOP_ITEM
 
-   In the above example, each element of `LISTA` (port1, port2) is substituted into the loop, and an Nmap scan is run for each port.
 
-   Example of looping over a range:
+Iterate over a range using variables for start and end:
 
    .. code-block:: yaml
 
@@ -108,15 +143,3 @@ The current index/iteration of the loop is also accessible as the `$LOOP_INDEX` 
           commands:
             - type: shell
               cmd: echo "Index is $LOOP_INDEX"
-
-.. confval:: LOOP_ITEM
-
-   In `items` loops, this variable holds the current item from the list being iterated over.
-
-   :type: str
-
-.. confval:: LOOP_INDEX
-
-   In `range` loops, this variable holds the current index of the iteration.
-
-   :type: int

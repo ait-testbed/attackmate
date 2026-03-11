@@ -2,16 +2,14 @@
 sftp
 ====
 
-Upload or download files using SSH. This command is
-also executed by the SSHExecutor and therefor all
-ssh-related settings can be used. SSH-sessions can also
-be used with the sftp-command!
+Upload or download files over SSH. This command shares the same connection settings and
+session cache as the :ref:`ssh <ssh>` command — all SSH options apply, and sessions
+created by either command can be reused by the other.
 
 .. note::
 
-   This command caches all the settings so
+   This command caches all settings so
    that they only need to be defined once.
-
 .. code-block:: yaml
 
    vars:
@@ -19,6 +17,7 @@ be used with the sftp-command!
      $SSH_SERVER: 10.10.10.19
 
    commands:
+     # Upload a file and create a named session:
      - type: sftp
        cmd: put
        local_path: /tmp/linpeas.sh
@@ -26,51 +25,59 @@ be used with the sftp-command!
        hostname: $SSH_SERVER
        username: aecid
        key_filename: "/home/alice/.ssh/id_rsa"
-       creates_session: "attacker"
+       creates_session: attacker
 
-     # cached ssh-settings. creates new ssh-connection
+     # Download a file using cached connection settings, creates new connection:
      - type: sftp
        cmd: get
        remote_path: /etc/passwd
        local_path: /tmp/remote_passwd
 
-     # reuses existing session "attacker"
+     # Reuse the "attacker" session from the first command in an ssh command:
      - type: ssh
-       session: "attacker"
-       cmd: "id"
+       session: attacker
+       cmd: id
+
+File Transfer
+-------------
 
 .. confval:: cmd
 
-   SFTP-command to use. Valid commands are *put* or *get*.
+   The SFTP operation to perform.
+
+   * ``put`` — upload a file from the local machine to the remote host
+   * ``get`` — download a file from the remote host to the local machine
 
    :type: str
-   :required: ``True``
-
-.. confval:: remote_path
-
-   The filepath on the remote machine.
-
-   :type: str
-   :required: ``True``
+   :required: True
 
 .. confval:: local_path
 
-   The filepath on the local machine.
+   Path to the file on the local machine.
 
    :type: str
-   :required: ``True``
+   :required: True
+
+.. confval:: remote_path
+
+   Path to the file on the remote machine.
+
+   :type: str
+   :required: True
 
 .. confval:: mode
 
-   The file permissions on the remote file(e.g. *755*).
+   File permissions to set on the remote file after upload (e.g. ``755``).
 
    :type: str
+   :required: False
 
+Connection
+----------
 
 .. confval:: hostname
 
-   This option sets the hostname or ip-address of the
-   remote ssh-server.
+   Hostname or IP address of the remote SSH server.
 
    :type: str
 
@@ -83,82 +90,82 @@ be used with the sftp-command!
 
 .. confval:: username
 
-   Specifies the user to log in as on the remote machine.
+   Username to authenticate as on the remote host.
 
    :type: str
 
 .. confval:: password
 
-   Specifies the password to use. An alternative would be to use a key_file.
-
-   :type: str
-
-.. confval:: passphrase
-
-   Use this passphrase to decrypt the key_file. This is only necessary if the
-   keyfile is protected by a passphrase.
+   Password for authentication. An alternative is to use :confval:`key_filename`.
 
    :type: str
 
 .. confval:: key_filename
 
-   Path to the keyfile.
+   Path to a private key file for authentication.
+
+   :type: str
+
+.. confval:: passphrase
+
+   Passphrase to decrypt :confval:`key_filename`, if the key is passphrase-protected.
 
    :type: str
 
 .. confval:: timeout
 
-   The timeout to drop a connection attempt in seconds.
+   Timeout in seconds for connection attempts.
 
    :type: float
 
 .. confval:: clear_cache
 
-   Normally all settings for ssh-connections are cached. This allows to defined
-   all settings in one command and all following commands can reuse these settings
-   without set them in every single command. If a new connection with different
-   settings should be configured, this setting allows to reset the cache to default
-   values.
+   Clear all cached connection settings before this command runs, allowing a fresh
+   connection to be configured. (Normally all settings for ssh-connections are cached. This allows to define
+   all settings in one command and reuse them in the following commands without having to redefine them)
+
 
    :type: bool
    :default: ``False``
+   :required: False
 
-   .. note::
-
-       This setting will not clear the session store.
+Sessions
+--------
 
 .. confval:: creates_session
 
-   A session name that identifies the session that is created when
-   executing this command. This session-name can be used by using the
-   option "session"
+   Name to assign to the session opened by this command. Can be reused in subsequent
+   ``sftp`` or ``ssh`` commands via :confval:`session`.
 
    :type: str
 
 .. confval:: session
 
-   Reuse an existing ssh-session. This setting works only if another
-   ssh-command was executed with the command-option "creates_session"
+   Name of an existing session to reuse. The session must have been created previously
+   via :confval:`creates_session` in an ``sftp`` or ``ssh`` command.
 
    :type: str
+   :required: False
+
+Jump Host
+---------
 
 .. confval:: jmp_hostname
 
-   This option sets the hostname or ip-address of the
-   remote jump server.
+   Hostname or IP address of an SSH jump host to tunnel through.
 
    :type: str
 
 .. confval:: jmp_port
 
-   Port to connect to on the jump-host.
+   Port to connect to on the jump host.
 
    :type: int
    :default: ``22``
 
 .. confval:: jmp_username
 
-   Specifies the user to log in as on the jmp-host.
+   Username to authenticate as on the jump host.
 
    :type: str
-   :default: ``same as username``
+   :default: same as :confval:`username`

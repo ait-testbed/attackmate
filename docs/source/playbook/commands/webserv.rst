@@ -2,43 +2,49 @@
 webserv
 =======
 
-Start a http-server and share a file. This command
-will return after the first HTTP-request. To keep serving the file instead set keep_serving to True.
-The webserv command has to be run in background mode, otherwise the playbook execution will halt until a request is received.
+Start a simple HTTP server to serve a single file. By default, the server stops after
+handling the first request. Set :confval:`keep_serving` to ``True`` to continue serving.
+
+.. warning::
+
+   This command blocks until a request is received. Always run it in
+   :confval:`background` mode to avoid halting playbook execution.
+
 .. code-block:: yaml
 
-   ###
    commands:
      - type: webserv
        local_path: "/tmp/webshell.php"
        port: 8000
-
+       background: true
 
 .. confval:: local_path
 
-   Path to the file to share
+   Path to the file to serve.
 
    :type: str
-   :required: ``True``
-
+   :required: True
 
 .. confval:: port
 
-   Port to listen
+   Port to listen on.
 
    :type: int
    :default: ``8000``
+   :required: False
 
 .. confval:: address
 
-   Address to listen
+   Address to listen on.
 
    :type: str
    :default: ``0.0.0.0``
+   :required: False
 
-.. confval:: keep_servng
+.. confval:: keep_serving
 
-   Keep serving even after a request has been processed
+   Continue serving the file after the first request has been handled.
 
    :type: bool
-   :default: False
+   :default: ``False``
+   :required: False

@@ -12,7 +12,7 @@ C1 – System Context Diagram
    :width: 80%
    :alt: System Context Diagram
 
-The System Context diagram shows how **AttackMate** fits into its environment. It illustrates the main user
+The System Context diagram shows how AttackMate fits into its environment. It illustrates the main user
 (e.g., a pentester or researcher), the software systems it interacts with (e.g., vulnerable target systems, external
 frameworks like Metasploit or Sliver), and the nature of those interactions.
 

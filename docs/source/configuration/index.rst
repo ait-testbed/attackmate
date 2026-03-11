@@ -11,7 +11,7 @@ is not used, attackmate will search at the following locations for the config-fi
 #. **$HOME/.config/attackmate.yml**
 #. **/etc/attackmate.yml**
 
-The optional configuration-file is in yaml-format and is divided into five sections:
+The optional configuration file is in yaml-format and is divided into five sections:
 
 * **cmd_config**: defines settings for all commands
 * **msf_config**: connection settings for the msfrpcd
@@ -20,11 +20,10 @@ The optional configuration-file is in yaml-format and is divided into five secti
 * **remote_config**: connection settings for the remote attackmate server
 
 The following configuration file is an example for a basic configuration with
-sliver and metasploit:
+sliver, metasploit and remote attackmate server:
 
 .. code-block:: yaml
 
-   ###
    cmd_config:
      loop_sleep: 5
      command_delay: 0
@@ -42,7 +41,14 @@ sliver and metasploit:
    sliver_config:
      config_file: /home/attacker/.sliver-client/configs/attacker_localhost.cfg
 
-For detailed information about the config sections see:
+   remote_config:
+     remote_server_name:
+       url: "https://10.0.0.5:5000"
+       username: admin
+       password: securepassword
+       cafile: "/path/to/cert.pem"
+
+For detailed information about each config section see:
 
 .. toctree::
    :maxdepth: 4

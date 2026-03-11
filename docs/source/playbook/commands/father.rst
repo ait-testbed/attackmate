@@ -2,7 +2,7 @@
 father
 ======
 
-The Fahter LD_PRELOAD rootkit requires to compile the config settings into the binary.
+The Father LD_PRELOAD rootkit requires to compile the config settings into the binary.
 This command compiles the binary and stores the path in the variable ``LAST_FATHER_PATH``.
 If ``local_path`` is not defined, the command will create a temporary directory and copy
 the sources into the directory before compiling the rootkit.
@@ -12,7 +12,6 @@ Father can be found at `this GitHub-Page <https://github.com/mav8557/Father>`_
 
 .. code-block:: yaml
 
-   ###
    commands:
      - type: father
        cmd: generate
@@ -31,6 +30,7 @@ Father can be found at `this GitHub-Page <https://github.com/mav8557/Father>`_
 
    :type: int
    :default: ``1337``
+   :required: False
 
 .. confval:: srcport
 
@@ -38,13 +38,15 @@ Father can be found at `this GitHub-Page <https://github.com/mav8557/Father>`_
 
    :type: int
    :default: ``54321``
+   :required: False
 
 .. confval:: epochtime
 
-   Time for timebomb() to go off, in seconds since 1970-01-01
+   Time for ``timebomb()`` to go off, in seconds since 1970-01-01.
 
    :type: int
    :default: ``0000000000``
+   :required: False
 
 .. confval:: env_var
 
@@ -53,6 +55,7 @@ Father can be found at `this GitHub-Page <https://github.com/mav8557/Father>`_
 
    :type: str
    :default: ``lobster``
+   :required: False
 
 .. confval:: file_prefix
 
@@ -60,13 +63,15 @@ Father can be found at `this GitHub-Page <https://github.com/mav8557/Father>`_
 
    :type: str
    :default: ``lobster``
+   :required: False
 
 .. confval:: preload_file
 
-   Hide this preload file(hide the rootkit)
+   Hide this preload file (hide the rootkit).
 
    :type: str
    :default: ``ld.so.preload``
+   :required: False
 
 .. confval:: hiddenport
 
@@ -74,20 +79,23 @@ Father can be found at `this GitHub-Page <https://github.com/mav8557/Father>`_
 
    :type: str(hex)
    :default: ``D431``
+   :required: False
 
 .. confval:: shell_pass
 
-   Password for accept() backdoor shell
+   Password for ``accept()`` backdoor shell.
 
    :type: str
    :default: ``lobster``
+   :required: False
 
 .. confval:: install_path
 
-   Location of rootkit on disk
+   Location of rootkit on disk.
 
    :type: str
    :default: ``/lib/selinux.so.3``
+   :required: False
 
 .. confval:: local_path
 
@@ -95,6 +103,7 @@ Father can be found at `this GitHub-Page <https://github.com/mav8557/Father>`_
    If not set, the builder will generate a temporary path.
 
    :type: str
+   :required: False
 
 .. confval:: arch
 
@@ -103,6 +112,7 @@ Father can be found at `this GitHub-Page <https://github.com/mav8557/Father>`_
 
    :type: str
    :default: ``amd64``
+   :required: False
 
 .. confval:: build_command
 
@@ -111,3 +121,4 @@ Father can be found at `this GitHub-Page <https://github.com/mav8557/Father>`_
 
    :type: str
    :default: ``make``
+   :required: False

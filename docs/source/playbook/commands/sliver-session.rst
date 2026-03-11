@@ -4,17 +4,34 @@
 sliver-session
 ==============
 
-There are multiple commands from type 'sliver-session' to execute commands in an
-active sliver session.
+Execute commands within an active Sliver implant session. All commands require a
+:confval:`session` field identifying the target implant.
+
+.. note::
+
+   **For developers:** The ``sliver`` and ``sliver-session`` command families use a legacy
+   ``type`` + ``cmd`` discrimination pattern and should not be replicated. New commands
+   must define a unique ``type`` literal and handle sub-behavior branching via ``cmd``
+   in the executor. See :ref:`command` for details.
+
+.. confval:: session
+
+   Name of the Sliver implant session to operate in. The implant must have been
+   generated and deployed previously via the sliver :ref:`generate_implant <sliver>` command.
+
+   :type: str
+   :required: True
+
+File System
+-----------
 
 ls
---
+^^^
 
-List files and directories on the remote host
+List files and directories on the remote host.
 
 .. code-block:: yaml
 
-   ###
    commands:
      - type: sliver-session
        cmd: ls
@@ -24,27 +41,19 @@ List files and directories on the remote host
 
 .. confval:: remote_path
 
-   Path to list all files
+   Path to list all files.
 
    :type: str
-   :required: ``True``
-
-.. confval:: session
-
-   The name of the sliver implant to connect to. Defined previously by the by sliver generate_implant command.
-
-   :type: str
-   :required: ``True``
+   :required: True
 
 
 cd
---
+^^^
 
-Change the working directory
+Change the working directory of the active session.
 
 .. code-block:: yaml
 
-   ###
    commands:
      - type: sliver-session
        cmd: cd
@@ -57,17 +66,160 @@ Change the working directory
    Path to change to
 
    :type: str
-   :required: ``True``
+   :required: True
 
 
-netstat
--------
 
-Print network connection information
+mkdir
+^^^^^
+
+Create a remote directory.
 
 .. code-block:: yaml
 
-   ###
+   commands:
+     - type: sliver-session
+       cmd: mkdir
+       remote_path: /tmp/somedirectory
+       session: implant-name
+
+
+.. confval:: remote_path
+
+   Path to the directory to create.
+
+   :type: str
+   :required: True
+
+
+pwd
+^^^
+
+Print working directory of the active session.
+
+.. code-block:: yaml
+
+   commands:
+     - type: sliver-session
+       cmd: pwd
+       session: implant-name
+
+
+rm
+^^^
+
+Delete a remote file or directory.
+
+.. code-block:: yaml
+
+   commands:
+     - type: sliver-session
+       cmd: rm
+       remote_path: /tmp/somefile
+       session: implant-name
+
+.. confval:: remote_path
+
+   Path to the file to remove.
+
+   :type: str
+   :required: True
+
+.. confval:: recursive
+
+   Recursively remove files
+
+   :type: bool
+   :default: ``False``
+
+.. confval:: force
+
+   Ignore safety and forcefully remove files.
+
+   :type: bool
+   :default: ``False``
+
+download
+^^^^^^^^
+
+Download a file or directory from the remote system. Directories will be downloaded as a gzipped tar-file.
+
+.. code-block:: yaml
+
+   commands:
+     - type: sliver-session
+       cmd: download
+       remote_path: /root
+       recurse: True
+       session: implant-name
+
+
+.. confval:: remote_path
+
+   Path to the file or directory to download.
+
+   :type: str
+   :required: True
+
+.. confval:: local_path
+
+   Local path where the downloaded file will be saved.
+
+   :type: str
+   :required: False
+   :default: ``.``
+
+.. confval:: recurse
+
+   Recursively downloaded all files in a directory.
+
+   :type: bool
+   :default: ``False``
+
+upload
+^^^^^^
+
+Upload a file to the remote system.
+
+.. code-block:: yaml
+
+   commands:
+     - type: sliver-session
+       cmd: upload
+       remote_path: /tmp/somefile
+       local_path: /home/user/somefile
+       session: implant-name
+
+.. confval:: remote_path
+
+   Destination path on the remote host.
+
+   :type: str
+   :required: True
+
+.. confval:: local_path
+
+   Path to the local file to upload.
+
+   :type: str
+
+.. confval:: is_ioc
+
+   Mark the uploaded file as an indicator of compromise (IOC) for tracking purposes.
+
+   :type: bool
+   :default: ``False``
+
+Network
+-------
+
+netstat
+^^^^^^^
+
+Display network connection information for the remote host.
+
+.. code-block:: yaml
+
    commands:
      - type: sliver-session
        cmd: netstat
@@ -81,28 +233,28 @@ Print network connection information
 
 .. confval:: tcp
 
-   Display information about TCP sockets
+   Display information about TCP sockets.
 
    :type: bool
    :default: ``True``
 
 .. confval:: udp
 
-   Display information about UDP sockets
+   Display information about UDP sockets.
 
    :type: bool
    :default: ``True``
 
 .. confval:: ipv4
 
-   Display information about IPv4 sockets
+   Display information about IPv4 sockets.
 
    :type: bool
    :default: ``True``
 
 .. confval:: ipv6
 
-   Display information about IPv6 sockets
+   Display information about IPv6 sockets.
 
    :type: bool
    :default: ``True``
@@ -114,15 +266,41 @@ Print network connection information
    :type: bool
    :default: ``True``
 
+ifconfig
+^^^^^^^^
 
-execute
--------
-
-Execute a program on the remote system
+Display network interface configuration of the remote host.
 
 .. code-block:: yaml
 
-   ###
+   commands:
+     - type: sliver-session
+       cmd: ifconfig
+       session: implant-name
+
+
+Processes
+---------
+
+ps
+^^^
+
+List processes of the remote system.
+
+.. code-block:: yaml
+
+   commands:
+     - type: sliver-session
+       cmd: ps
+       session: implant-name
+
+execute
+^^^^^^^
+
+Execute a program on the remote host.
+
+.. code-block:: yaml
+
    commands:
      - type: sliver-session
        cmd: execute
@@ -136,170 +314,61 @@ Execute a program on the remote system
 
 .. confval:: exe
 
-   Command to execute
+   Command to execute.
 
    :type: str
-   :required: ``True``
+   :required: True
 
 .. confval:: args
 
-   List of command arguments
+   List of command arguments.
 
    :type: List[str]
 
 .. confval:: output
 
-   Capture command output
+   Capture command output.
 
    :type: bool
    :default: ``True``
 
+terminate
+^^^^^^^^^
 
-mkdir
------
-
-Create a remote directory.
-
-.. code-block:: yaml
-
-   ###
-   commands:
-     - type: sliver-session
-       cmd: mkdir
-       remote_path: /tmp/somedirectory
-       session: implant-name
-
-
-.. confval:: remote_path
-
-   Path to the directory to create
-
-   :type: str
-   :required: ``True``
-
-
-ifconfig
---------
-
-View network interface configurations
+Kill a process on the remote host by PID.
 
 .. code-block:: yaml
 
-   ###
    commands:
      - type: sliver-session
-       cmd: ifconfig
+       cmd: terminate
+       pid: 1234
        session: implant-name
 
-ps
---
+.. confval:: pid
 
-List processes of the remote system
+   PID of the process to kill.
 
-.. code-block:: yaml
+   :type: int
+   :required: True
 
-   ###
-   commands:
-     - type: sliver-session
-       cmd: ps
-       session: implant-name
+.. confval:: force
 
-
-pwd
----
-
-Print working directory of the active session.
-
-.. code-block:: yaml
-
-   ###
-   commands:
-     - type: sliver-session
-       cmd: pwd
-       session: implant-name
-
-download
---------
-
-Download a file or directory from the remote system. Directories will be downloaded as a gzipped tar-file.
-
-.. code-block:: yaml
-
-   ###
-   commands:
-     - type: sliver-session
-       cmd: download
-       remote_path: /root
-       recurse: True
-       session: implant-name
-
-
-.. confval:: remote_path
-
-   Path to the file or directory to download
-
-   :type: str
-   :required: ``True``
-
-.. confval:: local_path
-
-   Local path where the downloaded file will be saved.
-
-   :type: str
-   :required: ``False``
-   :default: ``.``
-
-.. confval:: recurse
-
-   Recursively downloaded all files in a directory.
+   Disregard safety and kill the process.
 
    :type: bool
    :default: ``False``
 
-upload
+Memory
 ------
 
-Upload a file to the remote system.
-
-.. code-block:: yaml
-
-   ###
-   commands:
-     - type: sliver-session
-       cmd: upload
-       remote_path: /tmp/somefile
-       local_path: /home/user/somefile
-       session: implant-name
-
-.. confval:: remote_path
-
-   Path to the file or directory to upload to
-
-   :type: str
-   :required: ``True``
-
-.. confval:: local_path
-
-   Local path to the file to upload
-
-   :type: str
-
-.. confval:: is_ioc
-
-   Track uploaded file as an ioc
-
-   :type: bool
-   :default: ``False``
-
-
 process_dump
-------------
+^^^^^^^^^^^^
 
-Dumps the process memory of a given pid to a local file.
+Dump the memory of a running process to a local file.
 
 .. code-block:: yaml
 
-   ###
    commands:
      - type: sliver-session
        cmd: process_dump
@@ -309,10 +378,10 @@ Dumps the process memory of a given pid to a local file.
 
 .. confval:: pid
 
-   Target Pid
+   Target PID.
 
    :type: int
-   :required: ``True``
+   :required: True
 
 
 .. confval:: local_path
@@ -320,51 +389,4 @@ Dumps the process memory of a given pid to a local file.
    Save to file.
 
    :type: str
-   :required: ``True``
-
-
-rm
---
-
-Delete a remote file or directory.
-
-.. confval:: remote_path
-
-   Path to the file to remove
-
-   :type: str
-   :required: ``True``
-
-.. confval:: recursive
-
-   Recursively remove files
-
-   :type: bool
-   :default: ``False``
-
-.. confval:: force
-
-   Ignore safety and forcefully remove files
-
-   :type: bool
-   :default: ``False``
-
-
-terminate
----------
-
-Kills a remote process designated by PID
-
-.. confval:: pid
-
-   PID of the process to kill.
-
-   :type: int
-   :required: ``True``
-
-.. confval:: force
-
-   Disregard safety and kill the PID.
-
-   :type: bool
-   :default: ``False``
+   :required: True

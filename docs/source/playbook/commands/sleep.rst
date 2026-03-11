@@ -2,30 +2,20 @@
 sleep
 =====
 
-Sleep a certain amount of seconds.
+Pause execution for a fixed or randomised number of seconds.
 
 .. code-block:: yaml
 
-   ###
    commands:
+   # Sleep for 60 seconds
      - type: sleep
        seconds: 60
 
 
-.. confval:: min_sec
-
-   This option defines the minimum seconds to sleep. This
-   is only relevant if option **random** is set to True
-
-   :type: int
-   :default: ``0``
-
-
 .. confval:: seconds
 
-   This options sets the seconds to sleep. If the option
-   **random** is set to True, this option is the maximum time
-   to sleep.
+   Number of seconds to sleep. When :confval:`random` is ``True``, this serves as
+   the upper bound of the random range.
 
    :type: int
    :default: ``1``
@@ -34,22 +24,27 @@ Sleep a certain amount of seconds.
 
 .. confval:: random
 
-  This option allows to randomize the seconds to wait. The minimum
-  and maximum seconds for the range can be set by **min_sec** and
-  **seconds**.
-
+  Sleep for a random duration between :confval:`min_sec` and :confval:`seconds`
+  instead of a fixed duration.
 
   :type: bool
   :default: ``False``
+  :required: False
 
 
-  The following example will take a random amount of seconds between 30 seconds
-  and 60 seconds:
+.. confval:: min_sec
+
+   Lower bound in seconds for the random sleep range. Only used when
+   :confval:`random` is ``True``.
+
+   :type: int
+   :default: ``0``
+   :required: False
 
   .. code-block:: yaml
 
-     ###
      commands:
+     # Sleep for a random duration between 30 and 60 seconds
        - type: sleep
          seconds: 60
          min_sec: 30
@@ -58,7 +53,7 @@ Sleep a certain amount of seconds.
 
 .. confval:: cmd
 
-  This option is ignored
+  This option is ignored. It is only present to allow the use of the generic command syntax and does not have any effect on the behavior of the command.
 
   :type: str
   :default: ``sleep``

