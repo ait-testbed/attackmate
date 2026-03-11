@@ -43,4 +43,4 @@ commands.
    temporary file or directory will be stored (without the leading ``$``).
 
    :type: str
-   :required: ``True``
+   :required: True

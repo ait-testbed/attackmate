@@ -6,7 +6,6 @@ AttackMate playbooks must be written in valid `YAML-format <https://yaml.org/>`_
 
 .. code-block:: yaml
 
-   ###
    commands:
      - type: shell
        cmd: nmap www.vulnerable-system.tld
@@ -18,7 +17,6 @@ placeholders that can be referenced throughout the ``commands`` section:
 
 .. code-block:: yaml
 
-   ###
    vars:
      TARGET: www.vulnerable-system.tld
      NMAP: /usr/bin/nmap

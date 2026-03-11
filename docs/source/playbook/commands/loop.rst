@@ -62,7 +62,7 @@ Configuration
    condition defined in until() is met.
 
    :type: str
-   :required: ``True``
+   :required: True
 
    Examples:
 
@@ -77,14 +77,14 @@ Configuration
    Supports the same operators as :confval:`only_if`.
 
    :type: str
-   :required: ``False``
+   :required: False
 
 .. confval:: commands
 
    The list of commands to execute during each iteration of the loop. These commands are executed once per iteration, with loop-specific variables (`$LOOP_ITEM` or `$LOOP_INDEX`) available for substitution within these commands.
 
    :type: list[Command]
-   :required: ``True``
+   :required: True
 
 
 Loop Variables

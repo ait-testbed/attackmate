@@ -13,7 +13,7 @@ following tools:
 
 .. note::
 
-   ``python3-venv`` must only be installed if AttackMate should be installed in a virtual environment.
+   ``python3-venv`` only needs to be installed if AttackMate should be installed in a virtual environment.
 
 Download the sources:
 
@@ -56,4 +56,4 @@ Run AttackMate via:
 
    Please note that you if you install from source you also need to install :ref:`sliver-fix` if you want
    to use the sliver commands!
-   The ansible role ref:`ansible` already includes the sliver-fix.
+   The ansible role :ref:`ansible` already includes the sliver-fix.

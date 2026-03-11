@@ -20,7 +20,7 @@ Execute commands within an active Sliver implant session. All commands require a
    generated and deployed previously via the :ref:`sliver` generate_implant command.
 
    :type: str
-   :required: ``True``
+   :required: True
 
 File System
 -----------
@@ -44,7 +44,7 @@ List files and directories on the remote host.
    Path to list all files.
 
    :type: str
-   :required: ``True``
+   :required: True
 
 
 cd
@@ -66,7 +66,7 @@ Change the working directory of the active session.
    Path to change to
 
    :type: str
-   :required: ``True``
+   :required: True
 
 
 
@@ -89,7 +89,7 @@ Create a remote directory.
    Path to the directory to create.
 
    :type: str
-   :required: ``True``
+   :required: True
 
 
 pwd
@@ -123,7 +123,7 @@ Delete a remote file or directory.
    Path to the file to remove.
 
    :type: str
-   :required: ``True``
+   :required: True
 
 .. confval:: recursive
 
@@ -159,14 +159,14 @@ Download a file or directory from the remote system. Directories will be downloa
    Path to the file or directory to download.
 
    :type: str
-   :required: ``True``
+   :required: True
 
 .. confval:: local_path
 
    Local path where the downloaded file will be saved.
 
    :type: str
-   :required: ``False``
+   :required: False
    :default: ``.``
 
 .. confval:: recurse
@@ -195,7 +195,7 @@ Upload a file to the remote system.
    Destination path on the remote host.
 
    :type: str
-   :required: ``True``
+   :required: True
 
 .. confval:: local_path
 
@@ -318,7 +318,7 @@ Execute a program on the remote host.
    Command to execute
 
    :type: str
-   :required: ``True``
+   :required: True
 
 .. confval:: args
 
@@ -351,7 +351,7 @@ Kill a process on the remote host by PID.
    PID of the process to kill.
 
    :type: int
-   :required: ``True``
+   :required: True
 
 .. confval:: force
 
@@ -382,7 +382,7 @@ Dump the memory of a running process to a local file.
    Target PID.
 
    :type: int
-   :required: ``True``
+   :required: True
 
 
 .. confval:: local_path
@@ -390,4 +390,4 @@ Dump the memory of a running process to a local file.
    Save to file.
 
    :type: str
-   :required: ``True``
+   :required: True

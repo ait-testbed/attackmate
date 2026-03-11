@@ -46,7 +46,7 @@ Send HTTP requests with support for common methods, custom headers, cookies, and
    URL of the target.
 
    :type: str
-   :required: ``True``
+   :required: True
 
 .. confval:: output_headers
 

@@ -36,8 +36,7 @@ dependencies:
   (venv)$ git submodule update --init
   (venv)$ pip install -r requirements.txt
 
-Now remove the packages we want to compile by our own:
-
+Now remove the packages we want to compile ourselves:
 ::
 
   (venv)$ pip uninstall --yes protobuf

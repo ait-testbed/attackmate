@@ -3,6 +3,7 @@ ssh
 ===
 
 Execute commands on a remote host via SSH.
+
 .. note::
 
    This command caches all settings so
