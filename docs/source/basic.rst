@@ -25,7 +25,7 @@ Sample Playbook
 ===============
 
 The following playbook demonstrates a simple reconnaissance chain using nmap, regex parsing,
-and nikto:
+and a conditional nikto scan:
 
 .. code-block:: yaml
 
@@ -89,7 +89,7 @@ Expected output:
 Explanation
 ===========
 
-**vars** defines reusable variables that can be referenced throughout the ``commands`` section.
+**vars** defines reusable variables that can be referenced throughout the ``commands`` section via ``$VARNAME`` substitution.
 In this example, we define the path to the nmap binary, the target host, and the web port to attack.
 The nmap-binary is expected at the location */usr/bin/nmap*, the target to attack is *localhost* and
 the web-port to attack is *8000*.

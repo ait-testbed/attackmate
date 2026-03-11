@@ -10,19 +10,18 @@ defined in the ``vars`` section, but **must** be prefixed with ``$`` when refere
 in the ``commands`` section.
 If an environment variable with the prefix ``ATTACKMATE_`` exists with the same name,
 it will override the playbook variable. For example,  the playbookvariabel $FOO will
-be overwritten be environment variabel $ATTACKMATE_FOO.
+be overwritten be environment variabel ``$ATTACKMATE_FOO``.
 
 .. code-block:: yaml
 
-   ###
    vars:
+   # the $-sign is optional here:
      $SERVER_ADDRESS: 192.42.0.254
-     # the $-sign is optional here:
      $NMAP: /usr/bin/nmap
 
    commands:
      - type: shell
-       # the $-sign is required when referencing the variable:
+       # the $-sign is required when referencing a variable:
        cmd: $NMAP $SERVER_ADDRESS
 
 .. note::
