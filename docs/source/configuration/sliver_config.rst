@@ -8,7 +8,6 @@ sliver_config
 
 .. code-block:: yaml
 
-   ###
    sliver_config:
      config_file: /home/attacker/.sliver-client/configs/attacker_localhost.cfg
 

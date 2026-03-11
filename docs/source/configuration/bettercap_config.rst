@@ -11,7 +11,6 @@ is used as the default.
 
 .. code-block:: yaml
 
-   ###
    bettercap_config:
      default:
        url: "http://localhost:8081"
@@ -29,7 +28,6 @@ default connection is used when none is specified:
 
 .. code-block:: yaml
 
-   # bettercap-playbook.yml:
    commands:
      # this is executed on the remote host:
      - type: bettercap
@@ -56,7 +54,7 @@ default connection is used when none is specified:
 
 .. confval:: password
 
-   HTTP Basic Auth password for the BettercapREST API.
+   HTTP Basic Auth password for the Bettercap REST API.
 
    :type: str
 

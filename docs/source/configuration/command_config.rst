@@ -7,7 +7,6 @@ These are settings for **all** commands.
 
 .. code-block:: yaml
 
-   ###
    cmd_config:
      loop_sleep: 5
      command_delay: 0

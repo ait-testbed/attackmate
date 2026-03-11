@@ -24,7 +24,6 @@ sliver, metasploit and remote attackmate server:
 
 .. code-block:: yaml
 
-   ###
    cmd_config:
      loop_sleep: 5
      command_delay: 0

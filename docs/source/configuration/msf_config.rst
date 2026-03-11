@@ -8,7 +8,6 @@ msf_config
 
 .. code-block:: yaml
 
-   ###
    msf_config:
      password: securepassword
      server: 10.18.3.86
