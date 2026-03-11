@@ -91,7 +91,16 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">General:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html">AttackMate <img alt="Logo" src="/images/AttackMate_logo_no_logo.png" align="right" height="90"></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#installation">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#execute">Execute</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#documentation">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#publications">Publications</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#contribution">Contribution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#disclaimer">Disclaimer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#security">Security</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#license">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#financial-support">Financial Support</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Getting Started:</span></p>
 <ul>
@@ -176,10 +185,10 @@
              
   <section id="mktemp">
 <h1>mktemp<a class="headerlink" href="#mktemp" title="Permalink to this heading"></a></h1>
-<p>Create temporary files or directories that are deleted when the programm exits.
-The path to the file or directory is storen in a given variable.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1">###</span>
-<span class="nt">commands</span><span class="p">:</span>
+<p>Create a temporary file or directory that is automatically deleted when AttackMate exits.
+The path to the file or directory is stored in a variable for use in subsequent
+commands.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">commands</span><span class="p">:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mktemp</span>
 <span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">file</span>
 <span class="w">    </span><span class="nt">variable</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SOMEFILE</span>
@@ -198,8 +207,7 @@ The path to the file or directory is storen in a given variable.</p>
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-cmd">
 <span class="sig-name descname"><span class="pre">cmd</span></span><a class="headerlink" href="#confval-cmd" title="Permalink to this definition"></a></dt>
-<dd><p>Define if a file or directory will be created. Valid
-options are: <em>file</em> or <em>dir</em>.</p>
+<dd><p>Whether to create a temporary file or directory.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str</p>
@@ -208,19 +216,24 @@ options are: <em>file</em> or <em>dir</em>.</p>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">file</span></code></p>
 </dd>
 </dl>
+<p>Valid values:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">file</span></code> — create a temporary file</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">dir</span></code> — create a temporary directory</p></li>
+</ul>
 </dd></dl>
 
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-variable">
 <span class="sig-name descname"><span class="pre">variable</span></span><a class="headerlink" href="#confval-variable" title="Permalink to this definition"></a></dt>
-<dd><p>This setting defines a variable where the path of the
-temporary file or directory will be stored.</p>
+<dd><p>Name of the variable where the path of the
+temporary file or directory will be stored (without the leading <code class="docutils literal notranslate"><span class="pre">$</span></code>).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str</p>
 </dd>
 <dt class="field-even">Required<span class="colon">:</span></dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code></p>
+<dd class="field-even"><p>True</p>
 </dd>
 </dl>
 </dd></dl>

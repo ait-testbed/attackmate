@@ -91,7 +91,16 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">General:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../readme_link.html">AttackMate <img alt="Logo" src="/images/AttackMate_logo_no_logo.png" align="right" height="90"></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#installation">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#execute">Execute</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#documentation">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#publications">Publications</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#contribution">Contribution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#disclaimer">Disclaimer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#security">Security</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#license">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#financial-support">Financial Support</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Getting Started:</span></p>
 <ul class="current">
@@ -102,7 +111,6 @@
 <li class="toctree-l2"><a class="reference internal" href="sliverfix.html">Install sliver-fix</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Installation with Ansible</a></li>
 <li class="toctree-l2"><a class="reference internal" href="docker.html">Installation with Docker</a></li>
-<li class="toctree-l2"><a class="reference internal" href="uv.html">Installation with uv</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../preparation/index.html">Preparation</a></li>
@@ -159,10 +167,10 @@
   <section id="installation-with-ansible">
 <span id="ansible"></span><h1>Installation with Ansible<a class="headerlink" href="#installation-with-ansible" title="Permalink to this heading"></a></h1>
 <p>It is possible to automatically install AttackMate using
-Ansible. The <a class="reference external" href="https://github.com/ait-aecid/attackmate-ansible">ansible-role</a> also deploys the sliver-fix.</p>
+Ansible. The <a class="reference external" href="https://github.com/ait-aecid/attackmate-ansible">ansible-role</a> also deploys the <a class="reference internal" href="sliverfix.html#sliver-fix"><span class="std std-ref">Install sliver-fix</span></a>.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Currently the ansible role only works with Debian and Ubuntu distributions.</p>
+<p>Currently the ansible role supports Kali, Debian and Ubuntu distributions.</p>
 </div>
 <section id="installation-steps">
 <h2>Installation Steps<a class="headerlink" href="#installation-steps" title="Permalink to this heading"></a></h2>
@@ -174,7 +182,7 @@ $ sudo apt install ansible -y
 </pre></div>
 </div>
 <ol class="arabic" start="2">
-<li><p>Set Up the Playbook</p>
+<li><p>Set Up the Playbook:</p>
 <p>Create a new directory for your AttackMate setup, navigate into it, and create your playbook file:</p>
 </li>
 </ol>
@@ -183,21 +191,21 @@ $ cd my-attackmate
 $ touch install_attackmate.yml
 </pre></div>
 </div>
-<p>Open the <cite>install_attackmate.yml</cite> file and fill it with this sample playbook (it also can be found on the README-page
-of the <a class="reference external" href="https://github.com/ait-aecid/attackmate-ansible">github-repository</a>), which installs AttackMate on localhost:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">Install</span> <span class="n">attackmate</span>
-  <span class="n">become</span><span class="p">:</span> <span class="n">true</span>
-  <span class="n">hosts</span><span class="p">:</span> <span class="n">localhost</span>
-  <span class="n">roles</span><span class="p">:</span>
-    <span class="o">-</span> <span class="n">role</span><span class="p">:</span> <span class="n">attackmate</span>
-      <span class="nb">vars</span><span class="p">:</span>
-        <span class="n">attackmate_sliverfix</span><span class="p">:</span> <span class="kc">True</span>
-        <span class="n">attackmate_version</span><span class="p">:</span> <span class="n">development</span>
-        <span class="n">attackmate_msf_server</span><span class="p">:</span> <span class="n">localhost</span>
-        <span class="n">attackmate_msf_passwd</span><span class="p">:</span> <span class="n">hackerman</span>
-        <span class="n">attackmate_playbooks</span><span class="p">:</span>
-          <span class="o">-</span> <span class="n">upgradeshell</span><span class="o">.</span><span class="n">j2</span>
-          <span class="o">-</span> <span class="n">attackchain</span><span class="o">.</span><span class="n">j2</span>
+<p>Open the <cite>install_attackmate.yml</cite> file and fill it with this sample playbook to install AttackMate on localhost. The playbook can also can be found on the README page
+of the <a class="reference external" href="https://github.com/ait-aecid/attackmate-ansible">github-repository</a>, have a look at the role variables there for further configuration options.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Install attackmate</span>
+<span class="w">  </span><span class="nt">become</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">  </span><span class="nt">hosts</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">localhost</span>
+<span class="w">  </span><span class="nt">roles</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">role</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">attackmate</span>
+<span class="w">      </span><span class="nt">vars</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">attackmate_sliverfix</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">        </span><span class="nt">attackmate_version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">development</span>
+<span class="w">        </span><span class="nt">attackmate_msf_server</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">localhost</span>
+<span class="w">        </span><span class="nt">attackmate_msf_passwd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hackerman</span>
+<span class="w">        </span><span class="nt">attackmate_playbooks</span><span class="p">:</span>
+<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">upgradeshell.j2</span>
+<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">attackchain.j2</span>
 </pre></div>
 </div>
 <ol class="arabic" start="3">
@@ -210,17 +218,17 @@ following content:</p>
 <span class="n">localhost</span> <span class="n">ansible_connection</span><span class="o">=</span><span class="n">local</span>
 </pre></div>
 </div>
-<ol class="arabic" start="3">
-<li><p>Clone the Ansible Role</p>
-<p>Ansible expects all roles to be in the <strong>roles</strong> directory. Create this directory and clone the repository:</p>
+<ol class="arabic" start="4">
+<li><p>Clone the Ansible Role:</p>
+<p>Ansible expects all roles to be in the <strong>roles</strong> directory. Create this directory and clone the ansible role repository:</p>
 </li>
 </ol>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ mkdir -p roles/attackmate
 $ git clone https://github.com/ait-testbed/attackmate-ansible roles/attackmate
 </pre></div>
 </div>
-<ol class="arabic simple" start="4">
-<li><p>Run the playbook</p></li>
+<ol class="arabic simple" start="5">
+<li><p>Run the playbook:</p></li>
 </ol>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ ansible-playbook -i hosts install_attackmate.yml
 </pre></div>

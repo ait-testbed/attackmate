@@ -91,7 +91,16 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">General:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html">AttackMate <img alt="Logo" src="/images/AttackMate_logo_no_logo.png" align="right" height="90"></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#installation">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#execute">Execute</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#documentation">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#publications">Publications</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#contribution">Contribution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#disclaimer">Disclaimer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#security">Security</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#license">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#financial-support">Financial Support</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Getting Started:</span></p>
 <ul>
@@ -176,11 +185,13 @@
              
   <section id="setvar">
 <h1>setvar<a class="headerlink" href="#setvar" title="Permalink to this heading"></a></h1>
-<p>Set a variable. This could be used for string interpolation or for
-copying variables.
-This command does not modify the Builtin Variable <code class="docutils literal notranslate"><span class="pre">RESULT_STDOUT</span></code>.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1">###</span>
-<span class="nt">vars</span><span class="p">:</span>
+<p>Set a variable to a string value. Useful for string interpolation and copying or
+transforming existing variables.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This command does not modify <code class="docutils literal notranslate"><span class="pre">RESULT_STDOUT</span></code>.</p>
+</div>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">vars</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">FOO</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;WORLD&quot;</span>
 
 <span class="nt">commands</span><span class="p">:</span>
@@ -192,13 +203,13 @@ This command does not modify the Builtin Variable <code class="docutils literal 
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-variable">
 <span class="sig-name descname"><span class="pre">variable</span></span><a class="headerlink" href="#confval-variable" title="Permalink to this definition"></a></dt>
-<dd><p>The variable-name that stores the value of <em>cmd</em></p>
+<dd><p>Name of the variable to set (without the leading <code class="docutils literal notranslate"><span class="pre">$</span></code>).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str</p>
 </dd>
 <dt class="field-even">Required<span class="colon">:</span></dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code></p>
+<dd class="field-even"><p>True</p>
 </dd>
 </dl>
 </dd></dl>
@@ -206,13 +217,13 @@ This command does not modify the Builtin Variable <code class="docutils literal 
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-cmd">
 <span class="sig-name descname"><span class="pre">cmd</span></span><a class="headerlink" href="#confval-cmd" title="Permalink to this definition"></a></dt>
-<dd><p>The value of the variable</p>
+<dd><p>The value to assign to the variable. Supports variable substitution.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str</p>
 </dd>
 <dt class="field-even">Required<span class="colon">:</span></dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code></p>
+<dd class="field-even"><p>True</p>
 </dd>
 </dl>
 </dd></dl>
@@ -220,9 +231,25 @@ This command does not modify the Builtin Variable <code class="docutils literal 
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-encoder">
 <span class="sig-name descname"><span class="pre">encoder</span></span><a class="headerlink" href="#confval-encoder" title="Permalink to this definition"></a></dt>
-<dd><p>If encoder is set, the command in cmd will be encoded before stored in <code class="docutils literal notranslate"><span class="pre">variable</span></code>.
-Please note that if encoding fails, this command will fallback to plain cmd and will
-print out a warning.</p>
+<dd><p>Encode or decode the value of <code class="docutils literal notranslate"><span class="pre">cmd</span></code> before storing it in <code class="docutils literal notranslate"><span class="pre">variable</span></code>.</p>
+<p>Supported values:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">base64-encoder</span></code> — encode to Base64</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">base64-decoder</span></code> — decode from Base64</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">rot13</span></code> — apply ROT13</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">urlencoder</span></code> — percent-encode for use in URLs</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">urldecoder</span></code> — decode percent-encoded strings</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str[‘base64-encoder’, ‘base64-decoder’, ‘rot13’, ‘urlencoder’, ‘urldecoder’]</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Note that if encoding fails, the plain value is stored and a warning is printed.</p>
+</div>
+<p>Example:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">commands</span><span class="p">:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">setvar</span>
 <span class="w">    </span><span class="nt">variable</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">TEST</span>
@@ -281,11 +308,6 @@ print out a warning.</p>
 <span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">$TEST</span>
 </pre></div>
 </div>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>str[‘base64-encoder’, ‘base64-decoder’, ‘rot13’, ‘urlencoder’, ‘urldecoder’]</p>
-</dd>
-</dl>
 </dd></dl>
 
 </section>

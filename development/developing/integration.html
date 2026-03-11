@@ -91,7 +91,16 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">General:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../readme_link.html">AttackMate <img alt="Logo" src="/images/AttackMate_logo_no_logo.png" align="right" height="90"></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#installation">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#execute">Execute</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#documentation">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#publications">Publications</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#contribution">Contribution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#disclaimer">Disclaimer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#security">Security</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#license">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#financial-support">Financial Support</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Getting Started:</span></p>
 <ul>
@@ -210,11 +219,11 @@ Commands can be created with the <code class="docutils literal notranslate"><spa
 <section id="understanding-the-result-object">
 <h2>Understanding the Result Object<a class="headerlink" href="#understanding-the-result-object" title="Permalink to this heading"></a></h2>
 <p>When executing a command with AttackMate, the result is returned as an instance of the <code class="docutils literal notranslate"><span class="pre">Result</span></code> class. This object contains the standard output (<cite>stdout</cite>) and the return code (<cite>returncode</cite>) of the executed command.
-Commands that run in the Background return Result(None,None)</p>
+Commands that run in the Background return Result(‘Command started in background’, 0)</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Regular Commands return a <code class="docutils literal notranslate"><span class="pre">Result</span></code> object.
-Commands that run in background mode return <code class="docutils literal notranslate"><span class="pre">Result(None,None)</span></code>.</p>
+Commands that run in background mode return <code class="docutils literal notranslate"><span class="pre">Result('Command</span> <span class="pre">started</span> <span class="pre">in</span> <span class="pre">background',</span> <span class="pre">0)</span></code>.</p>
 </div>
 <section id="attributes">
 <h3>Attributes<a class="headerlink" href="#attributes" title="Permalink to this heading"></a></h3>

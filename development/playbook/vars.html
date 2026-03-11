@@ -91,7 +91,16 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">General:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../readme_link.html">AttackMate <img alt="Logo" src="/images/AttackMate_logo_no_logo.png" align="right" height="90"></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#installation">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#execute">Execute</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#documentation">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#publications">Publications</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#contribution">Contribution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#disclaimer">Disclaimer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#security">Security</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#license">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#financial-support">Financial Support</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Getting Started:</span></p>
 <ul>
@@ -153,44 +162,41 @@
              
   <section id="variables">
 <span id="id1"></span><h1>Variables<a class="headerlink" href="#variables" title="Permalink to this heading"></a></h1>
-<p>Variables may be assigned to by a statement of the form of key-values.
-Once assigned, they can be used as placeholders in command-settings. It
-is unnecessary to begin variable names with a $-sign when defined in the
-vars-section. However, when variables are placed in the commands section,
-they always must start with a $-sign.
-If the same variable name with the prefix “<a href="#id2"><span class="problematic" id="id3">ATTACKMATE_</span></a>” exists as an
-environment variable it will overwrite the playbook variable value.
-i.e. the playbookvariabel $FOO will be overwritten be environment variabel
-$ATTACKMATE_FOO.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1">###</span>
-<span class="nt">vars</span><span class="p">:</span>
+<p>Variables are defined as key-value pairs in the <code class="docutils literal notranslate"><span class="pre">vars</span></code> section and can be used as
+placeholders in command settings. Variable names do not require a <code class="docutils literal notranslate"><span class="pre">$</span></code> prefix when
+defined in the <code class="docutils literal notranslate"><span class="pre">vars</span></code> section, but <strong>MUST</strong> be prefixed with <code class="docutils literal notranslate"><span class="pre">$</span></code> when referenced
+in the <code class="docutils literal notranslate"><span class="pre">commands</span></code> section.
+If an environment variable with the prefix <code class="docutils literal notranslate"><span class="pre">ATTACKMATE_</span></code> exists with the same name,
+it will override the playbook variable. For example,  the playbook variabel <code class="docutils literal notranslate"><span class="pre">$FOO</span></code> will
+be overwritten by the environment variabel <code class="docutils literal notranslate"><span class="pre">$ATTACKMATE_FOO</span></code>.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">vars</span><span class="p">:</span>
+<span class="w">  </span><span class="c1"># the $-sign is optional here:</span>
 <span class="w">  </span><span class="nt">$SERVER_ADDRESS</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.42.0.254</span>
-<span class="w">  </span><span class="c1"># the $-sign is not necessary here:</span>
 <span class="w">  </span><span class="nt">$NMAP</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/usr/bin/nmap</span>
 
 <span class="nt">commands</span><span class="p">:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">shell</span>
-<span class="w">    </span><span class="c1"># the $-sign is required when using the variable:</span>
+<span class="w">    </span><span class="c1"># the $-sign is required when referencing a variable:</span>
 <span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">$NMAP $SERVER_ADDRESS</span>
 </pre></div>
 </div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>For more information about using the variables see <a class="reference external" href="https://docs.python.org/3/library/string.html#string.Template">string.Template</a></p>
+<p>Variable substitution uses Python’s <a class="reference external" href="https://docs.python.org/3/library/string.html#string.Template">string.Template</a> syntax.</p>
 </div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>variables in cmd settings of a loop command will be substituted on every iteration of the loop, see <span class="xref std std-ref">loop</span></p>
+<p>Variables in <code class="docutils literal notranslate"><span class="pre">cmd</span></code> settings of a <code class="docutils literal notranslate"><span class="pre">loop</span></code> command will be substituted on every iteration of the loop, see the  <a class="reference internal" href="commands/loop.html#loop"><span class="std std-ref">loop</span></a> command for details.</p>
 </div>
 <section id="builtin-variables">
-<h2>Builtin Variables<a class="headerlink" href="#builtin-variables" title="Permalink to this heading"></a></h2>
-<p>The following variables are set by the system:</p>
-<p><code class="docutils literal notranslate"><span class="pre">RESULT_STDOUT</span></code> is set after every command execution (except for debug, regex and setvar commands) and stores the result output.</p>
-<p><code class="docutils literal notranslate"><span class="pre">RESULT_CODE</span></code> is set after every command execution and stores the returncode.</p>
-<p><code class="docutils literal notranslate"><span class="pre">LAST_MSF_SESSION</span></code> is set every time after a new metasploit session was created and contains the session number.</p>
-<p><code class="docutils literal notranslate"><span class="pre">LAST_SLIVER_IMPLANT</span></code> is set every time after a new sliver implant was created and contains the path to the implant file.</p>
-<p><code class="docutils literal notranslate"><span class="pre">LAST_FATHER_PATH</span></code> is set every time when a father-rootkit was generated.</p>
-<p><code class="docutils literal notranslate"><span class="pre">REGEX_MATCHES_LIST</span></code> is set every time a regex command yields matches and it contains a list of all matches. Note that if sub or split does not have a match the input string is returned.</p>
+<span id="id2"></span><h2>Builtin Variables<a class="headerlink" href="#builtin-variables" title="Permalink to this heading"></a></h2>
+<p>The following variables are set automatically by AttackMate during execution:</p>
+<p><code class="docutils literal notranslate"><span class="pre">RESULT_STDOUT</span></code> Stores the standard output of the most recently executed command. Not set by <code class="docutils literal notranslate"><span class="pre">debug</span></code>, <code class="docutils literal notranslate"><span class="pre">regex</span></code>, or <code class="docutils literal notranslate"><span class="pre">setvar</span></code> commands.</p>
+<p><code class="docutils literal notranslate"><span class="pre">RESULT_CODE</span></code> Stores the return code of the most recently executed command.</p>
+<p><code class="docutils literal notranslate"><span class="pre">LAST_MSF_SESSION</span></code> Set whenever a new Metasploit session is created. Contains the session number.</p>
+<p><code class="docutils literal notranslate"><span class="pre">LAST_SLIVER_IMPLANT</span></code> Set whenever a new Sliver implant is generated. Contains the path to the implant file.</p>
+<p><code class="docutils literal notranslate"><span class="pre">LAST_FATHER_PATH</span></code> Set whenever a Father rootkit is generated. Contains the path to the rootkit.</p>
+<p><code class="docutils literal notranslate"><span class="pre">REGEX_MATCHES_LIST</span></code> Set every time a regex command yields matches. Contains a list of all matches. If <code class="docutils literal notranslate"><span class="pre">sub</span></code> or <code class="docutils literal notranslate"><span class="pre">split</span></code> finds no match, the original input string is returned.</p>
 </section>
 </section>
 

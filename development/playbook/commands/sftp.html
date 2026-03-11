@@ -91,7 +91,16 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">General:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html">AttackMate <img alt="Logo" src="/images/AttackMate_logo_no_logo.png" align="right" height="90"></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#installation">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#execute">Execute</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#documentation">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#publications">Publications</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#contribution">Contribution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#disclaimer">Disclaimer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#security">Security</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#license">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#financial-support">Financial Support</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Getting Started:</span></p>
 <ul>
@@ -176,13 +185,12 @@
              
   <section id="sftp">
 <h1>sftp<a class="headerlink" href="#sftp" title="Permalink to this heading"></a></h1>
-<p>Upload or download files using SSH. This command is
-also executed by the SSHExecutor and therefor all
-ssh-related settings can be used. SSH-sessions can also
-be used with the sftp-command!</p>
+<p>Upload or download files over SSH. This command shares the same connection settings and
+session cache as the <a class="reference internal" href="ssh.html#ssh"><span class="std std-ref">ssh</span></a> command — all SSH options apply, and sessions
+created by either command can be reused by the other.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This command caches all the settings so
+<p>This command caches all settings so
 that they only need to be defined once.</p>
 </div>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">vars</span><span class="p">:</span>
@@ -190,6 +198,7 @@ that they only need to be defined once.</p>
 <span class="w">  </span><span class="nt">$SSH_SERVER</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10.10.10.19</span>
 
 <span class="nt">commands</span><span class="p">:</span>
+<span class="w">  </span><span class="c1"># Upload a file and create a named session:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sftp</span>
 <span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">put</span>
 <span class="w">    </span><span class="nt">local_path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/tmp/linpeas.sh</span>
@@ -197,44 +206,36 @@ that they only need to be defined once.</p>
 <span class="w">    </span><span class="nt">hostname</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">$SSH_SERVER</span>
 <span class="w">    </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">aecid</span>
 <span class="w">    </span><span class="nt">key_filename</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/home/alice/.ssh/id_rsa&quot;</span>
-<span class="w">    </span><span class="nt">creates_session</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;attacker&quot;</span>
+<span class="w">    </span><span class="nt">creates_session</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">attacker</span>
 
-<span class="w">  </span><span class="c1"># cached ssh-settings. creates new ssh-connection</span>
+<span class="w">  </span><span class="c1"># Download a file using cached connection settings, creates new connection:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sftp</span>
 <span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">get</span>
 <span class="w">    </span><span class="nt">remote_path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/etc/passwd</span>
 <span class="w">    </span><span class="nt">local_path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/tmp/remote_passwd</span>
 
-<span class="w">  </span><span class="c1"># reuses existing session &quot;attacker&quot;</span>
+<span class="w">  </span><span class="c1"># Reuse the &quot;attacker&quot; session from the first command in an ssh command:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ssh</span>
-<span class="w">    </span><span class="nt">session</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;attacker&quot;</span>
-<span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;id&quot;</span>
+<span class="w">    </span><span class="nt">session</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">attacker</span>
+<span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">id</span>
 </pre></div>
 </div>
+<section id="file-transfer">
+<h2>File Transfer<a class="headerlink" href="#file-transfer" title="Permalink to this heading"></a></h2>
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-cmd">
 <span class="sig-name descname"><span class="pre">cmd</span></span><a class="headerlink" href="#confval-cmd" title="Permalink to this definition"></a></dt>
-<dd><p>SFTP-command to use. Valid commands are <em>put</em> or <em>get</em>.</p>
+<dd><p>The SFTP operation to perform.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">put</span></code> — upload a file from the local machine to the remote host</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">get</span></code> — download a file from the remote host to the local machine</p></li>
+</ul>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str</p>
 </dd>
 <dt class="field-even">Required<span class="colon">:</span></dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="std confval">
-<dt class="sig sig-object std" id="confval-remote_path">
-<span class="sig-name descname"><span class="pre">remote_path</span></span><a class="headerlink" href="#confval-remote_path" title="Permalink to this definition"></a></dt>
-<dd><p>The filepath on the remote machine.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>str</p>
-</dd>
-<dt class="field-even">Required<span class="colon">:</span></dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code></p>
+<dd class="field-even"><p>True</p>
 </dd>
 </dl>
 </dd></dl>
@@ -242,13 +243,27 @@ that they only need to be defined once.</p>
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-local_path">
 <span class="sig-name descname"><span class="pre">local_path</span></span><a class="headerlink" href="#confval-local_path" title="Permalink to this definition"></a></dt>
-<dd><p>The filepath on the local machine.</p>
+<dd><p>Path to the file on the local machine.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str</p>
 </dd>
 <dt class="field-even">Required<span class="colon">:</span></dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code></p>
+<dd class="field-even"><p>True</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="std confval">
+<dt class="sig sig-object std" id="confval-remote_path">
+<span class="sig-name descname"><span class="pre">remote_path</span></span><a class="headerlink" href="#confval-remote_path" title="Permalink to this definition"></a></dt>
+<dd><p>Path to the file on the remote machine.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+<dt class="field-even">Required<span class="colon">:</span></dt>
+<dd class="field-even"><p>True</p>
 </dd>
 </dl>
 </dd></dl>
@@ -256,19 +271,24 @@ that they only need to be defined once.</p>
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-mode">
 <span class="sig-name descname"><span class="pre">mode</span></span><a class="headerlink" href="#confval-mode" title="Permalink to this definition"></a></dt>
-<dd><p>The file permissions on the remote file(e.g. <em>755</em>).</p>
+<dd><p>File permissions to set on the remote file after upload (e.g. <code class="docutils literal notranslate"><span class="pre">755</span></code>).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str</p>
 </dd>
+<dt class="field-even">Required<span class="colon">:</span></dt>
+<dd class="field-even"><p>False</p>
+</dd>
 </dl>
 </dd></dl>
 
+</section>
+<section id="connection">
+<h2>Connection<a class="headerlink" href="#connection" title="Permalink to this heading"></a></h2>
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-hostname">
 <span class="sig-name descname"><span class="pre">hostname</span></span><a class="headerlink" href="#confval-hostname" title="Permalink to this definition"></a></dt>
-<dd><p>This option sets the hostname or ip-address of the
-remote ssh-server.</p>
+<dd><p>Hostname or IP address of the remote SSH server.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str</p>
@@ -293,7 +313,7 @@ remote ssh-server.</p>
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-username">
 <span class="sig-name descname"><span class="pre">username</span></span><a class="headerlink" href="#confval-username" title="Permalink to this definition"></a></dt>
-<dd><p>Specifies the user to log in as on the remote machine.</p>
+<dd><p>Username to authenticate as on the remote host.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str</p>
@@ -304,19 +324,7 @@ remote ssh-server.</p>
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-password">
 <span class="sig-name descname"><span class="pre">password</span></span><a class="headerlink" href="#confval-password" title="Permalink to this definition"></a></dt>
-<dd><p>Specifies the password to use. An alternative would be to use a key_file.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>str</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="std confval">
-<dt class="sig sig-object std" id="confval-passphrase">
-<span class="sig-name descname"><span class="pre">passphrase</span></span><a class="headerlink" href="#confval-passphrase" title="Permalink to this definition"></a></dt>
-<dd><p>Use this passphrase to decrypt the key_file. This is only necessary if the
-keyfile is protected by a passphrase.</p>
+<dd><p>Password for authentication. An alternative is to use <a class="reference internal" href="ssh.html#confval-key_filename"><code class="xref std std-confval docutils literal notranslate"><span class="pre">key_filename</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str</p>
@@ -327,7 +335,18 @@ keyfile is protected by a passphrase.</p>
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-key_filename">
 <span class="sig-name descname"><span class="pre">key_filename</span></span><a class="headerlink" href="#confval-key_filename" title="Permalink to this definition"></a></dt>
-<dd><p>Path to the keyfile.</p>
+<dd><p>Path to a private key file for authentication.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="std confval">
+<dt class="sig sig-object std" id="confval-passphrase">
+<span class="sig-name descname"><span class="pre">passphrase</span></span><a class="headerlink" href="#confval-passphrase" title="Permalink to this definition"></a></dt>
+<dd><p>Passphrase to decrypt <a class="reference internal" href="ssh.html#confval-key_filename"><code class="xref std std-confval docutils literal notranslate"><span class="pre">key_filename</span></code></a>, if the key is passphrase-protected.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str</p>
@@ -338,7 +357,7 @@ keyfile is protected by a passphrase.</p>
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-timeout">
 <span class="sig-name descname"><span class="pre">timeout</span></span><a class="headerlink" href="#confval-timeout" title="Permalink to this definition"></a></dt>
-<dd><p>The timeout to drop a connection attempt in seconds.</p>
+<dd><p>Timeout in seconds for connection attempts.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>float</p>
@@ -349,11 +368,9 @@ keyfile is protected by a passphrase.</p>
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-clear_cache">
 <span class="sig-name descname"><span class="pre">clear_cache</span></span><a class="headerlink" href="#confval-clear_cache" title="Permalink to this definition"></a></dt>
-<dd><p>Normally all settings for ssh-connections are cached. This allows to defined
-all settings in one command and all following commands can reuse these settings
-without set them in every single command. If a new connection with different
-settings should be configured, this setting allows to reset the cache to default
-values.</p>
+<dd><p>Clear all cached connection settings before this command runs, allowing a fresh
+connection to be configured. (Normally all settings for ssh-connections are cached. This allows to define
+all settings in one command and reuse them in the following commands without having to redefine them)</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>bool</p>
@@ -361,19 +378,20 @@ values.</p>
 <dt class="field-even">Default<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">False</span></code></p>
 </dd>
+<dt class="field-odd">Required<span class="colon">:</span></dt>
+<dd class="field-odd"><p>False</p>
+</dd>
 </dl>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>This setting will not clear the session store.</p>
-</div>
 </dd></dl>
 
+</section>
+<section id="sessions">
+<h2>Sessions<a class="headerlink" href="#sessions" title="Permalink to this heading"></a></h2>
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-creates_session">
 <span class="sig-name descname"><span class="pre">creates_session</span></span><a class="headerlink" href="#confval-creates_session" title="Permalink to this definition"></a></dt>
-<dd><p>A session name that identifies the session that is created when
-executing this command. This session-name can be used by using the
-option “session”</p>
+<dd><p>Name to assign to the session opened by this command. Can be reused in subsequent
+<code class="docutils literal notranslate"><span class="pre">sftp</span></code> or <code class="docutils literal notranslate"><span class="pre">ssh</span></code> commands via <a class="reference internal" href="vnc.html#confval-session"><code class="xref std std-confval docutils literal notranslate"><span class="pre">session</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str</p>
@@ -384,20 +402,25 @@ option “session”</p>
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-session">
 <span class="sig-name descname"><span class="pre">session</span></span><a class="headerlink" href="#confval-session" title="Permalink to this definition"></a></dt>
-<dd><p>Reuse an existing ssh-session. This setting works only if another
-ssh-command was executed with the command-option “creates_session”</p>
+<dd><p>Name of an existing session to reuse. The session must have been created previously
+via <a class="reference internal" href="vnc.html#confval-creates_session"><code class="xref std std-confval docutils literal notranslate"><span class="pre">creates_session</span></code></a> in an <code class="docutils literal notranslate"><span class="pre">sftp</span></code> or <code class="docutils literal notranslate"><span class="pre">ssh</span></code> command.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str</p>
 </dd>
+<dt class="field-even">Required<span class="colon">:</span></dt>
+<dd class="field-even"><p>False</p>
+</dd>
 </dl>
 </dd></dl>
 
+</section>
+<section id="jump-host">
+<h2>Jump Host<a class="headerlink" href="#jump-host" title="Permalink to this heading"></a></h2>
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-jmp_hostname">
 <span class="sig-name descname"><span class="pre">jmp_hostname</span></span><a class="headerlink" href="#confval-jmp_hostname" title="Permalink to this definition"></a></dt>
-<dd><p>This option sets the hostname or ip-address of the
-remote jump server.</p>
+<dd><p>Hostname or IP address of an SSH jump host to tunnel through.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str</p>
@@ -408,7 +431,7 @@ remote jump server.</p>
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-jmp_port">
 <span class="sig-name descname"><span class="pre">jmp_port</span></span><a class="headerlink" href="#confval-jmp_port" title="Permalink to this definition"></a></dt>
-<dd><p>Port to connect to on the jump-host.</p>
+<dd><p>Port to connect to on the jump host.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>int</p>
@@ -422,17 +445,18 @@ remote jump server.</p>
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-jmp_username">
 <span class="sig-name descname"><span class="pre">jmp_username</span></span><a class="headerlink" href="#confval-jmp_username" title="Permalink to this definition"></a></dt>
-<dd><p>Specifies the user to log in as on the jmp-host.</p>
+<dd><p>Username to authenticate as on the jump host.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str</p>
 </dd>
 <dt class="field-even">Default<span class="colon">:</span></dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">same</span> <span class="pre">as</span> <span class="pre">username</span></code></p>
+<dd class="field-even"><p>same as <a class="reference internal" href="ssh.html#confval-username"><code class="xref std std-confval docutils literal notranslate"><span class="pre">username</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
 
+</section>
 </section>
 
 

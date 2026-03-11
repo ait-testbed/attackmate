@@ -2,7 +2,7 @@
 Basic Usage
 ===========
 
-AttackMate ships with a executable stub called "attackmate" that can be called like follows:
+AttackMate is invoked via the ``attackmate`` command:
 
 ::
 
@@ -24,7 +24,8 @@ AttackMate ships with a executable stub called "attackmate" that can be called l
 Sample Playbook
 ===============
 
-In our first example we use the following playbook.yml:
+The following playbook demonstrates a simple reconnaissance chain using nmap, regex parsing,
+and a conditional nikto scan:
 
 .. code-block:: yaml
 
@@ -47,19 +48,31 @@ In our first example we use the following playbook.yml:
        cmd: nikto -host $TARGET -port $PORT
        only_if: $PORT == 8000
 
-.. warning::
+.. note::
 
-   For this playbook it is required to have nmap and nikto installed!
-   This playbook also needs a webserver at localhost on port 8000.
-   You can run ``python3 -mhttp.server`` in a seperate shell to start
-   the webserver.
+   This playbook requires ``nmap`` and ``nikto`` to be installed, and a web server
+   running on ``localhost:8000``. You can start one with:
+
+   ::
+
+      $ python3 -mhttp.server
 
 
 First Run
 =========
 
-Now we can run the playbook using the following command:
-(We can supply the full path to the playbook, otherwise the parser tries to find it in the current working directory or in the folder /etc/attackmate/playbooks)
+Run the playbook with ``--debug`` for verbose output:
+
+::
+
+   $ attackmate --debug playbook.yml
+
+.. note::
+
+   The playbook path can be absolute, relative to the current working directory,
+   or relative to ``/etc/attackmate/playbooks``.
+
+Expected output:
 
 ::
 
@@ -76,33 +89,33 @@ Now we can run the playbook using the following command:
 Explanation
 ===========
 
-In the **vars**-section we have three variables That can be used later in the **commands**-section.
-The nmap-binary is expected at the location */usr/bin/nmap*. The target to attack is *localhost* and
+**vars** defines reusable variables that can be referenced throughout the ``commands`` section via ``$VARNAME`` substitution.
+In this example, we define the path to the nmap binary, the target host, and the web port to attack.
+The nmap-binary is expected at the location */usr/bin/nmap*, the target to attack is *localhost* and
 the web-port to attack is *8000*.
 
-::
+.. code-block:: yaml
 
   vars:
     NMAP: /usr/bin/nmap
     TARGET: localhost
     WEBPORT: "8000"
 
-The first command executes an nmap-script-scan on port *8000* at *localhost*. This command illustrates
-how to use variables:
+The first command executes an nmap script scan on port *8000* against the target *localhost*. This command illustrates
+how to use variables: Variables are substituted at runtime using ``$VARNAME`` syntax:
 
-::
+.. code-block:: yaml
 
   commands:
     - type: shell
       cmd: $NMAP -sC -p $WEBPORT $TARGET
 
-As soon as nmap finishes, it automatically stores the output the the built-in variable ``RESULT_STDOUT``.
-The regex command executes a regex search using the content of the nmap output. The regular expression is
-`(\d+)/tcp open\s+http`. If the expression matches, it will "group" the port number in the variable
-``$MATCH_0`` which is a volatile variable and is deleted after the regex-command finishes. In the setting
-*output* is a variable defined with the name ``PORT`` and it will be set with the value of ``$MATCH_0``.
+As soon as nmap finishes, its output is automatically stored in the built-in variable ``RESULT_STDOUT``.
+The regex command searches this output using the expression ``(\d+)/tcp open\s+http``.
+If it matches, the captured port number is stored in the volatile variable ``$MATCH_0`` (deleted after the regex-command finishes),
+which is then assigned to the persistent variable ``PORT`` via the ``output`` mapping:
 
-::
+.. code-block:: yaml
 
     - type: regex
       cmd: (\d+)/tcp open\s+http
@@ -110,10 +123,10 @@ The regex command executes a regex search using the content of the nmap output. 
       output:
         PORT: $MATCH_0
 
-The final command is again a shell command that is supposed to execute a nikto scan using the previously
-parsed variable ``$PORT``. This command will only be executed if the condition ``$PORT == 8000`` is **True**.
+The final command is a shell command that executes a nikto scan using the previously
+parsed ``$PORT`` variable. The  ``only_if`` condition ensures this command will only be executed if ``$PORT == 8000`` is **True**.
 
-::
+.. code-block:: yaml
 
     - type: shell
       cmd: nikto -host $TARGET -port $PORT

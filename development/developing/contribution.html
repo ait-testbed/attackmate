@@ -91,7 +91,16 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">General:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../readme_link.html">AttackMate <img alt="Logo" src="/images/AttackMate_logo_no_logo.png" align="right" height="90"></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#installation">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#execute">Execute</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#documentation">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#publications">Publications</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#contribution">Contribution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#disclaimer">Disclaimer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#security">Security</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#license">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#financial-support">Financial Support</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Getting Started:</span></p>
 <ul>
@@ -157,7 +166,7 @@
 <p>We’re happily taking patches and other contributions. Below is a summary of the processes we follow for any contribution.</p>
 <section id="bug-reports-and-enhancement-requests">
 <h2>Bug reports and enhancement requests<a class="headerlink" href="#bug-reports-and-enhancement-requests" title="Permalink to this heading"></a></h2>
-<p>Bug reports and enhancement requests are an important part of making <cite>attackmate</cite> more stable and are curated through Github issues.
+<p>Bug reports and enhancement requests are an important part of making AttackMate more stable and are curated through Github issues.
 Before reporting an issue, check our backlog of open issues to see if anybody else has already reported it.
 If that is the case, you might be able to give additional information on that issue.
 Bug reports are very helpful to us in improving the software, and therefore, they are very welcome. It is very important to give us
@@ -166,7 +175,7 @@ at least the following information in a bug report:</p>
 <li><p>Description of the bug. Describe the problem clearly.</p></li>
 <li><p>Steps to reproduce. With the following configuration, go to.., click.., see error</p></li>
 <li><p>Expected behavoir. What should happen?</p></li>
-<li><p>Environment. What was the environment for the test(version, browser, etc..)</p></li>
+<li><p>Environment. What was the environment for the test (version, browser, etc..)</p></li>
 </ol>
 <p>For reporting security-related issues, see <a class="reference external" href="https://github.com/ait-testbed/attackmate/blob/main/SECURITY.md">SECURITY.md</a></p>
 </section>
@@ -176,7 +185,7 @@ at least the following information in a bug report:</p>
 <img alt="../_images/GitHub-Contrib.drawio.png" src="../_images/GitHub-Contrib.drawio.png" />
 <section id="fork">
 <h3>1. Fork<a class="headerlink" href="#fork" title="Permalink to this heading"></a></h3>
-<p>Go to <a class="reference external" href="https://github.com/ait-testbed/attackmate.git">https://github.com/ait-testbed/attackmate.git</a> and click on fork. Please note that you must login first to GitHub.</p>
+<p>Go to <a class="reference external" href="https://github.com/ait-testbed/attackmate.git">https://github.com/ait-testbed/attackmate.git</a> and click on fork. Please note that you must login to GitHub first.</p>
 </section>
 <section id="clone">
 <h3>2. Clone<a class="headerlink" href="#clone" title="Permalink to this heading"></a></h3>
@@ -195,10 +204,10 @@ at least the following information in a bug report:</p>
 </section>
 <section id="develop-your-feature-and-improvements-in-the-feature-branch">
 <h3>4. Develop your feature and improvements in the feature-branch<a class="headerlink" href="#develop-your-feature-and-improvements-in-the-feature-branch" title="Permalink to this heading"></a></h3>
-<p>Please make sure that you commit only improvements that are related to the workpage you created the feature-branch for. See the section <a class="reference internal" href="development.html#development"><span class="std std-ref">Development</span></a> for detailed information about how to develope code for <cite>attackmate</cite>.</p>
+<p>Please make sure that you commit only improvements that are related to the workpage you created the feature-branch for. See the section <a class="reference internal" href="development.html#development"><span class="std std-ref">Development</span></a> for detailed information about how to develope code for AttackMate.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p><cite>attackmate</cite> uses <a class="reference external" href="https://github.com/j178/prek">prek</a> to ensure code quality. Make sure that you use it properly.</p>
+<p>AttackMate uses <a class="reference external" href="https://github.com/j178/prek">prek</a> to ensure code quality. Make sure to use it properly.</p>
 </div>
 </section>
 <section id="fetch-and-merge-from-the-upstream">
@@ -226,7 +235,7 @@ at least the following information in a bug report:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">rebase</span> <span class="o">-</span><span class="n">i</span> <span class="n">HEAD</span><span class="o">~</span><span class="n">n</span>
 </pre></div>
 </div>
-<p>Finally you can push the changes to YOUR github-repository:</p>
+<p>Finally you can push the changes to YOUR GitHub repository:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">push</span>
 </pre></div>
 </div>
@@ -237,7 +246,7 @@ at least the following information in a bug report:</p>
 </section>
 <section id="submit-your-pull-request">
 <h3>7. Submit your pull-request<a class="headerlink" href="#submit-your-pull-request" title="Permalink to this heading"></a></h3>
-<p>Use the GitHub-Webinterface to create a pull-request. Make sure that the target-repository is <cite>ait-testbed/attackmate</cite>.</p>
+<p>Use the GitHub webinterface to create a pull-request. Make sure that the target-repository is <cite>ait-testbed/attackmate</cite>.</p>
 <p>If your pull-request was accepted and merged into the development branch continue with <a class="reference internal" href="#update-local-branch"><span class="std std-ref">Update your local main branch</span></a>. If it wasn’t accepted, read the comments and fix the problems. Before pushing the changes make sure that you squashed them with your last commit:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">rebase</span> <span class="o">-</span><span class="n">i</span> <span class="n">HEAD</span><span class="o">~</span><span class="mi">2</span>
 </pre></div>
@@ -258,8 +267,8 @@ at least the following information in a bug report:</p>
 </ul>
 </section>
 <section id="update-your-main-branch-in-your-github-repository">
-<h3>9. Update your main branch in your github-repository<a class="headerlink" href="#update-your-main-branch-in-your-github-repository" title="Permalink to this heading"></a></h3>
-<p>Please make sure that you updated your local development branch as described in section 8. above. After that push the changes to your github-repository to keep it up2date:</p>
+<h3>9. Update your main branch in your GitHub repository<a class="headerlink" href="#update-your-main-branch-in-your-github-repository" title="Permalink to this heading"></a></h3>
+<p>Please make sure that you updated your local development branch as described in section 8 above. Then push the changes to your GitHub repository to keep it up2date:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">push</span>
 </pre></div>
 </div>

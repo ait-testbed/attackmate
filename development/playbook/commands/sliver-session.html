@@ -91,7 +91,16 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">General:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html">AttackMate <img alt="Logo" src="/images/AttackMate_logo_no_logo.png" align="right" height="90"></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#installation">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#execute">Execute</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#documentation">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#publications">Publications</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#contribution">Contribution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#disclaimer">Disclaimer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#security">Security</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#license">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#financial-support">Financial Support</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Getting Started:</span></p>
 <ul>
@@ -176,13 +185,36 @@
              
   <section id="sliver-session">
 <span id="id1"></span><h1>sliver-session<a class="headerlink" href="#sliver-session" title="Permalink to this heading"></a></h1>
-<p>There are multiple commands from type ‘sliver-session’ to execute commands in an
-active sliver session.</p>
+<p>Execute commands within an active Sliver implant session. All commands require a
+<a class="reference internal" href="vnc.html#confval-session"><code class="xref std std-confval docutils literal notranslate"><span class="pre">session</span></code></a> field identifying the target implant.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><strong>For developers:</strong> The <code class="docutils literal notranslate"><span class="pre">sliver</span></code> and <code class="docutils literal notranslate"><span class="pre">sliver-session</span></code> command families use a legacy
+<code class="docutils literal notranslate"><span class="pre">type</span></code> + <code class="docutils literal notranslate"><span class="pre">cmd</span></code> discrimination pattern and should not be replicated. New commands
+must define a unique <code class="docutils literal notranslate"><span class="pre">type</span></code> literal and handle sub-behavior branching via <code class="docutils literal notranslate"><span class="pre">cmd</span></code>
+in the executor. See <a class="reference internal" href="../../developing/command.html#command"><span class="std std-ref">Adding a New Command</span></a> for details.</p>
+</div>
+<dl class="std confval">
+<dt class="sig sig-object std" id="confval-session">
+<span class="sig-name descname"><span class="pre">session</span></span><a class="headerlink" href="#confval-session" title="Permalink to this definition"></a></dt>
+<dd><p>Name of the Sliver implant session to operate in. The implant must have been
+generated and deployed previously via the sliver <a class="reference internal" href="sliver.html#sliver"><span class="std std-ref">generate_implant</span></a> command.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+<dt class="field-even">Required<span class="colon">:</span></dt>
+<dd class="field-even"><p>True</p>
+</dd>
+</dl>
+</dd></dl>
+
+<section id="file-system">
+<h2>File System<a class="headerlink" href="#file-system" title="Permalink to this heading"></a></h2>
 <section id="ls">
-<h2>ls<a class="headerlink" href="#ls" title="Permalink to this heading"></a></h2>
-<p>List files and directories on the remote host</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1">###</span>
-<span class="nt">commands</span><span class="p">:</span>
+<h3>ls<a class="headerlink" href="#ls" title="Permalink to this heading"></a></h3>
+<p>List files and directories on the remote host.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">commands</span><span class="p">:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sliver-session</span>
 <span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ls</span>
 <span class="w">    </span><span class="nt">remote_path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/etc</span>
@@ -192,37 +224,22 @@ active sliver session.</p>
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-remote_path">
 <span class="sig-name descname"><span class="pre">remote_path</span></span><a class="headerlink" href="#confval-remote_path" title="Permalink to this definition"></a></dt>
-<dd><p>Path to list all files</p>
+<dd><p>Path to list all files.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str</p>
 </dd>
 <dt class="field-even">Required<span class="colon">:</span></dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="std confval">
-<dt class="sig sig-object std" id="confval-session">
-<span class="sig-name descname"><span class="pre">session</span></span><a class="headerlink" href="#confval-session" title="Permalink to this definition"></a></dt>
-<dd><p>The name of the sliver implant to connect to. Defined previously by the by sliver generate_implant command.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>str</p>
-</dd>
-<dt class="field-even">Required<span class="colon">:</span></dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code></p>
+<dd class="field-even"><p>True</p>
 </dd>
 </dl>
 </dd></dl>
 
 </section>
 <section id="cd">
-<h2>cd<a class="headerlink" href="#cd" title="Permalink to this heading"></a></h2>
-<p>Change the working directory</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1">###</span>
-<span class="nt">commands</span><span class="p">:</span>
+<h3>cd<a class="headerlink" href="#cd" title="Permalink to this heading"></a></h3>
+<p>Change the working directory of the active session.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">commands</span><span class="p">:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sliver-session</span>
 <span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cd</span>
 <span class="w">    </span><span class="nt">remote_path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/home</span>
@@ -238,17 +255,215 @@ active sliver session.</p>
 <dd class="field-odd"><p>str</p>
 </dd>
 <dt class="field-even">Required<span class="colon">:</span></dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code></p>
+<dd class="field-even"><p>True</p>
 </dd>
 </dl>
 </dd></dl>
 
 </section>
+<section id="mkdir">
+<h3>mkdir<a class="headerlink" href="#mkdir" title="Permalink to this heading"></a></h3>
+<p>Create a remote directory.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">commands</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sliver-session</span>
+<span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mkdir</span>
+<span class="w">    </span><span class="nt">remote_path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/tmp/somedirectory</span>
+<span class="w">    </span><span class="nt">session</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">implant-name</span>
+</pre></div>
+</div>
+<dl class="std confval">
+<dt class="sig sig-object std" id="confval-1">
+<span class="sig-name descname"><span class="pre">remote_path</span></span><a class="headerlink" href="#confval-1" title="Permalink to this definition"></a></dt>
+<dd><p>Path to the directory to create.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+<dt class="field-even">Required<span class="colon">:</span></dt>
+<dd class="field-even"><p>True</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="pwd">
+<h3>pwd<a class="headerlink" href="#pwd" title="Permalink to this heading"></a></h3>
+<p>Print working directory of the active session.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">commands</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sliver-session</span>
+<span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pwd</span>
+<span class="w">    </span><span class="nt">session</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">implant-name</span>
+</pre></div>
+</div>
+</section>
+<section id="rm">
+<h3>rm<a class="headerlink" href="#rm" title="Permalink to this heading"></a></h3>
+<p>Delete a remote file or directory.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">commands</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sliver-session</span>
+<span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rm</span>
+<span class="w">    </span><span class="nt">remote_path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/tmp/somefile</span>
+<span class="w">    </span><span class="nt">session</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">implant-name</span>
+</pre></div>
+</div>
+<dl class="std confval">
+<dt class="sig sig-object std" id="confval-2">
+<span class="sig-name descname"><span class="pre">remote_path</span></span><a class="headerlink" href="#confval-2" title="Permalink to this definition"></a></dt>
+<dd><p>Path to the file to remove.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+<dt class="field-even">Required<span class="colon">:</span></dt>
+<dd class="field-even"><p>True</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="std confval">
+<dt class="sig sig-object std" id="confval-recursive">
+<span class="sig-name descname"><span class="pre">recursive</span></span><a class="headerlink" href="#confval-recursive" title="Permalink to this definition"></a></dt>
+<dd><p>Recursively remove files</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+<dt class="field-even">Default<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">False</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="std confval">
+<dt class="sig sig-object std" id="confval-force">
+<span class="sig-name descname"><span class="pre">force</span></span><a class="headerlink" href="#confval-force" title="Permalink to this definition"></a></dt>
+<dd><p>Ignore safety and forcefully remove files.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+<dt class="field-even">Default<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">False</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="download">
+<h3>download<a class="headerlink" href="#download" title="Permalink to this heading"></a></h3>
+<p>Download a file or directory from the remote system. Directories will be downloaded as a gzipped tar-file.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">commands</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sliver-session</span>
+<span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">download</span>
+<span class="w">    </span><span class="nt">remote_path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/root</span>
+<span class="w">    </span><span class="nt">recurse</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">    </span><span class="nt">session</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">implant-name</span>
+</pre></div>
+</div>
+<dl class="std confval">
+<dt class="sig sig-object std" id="confval-3">
+<span class="sig-name descname"><span class="pre">remote_path</span></span><a class="headerlink" href="#confval-3" title="Permalink to this definition"></a></dt>
+<dd><p>Path to the file or directory to download.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+<dt class="field-even">Required<span class="colon">:</span></dt>
+<dd class="field-even"><p>True</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="std confval">
+<dt class="sig sig-object std" id="confval-local_path">
+<span class="sig-name descname"><span class="pre">local_path</span></span><a class="headerlink" href="#confval-local_path" title="Permalink to this definition"></a></dt>
+<dd><p>Local path where the downloaded file will be saved.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+<dt class="field-even">Required<span class="colon">:</span></dt>
+<dd class="field-even"><p>False</p>
+</dd>
+<dt class="field-odd">Default<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">.</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="std confval">
+<dt class="sig sig-object std" id="confval-recurse">
+<span class="sig-name descname"><span class="pre">recurse</span></span><a class="headerlink" href="#confval-recurse" title="Permalink to this definition"></a></dt>
+<dd><p>Recursively downloaded all files in a directory.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+<dt class="field-even">Default<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">False</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="upload">
+<h3>upload<a class="headerlink" href="#upload" title="Permalink to this heading"></a></h3>
+<p>Upload a file to the remote system.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">commands</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sliver-session</span>
+<span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">upload</span>
+<span class="w">    </span><span class="nt">remote_path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/tmp/somefile</span>
+<span class="w">    </span><span class="nt">local_path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/home/user/somefile</span>
+<span class="w">    </span><span class="nt">session</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">implant-name</span>
+</pre></div>
+</div>
+<dl class="std confval">
+<dt class="sig sig-object std" id="confval-4">
+<span class="sig-name descname"><span class="pre">remote_path</span></span><a class="headerlink" href="#confval-4" title="Permalink to this definition"></a></dt>
+<dd><p>Destination path on the remote host.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+<dt class="field-even">Required<span class="colon">:</span></dt>
+<dd class="field-even"><p>True</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="std confval">
+<dt class="sig sig-object std" id="confval-5">
+<span class="sig-name descname"><span class="pre">local_path</span></span><a class="headerlink" href="#confval-5" title="Permalink to this definition"></a></dt>
+<dd><p>Path to the local file to upload.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="std confval">
+<dt class="sig sig-object std" id="confval-is_ioc">
+<span class="sig-name descname"><span class="pre">is_ioc</span></span><a class="headerlink" href="#confval-is_ioc" title="Permalink to this definition"></a></dt>
+<dd><p>Mark the uploaded file as an indicator of compromise (IOC) for tracking purposes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+<dt class="field-even">Default<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">False</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+<section id="network">
+<h2>Network<a class="headerlink" href="#network" title="Permalink to this heading"></a></h2>
 <section id="netstat">
-<h2>netstat<a class="headerlink" href="#netstat" title="Permalink to this heading"></a></h2>
-<p>Print network connection information</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1">###</span>
-<span class="nt">commands</span><span class="p">:</span>
+<h3>netstat<a class="headerlink" href="#netstat" title="Permalink to this heading"></a></h3>
+<p>Display network connection information for the remote host.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">commands</span><span class="p">:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sliver-session</span>
 <span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">netstat</span>
 <span class="w">    </span><span class="nt">tcp</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
@@ -262,7 +477,7 @@ active sliver session.</p>
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-tcp">
 <span class="sig-name descname"><span class="pre">tcp</span></span><a class="headerlink" href="#confval-tcp" title="Permalink to this definition"></a></dt>
-<dd><p>Display information about TCP sockets</p>
+<dd><p>Display information about TCP sockets.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>bool</p>
@@ -276,7 +491,7 @@ active sliver session.</p>
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-udp">
 <span class="sig-name descname"><span class="pre">udp</span></span><a class="headerlink" href="#confval-udp" title="Permalink to this definition"></a></dt>
-<dd><p>Display information about UDP sockets</p>
+<dd><p>Display information about UDP sockets.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>bool</p>
@@ -290,7 +505,7 @@ active sliver session.</p>
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-ipv4">
 <span class="sig-name descname"><span class="pre">ipv4</span></span><a class="headerlink" href="#confval-ipv4" title="Permalink to this definition"></a></dt>
-<dd><p>Display information about IPv4 sockets</p>
+<dd><p>Display information about IPv4 sockets.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>bool</p>
@@ -304,7 +519,7 @@ active sliver session.</p>
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-ipv6">
 <span class="sig-name descname"><span class="pre">ipv6</span></span><a class="headerlink" href="#confval-ipv6" title="Permalink to this definition"></a></dt>
-<dd><p>Display information about IPv6 sockets</p>
+<dd><p>Display information about IPv6 sockets.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>bool</p>
@@ -330,11 +545,33 @@ active sliver session.</p>
 </dd></dl>
 
 </section>
+<section id="ifconfig">
+<h3>ifconfig<a class="headerlink" href="#ifconfig" title="Permalink to this heading"></a></h3>
+<p>Display network interface configuration of the remote host.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">commands</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sliver-session</span>
+<span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ifconfig</span>
+<span class="w">    </span><span class="nt">session</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">implant-name</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="processes">
+<h2>Processes<a class="headerlink" href="#processes" title="Permalink to this heading"></a></h2>
+<section id="ps">
+<h3>ps<a class="headerlink" href="#ps" title="Permalink to this heading"></a></h3>
+<p>List processes of the remote system.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">commands</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sliver-session</span>
+<span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps</span>
+<span class="w">    </span><span class="nt">session</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">implant-name</span>
+</pre></div>
+</div>
+</section>
 <section id="execute">
-<h2>execute<a class="headerlink" href="#execute" title="Permalink to this heading"></a></h2>
-<p>Execute a program on the remote system</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1">###</span>
-<span class="nt">commands</span><span class="p">:</span>
+<h3>execute<a class="headerlink" href="#execute" title="Permalink to this heading"></a></h3>
+<p>Execute a program on the remote host.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">commands</span><span class="p">:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sliver-session</span>
 <span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">execute</span>
 <span class="w">    </span><span class="nt">exe</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/usr/bin/grep</span>
@@ -348,13 +585,13 @@ active sliver session.</p>
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-exe">
 <span class="sig-name descname"><span class="pre">exe</span></span><a class="headerlink" href="#confval-exe" title="Permalink to this definition"></a></dt>
-<dd><p>Command to execute</p>
+<dd><p>Command to execute.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str</p>
 </dd>
 <dt class="field-even">Required<span class="colon">:</span></dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code></p>
+<dd class="field-even"><p>True</p>
 </dd>
 </dl>
 </dd></dl>
@@ -362,7 +599,7 @@ active sliver session.</p>
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-args">
 <span class="sig-name descname"><span class="pre">args</span></span><a class="headerlink" href="#confval-args" title="Permalink to this definition"></a></dt>
-<dd><p>List of command arguments</p>
+<dd><p>List of command arguments.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>List[str]</p>
@@ -373,7 +610,7 @@ active sliver session.</p>
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-output">
 <span class="sig-name descname"><span class="pre">output</span></span><a class="headerlink" href="#confval-output" title="Permalink to this definition"></a></dt>
-<dd><p>Capture command output</p>
+<dd><p>Capture command output.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>bool</p>
@@ -385,112 +622,34 @@ active sliver session.</p>
 </dd></dl>
 
 </section>
-<section id="mkdir">
-<h2>mkdir<a class="headerlink" href="#mkdir" title="Permalink to this heading"></a></h2>
-<p>Create a remote directory.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1">###</span>
-<span class="nt">commands</span><span class="p">:</span>
+<section id="terminate">
+<h3>terminate<a class="headerlink" href="#terminate" title="Permalink to this heading"></a></h3>
+<p>Kill a process on the remote host by PID.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">commands</span><span class="p">:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sliver-session</span>
-<span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mkdir</span>
-<span class="w">    </span><span class="nt">remote_path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/tmp/somedirectory</span>
+<span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">terminate</span>
+<span class="w">    </span><span class="nt">pid</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1234</span>
 <span class="w">    </span><span class="nt">session</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">implant-name</span>
 </pre></div>
 </div>
 <dl class="std confval">
-<dt class="sig sig-object std" id="confval-1">
-<span class="sig-name descname"><span class="pre">remote_path</span></span><a class="headerlink" href="#confval-1" title="Permalink to this definition"></a></dt>
-<dd><p>Path to the directory to create</p>
+<dt class="sig sig-object std" id="confval-pid">
+<span class="sig-name descname"><span class="pre">pid</span></span><a class="headerlink" href="#confval-pid" title="Permalink to this definition"></a></dt>
+<dd><p>PID of the process to kill.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>str</p>
+<dd class="field-odd"><p>int</p>
 </dd>
 <dt class="field-even">Required<span class="colon">:</span></dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code></p>
-</dd>
-</dl>
-</dd></dl>
-
-</section>
-<section id="ifconfig">
-<h2>ifconfig<a class="headerlink" href="#ifconfig" title="Permalink to this heading"></a></h2>
-<p>View network interface configurations</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1">###</span>
-<span class="nt">commands</span><span class="p">:</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sliver-session</span>
-<span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ifconfig</span>
-<span class="w">    </span><span class="nt">session</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">implant-name</span>
-</pre></div>
-</div>
-</section>
-<section id="ps">
-<h2>ps<a class="headerlink" href="#ps" title="Permalink to this heading"></a></h2>
-<p>List processes of the remote system</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1">###</span>
-<span class="nt">commands</span><span class="p">:</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sliver-session</span>
-<span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps</span>
-<span class="w">    </span><span class="nt">session</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">implant-name</span>
-</pre></div>
-</div>
-</section>
-<section id="pwd">
-<h2>pwd<a class="headerlink" href="#pwd" title="Permalink to this heading"></a></h2>
-<p>Print working directory of the active session.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1">###</span>
-<span class="nt">commands</span><span class="p">:</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sliver-session</span>
-<span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pwd</span>
-<span class="w">    </span><span class="nt">session</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">implant-name</span>
-</pre></div>
-</div>
-</section>
-<section id="download">
-<h2>download<a class="headerlink" href="#download" title="Permalink to this heading"></a></h2>
-<p>Download a file or directory from the remote system. Directories will be downloaded as a gzipped tar-file.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1">###</span>
-<span class="nt">commands</span><span class="p">:</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sliver-session</span>
-<span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">download</span>
-<span class="w">    </span><span class="nt">remote_path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/root</span>
-<span class="w">    </span><span class="nt">recurse</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
-<span class="w">    </span><span class="nt">session</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">implant-name</span>
-</pre></div>
-</div>
-<dl class="std confval">
-<dt class="sig sig-object std" id="confval-2">
-<span class="sig-name descname"><span class="pre">remote_path</span></span><a class="headerlink" href="#confval-2" title="Permalink to this definition"></a></dt>
-<dd><p>Path to the file or directory to download</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>str</p>
-</dd>
-<dt class="field-even">Required<span class="colon">:</span></dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code></p>
+<dd class="field-even"><p>True</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="std confval">
-<dt class="sig sig-object std" id="confval-local_path">
-<span class="sig-name descname"><span class="pre">local_path</span></span><a class="headerlink" href="#confval-local_path" title="Permalink to this definition"></a></dt>
-<dd><p>Local path where the downloaded file will be saved.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>str</p>
-</dd>
-<dt class="field-even">Required<span class="colon">:</span></dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">False</span></code></p>
-</dd>
-<dt class="field-odd">Default<span class="colon">:</span></dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">.</span></code></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="std confval">
-<dt class="sig sig-object std" id="confval-recurse">
-<span class="sig-name descname"><span class="pre">recurse</span></span><a class="headerlink" href="#confval-recurse" title="Permalink to this definition"></a></dt>
-<dd><p>Recursively downloaded all files in a directory.</p>
+<dt class="sig sig-object std" id="confval-6">
+<span class="sig-name descname"><span class="pre">force</span></span><a class="headerlink" href="#confval-6" title="Permalink to this definition"></a></dt>
+<dd><p>Disregard safety and kill the process.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>bool</p>
@@ -502,63 +661,13 @@ active sliver session.</p>
 </dd></dl>
 
 </section>
-<section id="upload">
-<h2>upload<a class="headerlink" href="#upload" title="Permalink to this heading"></a></h2>
-<p>Upload a file to the remote system.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1">###</span>
-<span class="nt">commands</span><span class="p">:</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sliver-session</span>
-<span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">upload</span>
-<span class="w">    </span><span class="nt">remote_path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/tmp/somefile</span>
-<span class="w">    </span><span class="nt">local_path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/home/user/somefile</span>
-<span class="w">    </span><span class="nt">session</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">implant-name</span>
-</pre></div>
-</div>
-<dl class="std confval">
-<dt class="sig sig-object std" id="confval-3">
-<span class="sig-name descname"><span class="pre">remote_path</span></span><a class="headerlink" href="#confval-3" title="Permalink to this definition"></a></dt>
-<dd><p>Path to the file or directory to upload to</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>str</p>
-</dd>
-<dt class="field-even">Required<span class="colon">:</span></dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="std confval">
-<dt class="sig sig-object std" id="confval-4">
-<span class="sig-name descname"><span class="pre">local_path</span></span><a class="headerlink" href="#confval-4" title="Permalink to this definition"></a></dt>
-<dd><p>Local path to the file to upload</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>str</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="std confval">
-<dt class="sig sig-object std" id="confval-is_ioc">
-<span class="sig-name descname"><span class="pre">is_ioc</span></span><a class="headerlink" href="#confval-is_ioc" title="Permalink to this definition"></a></dt>
-<dd><p>Track uploaded file as an ioc</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>bool</p>
-</dd>
-<dt class="field-even">Default<span class="colon">:</span></dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">False</span></code></p>
-</dd>
-</dl>
-</dd></dl>
-
 </section>
+<section id="memory">
+<h2>Memory<a class="headerlink" href="#memory" title="Permalink to this heading"></a></h2>
 <section id="process-dump">
-<h2>process_dump<a class="headerlink" href="#process-dump" title="Permalink to this heading"></a></h2>
-<p>Dumps the process memory of a given pid to a local file.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1">###</span>
-<span class="nt">commands</span><span class="p">:</span>
+<h3>process_dump<a class="headerlink" href="#process-dump" title="Permalink to this heading"></a></h3>
+<p>Dump the memory of a running process to a local file.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">commands</span><span class="p">:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sliver-session</span>
 <span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">process_dump</span>
 <span class="w">    </span><span class="nt">pid</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">102</span>
@@ -567,111 +676,34 @@ active sliver session.</p>
 </pre></div>
 </div>
 <dl class="std confval">
-<dt class="sig sig-object std" id="confval-pid">
-<span class="sig-name descname"><span class="pre">pid</span></span><a class="headerlink" href="#confval-pid" title="Permalink to this definition"></a></dt>
-<dd><p>Target Pid</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>int</p>
-</dd>
-<dt class="field-even">Required<span class="colon">:</span></dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="std confval">
-<dt class="sig sig-object std" id="confval-5">
-<span class="sig-name descname"><span class="pre">local_path</span></span><a class="headerlink" href="#confval-5" title="Permalink to this definition"></a></dt>
-<dd><p>Save to file.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>str</p>
-</dd>
-<dt class="field-even">Required<span class="colon">:</span></dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code></p>
-</dd>
-</dl>
-</dd></dl>
-
-</section>
-<section id="rm">
-<h2>rm<a class="headerlink" href="#rm" title="Permalink to this heading"></a></h2>
-<p>Delete a remote file or directory.</p>
-<dl class="std confval">
-<dt class="sig sig-object std" id="confval-6">
-<span class="sig-name descname"><span class="pre">remote_path</span></span><a class="headerlink" href="#confval-6" title="Permalink to this definition"></a></dt>
-<dd><p>Path to the file to remove</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>str</p>
-</dd>
-<dt class="field-even">Required<span class="colon">:</span></dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="std confval">
-<dt class="sig sig-object std" id="confval-recursive">
-<span class="sig-name descname"><span class="pre">recursive</span></span><a class="headerlink" href="#confval-recursive" title="Permalink to this definition"></a></dt>
-<dd><p>Recursively remove files</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>bool</p>
-</dd>
-<dt class="field-even">Default<span class="colon">:</span></dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">False</span></code></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="std confval">
-<dt class="sig sig-object std" id="confval-force">
-<span class="sig-name descname"><span class="pre">force</span></span><a class="headerlink" href="#confval-force" title="Permalink to this definition"></a></dt>
-<dd><p>Ignore safety and forcefully remove files</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>bool</p>
-</dd>
-<dt class="field-even">Default<span class="colon">:</span></dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">False</span></code></p>
-</dd>
-</dl>
-</dd></dl>
-
-</section>
-<section id="terminate">
-<h2>terminate<a class="headerlink" href="#terminate" title="Permalink to this heading"></a></h2>
-<p>Kills a remote process designated by PID</p>
-<dl class="std confval">
 <dt class="sig sig-object std" id="confval-7">
 <span class="sig-name descname"><span class="pre">pid</span></span><a class="headerlink" href="#confval-7" title="Permalink to this definition"></a></dt>
-<dd><p>PID of the process to kill.</p>
+<dd><p>Target PID.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>int</p>
 </dd>
 <dt class="field-even">Required<span class="colon">:</span></dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code></p>
+<dd class="field-even"><p>True</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-8">
-<span class="sig-name descname"><span class="pre">force</span></span><a class="headerlink" href="#confval-8" title="Permalink to this definition"></a></dt>
-<dd><p>Disregard safety and kill the PID.</p>
+<span class="sig-name descname"><span class="pre">local_path</span></span><a class="headerlink" href="#confval-8" title="Permalink to this definition"></a></dt>
+<dd><p>Save to file.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>bool</p>
+<dd class="field-odd"><p>str</p>
 </dd>
-<dt class="field-even">Default<span class="colon">:</span></dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">False</span></code></p>
+<dt class="field-even">Required<span class="colon">:</span></dt>
+<dd class="field-even"><p>True</p>
 </dd>
 </dl>
 </dd></dl>
 
+</section>
 </section>
 </section>
 

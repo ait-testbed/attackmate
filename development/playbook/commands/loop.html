@@ -91,7 +91,16 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">General:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html">AttackMate <img alt="Logo" src="/images/AttackMate_logo_no_logo.png" align="right" height="90"></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#installation">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#execute">Execute</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#documentation">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#publications">Publications</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#contribution">Contribution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#disclaimer">Disclaimer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#security">Security</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#license">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#financial-support">Financial Support</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Getting Started:</span></p>
 <ul>
@@ -175,12 +184,12 @@
            <div itemprop="articleBody">
              
   <section id="loop">
-<h1>loop<a class="headerlink" href="#loop" title="Permalink to this heading"></a></h1>
-<p>Execute a set of commands in a loop, based on a condition or iteration over a list of values.</p>
-<p>The <cite>loop</cite> command allows dynamic iteration over lists or ranges of values, executing a sequence of commands for each iteration. It provides flexibility when working with variable data such as network scans, enabling the execution of different commands depending on the results, without prior knowledge of the number of iterations.</p>
+<span id="id1"></span><h1>loop<a class="headerlink" href="#loop" title="Permalink to this heading"></a></h1>
+<p>Execute a sequence of commands repeatedly, either by iterating over a list of values, a numerical range, or until a condition is met.</p>
+<p>This is useful when the number of iterations is not known in advance, for example, when processing results from a network scan.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The loop command works with two primary loop conditions: iterating over a list of values (<cite>items</cite>) or iterating over a numerical range (<cite>range</cite>).</p>
+<p>The loop command works with two primary loop conditions: iterating over a list of values (<code class="docutils literal notranslate"><span class="pre">items()</span></code>) or iterating over a numerical range (<code class="docutils literal notranslate"><span class="pre">range()</span></code>).</p>
 </div>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">vars</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">LISTA</span><span class="p">:</span>
@@ -188,6 +197,7 @@
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">two</span>
 
 <span class="nt">commands</span><span class="p">:</span>
+<span class="w">  </span><span class="c1"># Iterate over a list:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">loop</span>
 <span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;items(LISTA)&quot;</span>
 <span class="w">    </span><span class="nt">commands</span><span class="p">:</span>
@@ -196,6 +206,7 @@
 <span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">debug</span>
 <span class="w">        </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">$LOOP_ITEM</span>
 
+<span class="w">  </span><span class="c1"># Iterate over a range:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">loop</span>
 <span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;range(0,</span><span class="nv"> </span><span class="s">3)&quot;</span>
 <span class="w">    </span><span class="nt">commands</span><span class="p">:</span>
@@ -205,48 +216,54 @@
 <span class="w">        </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">$LOOP_INDEX</span>
 </pre></div>
 </div>
-<p><strong>Loop with items</strong>:
-This mode iterates over the elements of a list and substitutes each element into the commands.
-The current item is accessible as the <cite>$LOOP_ITEM</cite> variable.</p>
-<p><strong>Loop with range</strong>:
-This mode iterates over a range of integers. The current index is accessible as the <cite>$LOOP_INDEX</cite> variable.</p>
-<p><strong>Loop until condition is fulfilled</strong>
-This mode iterates indefinitely until the condition is fulfilled. (Checked before every command within the loop)
-Variables in cmd settings of an until loop command until($VAR1 == $VAR2) will be substituted from the variable store on every iteration of the loop.
-The current index/iteration of the loop is also accessible as the <cite>$LOOP_INDEX</cite> variable for the until() condition.</p>
+<section id="loop-modes">
+<h2>Loop Modes<a class="headerlink" href="#loop-modes" title="Permalink to this heading"></a></h2>
+<p><strong>items(LIST)</strong>:
+Iterates over the elements of a list and substitutes each element into the commands.
+The current item is accessible as the <code class="docutils literal notranslate"><span class="pre">$LOOP_ITEM</span></code> variable.</p>
+<p><strong>range(start, end)</strong>
+Iterates over a range of integers <code class="docutils literal notranslate"><span class="pre">start</span></code> (inclusive) to <code class="docutils literal notranslate"><span class="pre">end</span></code> (exclusive). The current index is accessible as the <code class="docutils literal notranslate"><span class="pre">$LOOP_INDEX</span></code> variable.</p>
+<p><strong>until(condition)</strong>
+Iterates indefinitely until the condition is evaluates to <code class="docutils literal notranslate"><span class="pre">True</span></code>, checked before every command in the loop body.
+Variables in cmd section of an until loop command until(<code class="docutils literal notranslate"><span class="pre">$VAR1</span> <span class="pre">==</span> <span class="pre">$VAR2</span></code>) will be substituted from the variable store on every iteration of the loop.
+The current iteration count is available as <code class="docutils literal notranslate"><span class="pre">$LOOP_INDEX</span></code>.</p>
+<p>Example: <code class="docutils literal notranslate"><span class="pre">until($PORT</span> <span class="pre">==</span> <span class="pre">7)</span></code></p>
+</section>
+<section id="configuration">
+<h2>Configuration<a class="headerlink" href="#configuration" title="Permalink to this heading"></a></h2>
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-cmd">
 <span class="sig-name descname"><span class="pre">cmd</span></span><a class="headerlink" href="#confval-cmd" title="Permalink to this definition"></a></dt>
-<dd><p>The loop condition. This defines how the loop should iterate, either over a list or a range of values, or idefinitely until the
-condition defined in until() is rached.</p>
+<dd><p>The loop condition. Defines how the loop iterates, either over a list or a range of values, or idefinitely until the
+condition defined in <code class="docutils literal notranslate"><span class="pre">until()</span></code> is met.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str</p>
 </dd>
 <dt class="field-even">Required<span class="colon">:</span></dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code></p>
+<dd class="field-even"><p>True</p>
 </dd>
 </dl>
 <p>Examples:</p>
 <ul class="simple">
-<li><p><strong>items(LISTA)</strong>: Iterate over the elements of a list named <cite>LISTA</cite>.</p></li>
+<li><p><strong>items(LISTA)</strong>: Iterate over the elements of a list named <code class="docutils literal notranslate"><span class="pre">LISTA</span></code>.</p></li>
 <li><p><strong>range(0, 10)</strong>: Iterate over a range from 0 to 9.</p></li>
-<li><p><a href="#id1"><span class="problematic" id="id2">**</span></a>until($PORT == 7)</p></li>
+<li><p><strong>until($PORT == 7)</strong>: Iterate until the condition is met</p></li>
 </ul>
 </dd></dl>
 
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-break_if">
 <span class="sig-name descname"><span class="pre">break_if</span></span><a class="headerlink" href="#confval-break_if" title="Permalink to this definition"></a></dt>
-<dd><p>If defined, this condition is checked before every command in the loop.
-If the condition evaluates to <cite>True</cite>, break out of the loop.
+<dd><p>A condition checked before every command in the loop.
+If it evaluates to <cite>True</cite>, the loop exits immediately
 Supports the same operators as <a class="reference internal" href="index.html#confval-only_if"><code class="xref std std-confval docutils literal notranslate"><span class="pre">only_if</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str</p>
 </dd>
 <dt class="field-even">Required<span class="colon">:</span></dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">False</span></code></p>
+<dd class="field-even"><p>False</p>
 </dd>
 </dl>
 </dd></dl>
@@ -254,46 +271,20 @@ Supports the same operators as <a class="reference internal" href="index.html#co
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-commands">
 <span class="sig-name descname"><span class="pre">commands</span></span><a class="headerlink" href="#confval-commands" title="Permalink to this definition"></a></dt>
-<dd><p>The list of commands to execute during each iteration of the loop. These commands are executed once per iteration, with loop-specific variables (<cite>$LOOP_ITEM</cite> or <cite>$LOOP_INDEX</cite>) available for substitution.</p>
+<dd><p>The list of commands to execute during each iteration of the loop. These commands are executed once per iteration, with loop-specific variables (<code class="docutils literal notranslate"><span class="pre">$LOOP_ITEM</span></code> or <code class="docutils literal notranslate"><span class="pre">$LOOP_INDEX</span></code>) available for substitution within these commands.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>list[Command]</p>
 </dd>
 <dt class="field-even">Required<span class="colon">:</span></dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code></p>
+<dd class="field-even"><p>True</p>
 </dd>
 </dl>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">vars</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">LISTA</span><span class="p">:</span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">port1</span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">port2</span>
-
-<span class="nt">commands</span><span class="p">:</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">loop</span>
-<span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;items(LISTA)&quot;</span>
-<span class="w">    </span><span class="nt">commands</span><span class="p">:</span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">shell</span>
-<span class="w">        </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;nmap</span><span class="nv"> </span><span class="s">-p</span><span class="nv"> </span><span class="s">$LOOP_ITEM</span><span class="nv"> </span><span class="s">10.10.10.10&quot;</span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">debug</span>
-<span class="w">        </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">$LOOP_ITEM</span>
-</pre></div>
-</div>
-<p>In the above example, each element of <cite>LISTA</cite> (port1, port2) is substituted into the loop, and an Nmap scan is run for each port.</p>
-<p>Example of looping over a range:</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">vars</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">INDEX_START</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span>
-<span class="w">  </span><span class="nt">INDEX_END</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5</span>
-
-<span class="nt">commands</span><span class="p">:</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">loop</span>
-<span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;range($INDEX_START,</span><span class="nv"> </span><span class="s">$INDEX_END)&quot;</span>
-<span class="w">    </span><span class="nt">commands</span><span class="p">:</span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">shell</span>
-<span class="w">        </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">echo &quot;Index is $LOOP_INDEX&quot;</span>
-</pre></div>
-</div>
 </dd></dl>
 
+</section>
+<section id="loop-variables">
+<h2>Loop Variables<a class="headerlink" href="#loop-variables" title="Permalink to this heading"></a></h2>
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-LOOP_ITEM">
 <span class="sig-name descname"><span class="pre">LOOP_ITEM</span></span><a class="headerlink" href="#confval-LOOP_ITEM" title="Permalink to this definition"></a></dt>
@@ -316,6 +307,43 @@ Supports the same operators as <a class="reference internal" href="index.html#co
 </dl>
 </dd></dl>
 
+</section>
+<section id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this heading"></a></h2>
+<p>Iterate over a list and run an Nmap scan for each element:</p>
+<blockquote>
+<div><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">vars</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">PORTS</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">port1</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">port2</span>
+
+<span class="nt">commands</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">loop</span>
+<span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;items(PORTS)&quot;</span>
+<span class="w">    </span><span class="nt">commands</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">shell</span>
+<span class="w">        </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;nmap</span><span class="nv"> </span><span class="s">-p</span><span class="nv"> </span><span class="s">$LOOP_ITEM</span><span class="nv"> </span><span class="s">10.10.10.10&quot;</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">debug</span>
+<span class="w">        </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">$LOOP_ITEM</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>Iterate over a range using variables for start and end:</p>
+<blockquote>
+<div><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">vars</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">INDEX_START</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span>
+<span class="w">  </span><span class="nt">INDEX_END</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5</span>
+
+<span class="nt">commands</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">loop</span>
+<span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;range($INDEX_START,</span><span class="nv"> </span><span class="s">$INDEX_END)&quot;</span>
+<span class="w">    </span><span class="nt">commands</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">shell</span>
+<span class="w">        </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">echo &quot;Index is $LOOP_INDEX&quot;</span>
+</pre></div>
+</div>
+</div></blockquote>
+</section>
 </section>
 
 

@@ -91,7 +91,16 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">General:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../readme_link.html">AttackMate <img alt="Logo" src="/images/AttackMate_logo_no_logo.png" align="right" height="90"></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#installation">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#execute">Execute</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#documentation">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#publications">Publications</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#contribution">Contribution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#disclaimer">Disclaimer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#security">Security</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#license">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#financial-support">Financial Support</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Getting Started:</span></p>
 <ul class="current">
@@ -158,10 +167,8 @@
              
   <section id="msf-config">
 <span id="id1"></span><h1>msf_config<a class="headerlink" href="#msf-config" title="Permalink to this heading"></a></h1>
-<p>msf_config holds settings for the Metasploit modules and sessions.
-Most of these settings control the Metsaploit RPC connection.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1">###</span>
-<span class="nt">msf_config</span><span class="p">:</span>
+<p><code class="docutils literal notranslate"><span class="pre">msf_config</span></code> holds connection settings for the Metasploit RPC daemon (<code class="docutils literal notranslate"><span class="pre">msfrpcd</span></code>).</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">msf_config</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">securepassword</span>
 <span class="w">  </span><span class="nt">server</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10.18.3.86</span>
 </pre></div>
@@ -169,7 +176,7 @@ Most of these settings control the Metsaploit RPC connection.</p>
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-server">
 <span class="sig-name descname"><span class="pre">server</span></span><a class="headerlink" href="#confval-server" title="Permalink to this definition"></a></dt>
-<dd><p>This option stores the servername or ip-address of the msfrpcd</p>
+<dd><p>The servername or IP address of the <code class="docutils literal notranslate"><span class="pre">msfrpcd</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str</p>
@@ -181,37 +188,9 @@ Most of these settings control the Metsaploit RPC connection.</p>
 </dd></dl>
 
 <dl class="std confval">
-<dt class="sig sig-object std" id="confval-password">
-<span class="sig-name descname"><span class="pre">password</span></span><a class="headerlink" href="#confval-password" title="Permalink to this definition"></a></dt>
-<dd><p>This option stores the password of the rpc-connection.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>str</p>
-</dd>
-<dt class="field-even">Default<span class="colon">:</span></dt>
-<dd class="field-even"><p>None</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="std confval">
-<dt class="sig sig-object std" id="confval-ssl">
-<span class="sig-name descname"><span class="pre">ssl</span></span><a class="headerlink" href="#confval-ssl" title="Permalink to this definition"></a></dt>
-<dd><p>This option enables encryption for the rpc-connection</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>bool</p>
-</dd>
-<dt class="field-even">Default<span class="colon">:</span></dt>
-<dd class="field-even"><p>True</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="std confval">
 <dt class="sig sig-object std" id="confval-port">
 <span class="sig-name descname"><span class="pre">port</span></span><a class="headerlink" href="#confval-port" title="Permalink to this definition"></a></dt>
-<dd><p>This option sets the port for the rpc-connection.</p>
+<dd><p>Port on which <code class="docutils literal notranslate"><span class="pre">msfrpcd</span></code> is listening.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>int</p>
@@ -225,7 +204,33 @@ Most of these settings control the Metsaploit RPC connection.</p>
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-uri">
 <span class="sig-name descname"><span class="pre">uri</span></span><a class="headerlink" href="#confval-uri" title="Permalink to this definition"></a></dt>
-<dd><p>This option sets uri of the rpc-api.</p>
+<dd><p>URI of the RPC API.</p>
+</dd></dl>
+
+<dl class="std confval">
+<dt class="sig sig-object std" id="confval-ssl">
+<span class="sig-name descname"><span class="pre">ssl</span></span><a class="headerlink" href="#confval-ssl" title="Permalink to this definition"></a></dt>
+<dd><p>Enables encryption for the RPC connection.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+<p>::default: <code class="docutils literal notranslate"><span class="pre">True</span></code></p>
+</dd></dl>
+
+<dl class="std confval">
+<dt class="sig sig-object std" id="confval-password">
+<span class="sig-name descname"><span class="pre">password</span></span><a class="headerlink" href="#confval-password" title="Permalink to this definition"></a></dt>
+<dd><p>The password for the RPC connection.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+<dt class="field-even">Default<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
 </dd></dl>
 
 </section>

@@ -91,7 +91,16 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">General:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../readme_link.html">AttackMate <img alt="Logo" src="/images/AttackMate_logo_no_logo.png" align="right" height="90"></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#installation">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#execute">Execute</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#documentation">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#publications">Publications</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#contribution">Contribution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#disclaimer">Disclaimer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#security">Security</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#license">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#financial-support">Financial Support</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Getting Started:</span></p>
 <ul class="current">
@@ -164,7 +173,7 @@ is not used, attackmate will search at the following locations for the config-fi
 <li><p><strong>$HOME/.config/attackmate.yml</strong></p></li>
 <li><p><strong>/etc/attackmate.yml</strong></p></li>
 </ol>
-<p>The optional configuration-file is in yaml-format and is divided into five sections:</p>
+<p>The optional configuration file is in yaml-format and is divided into five sections:</p>
 <ul class="simple">
 <li><p><strong>cmd_config</strong>: defines settings for all commands</p></li>
 <li><p><strong>msf_config</strong>: connection settings for the msfrpcd</p></li>
@@ -173,9 +182,8 @@ is not used, attackmate will search at the following locations for the config-fi
 <li><p><strong>remote_config</strong>: connection settings for the remote attackmate server</p></li>
 </ul>
 <p>The following configuration file is an example for a basic configuration with
-sliver and metasploit:</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1">###</span>
-<span class="nt">cmd_config</span><span class="p">:</span>
+sliver, metasploit and remote attackmate server:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">cmd_config</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">loop_sleep</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5</span>
 <span class="w">  </span><span class="nt">command_delay</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span>
 
@@ -191,9 +199,16 @@ sliver and metasploit:</p>
 
 <span class="nt">sliver_config</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">config_file</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/home/attacker/.sliver-client/configs/attacker_localhost.cfg</span>
+
+<span class="nt">remote_config</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">remote_server_name</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;https://10.0.0.5:5000&quot;</span>
+<span class="w">    </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">admin</span>
+<span class="w">    </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">securepassword</span>
+<span class="w">    </span><span class="nt">cafile</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/path/to/cert.pem&quot;</span>
 </pre></div>
 </div>
-<p>For detailed information about the config sections see:</p>
+<p>For detailed information about each config section see:</p>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="command_config.html">cmd_config</a></li>

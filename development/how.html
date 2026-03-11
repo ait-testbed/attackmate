@@ -91,7 +91,16 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">General:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="readme_link.html">AttackMate <img alt="Logo" src="/images/AttackMate_logo_no_logo.png" align="right" height="90"></a></li>
+<li class="toctree-l1"><a class="reference internal" href="readme_link.html">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="readme_link.html#installation">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="readme_link.html#execute">Execute</a></li>
+<li class="toctree-l1"><a class="reference internal" href="readme_link.html#documentation">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="readme_link.html#publications">Publications</a></li>
+<li class="toctree-l1"><a class="reference internal" href="readme_link.html#contribution">Contribution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="readme_link.html#disclaimer">Disclaimer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="readme_link.html#security">Security</a></li>
+<li class="toctree-l1"><a class="reference internal" href="readme_link.html#license">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="readme_link.html#financial-support">Financial Support</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Getting Started:</span></p>
 <ul class="current">
@@ -150,7 +159,17 @@
              
   <section id="how-it-works">
 <h1>How it works<a class="headerlink" href="#how-it-works" title="Permalink to this heading"></a></h1>
-<p>AttackMate is designed so that there can be different commands in a playbook which can be executed by corresponding executors. For example, there are executors that can orchestrate Metasploit or executors for the Sliver framework. The attacks that are carried out are real attacks and require vulnerable systems to be successful.</p>
+<p>AttackMate executes playbooks consisting of commands, each handled by a corresponding
+executor. Executors integrate with external tools and frameworks, for example the
+Metasploit executor can run modules and manage sessions, while the Sliver executor can
+generate implants and issue C2 commands. A full list of available executors and their
+commands can be found in the <a class="reference internal" href="playbook/commands/index.html#commands"><span class="std std-ref">commands</span></a> reference.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>AttackMate executes real attacks and requires intentionally vulnerable or
+dedicated test systems. Never run AttackMate against systems
+you do not own or do not have explicit permission to test.</p>
+</div>
 <img alt="_images/attackmate-schema.png" src="_images/attackmate-schema.png" />
 </section>
 

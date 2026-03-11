@@ -91,7 +91,16 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">General:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html">AttackMate <img alt="Logo" src="/images/AttackMate_logo_no_logo.png" align="right" height="90"></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#installation">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#execute">Execute</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#documentation">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#publications">Publications</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#contribution">Contribution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#disclaimer">Disclaimer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#security">Security</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#license">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#financial-support">Financial Support</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Getting Started:</span></p>
 <ul>
@@ -176,12 +185,13 @@
              
   <section id="bettercap">
 <span id="id1"></span><h1>bettercap<a class="headerlink" href="#bettercap" title="Permalink to this heading"></a></h1>
-<p>This command communicates with the bettercap rest-api. It supports all
-endpoints of the official api. Please see <a class="reference external" href="https://www.bettercap.org/modules/core/apirest/">Bettercap Rest-Api Docs</a>
+<p>This command communicates with the Bettercap REST API. It supports all
+endpoints of the official API. Please see <a class="reference external" href="https://www.bettercap.org/modules/core/apirest/">Bettercap Rest-Api Docs</a>
 for additional information. All commands return a json-formatted string.</p>
-<p>All commands support the setting: <cite>connection</cite>. This settings allows to query a api-command on a specific host. The name
-of the connection must be set in attackmate.yml. If connection is not set, the command will be executed on the first
-connection in attackmate.yml:</p>
+<p>All <code class="docutils literal notranslate"><span class="pre">bettercap</span></code> commands support the <code class="docutils literal notranslate"><span class="pre">connection</span></code> field, which specifies which configured
+host to target. Connection profiles are defined in <code class="docutils literal notranslate"><span class="pre">attackmate.yml</span></code> under
+<a class="reference internal" href="../../configuration/bettercap_config.html#bettercap-config"><span class="std std-ref">bettercap_config</span></a>. If <code class="docutils literal notranslate"><span class="pre">connection</span></code> is omitted, the first profile in the configuration
+is used as the default.</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># .attackmate.yml:</span>
 <span class="nt">bettercap_config</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">default</span><span class="p">:</span>
@@ -201,52 +211,44 @@ connection in attackmate.yml:</p>
 <span class="w">    </span><span class="nt">data</span><span class="p">:</span>
 <span class="w">      </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;net.sniff</span><span class="nv"> </span><span class="s">on&quot;</span>
 <span class="w">    </span><span class="nt">connection</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">remote</span>
-<span class="w">  </span><span class="c1"># this is executed on localhost:</span>
+<span class="w">  </span><span class="c1"># this is executed on localhost (default):</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bettercap</span>
 <span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">get_events</span>
 </pre></div>
 </div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>To configure the connection to the bettercap rest-api see <a class="reference internal" href="../../configuration/bettercap_config.html#bettercap-config"><span class="std std-ref">bettercap_config</span></a></p>
+<p>To configure the connection to the bettercap REST API see <a class="reference internal" href="../../configuration/bettercap_config.html#bettercap-config"><span class="std std-ref">bettercap_config</span></a></p>
 </div>
 <section id="post-api-session">
 <h2>post_api_session<a class="headerlink" href="#post-api-session" title="Permalink to this heading"></a></h2>
-<p>Post a command to the interactive session.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1">###</span>
-<span class="nt">commands</span><span class="p">:</span>
+<p>Post a command to the interactive Bettercap session.</p>
+<dl class="std confval">
+<dt class="sig sig-object std" id="confval-data">
+<span class="sig-name descname"><span class="pre">data</span></span><a class="headerlink" href="#confval-data" title="Permalink to this definition"></a></dt>
+<dd><p>Key-value pairs of POST data to send to the session endpoint.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Dict[str, str]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">commands</span><span class="p">:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bettercap</span>
 <span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">post_api_session</span>
 <span class="w">    </span><span class="nt">data</span><span class="p">:</span>
 <span class="w">      </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;net.sniff</span><span class="nv"> </span><span class="s">on&quot;</span>
 </pre></div>
 </div>
-<dl class="std confval">
-<dt class="sig sig-object std" id="confval-data">
-<span class="sig-name descname"><span class="pre">data</span></span><a class="headerlink" href="#confval-data" title="Permalink to this definition"></a></dt>
-<dd><p>Dict(key/values) of post-data:</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Dict[str,str]</p>
-</dd>
-</dl>
-</dd></dl>
-
 </section>
 <section id="get-file">
 <h2>get_file<a class="headerlink" href="#get-file" title="Permalink to this heading"></a></h2>
-<p>Get a file from the api-server.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1">###</span>
-<span class="nt">commands</span><span class="p">:</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bettercap</span>
-<span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">get_file</span>
-<span class="w">    </span><span class="nt">filename</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/etc/passwd&quot;</span>
-</pre></div>
-</div>
+<p>Get a file from the Bettercap API server.</p>
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-filename">
 <span class="sig-name descname"><span class="pre">filename</span></span><a class="headerlink" href="#confval-filename" title="Permalink to this definition"></a></dt>
-<dd><p>Full path of the filename on the api-server.</p>
+<dd><p>Full path of the file to retrieve from the API server.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str</p>
@@ -254,12 +256,17 @@ connection in attackmate.yml:</p>
 </dl>
 </dd></dl>
 
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">commands</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bettercap</span>
+<span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">get_file</span>
+<span class="w">    </span><span class="nt">filename</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/etc/passwd&quot;</span>
+</pre></div>
+</div>
 </section>
 <section id="delete-api-events">
 <h2>delete_api_events<a class="headerlink" href="#delete-api-events" title="Permalink to this heading"></a></h2>
 <p>Clear the events buffer.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1">###</span>
-<span class="nt">commands</span><span class="p">:</span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">commands</span><span class="p">:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bettercap</span>
 <span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">delete_api_events</span>
 </pre></div>
@@ -267,9 +274,8 @@ connection in attackmate.yml:</p>
 </section>
 <section id="get-events">
 <h2>get_events<a class="headerlink" href="#get-events" title="Permalink to this heading"></a></h2>
-<p>Get all events</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1">###</span>
-<span class="nt">commands</span><span class="p">:</span>
+<p>Get all events from the current session.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">commands</span><span class="p">:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bettercap</span>
 <span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">get_events</span>
 </pre></div>
@@ -277,9 +283,8 @@ connection in attackmate.yml:</p>
 </section>
 <section id="get-session-modules">
 <h2>get_session_modules<a class="headerlink" href="#get-session-modules" title="Permalink to this heading"></a></h2>
-<p>Get session modules</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1">###</span>
-<span class="nt">commands</span><span class="p">:</span>
+<p>Get all modules active in the current session.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">commands</span><span class="p">:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bettercap</span>
 <span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">get_session_modules</span>
 </pre></div>
@@ -287,9 +292,8 @@ connection in attackmate.yml:</p>
 </section>
 <section id="get-session-env">
 <h2>get_session_env<a class="headerlink" href="#get-session-env" title="Permalink to this heading"></a></h2>
-<p>Get session environment</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1">###</span>
-<span class="nt">commands</span><span class="p">:</span>
+<p>Get the environment variables of the current session.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">commands</span><span class="p">:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bettercap</span>
 <span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">get_session_env</span>
 </pre></div>
@@ -297,9 +301,8 @@ connection in attackmate.yml:</p>
 </section>
 <section id="get-session-gateway">
 <h2>get_session_gateway<a class="headerlink" href="#get-session-gateway" title="Permalink to this heading"></a></h2>
-<p>Get session gateway</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1">###</span>
-<span class="nt">commands</span><span class="p">:</span>
+<p>Get gateway information for the current session.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">commands</span><span class="p">:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bettercap</span>
 <span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">get_session_gateway</span>
 </pre></div>
@@ -307,9 +310,8 @@ connection in attackmate.yml:</p>
 </section>
 <section id="get-session-interface">
 <h2>get_session_interface<a class="headerlink" href="#get-session-interface" title="Permalink to this heading"></a></h2>
-<p>Get session interface</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1">###</span>
-<span class="nt">commands</span><span class="p">:</span>
+<p>Get network interface information for the current session.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">commands</span><span class="p">:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bettercap</span>
 <span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">get_session_interface</span>
 </pre></div>
@@ -317,9 +319,8 @@ connection in attackmate.yml:</p>
 </section>
 <section id="get-session-options">
 <h2>get_session_options<a class="headerlink" href="#get-session-options" title="Permalink to this heading"></a></h2>
-<p>Get session options</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1">###</span>
-<span class="nt">commands</span><span class="p">:</span>
+<p>Get the configured options for the current session.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">commands</span><span class="p">:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bettercap</span>
 <span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">get_session_options</span>
 </pre></div>
@@ -327,9 +328,8 @@ connection in attackmate.yml:</p>
 </section>
 <section id="get-session-packets">
 <h2>get_session_packets<a class="headerlink" href="#get-session-packets" title="Permalink to this heading"></a></h2>
-<p>Get session packets</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1">###</span>
-<span class="nt">commands</span><span class="p">:</span>
+<p>Get packet statistics for the current session.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">commands</span><span class="p">:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bettercap</span>
 <span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">get_session_packets</span>
 </pre></div>
@@ -337,9 +337,8 @@ connection in attackmate.yml:</p>
 </section>
 <section id="get-session-started-at">
 <h2>get_session_started_at<a class="headerlink" href="#get-session-started-at" title="Permalink to this heading"></a></h2>
-<p>Get session started at</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1">###</span>
-<span class="nt">commands</span><span class="p">:</span>
+<p>Get the timestamp of when the current session was started.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">commands</span><span class="p">:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bettercap</span>
 <span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">get_session_started_at</span>
 </pre></div>
@@ -347,26 +346,26 @@ connection in attackmate.yml:</p>
 </section>
 <section id="get-session-hid">
 <h2>get_session_hid<a class="headerlink" href="#get-session-hid" title="Permalink to this heading"></a></h2>
-<p>Get a JSON of the HID devices in the current session</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1">###</span>
-<span class="nt">commands</span><span class="p">:</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bettercap</span>
-<span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">get_session_hid</span>
-</pre></div>
-</div>
+<p>Get a JSON list of HID devices discovered in the current session.</p>
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-mac">
 <span class="sig-name descname"><span class="pre">mac</span></span><a class="headerlink" href="#confval-mac" title="Permalink to this definition"></a></dt>
-<dd><p>Optional parameter to return the info of a specific endpoint</p>
+<dd><p>Optional. Filter results to a specific device by MAC address.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str</p>
 </dd>
+<dt class="field-even">Required<span class="colon">:</span></dt>
+<dd class="field-even"><p>False</p>
+</dd>
 </dl>
 </dd></dl>
 
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1">###</span>
-<span class="nt">commands</span><span class="p">:</span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">commands</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bettercap</span>
+<span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">get_session_hid</span>
+
+<span class="w">  </span><span class="c1"># Filter by MAC address:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bettercap</span>
 <span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">get_session_hid</span>
 <span class="w">    </span><span class="nt">mac</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;32:26:9f:a4:08&quot;</span>
@@ -375,9 +374,8 @@ connection in attackmate.yml:</p>
 </section>
 <section id="get-session-ble">
 <h2>get_session_ble<a class="headerlink" href="#get-session-ble" title="Permalink to this heading"></a></h2>
-<p>Get a JSON of the BLE devices in the current session.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1">###</span>
-<span class="nt">commands</span><span class="p">:</span>
+<p>Get a JSON list of BLE devices discovered in the current session.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">commands</span><span class="p">:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bettercap</span>
 <span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">get_session_ble</span>
 </pre></div>
@@ -385,16 +383,18 @@ connection in attackmate.yml:</p>
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-0">
 <span class="sig-name descname"><span class="pre">mac</span></span><a class="headerlink" href="#confval-0" title="Permalink to this definition"></a></dt>
-<dd><p>Optional parameter to return the info of a specific endpoint</p>
+<dd><p>Optional. Return the info of a specific device by MAC address.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str</p>
 </dd>
+<dt class="field-even">Required<span class="colon">:</span></dt>
+<dd class="field-even"><p>False</p>
+</dd>
 </dl>
 </dd></dl>
 
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1">###</span>
-<span class="nt">commands</span><span class="p">:</span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">commands</span><span class="p">:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bettercap</span>
 <span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">get_session_ble</span>
 <span class="w">    </span><span class="nt">mac</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;32:26:9f:a4:08&quot;</span>
@@ -403,9 +403,8 @@ connection in attackmate.yml:</p>
 </section>
 <section id="get-session-lan">
 <h2>get_session_lan<a class="headerlink" href="#get-session-lan" title="Permalink to this heading"></a></h2>
-<p>Get a JSON of the lan devices in the current session</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1">###</span>
-<span class="nt">commands</span><span class="p">:</span>
+<p>Get a JSON of the lan devices in the current session.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">commands</span><span class="p">:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bettercap</span>
 <span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">get_session_lan</span>
 </pre></div>
@@ -413,16 +412,18 @@ connection in attackmate.yml:</p>
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-1">
 <span class="sig-name descname"><span class="pre">mac</span></span><a class="headerlink" href="#confval-1" title="Permalink to this definition"></a></dt>
-<dd><p>Optional parameter to return the info of a specific endpoint</p>
+<dd><p>Optional. Return the info of a specific device by MAC address.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str</p>
 </dd>
+<dt class="field-even">Required<span class="colon">:</span></dt>
+<dd class="field-even"><p>False</p>
+</dd>
 </dl>
 </dd></dl>
 
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1">###</span>
-<span class="nt">commands</span><span class="p">:</span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">commands</span><span class="p">:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bettercap</span>
 <span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">get_session_lan</span>
 <span class="w">    </span><span class="nt">mac</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;32:26:9f:a4:08&quot;</span>
@@ -431,9 +432,8 @@ connection in attackmate.yml:</p>
 </section>
 <section id="get-session-wifi">
 <h2>get_session_wifi<a class="headerlink" href="#get-session-wifi" title="Permalink to this heading"></a></h2>
-<p>Get a JSON of the wifi devices (clients and access points) in the current session</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1">###</span>
-<span class="nt">commands</span><span class="p">:</span>
+<p>Get a JSON of the wifi devices (clients and access points) in the current session.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">commands</span><span class="p">:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bettercap</span>
 <span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">get_session_wifi</span>
 </pre></div>
@@ -441,16 +441,18 @@ connection in attackmate.yml:</p>
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-2">
 <span class="sig-name descname"><span class="pre">mac</span></span><a class="headerlink" href="#confval-2" title="Permalink to this definition"></a></dt>
-<dd><p>Optional parameter to return the info of a specific endpoint</p>
+<dd><p>Optional. Return the info of a specific device by MAC address.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str</p>
 </dd>
+<dt class="field-even">Required<span class="colon">:</span></dt>
+<dd class="field-even"><p>False</p>
+</dd>
 </dl>
 </dd></dl>
 
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1">###</span>
-<span class="nt">commands</span><span class="p">:</span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">commands</span><span class="p">:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bettercap</span>
 <span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">get_session_wifi</span>
 <span class="w">    </span><span class="nt">mac</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;32:26:9f:a4:08&quot;</span>

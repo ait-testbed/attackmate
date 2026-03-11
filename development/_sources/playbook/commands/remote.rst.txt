@@ -2,9 +2,15 @@
 remote
 ======
 
-This command executes playbooks or commands on a remote AttackMate instance.
-The connection to the remote instance is defined in the ``remote_config`` section of the configuration file.
-If no connection is specified, the first entry in the ``remote_config`` section will be used as default.
+Execute playbooks or commands on a remote AttackMate instance.
+Remote connections are defined in the ``remote_config`` section of the configuration file.
+If no ``connection`` is specified, the first entry in the ``remote_config`` section is used as default.
+
+.. warning::
+
+   Options such as ``background`` and ``only_if`` defined on the ``remote`` command apply
+   to the **local** execution context, not to the command or playbook running on the remote
+   instance.
 
 Configuration
 =============
@@ -58,44 +64,42 @@ Options
 
 .. confval:: cmd
 
-   The remote operation to perform. Must be one of the following:
+   The operation to perform on the remote instance. One of:
 
    - ``execute_command`` — Execute a single AttackMate command on the remote instance.
-     Requires ``remote_command`` to be set.
+     Requires ``remote_command``
    - ``execute_playbook`` — Execute a full playbook YAML file on the remote instance.
-     Requires ``playbook_path`` to be set.
+     Requires ``playbook_path``
 
    :type: str (``execute_command`` | ``execute_playbook``)
+   :required: True
 
 .. confval:: connection
 
-   The name of the remote connection to use, as defined in the ``remote_config`` section
-   of the configuration file. If omitted, the first entry in ``remote_config`` is used
-   as the default connection.
+   Name of the remote connection to use, as defined in the ``remote_config`` section
+   of the AttackMate configuration file. If omitted, the first entry in ``remote_config`` is used.
 
    :type: str
    :default: first entry in ``remote_config``
+   :required: False
 
 .. confval:: playbook_path
 
-   Path to a local YAML playbook file that will be read and sent to the remote AttackMate
-   instance for execution. Required when ``cmd`` is ``execute_playbook``.
+   Path to a local YAML playbook file to sent to and execute on the remote AttackMate.
+   Required when ``cmd`` is ``execute_playbook``.
 
    :type: str
+   :required: when ``cmd: execute_playbook``
 
 .. confval:: remote_command
 
-   An inline AttackMate command definition that will be executed on the remote instance.
-   This supports any command type that the remote AttackMate instance is configured to handle
-   (e.g., ``shell``, ``sliver``, etc., EXCEPT another remote_command). Required when ``cmd`` is ``execute_command``.
+   An inline AttackMate command to execute on the remote instance.
+   Supports any command type that the remote AttackMate instance is configured to handle
+   (e.g., ``type: shell``, ``type: sliver``, etc., EXCEPT ``type: remote``  itself). Required when ``cmd`` is ``execute_command``.
 
    :type: RemotelyExecutableCommand
+   :required: when ``cmd: execute_command``
 
-.. warning::
-
-   Parameters such as ``background`` and ``only_if`` defined at the top-level ``remote`` command
-   apply to the **local** execution of the remote command, not to the command executed on the
-   remote instance.
 
 Examples
 ========
@@ -116,8 +120,8 @@ Execute a shell command on a remote instance
          type: shell
          cmd: id
 
-Execute a playbook on a remote instance using the default connection
---------------------------------------------------------------------
+Execute a playbook on the default remote connection
+---------------------------------------------------
 
 .. code-block:: yaml
 

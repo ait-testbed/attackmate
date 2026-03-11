@@ -2,12 +2,11 @@
 debug
 =====
 
-This command prints out strings and variables and is for debugging
-purposes/printing to the console only. This command does not modify the Builtin Variable ``RESULT_STDOUT``.
+The ``debug`` command prints messages and variables to the console. It is intended for
+troubleshooting playbooks and does not modify ``RESULT_STDOUT`` (:ref:`builtin variables <builtin-variables>`).
 
    .. code-block:: yaml
 
-      ###
       vars:
         $SERVER_ADDRESS: 192.42.0.254
         $NMAP: /usr/bin/nmap
@@ -19,32 +18,36 @@ purposes/printing to the console only. This command does not modify the Builtin 
 
 .. confval:: cmd
 
-   A message to print on the screen.
+   A message to print to the console. Supports variable substitution.
 
    :type: str
    :default: ``empty_string``
+   :required: False
 
 
 .. confval:: varstore
 
-   Print out all variables that are stored in the VariableStore.
+   Print out all variables currently stored in the VariableStore.
 
    :type: bool
    :default: ``False``
+   :required: False
 
 .. confval:: exit
 
    This setting causes the programm to exit when the command was
    executed. It will exit with an error in order to indicate
-   that this is an exceptional break.
+   that this is an intentional early termination.
 
    :type: bool
    :default: ``False``
+   :required: False
 
 .. confval:: wait_for_key
 
-   This setting causes the programm to pause until the user
-   hits the enter key.
+   Pause execution until the user presses Enter. Useful for stepping through a
+   playbook manually.
 
    :type: bool
    :default: ``False``
+   :required: False

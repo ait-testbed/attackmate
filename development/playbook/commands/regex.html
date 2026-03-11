@@ -91,7 +91,16 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">General:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html">AttackMate <img alt="Logo" src="/images/AttackMate_logo_no_logo.png" align="right" height="90"></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#installation">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#execute">Execute</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#documentation">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#publications">Publications</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#contribution">Contribution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#disclaimer">Disclaimer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#security">Security</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#license">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#financial-support">Financial Support</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Getting Started:</span></p>
 <ul>
@@ -176,10 +185,13 @@
              
   <section id="regex">
 <h1>regex<a class="headerlink" href="#regex" title="Permalink to this heading"></a></h1>
-<p>This command parses variables using regular expressions. For more information
-about regular expressions see <a class="reference external" href="https://docs.python.org/3/library/re.html">Python Regex</a>
-This command does not modify the Builtin Variable <code class="docutils literal notranslate"><span class="pre">RESULT_STDOUT</span></code>.</p>
-<p>The following example parses the portnumber from the output of the last command and stores it in variable “UNREALPORT”:</p>
+<p>Parse and transform variables using regular expressions. For more information
+about regular expressions and regex syntax see <a class="reference external" href="https://docs.python.org/3/library/re.html">Python Regex</a>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This command does not modify <code class="docutils literal notranslate"><span class="pre">RESULT_STDOUT</span></code>.</p>
+</div>
+<p>The following example extracts a port number from the output of a shell command and stores it in the variable <code class="docutils literal notranslate"><span class="pre">UNREALPORT</span></code>:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">commands</span><span class="p">:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">shell</span>
 <span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">echo &quot;6667/tcp open  irc UnrealIRCd&quot;</span>
@@ -193,7 +205,7 @@ This command does not modify the Builtin Variable <code class="docutils literal 
 <span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Port:</span><span class="nv"> </span><span class="s">$UNREALPORT&quot;</span>
 </pre></div>
 </div>
-<p>By using the mode “split”, strings that are seperated by whitespaces can be tokenized:</p>
+<p>Using <code class="docutils literal notranslate"><span class="pre">mode:</span> <span class="pre">split</span></code>, a string can be tokenized by a delimiter, in this case, whitespace <code class="docutils literal notranslate"><span class="pre">&quot;\</span> <span class="pre">+&quot;</span></code>:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">commands</span><span class="p">:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">shell</span>
 <span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">echo &quot;6667/tcp open  irc UnrealIRCd&quot;</span>
@@ -210,9 +222,31 @@ This command does not modify the Builtin Variable <code class="docutils literal 
 </pre></div>
 </div>
 <dl class="std confval">
+<dt class="sig sig-object std" id="confval-cmd">
+<span class="sig-name descname"><span class="pre">cmd</span></span><a class="headerlink" href="#confval-cmd" title="Permalink to this definition"></a></dt>
+<dd><p>The regular expression pattern to apply.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+<dt class="field-even">Required<span class="colon">:</span></dt>
+<dd class="field-even"><p>True</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="std confval">
 <dt class="sig sig-object std" id="confval-mode">
 <span class="sig-name descname"><span class="pre">mode</span></span><a class="headerlink" href="#confval-mode" title="Permalink to this definition"></a></dt>
-<dd><p>Specifies the python regex-function. One of: <code class="docutils literal notranslate"><span class="pre">search</span></code>, <code class="docutils literal notranslate"><span class="pre">split</span></code>, <code class="docutils literal notranslate"><span class="pre">sub</span></code> or <code class="docutils literal notranslate"><span class="pre">findall</span></code>.</p>
+<dd><p>The Python regex function to use. One of:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">findall</span></code> - find all non-overlapping matches</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">search</span></code> - find the first match anywhere in the string</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">split</span></code> - split the string by occurrences of the pattern</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sub</span></code> - replace occurrences of the pattern with <a class="reference internal" href="#confval-replace"><code class="xref std std-confval docutils literal notranslate"><span class="pre">replace</span></code></a></p></li>
+</ul>
+</div></blockquote>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str</p>
@@ -220,21 +254,25 @@ This command does not modify the Builtin Variable <code class="docutils literal 
 <dt class="field-even">Default<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">findall</span></code></p>
 </dd>
+<dt class="field-odd">Required<span class="colon">:</span></dt>
+<dd class="field-odd"><p>False</p>
+</dd>
 </dl>
 </dd></dl>
 
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-replace">
 <span class="sig-name descname"><span class="pre">replace</span></span><a class="headerlink" href="#confval-replace" title="Permalink to this definition"></a></dt>
-<dd><p>This variable must be set for sub mode. It holds the replacement-string for the substitution.</p>
-<dl class="field-list simple">
+<dd><p>This variable must be set for <code class="docutils literal notranslate"><span class="pre">mode:</span> <span class="pre">sub</span></code>. It holds the replacement-string for the substitution.</p>
+<dl class="field-list">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str</p>
 </dd>
 <dt class="field-even">Default<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
 </dd>
-</dl>
+<dt class="field-odd">Required<span class="colon">:</span></dt>
+<dd class="field-odd"><p>when <code class="docutils literal notranslate"><span class="pre">mode:</span> <span class="pre">sub</span></code></p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">commands</span><span class="p">:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">setvar</span>
 <span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;hello</span><span class="nv"> </span><span class="s">world&quot;</span>
@@ -252,12 +290,15 @@ This command does not modify the Builtin Variable <code class="docutils literal 
 <span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">$BAR</span>
 </pre></div>
 </div>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-input">
 <span class="sig-name descname"><span class="pre">input</span></span><a class="headerlink" href="#confval-input" title="Permalink to this definition"></a></dt>
-<dd><p>Parse the value of this variable.</p>
+<dd><p>Name of the variable whose value will be used as the regex input
+(without the leading <code class="docutils literal notranslate"><span class="pre">$</span></code>).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str</p>
@@ -265,25 +306,16 @@ This command does not modify the Builtin Variable <code class="docutils literal 
 <dt class="field-even">Default<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">RESULT_STDOUT</span></code></p>
 </dd>
+<dt class="field-odd">Required<span class="colon">:</span></dt>
+<dd class="field-odd"><p>False</p>
+</dd>
 </dl>
 </dd></dl>
 
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-output">
 <span class="sig-name descname"><span class="pre">output</span></span><a class="headerlink" href="#confval-output" title="Permalink to this definition"></a></dt>
-<dd><p>Defines where to store the results of the regular expression. This
-must be a list of key-value pairs(“variable-name”: “$MATCH”). The matches
-of the regular expressions are stored in temporary variables $MATCH. If the
-match is stored in a list or in a list of tuples the variablename will be
-numbered by the index. For example: “$MATCH_0_0” for the first element in the
-first occurance. The first match (even if there is only one) is indexed MATCH_0.
-If the regex-command does not match, no output variable will be set!
-Note that if sub() or split() do not have a match the input string is returned.
-Additionally, <code class="docutils literal notranslate"><span class="pre">REGEX_MATCHES_LIST</span></code> is set every time a regex command yields matches and it contains a list of all matches.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>A dump containing all matches will be printed if attackmate runs in debug-mode.</p>
-</div>
+<dd><p>Mapping of variable names to match references (e.g. <code class="docutils literal notranslate"><span class="pre">MYVAR:</span> <span class="pre">$MATCH_0</span></code>).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>dict[str,str]</p>
@@ -292,6 +324,16 @@ Additionally, <code class="docutils literal notranslate"><span class="pre">REGEX
 <dd class="field-even"><p>True</p>
 </dd>
 </dl>
+<p>Matches are indexed as <code class="docutils literal notranslate"><span class="pre">$MATCH_0</span></code>, <code class="docutils literal notranslate"><span class="pre">$MATCH_1</span></code>, etc. For nested results
+(lists of tuples), matches are indexed as <code class="docutils literal notranslate"><span class="pre">$MATCH_0_0</span></code>, <code class="docutils literal notranslate"><span class="pre">$MATCH_0_1</span></code>, etc.</p>
+<p>If the pattern does not match, no output variables are set. If <code class="docutils literal notranslate"><span class="pre">sub</span></code> or
+<code class="docutils literal notranslate"><span class="pre">split</span></code> find no match, the original input string is returned.</p>
+<p>The <a class="reference internal" href="../vars.html#builtin-variables"><span class="std std-ref">builtin variables</span></a> <code class="docutils literal notranslate"><span class="pre">REGEX_MATCHES_LIST</span></code> is also populated with a list of
+all matches whenever the command produces results.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Running AttackMate in debug mode (–debug) prints a full dump of all matches.</p>
+</div>
 </dd></dl>
 
 </section>

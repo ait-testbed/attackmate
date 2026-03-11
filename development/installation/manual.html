@@ -91,7 +91,16 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">General:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../readme_link.html">AttackMate <img alt="Logo" src="/images/AttackMate_logo_no_logo.png" align="right" height="90"></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#installation">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#execute">Execute</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#documentation">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#publications">Publications</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#contribution">Contribution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#disclaimer">Disclaimer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#security">Security</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#license">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#financial-support">Financial Support</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Getting Started:</span></p>
 <ul class="current">
@@ -102,7 +111,6 @@
 <li class="toctree-l2"><a class="reference internal" href="sliverfix.html">Install sliver-fix</a></li>
 <li class="toctree-l2"><a class="reference internal" href="ansible.html">Installation with Ansible</a></li>
 <li class="toctree-l2"><a class="reference internal" href="docker.html">Installation with Docker</a></li>
-<li class="toctree-l2"><a class="reference internal" href="uv.html">Installation with uv</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../preparation/index.html">Preparation</a></li>
@@ -157,7 +165,7 @@
            <div itemprop="articleBody">
              
   <section id="installation-from-sources">
-<span id="manual"></span><h1>Installation from sources<a class="headerlink" href="#installation-from-sources" title="Permalink to this heading"></a></h1>
+<h1>Installation from sources<a class="headerlink" href="#installation-from-sources" title="Permalink to this heading"></a></h1>
 <p>AttackMate is written in python language. It can execute various pentesting and hacking tools.
 Therefore, it is recommended to install AttackMate under Kali Linux. However, it should also
 work on other Linux distributions. In order to prepare your system for AttackMate install the
@@ -167,26 +175,38 @@ following tools:</p>
 </div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>python3-venv must only be installed if AttackMate should be installed in a virtual environment</p>
+<p><code class="docutils literal notranslate"><span class="pre">python3-venv</span></code> only needs to be installed if AttackMate should be installed in a virtual environment.</p>
 </div>
 <p>Download the sources:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ git clone https://github.com/ait-aecid/attackmate.git
 $ cd attackmate
 </pre></div>
 </div>
-<p>Optional: Create virtual environment and activate it:</p>
+<p><strong>Option A: Install with pip</strong></p>
+<p>Optional: Create a virtual environment and activate it:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ python3 -mvenv venv
 $ source venv/bin/activate
 </pre></div>
 </div>
-<p>Finally install attackmate and it’s dependencies:</p>
+<p>Install AttackMate and its dependencies:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ pip3 install .
+</pre></div>
+</div>
+<p><strong>Option B: Install with uv</strong></p>
+<p><code class="docutils literal notranslate"><span class="pre">uv</span></code> manages the virtual environment and dependencies automatically — no manual venv setup needed:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ pip3 install uv
+$ uv sync
+</pre></div>
+</div>
+<p>Run AttackMate via:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ uv run attackmate playbook.yml
 </pre></div>
 </div>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>Please note that you need to <a class="reference internal" href="sliverfix.html#sliver-fix"><span class="std std-ref">Install sliver-fix</span></a> if you want
-to use the sliver commands!</p>
+<p>Please note that you if you install from source you also need to install <a class="reference internal" href="sliverfix.html#sliver-fix"><span class="std std-ref">Install sliver-fix</span></a> if you want
+to use the sliver commands!
+The Dockerfile and ansible role <a class="reference internal" href="ansible.html#ansible"><span class="std std-ref">Installation with Ansible</span></a> already include the sliver-fix.</p>
 </div>
 </section>
 

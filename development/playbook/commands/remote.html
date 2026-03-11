@@ -91,7 +91,16 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">General:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html">AttackMate <img alt="Logo" src="/images/AttackMate_logo_no_logo.png" align="right" height="90"></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#installation">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#execute">Execute</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#documentation">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#publications">Publications</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#contribution">Contribution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#disclaimer">Disclaimer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#security">Security</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#license">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#financial-support">Financial Support</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Getting Started:</span></p>
 <ul>
@@ -176,9 +185,15 @@
              
   <section id="remote">
 <h1>remote<a class="headerlink" href="#remote" title="Permalink to this heading"></a></h1>
-<p>This command executes playbooks or commands on a remote AttackMate instance.
-The connection to the remote instance is defined in the <code class="docutils literal notranslate"><span class="pre">remote_config</span></code> section of the configuration file.
-If no connection is specified, the first entry in the <code class="docutils literal notranslate"><span class="pre">remote_config</span></code> section will be used as default.</p>
+<p>Execute playbooks or commands on a remote AttackMate instance.
+Remote connections are defined in the <code class="docutils literal notranslate"><span class="pre">remote_config</span></code> section of the configuration file.
+If no <code class="docutils literal notranslate"><span class="pre">connection</span></code> is specified, the first entry in the <code class="docutils literal notranslate"><span class="pre">remote_config</span></code> section is used as default.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Options such as <code class="docutils literal notranslate"><span class="pre">background</span></code> and <code class="docutils literal notranslate"><span class="pre">only_if</span></code> defined on the <code class="docutils literal notranslate"><span class="pre">remote</span></code> command apply
+to the <strong>local</strong> execution context, not to the command or playbook running on the remote
+instance.</p>
+</div>
 <section id="configuration">
 <h2>Configuration<a class="headerlink" href="#configuration" title="Permalink to this heading"></a></h2>
 <p>Remote connections are defined under the <code class="docutils literal notranslate"><span class="pre">remote_config</span></code> key in the AttackMate configuration file.
@@ -225,16 +240,19 @@ for TLS certificate verification.</p>
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-cmd">
 <span class="sig-name descname"><span class="pre">cmd</span></span><a class="headerlink" href="#confval-cmd" title="Permalink to this definition"></a></dt>
-<dd><p>The remote operation to perform. Must be one of the following:</p>
+<dd><p>The operation to perform on the remote instance. One of:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">execute_command</span></code> — Execute a single AttackMate command on the remote instance.
-Requires <code class="docutils literal notranslate"><span class="pre">remote_command</span></code> to be set.</p></li>
+Requires <code class="docutils literal notranslate"><span class="pre">remote_command</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">execute_playbook</span></code> — Execute a full playbook YAML file on the remote instance.
-Requires <code class="docutils literal notranslate"><span class="pre">playbook_path</span></code> to be set.</p></li>
+Requires <code class="docutils literal notranslate"><span class="pre">playbook_path</span></code></p></li>
 </ul>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str (<code class="docutils literal notranslate"><span class="pre">execute_command</span></code> | <code class="docutils literal notranslate"><span class="pre">execute_playbook</span></code>)</p>
+</dd>
+<dt class="field-even">Required<span class="colon">:</span></dt>
+<dd class="field-even"><p>True</p>
 </dd>
 </dl>
 </dd></dl>
@@ -242,9 +260,8 @@ Requires <code class="docutils literal notranslate"><span class="pre">playbook_p
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-connection">
 <span class="sig-name descname"><span class="pre">connection</span></span><a class="headerlink" href="#confval-connection" title="Permalink to this definition"></a></dt>
-<dd><p>The name of the remote connection to use, as defined in the <code class="docutils literal notranslate"><span class="pre">remote_config</span></code> section
-of the configuration file. If omitted, the first entry in <code class="docutils literal notranslate"><span class="pre">remote_config</span></code> is used
-as the default connection.</p>
+<dd><p>Name of the remote connection to use, as defined in the <code class="docutils literal notranslate"><span class="pre">remote_config</span></code> section
+of the AttackMate configuration file. If omitted, the first entry in <code class="docutils literal notranslate"><span class="pre">remote_config</span></code> is used.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str</p>
@@ -252,17 +269,23 @@ as the default connection.</p>
 <dt class="field-even">Default<span class="colon">:</span></dt>
 <dd class="field-even"><p>first entry in <code class="docutils literal notranslate"><span class="pre">remote_config</span></code></p>
 </dd>
+<dt class="field-odd">Required<span class="colon">:</span></dt>
+<dd class="field-odd"><p>False</p>
+</dd>
 </dl>
 </dd></dl>
 
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-playbook_path">
 <span class="sig-name descname"><span class="pre">playbook_path</span></span><a class="headerlink" href="#confval-playbook_path" title="Permalink to this definition"></a></dt>
-<dd><p>Path to a local YAML playbook file that will be read and sent to the remote AttackMate
-instance for execution. Required when <code class="docutils literal notranslate"><span class="pre">cmd</span></code> is <code class="docutils literal notranslate"><span class="pre">execute_playbook</span></code>.</p>
+<dd><p>Path to a local YAML playbook file to sent to and execute on the remote AttackMate.
+Required when <code class="docutils literal notranslate"><span class="pre">cmd</span></code> is <code class="docutils literal notranslate"><span class="pre">execute_playbook</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str</p>
+</dd>
+<dt class="field-even">Required<span class="colon">:</span></dt>
+<dd class="field-even"><p>when <code class="docutils literal notranslate"><span class="pre">cmd:</span> <span class="pre">execute_playbook</span></code></p>
 </dd>
 </dl>
 </dd></dl>
@@ -270,22 +293,19 @@ instance for execution. Required when <code class="docutils literal notranslate"
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-remote_command">
 <span class="sig-name descname"><span class="pre">remote_command</span></span><a class="headerlink" href="#confval-remote_command" title="Permalink to this definition"></a></dt>
-<dd><p>An inline AttackMate command definition that will be executed on the remote instance.
-This supports any command type that the remote AttackMate instance is configured to handle
-(e.g., <code class="docutils literal notranslate"><span class="pre">shell</span></code>, <code class="docutils literal notranslate"><span class="pre">sliver</span></code>, etc., EXCEPT another remote_command). Required when <code class="docutils literal notranslate"><span class="pre">cmd</span></code> is <code class="docutils literal notranslate"><span class="pre">execute_command</span></code>.</p>
+<dd><p>An inline AttackMate command to execute on the remote instance.
+Supports any command type that the remote AttackMate instance is configured to handle
+(e.g., <code class="docutils literal notranslate"><span class="pre">type:</span> <span class="pre">shell</span></code>, <code class="docutils literal notranslate"><span class="pre">type:</span> <span class="pre">sliver</span></code>, etc., EXCEPT <code class="docutils literal notranslate"><span class="pre">type:</span> <span class="pre">remote</span></code>  itself). Required when <code class="docutils literal notranslate"><span class="pre">cmd</span></code> is <code class="docutils literal notranslate"><span class="pre">execute_command</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>RemotelyExecutableCommand</p>
 </dd>
+<dt class="field-even">Required<span class="colon">:</span></dt>
+<dd class="field-even"><p>when <code class="docutils literal notranslate"><span class="pre">cmd:</span> <span class="pre">execute_command</span></code></p>
+</dd>
 </dl>
 </dd></dl>
 
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Parameters such as <code class="docutils literal notranslate"><span class="pre">background</span></code> and <code class="docutils literal notranslate"><span class="pre">only_if</span></code> defined at the top-level <code class="docutils literal notranslate"><span class="pre">remote</span></code> command
-apply to the <strong>local</strong> execution of the remote command, not to the command executed on the
-remote instance.</p>
-</div>
 </section>
 <section id="examples">
 <h2>Examples<a class="headerlink" href="#examples" title="Permalink to this heading"></a></h2>
@@ -304,8 +324,8 @@ remote instance.</p>
 </pre></div>
 </div>
 </section>
-<section id="execute-a-playbook-on-a-remote-instance-using-the-default-connection">
-<h3>Execute a playbook on a remote instance using the default connection<a class="headerlink" href="#execute-a-playbook-on-a-remote-instance-using-the-default-connection" title="Permalink to this heading"></a></h3>
+<section id="execute-a-playbook-on-the-default-remote-connection">
+<h3>Execute a playbook on the default remote connection<a class="headerlink" href="#execute-a-playbook-on-the-default-remote-connection" title="Permalink to this heading"></a></h3>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">commands</span><span class="p">:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">remote</span>
 <span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">execute_playbook</span>

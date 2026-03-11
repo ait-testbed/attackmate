@@ -91,7 +91,16 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">General:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../readme_link.html">AttackMate <img alt="Logo" src="/images/AttackMate_logo_no_logo.png" align="right" height="90"></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#installation">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#execute">Execute</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#documentation">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#publications">Publications</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#contribution">Contribution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#disclaimer">Disclaimer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#security">Security</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#license">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#financial-support">Financial Support</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Getting Started:</span></p>
 <ul class="current">
@@ -158,12 +167,11 @@
              
   <section id="bettercap-config">
 <span id="id1"></span><h1>bettercap_config<a class="headerlink" href="#bettercap-config" title="Permalink to this heading"></a></h1>
-<p>bettercap_config holds settings for the Bettercap rest-api. The configuration
-always starts with an identifier for the connection. This identifier can be
-selected when executing a command in a playbook. The first connection in this
-file is the default if no explicit connection was selected in the command.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1">###</span>
-<span class="nt">bettercap_config</span><span class="p">:</span>
+<p><code class="docutils literal notranslate"><span class="pre">bettercap_config</span></code> holds connection profiles for the Bettercap REST API. Each profile
+is identified by a user-defined name that can be referenced in playbook commands via the
+<code class="docutils literal notranslate"><span class="pre">connection</span></code> field. If no connection is specified, the first profile in the configuration
+is used as the default.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">bettercap_config</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">default</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;http://localhost:8081&quot;</span>
 <span class="w">    </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">user</span>
@@ -174,8 +182,9 @@ file is the default if no explicit connection was selected in the command.</p>
 <span class="w">    </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">somepass</span>
 </pre></div>
 </div>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># bettercap-playbook.yml:</span>
-<span class="nt">commands</span><span class="p">:</span>
+<p>The following playbook example shows how to target a specific connection, and how the
+default connection is used when none is specified:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">commands</span><span class="p">:</span>
 <span class="w">  </span><span class="c1"># this is executed on the remote host:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bettercap</span>
 <span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">post_api_session</span>
@@ -190,7 +199,7 @@ file is the default if no explicit connection was selected in the command.</p>
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-url">
 <span class="sig-name descname"><span class="pre">url</span></span><a class="headerlink" href="#confval-url" title="Permalink to this definition"></a></dt>
-<dd><p>This option stores the url to the rest-api</p>
+<dd><p>URL of the Bettercap REST API.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str</p>
@@ -201,7 +210,7 @@ file is the default if no explicit connection was selected in the command.</p>
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-username">
 <span class="sig-name descname"><span class="pre">username</span></span><a class="headerlink" href="#confval-username" title="Permalink to this definition"></a></dt>
-<dd><p>The http basic username for the rest-api</p>
+<dd><p>HTTP Basic Auth username for the Bettercap REST API.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str</p>
@@ -212,7 +221,7 @@ file is the default if no explicit connection was selected in the command.</p>
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-password">
 <span class="sig-name descname"><span class="pre">password</span></span><a class="headerlink" href="#confval-password" title="Permalink to this definition"></a></dt>
-<dd><p>The http basic password for the rest-api</p>
+<dd><p>HTTP Basic Auth password for the Bettercap REST API.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str</p>
@@ -223,7 +232,7 @@ file is the default if no explicit connection was selected in the command.</p>
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-cafile">
 <span class="sig-name descname"><span class="pre">cafile</span></span><a class="headerlink" href="#confval-cafile" title="Permalink to this definition"></a></dt>
-<dd><p>The path to the ca-file for the encryption if https is in use.</p>
+<dd><p>Path to the CA certificate file used for TLS verification when connecting via HTTPS.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str</p>

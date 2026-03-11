@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AttackMate &mdash; AttackMate 0.6.0 documentation</title>
+  <title>Requirements &mdash; AttackMate 0.6.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css" />
 
@@ -91,18 +91,16 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">General:</span></p>
 <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">AttackMate <img alt="Logo" src="/images/AttackMate_logo_no_logo.png" align="right" height="90"></a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#requirements">Requirements</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#installation">Installation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#execute">Execute</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#documentation">Documentation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#contribution">Contribution</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#disclaimer">Disclaimer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#security">Security</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#license">License</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#financial-support">Financial Support</a></li>
-</ul>
-</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#installation">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#execute">Execute</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#documentation">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#publications">Publications</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#contribution">Contribution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#disclaimer">Disclaimer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#security">Security</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#license">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#financial-support">Financial Support</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Getting Started:</span></p>
 <ul>
@@ -149,7 +147,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">AttackMate <img alt="Logo" src="/images/AttackMate_logo_no_logo.png" align="right" height="90"></li>
+      <li class="breadcrumb-item active">Requirements</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/readme_link.md.txt" rel="nofollow"> View page source</a>
       </li>
@@ -159,20 +157,18 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="attackmate">
-<h1>AttackMate <img alt="Logo" src="/images/AttackMate_logo_no_logo.png" align="right" height="90"><a class="headerlink" href="#attackmate" title="Permalink to this heading"></a></h1>
-<p><a class="reference internal" href="#%22https://aecidjenkins.ait.ac.at/job/AECID/job/AECID/job/attackmate/job/main/%22"><span class="xref myst"><img alt="Build Status" src="https://aecidjenkins.ait.ac.at/buildStatus/icon?job=AECID%2FAECID%2Fattackmate%2Fmain" /></span></a></p>
+  <p><a class="reference internal" href="#%22https://aecidjenkins.ait.ac.at/job/AECID/job/AECID/job/attackmate/job/main/%22"><span class="xref myst"><img alt="Build Status" src="https://aecidjenkins.ait.ac.at/buildStatus/icon?job=AECID%2FAECID%2Fattackmate%2Fmain" /></span></a></p>
 <p>AttackMate is a tool to automate cyber attack scenarios that supports scripting of attack techniques across all phases of the Cyber Kill Chain. AttackMate’s design principles aim to integrate with penetration testing and attack emulation frameworks such as Metasploit and Sliver Framework and enables simple execution of commands via shell or ssh. For example, AttackMate enables to execute Metasploit modules or generate payloads and run commands in Metasploit sessions. Moreover, it is able to generate Sliver implants, automatize Sliver to send C2 commands, and configure and compile LD_PRELOAD-rootkits. AttackMate also offers a simple interface to automate shell or ssh interaction, run commands in background mode, transfer files via sftp, and start http clients or servers. All attack steps may be scheduled, chained, and repeatedly executed using a simple configuration file that supports variable declarations and conditional workflows.</p>
 <p><img alt="AttackMate Schema" src="_images/attackmate-schema1.png" /></p>
 <section id="requirements">
-<h2>Requirements<a class="headerlink" href="#requirements" title="Permalink to this heading"></a></h2>
+<h1>Requirements<a class="headerlink" href="#requirements" title="Permalink to this heading"></a></h1>
 <ul class="simple">
 <li><p>python &gt;= 3.12</p></li>
 <li><p>libmagic</p></li>
 </ul>
 </section>
 <section id="installation">
-<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this heading"></a></h2>
+<h1>Installation<a class="headerlink" href="#installation" title="Permalink to this heading"></a></h1>
 <p>Manually:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ git clone https://github.com/ait-aecid/attackmate.git
 $ cd attackmate
@@ -183,56 +179,70 @@ $ pip3 install .
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ pip3 install attackmate
 </pre></div>
 </div>
+<p>Using uv:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ git clone https://github.com/ait-aecid/attackmate.git
+$ cd attackmate
+$ uv sync
+</pre></div>
+</div>
 </section>
 <section id="execute">
-<h2>Execute<a class="headerlink" href="#execute" title="Permalink to this heading"></a></h2>
+<h1>Execute<a class="headerlink" href="#execute" title="Permalink to this heading"></a></h1>
+<p>With pip:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ attackmate playbook.yml
+</pre></div>
+</div>
+<p>With uv:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ uv run attackmate playbook.yml
 </pre></div>
 </div>
 <p><img alt="AttackMate Demo" src="_images/Demo1.gif" /></p>
 </section>
 <section id="documentation">
-<h2>Documentation<a class="headerlink" href="#documentation" title="Permalink to this heading"></a></h2>
-<p>Please take a look at our documentation for how to install and use attackmate:</p>
+<h1>Documentation<a class="headerlink" href="#documentation" title="Permalink to this heading"></a></h1>
+<p>Please take a look at our documentation on how to install and use attackmate:</p>
 <ul class="simple">
 <li><p><a class="reference external" href="https://ait-testbed.github.io/attackmate/main/installation/index.html">Installation</a></p></li>
 <li><p><a class="reference external" href="https://ait-testbed.github.io/attackmate/main/index.html">Documentation</a></p></li>
 <li><p><a class="reference external" href="https://ait-testbed.github.io/attackmate/main/playbook/commands/index.html">Command Reference</a></p></li>
 <li><p><a class="reference external" href="https://ait-testbed.github.io/attackmate/main/playbook/examples.html">Example Playbooks</a></p></li>
-<li><p><a class="reference external" href="https://arxiv.org/pdf/2601.14108">Arxiv Paper</a></p></li>
+</ul>
+</section>
+<section id="publications">
+<h1>Publications<a class="headerlink" href="#publications" title="Permalink to this heading"></a></h1>
+<ul class="simple">
+<li><p><a class="reference external" href="https://arxiv.org/pdf/2601.14108">AttackMate: Realistic Emulation and Automation of Cyber Attack Scenarios Across the Kill Chain</a> on Arxiv</p></li>
 </ul>
 </section>
 <section id="contribution">
-<h2>Contribution<a class="headerlink" href="#contribution" title="Permalink to this heading"></a></h2>
-<p>We’re happily taking patches and other contributions. Please see the following links for how to get started:</p>
+<h1>Contribution<a class="headerlink" href="#contribution" title="Permalink to this heading"></a></h1>
+<p>We’re happily taking patches and other contributions. Please see the following links on how to get started:</p>
 <ul class="simple">
 <li><p><a class="reference external" href="https://ait-testbed.github.io/attackmate/main/developing/contribution.html">Contribution Guide</a></p></li>
 </ul>
 </section>
 <section id="disclaimer">
-<h2>Disclaimer<a class="headerlink" href="#disclaimer" title="Permalink to this heading"></a></h2>
+<h1>Disclaimer<a class="headerlink" href="#disclaimer" title="Permalink to this heading"></a></h1>
 <p>AttackMate is purely for educational and academic purposes. The software is provided “as is”
 and the authors are not responsible for any damage or mishaps that may occur during its use.</p>
 <p>Do not attempt to use AttackMate to violate the law. Misuse of the provided software and
 information may result in criminal charges.</p>
 </section>
 <section id="security">
-<h2>Security<a class="headerlink" href="#security" title="Permalink to this heading"></a></h2>
-<p>AttackMate should only be executed against own test or training systems.
-For this reason, every software bug is treated equally, regardless of
-whether it is security relevant or not.</p>
+<h1>Security<a class="headerlink" href="#security" title="Permalink to this heading"></a></h1>
+<p>AttackMate should only be executed against systems you own or have explicit permission to test.
+For this reason, all software bugs are treated with equal priority, regardless of whether they have security implications.</p>
 <p>*Please note that AttackMate could easily be executed in a dangerous way. For example, by
 parsing the RESULT_STDOUT of a malicious server. The server response could lead to
-a command injection. Keep that in mind!</p>
+a command injection. Keep that in mind and always treat external input with caution!</p>
 </section>
 <section id="license">
-<h2>License<a class="headerlink" href="#license" title="Permalink to this heading"></a></h2>
+<h1>License<a class="headerlink" href="#license" title="Permalink to this heading"></a></h1>
 <p><a class="reference internal" href="#LICENSE"><span class="xref myst">GPL-3.0</span></a></p>
 </section>
 <section id="financial-support">
-<h2>Financial Support<a class="headerlink" href="#financial-support" title="Permalink to this heading"></a></h2>
+<h1>Financial Support<a class="headerlink" href="#financial-support" title="Permalink to this heading"></a></h1>
 <p>Funded by the European Union under GA no. 101121403 (NEWSROOM) and GA no. 101103385 (AInception). Views and opinions expressed are however those of the author(s) only and do not necessarily reflect those of the European Union or the European Commission. Neither the European Union nor the granting authority can be held responsible for them. Further supported by the Horizon Europe project MIRANDA (101168144). Co-funded by the Austrian security research programme KIRAS of the Federal Ministry of Finance (BMF) in course of the projects ASOC (FO999905301) and Testcat (FO999911248).</p>
-</section>
 </section>
 
 

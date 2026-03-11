@@ -91,7 +91,16 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">General:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="readme_link.html">AttackMate <img alt="Logo" src="/images/AttackMate_logo_no_logo.png" align="right" height="90"></a></li>
+<li class="toctree-l1"><a class="reference internal" href="readme_link.html">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="readme_link.html#installation">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="readme_link.html#execute">Execute</a></li>
+<li class="toctree-l1"><a class="reference internal" href="readme_link.html#documentation">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="readme_link.html#publications">Publications</a></li>
+<li class="toctree-l1"><a class="reference internal" href="readme_link.html#contribution">Contribution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="readme_link.html#disclaimer">Disclaimer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="readme_link.html#security">Security</a></li>
+<li class="toctree-l1"><a class="reference internal" href="readme_link.html#license">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="readme_link.html#financial-support">Financial Support</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Getting Started:</span></p>
 <ul class="current">
@@ -155,7 +164,7 @@
              
   <section id="basic-usage">
 <h1>Basic Usage<a class="headerlink" href="#basic-usage" title="Permalink to this heading"></a></h1>
-<p>AttackMate ships with a executable stub called “attackmate” that can be called like follows:</p>
+<p>AttackMate is invoked via the <code class="docutils literal notranslate"><span class="pre">attackmate</span></code> command:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">attackmate</span> <span class="o">-</span><span class="n">h</span>
 <span class="n">usage</span><span class="p">:</span> <span class="n">attackmate</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="o">--</span><span class="n">config</span> <span class="n">CONFIG</span> <span class="p">[</span><span class="o">--</span><span class="n">debug</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">version</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">json</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">append_logs</span><span class="p">]</span>
 
@@ -174,7 +183,8 @@
 </div>
 <section id="sample-playbook">
 <h2>Sample Playbook<a class="headerlink" href="#sample-playbook" title="Permalink to this heading"></a></h2>
-<p>In our first example we use the following playbook.yml:</p>
+<p>The following playbook demonstrates a simple reconnaissance chain using nmap, regex parsing,
+and a conditional nikto scan:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">vars</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">NMAP</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/usr/bin/nmap</span>
 <span class="w">  </span><span class="nt">TARGET</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">localhost</span>
@@ -195,18 +205,27 @@
 <span class="w">    </span><span class="nt">only_if</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">$PORT == 8000</span>
 </pre></div>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>For this playbook it is required to have nmap and nikto installed!
-This playbook also needs a webserver at localhost on port 8000.
-You can run <code class="docutils literal notranslate"><span class="pre">python3</span> <span class="pre">-mhttp.server</span></code> in a seperate shell to start
-the webserver.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This playbook requires <code class="docutils literal notranslate"><span class="pre">nmap</span></code> and <code class="docutils literal notranslate"><span class="pre">nikto</span></code> to be installed, and a web server
+running on <code class="docutils literal notranslate"><span class="pre">localhost:8000</span></code>. You can start one with:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ python3 -mhttp.server
+</pre></div>
+</div>
 </div>
 </section>
 <section id="first-run">
 <h2>First Run<a class="headerlink" href="#first-run" title="Permalink to this heading"></a></h2>
-<p>Now we can run the playbook using the following command:
-(We can supply the full path to the playbook, otherwise the parser tries to find it in the current working directory or in the folder /etc/attackmate/playbooks)</p>
+<p>Run the playbook with <code class="docutils literal notranslate"><span class="pre">--debug</span></code> for verbose output:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ attackmate --debug playbook.yml
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The playbook path can be absolute, relative to the current working directory,
+or relative to <code class="docutils literal notranslate"><span class="pre">/etc/attackmate/playbooks</span></code>.</p>
+</div>
+<p>Expected output:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ attackmate --debug playbook.yml
   2023-09-24 20:17:36 DEBUG   | No config-file found. Using empty default-config
   2023-09-24 20:17:36 DEBUG   | Template-Command: &#39;$NMAP -sC -p $WEBPORT $TARGET&#39;
@@ -221,39 +240,39 @@ the webserver.</p>
 </section>
 <section id="explanation">
 <h2>Explanation<a class="headerlink" href="#explanation" title="Permalink to this heading"></a></h2>
-<p>In the <strong>vars</strong>-section we have three variables That can be used later in the <strong>commands</strong>-section.
-The nmap-binary is expected at the location <em>/usr/bin/nmap</em>. The target to attack is <em>localhost</em> and
+<p><strong>vars</strong> defines reusable variables that can be referenced throughout the <code class="docutils literal notranslate"><span class="pre">commands</span></code> section via <code class="docutils literal notranslate"><span class="pre">$VARNAME</span></code> substitution.
+In this example, we define the path to the nmap binary, the target host, and the web port to attack.
+The nmap-binary is expected at the location <em>/usr/bin/nmap</em>, the target to attack is <em>localhost</em> and
 the web-port to attack is <em>8000</em>.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">vars</span><span class="p">:</span>
-  <span class="n">NMAP</span><span class="p">:</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">nmap</span>
-  <span class="n">TARGET</span><span class="p">:</span> <span class="n">localhost</span>
-  <span class="n">WEBPORT</span><span class="p">:</span> <span class="s2">&quot;8000&quot;</span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">vars</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">NMAP</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/usr/bin/nmap</span>
+<span class="w">  </span><span class="nt">TARGET</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">localhost</span>
+<span class="w">  </span><span class="nt">WEBPORT</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;8000&quot;</span>
 </pre></div>
 </div>
-<p>The first command executes an nmap-script-scan on port <em>8000</em> at <em>localhost</em>. This command illustrates
-how to use variables:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>commands:
-  - type: shell
-    cmd: $NMAP -sC -p $WEBPORT $TARGET
+<p>The first command executes an nmap script scan on port <em>8000</em> against the target <em>localhost</em>. This command illustrates
+how to use variables: Variables are substituted at runtime using <code class="docutils literal notranslate"><span class="pre">$VARNAME</span></code> syntax:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">commands</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">shell</span>
+<span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">$NMAP -sC -p $WEBPORT $TARGET</span>
 </pre></div>
 </div>
-<p>As soon as nmap finishes, it automatically stores the output the the built-in variable <code class="docutils literal notranslate"><span class="pre">RESULT_STDOUT</span></code>.
-The regex command executes a regex search using the content of the nmap output. The regular expression is
-<cite>(d+)/tcp opens+http</cite>. If the expression matches, it will “group” the port number in the variable
-<code class="docutils literal notranslate"><span class="pre">$MATCH_0</span></code> which is a volatile variable and is deleted after the regex-command finishes. In the setting
-<em>output</em> is a variable defined with the name <code class="docutils literal notranslate"><span class="pre">PORT</span></code> and it will be set with the value of <code class="docutils literal notranslate"><span class="pre">$MATCH_0</span></code>.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>- type: regex
-  cmd: (\d+)/tcp open\s+http
-  input: RESULT_STDOUT
-  output:
-    PORT: $MATCH_0
+<p>As soon as nmap finishes, its output is automatically stored in the built-in variable <code class="docutils literal notranslate"><span class="pre">RESULT_STDOUT</span></code>.
+The regex command searches this output using the expression <code class="docutils literal notranslate"><span class="pre">(\d+)/tcp</span> <span class="pre">open\s+http</span></code>.
+If it matches, the captured port number is stored in the volatile variable <code class="docutils literal notranslate"><span class="pre">$MATCH_0</span></code> (deleted after the regex-command finishes),
+which is then assigned to the persistent variable <code class="docutils literal notranslate"><span class="pre">PORT</span></code> via the <code class="docutils literal notranslate"><span class="pre">output</span></code> mapping:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">regex</span>
+<span class="w">  </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">(\d+)/tcp open\s+http</span>
+<span class="w">  </span><span class="nt">input</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">RESULT_STDOUT</span>
+<span class="w">  </span><span class="nt">output</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">PORT</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">$MATCH_0</span>
 </pre></div>
 </div>
-<p>The final command is again a shell command that is supposed to execute a nikto scan using the previously
-parsed variable <code class="docutils literal notranslate"><span class="pre">$PORT</span></code>. This command will only be executed if the condition <code class="docutils literal notranslate"><span class="pre">$PORT</span> <span class="pre">==</span> <span class="pre">8000</span></code> is <strong>True</strong>.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>- type: shell
-  cmd: nikto -host $TARGET -port $PORT
-  only_if: $PORT == 8000
+<p>The final command is a shell command that executes a nikto scan using the previously
+parsed <code class="docutils literal notranslate"><span class="pre">$PORT</span></code> variable. The  <code class="docutils literal notranslate"><span class="pre">only_if</span></code> condition ensures this command will only be executed if <code class="docutils literal notranslate"><span class="pre">$PORT</span> <span class="pre">==</span> <span class="pre">8000</span></code> is <strong>True</strong>.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">shell</span>
+<span class="w">  </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nikto -host $TARGET -port $PORT</span>
+<span class="w">  </span><span class="nt">only_if</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">$PORT == 8000</span>
 </pre></div>
 </div>
 </section>

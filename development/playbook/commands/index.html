@@ -91,7 +91,16 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">General:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html">AttackMate <img alt="Logo" src="/images/AttackMate_logo_no_logo.png" align="right" height="90"></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#installation">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#execute">Execute</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#documentation">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#publications">Publications</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#contribution">Contribution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#disclaimer">Disclaimer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#security">Security</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#license">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#financial-support">Financial Support</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Getting Started:</span></p>
 <ul>
@@ -175,13 +184,13 @@
              
   <section id="commands">
 <span id="id1"></span><h1>Commands<a class="headerlink" href="#commands" title="Permalink to this heading"></a></h1>
-<p>The <em>‘commands-section’</em> holds a list of AttackMate-commands that are executed sequentially from
+<p>The <code class="docutils literal notranslate"><span class="pre">commands:</span></code> section of a playbook holds a list of AttackMate commands that are executed sequentially from
 top to bottom.</p>
-<p>Every command, regardless of the type has the following general options:</p>
+<p>Every command, regardless of its type supports the following general options:</p>
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-cmd">
 <span class="sig-name descname"><span class="pre">cmd</span></span><a class="headerlink" href="#confval-cmd" title="Permalink to this definition"></a></dt>
-<dd><p><em>cmd</em> defines the command that should be executed. The purpose of this option varies depending on the type of command.</p>
+<dd><p>The command that should be executed. The meaning of this option varies depending on the type of command.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str</p>
@@ -209,8 +218,7 @@ top to bottom.</p>
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-exit_on_error">
 <span class="sig-name descname"><span class="pre">exit_on_error</span></span><a class="headerlink" href="#confval-exit_on_error" title="Permalink to this definition"></a></dt>
-<dd><p>If this option is true, attackmate will exit with an error if the command returns with a return code
-that is not zero.</p>
+<dd><p>Attackmate will exit with an error if the command returns a non-zero exit code.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>bool</p>
@@ -224,18 +232,17 @@ that is not zero.</p>
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-error_if">
 <span class="sig-name descname"><span class="pre">error_if</span></span><a class="headerlink" href="#confval-error_if" title="Permalink to this definition"></a></dt>
-<dd><p>If this option is set, an error will be raised if the string was found in the <strong>output</strong>
-of the command.</p>
+<dd><p>Raise an error if the given pattern is found in the command output.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str(regex)</p>
 </dd>
 </dl>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">commands</span><span class="p">:</span>
-<span class="w">  </span><span class="c1"># throw an error</span>
+<span class="w">  </span><span class="c1"># throws an error</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http-client</span>
 <span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">get</span>
-<span class="w">    </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://www.google.com</span>
+<span class="w">    </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://www.bing.com</span>
 <span class="w">    </span><span class="nt">error_if</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;.*bing.*&quot;</span>
 </pre></div>
 </div>
@@ -244,15 +251,14 @@ of the command.</p>
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-error_if_not">
 <span class="sig-name descname"><span class="pre">error_if_not</span></span><a class="headerlink" href="#confval-error_if_not" title="Permalink to this definition"></a></dt>
-<dd><p>If this option is set, an error will be raised if the string was not found in the <strong>output</strong>
-of the command.</p>
+<dd><p>Raise an error if the given pattern is <strong>not</strong> found in the command output.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str(regex)</p>
 </dd>
 </dl>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">commands</span><span class="p">:</span>
-<span class="w">  </span><span class="c1"># throw an error</span>
+<span class="w">  </span><span class="c1"># throws an error</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http-client</span>
 <span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">get</span>
 <span class="w">    </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://www.google.com</span>
@@ -264,8 +270,8 @@ of the command.</p>
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-loop_if">
 <span class="sig-name descname"><span class="pre">loop_if</span></span><a class="headerlink" href="#confval-loop_if" title="Permalink to this definition"></a></dt>
-<dd><p>If this option is set, the command will be executed again if the string was found in the
-<strong>output</strong> of the command.</p>
+<dd><p>Re-execute the command if the given pattern is found in the output. Repeats
+until the pattern no longer matches or <code class="docutils literal notranslate"><span class="pre">loop_count</span></code> is reached.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str(regex)</p>
@@ -284,8 +290,8 @@ of the command.</p>
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-loop_if_not">
 <span class="sig-name descname"><span class="pre">loop_if_not</span></span><a class="headerlink" href="#confval-loop_if_not" title="Permalink to this definition"></a></dt>
-<dd><p>If this option is set, the command will be executed again if the string was not found in the
-<strong>output</strong> of the command.</p>
+<dd><p>Re-execute the command if the given pattern is <strong>not</strong> found in the output. Repeats
+until the pattern matches or <code class="docutils literal notranslate"><span class="pre">loop_count</span></code> is reached.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str(regex)</p>
@@ -304,10 +310,9 @@ of the command.</p>
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-loop_count">
 <span class="sig-name descname"><span class="pre">loop_count</span></span><a class="headerlink" href="#confval-loop_count" title="Permalink to this definition"></a></dt>
-<dd><p>Number of Repetitions if <em>loop_if</em> or <em>loop_if_not</em> matches.</p>
-<dl class="field-list simple">
+<dd><dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>ini</p>
+<dd class="field-odd"><p>int</p>
 </dd>
 <dt class="field-even">Default<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">3</span></code></p>
@@ -318,71 +323,85 @@ of the command.</p>
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-only_if">
 <span class="sig-name descname"><span class="pre">only_if</span></span><a class="headerlink" href="#confval-only_if" title="Permalink to this definition"></a></dt>
-<dd><p>Execute this command only if the condition is true. The following operators are supported:</p>
+<dd><p>Execute this command only if the condition evaluates to <code class="docutils literal notranslate"><span class="pre">True</span></code>. Supported operators:</p>
 <ul class="simple">
-<li><p>var1 == var2</p></li>
-<li><p>var1 != var2</p></li>
-<li><p>var1 is var2</p></li>
-<li><p>var1 is not var2</p></li>
-<li><p>var1 &lt; var2</p></li>
-<li><p>var1 &lt;= var2</p></li>
-<li><p>var1 &gt; var2</p></li>
-<li><p>var1 &gt;= var2</p></li>
-<li><p>string !~ pattern</p></li>
-<li><p>string =~ pattern</p></li>
-<li><p>not var</p></li>
-<li><p>var</p></li>
-<li><p>None</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">var1</span> <span class="pre">==</span> <span class="pre">var2</span></code>, <code class="docutils literal notranslate"><span class="pre">var1</span> <span class="pre">!=</span> <span class="pre">var2</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">var1</span> <span class="pre">is</span> <span class="pre">var2</span></code>, <code class="docutils literal notranslate"><span class="pre">var1</span> <span class="pre">is</span> <span class="pre">not</span> <span class="pre">var2</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">var1</span> <span class="pre">&lt;</span> <span class="pre">var2</span></code>, <code class="docutils literal notranslate"><span class="pre">var1</span> <span class="pre">&lt;=</span> <span class="pre">var2</span></code>, <code class="docutils literal notranslate"><span class="pre">var1</span> <span class="pre">&gt;</span> <span class="pre">var2</span></code>, <code class="docutils literal notranslate"><span class="pre">var1</span> <span class="pre">&gt;=</span> <span class="pre">var2</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">string</span> <span class="pre">=~</span> <span class="pre">pattern</span></code> — matches if string satisfies the regex pattern</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">string</span> <span class="pre">!~</span> <span class="pre">pattern</span></code> — matches if string does not satisfy the regex pattern</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">not</span> <span class="pre">var</span></code>, <code class="docutils literal notranslate"><span class="pre">var</span></code>, <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
 </ul>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str(condition)</p>
 </dd>
 </dl>
-<p>The =~ operator is used to check if a string matches a regular expression pattern.
-The !~ operator is used to check if a string does not match a regular expression pattern.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">=~</span></code> operator is used to check if a string matches a regular expression pattern.
+The <code class="docutils literal notranslate"><span class="pre">!~</span></code> operator is used to check if a string does <strong>not</strong> match a regular expression pattern.</p>
+</div>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">commands</span><span class="p">:</span>
+<span class="w">  </span><span class="c1"># Get the PID of the running mysqld process:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">shell</span>
 <span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pgrep mysqld</span>
 
+<span class="w">  </span><span class="c1"># Extract the first captured group from the output, splitting on newlines.</span>
+<span class="w">  </span><span class="c1"># Stores the result in $KILLPID via the MATCH_0 capture variable:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">regex</span>
 <span class="w">    </span><span class="nt">mode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">split</span>
 <span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;\n&quot;</span>
 <span class="w">    </span><span class="nt">output</span><span class="p">:</span>
 <span class="w">      </span><span class="nt">KILLPID</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">$MATCH_0</span>
 
-<span class="w">  </span><span class="c1"># Execute this command only</span>
-<span class="w">  </span><span class="c1"># if it is not the init-process</span>
+<span class="w">  </span><span class="c1"># Only kill if it is not the init process with PID 1:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">shell</span>
 <span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kill $KILLPID</span>
 <span class="w">    </span><span class="nt">only_if</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">$KILLPID &gt; 1</span>
 
-<span class="w">  </span><span class="c1"># Execute this command only if the regex pattern is found</span>
+<span class="w">  </span><span class="c1"># Only execute if the regex pattern matches:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">shell</span>
 <span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">echo &quot;regex match found&quot;</span>
 <span class="w">    </span><span class="nt">only_if</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">some_string =~ some[_]?string</span>
 </pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>When comparing strings with integers, standard Python conventions apply:</p>
+<p><strong>Equality / Inequality</strong> (<code class="docutils literal notranslate"><span class="pre">==</span></code>, <code class="docutils literal notranslate"><span class="pre">!=</span></code>):
+A string and an integer are never equal, so <code class="docutils literal notranslate"><span class="pre">&quot;1&quot;</span> <span class="pre">==</span> <span class="pre">1</span></code> is <code class="docutils literal notranslate"><span class="pre">False</span></code>
+and <code class="docutils literal notranslate"><span class="pre">&quot;1&quot;</span> <span class="pre">!=</span> <span class="pre">1</span></code> is <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
+<p><strong>Identity</strong> (<code class="docutils literal notranslate"><span class="pre">is</span></code>, <code class="docutils literal notranslate"><span class="pre">is</span> <span class="pre">not</span></code>):
+Compares object identity, not value. <code class="docutils literal notranslate"><span class="pre">&quot;1&quot;</span> <span class="pre">is</span> <span class="pre">1</span></code> is always <code class="docutils literal notranslate"><span class="pre">False</span></code>
+because a string and an integer are distinct objects, regardless of
+their apparent values.</p>
+<p><strong>Ordering</strong> (<code class="docutils literal notranslate"><span class="pre">&lt;</span></code>, <code class="docutils literal notranslate"><span class="pre">&lt;=</span></code>, <code class="docutils literal notranslate"><span class="pre">&gt;</span></code>, <code class="docutils literal notranslate"><span class="pre">&gt;=</span></code>):
+Comparing a string with an integer raises a <code class="docutils literal notranslate"><span class="pre">TypeError</span></code> in Python 3
+since the two types have no defined ordering. These operators should
+only be used when both operands share the same type.</p>
+<p><strong>Integers and Booleans</strong> (<code class="docutils literal notranslate"><span class="pre">==</span></code>, <code class="docutils literal notranslate"><span class="pre">!=</span></code>):
+In Python, <code class="docutils literal notranslate"><span class="pre">bool</span></code> is a subclass of <code class="docutils literal notranslate"><span class="pre">int</span></code>, so <code class="docutils literal notranslate"><span class="pre">1</span> <span class="pre">==</span> <span class="pre">True</span></code> and
+<code class="docutils literal notranslate"><span class="pre">0</span> <span class="pre">==</span> <span class="pre">False</span></code> are both <code class="docutils literal notranslate"><span class="pre">True</span></code>, while any other integer (e.g.
+<code class="docutils literal notranslate"><span class="pre">2</span> <span class="pre">==</span> <span class="pre">True</span></code>) is <code class="docutils literal notranslate"><span class="pre">False</span></code>.  This also means that if a
+<code class="docutils literal notranslate"><span class="pre">$variable</span></code> has been set to the string <code class="docutils literal notranslate"><span class="pre">&quot;True&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;False&quot;</span></code>,
+comparing it against a boolean literal (<code class="docutils literal notranslate"><span class="pre">$var</span> <span class="pre">==</span> <span class="pre">True</span></code>) will
+always yield <code class="docutils literal notranslate"><span class="pre">False</span></code> — because the resolved value is a <code class="docutils literal notranslate"><span class="pre">str</span></code>
+while the literal is parsed as a <code class="docutils literal notranslate"><span class="pre">bool</span></code> by <code class="docutils literal notranslate"><span class="pre">ast</span></code>.  Use string
+literals for boolean-like flags stored in the <code class="docutils literal notranslate"><span class="pre">VariableStore</span></code>:
+<code class="docutils literal notranslate"><span class="pre">$flag</span> <span class="pre">==</span> <span class="pre">&quot;True&quot;</span></code>.</p>
+<p>Importantly, before a condition is evaluated, all <code class="docutils literal notranslate"><span class="pre">$variable</span></code> references are
+resolved by the <code class="docutils literal notranslate"><span class="pre">VariableStore</span></code>.  <strong>The store holds every value as a
+plain Python</strong> <code class="docutils literal notranslate"><span class="pre">str</span></code>, even values that were originally integers
+are coerced to <code class="docutils literal notranslate"><span class="pre">str</span></code> on ingress.</p>
 </div>
 </dd></dl>
 
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-background">
 <span class="sig-name descname"><span class="pre">background</span></span><a class="headerlink" href="#confval-background" title="Permalink to this definition"></a></dt>
-<dd><p>Execute the command as a subprocess in background. If set to <em>True</em>,
-the functionality for <em>error_if</em> and <em>error_if_not</em> as well as printing
-the output is disabled.</p>
-<p>Background-Mode is currently not implemented for the following commands:</p>
-<ul class="simple">
-<li><p>MsfModuleCommand</p></li>
-<li><p>IncludeCommand</p></li>
-<li><p>VncCommand</p></li>
-<li><p>BrowserCommand</p></li>
-</ul>
-<p>Background-Mode together with a session is currently not implemented for the following commands:</p>
-<ul class="simple">
-<li><p>SSHCommand</p></li>
-<li><p>SFTPCommand</p></li>
-</ul>
+<dd><p>Execute the command as a background subprocess. When enabled, output is not printed
+and <code class="docutils literal notranslate"><span class="pre">error_if</span></code> / <code class="docutils literal notranslate"><span class="pre">error_if_not</span></code> have no effect.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>bool</p>
@@ -393,17 +412,28 @@ the output is disabled.</p>
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The command in background-mode will not change global variables like
-RESULT_STDOUT or RESULT_CODE.</p>
+<p>The command in background-mode will change the <a class="reference internal" href="../vars.html#builtin-variables"><span class="std std-ref">builtin variables</span></a>
+<code class="docutils literal notranslate"><span class="pre">RESULT_STDOUT</span></code> to “Command started in Background” and <code class="docutils literal notranslate"><span class="pre">RESULT_CODE</span></code> to 0.</p>
 </div>
+<p>Background mode is not supported for</p>
+<ul class="simple">
+<li><p>MsfModuleCommand</p></li>
+<li><p>IncludeCommand</p></li>
+<li><p>VncCommand</p></li>
+<li><p>BrowserCommand</p></li>
+</ul>
+<p>Background mode together with a session is not supported for the following commands:</p>
+<ul class="simple">
+<li><p>SSHCommand</p></li>
+<li><p>SFTPCommand</p></li>
+</ul>
 </dd></dl>
 
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-kill_on_exit">
 <span class="sig-name descname"><span class="pre">kill_on_exit</span></span><a class="headerlink" href="#confval-kill_on_exit" title="Permalink to this definition"></a></dt>
-<dd><p>If this command runs in background-mode, the option <em>kill_on_exit</em> controls
-if the main process will wait for this subprocess before exitting or if the
-main process will simply kill the subprocess.</p>
+<dd><p>If this command runs in background mode, the option <code class="docutils literal notranslate"><span class="pre">kill_on_exit</span></code> controls
+whether the main process kills the subprocess on exit (<code class="docutils literal notranslate"><span class="pre">True</span></code>) or waits for it to finish (<code class="docutils literal notranslate"><span class="pre">False</span></code>).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>bool</p>
@@ -417,8 +447,8 @@ main process will simply kill the subprocess.</p>
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-metadata">
 <span class="sig-name descname"><span class="pre">metadata</span></span><a class="headerlink" href="#confval-metadata" title="Permalink to this definition"></a></dt>
-<dd><p>The option <em>metadata</em> can be used to pass a dictionary of key value pairs.
-These are not used in command execution but are logged together with the command.</p>
+<dd><p>An optional dictionary of key-value pairs that are logged alongside the command
+but have no effect on execution.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Dict</p>
@@ -437,7 +467,7 @@ These are not used in command execution but are logged together with the command
 </div>
 </dd></dl>
 
-<p>The next pages will describe all possible commands in detail.</p>
+<p>The next pages will describe each command type in detail.</p>
 <div class="toctree-wrapper compound">
 </div>
 </section>

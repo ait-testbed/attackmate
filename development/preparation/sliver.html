@@ -91,7 +91,16 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">General:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../readme_link.html">AttackMate <img alt="Logo" src="/images/AttackMate_logo_no_logo.png" align="right" height="90"></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#installation">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#execute">Execute</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#documentation">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#publications">Publications</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#contribution">Contribution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#disclaimer">Disclaimer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#security">Security</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#license">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#financial-support">Financial Support</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Getting Started:</span></p>
 <ul class="current">
@@ -156,17 +165,27 @@
              
   <section id="prepare-sliver">
 <span id="prep-sliver"></span><h1>Prepare Sliver<a class="headerlink" href="#prepare-sliver" title="Permalink to this heading"></a></h1>
-<p><a class="reference external" href="https://github.com/BishopFox/sliver">Sliver</a> is a Post-Exploitation framework with implants for Linux, Windows and MacOs.
-In order to use the sliver-commands in AttackMate, a sliver installation is required.
-Sliver offers an API on port <code class="docutils literal notranslate"><span class="pre">31337</span></code> which is used by AttackMate to interact with it.
-Follow the <a class="reference external" href="https://github.com/BishopFox/sliver">Instructions offered by BishopFox</a>
-to install the Sliver Framework. The simplest method is a curl oneliner:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ curl https://sliver.sh/install|sudo bash
+<p><a class="reference external" href="https://github.com/BishopFox/sliver">Sliver</a> is a post-exploitation framework with
+implants for Linux, Windows, and macOS. AttackMate communicates with Sliver via its API
+on port <code class="docutils literal notranslate"><span class="pre">31337</span></code>.</p>
+<section id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this heading"></a></h2>
+<p>Follow the <a class="reference external" href="https://github.com/BishopFox/sliver">installation instructions by BishopFox</a>
+to set up the Sliver framework. The quickest method is:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ curl https://sliver.sh/install | sudo bash
 </pre></div>
 </div>
-<p>Sliver will create an operator named “root” and save the configs under <code class="docutils literal notranslate"><span class="pre">/root/.sliver-client/configs</span></code>
-which can be used by AttackMate.</p>
-<p>attackm8 only works if daemon-mode is enabled: <code class="docutils literal notranslate"><span class="pre">&quot;daemon-mode&quot;:</span> <span class="pre">&quot;true&quot;</span></code> in the sliver-server under <code class="docutils literal notranslate"><span class="pre">.sliver/configs/server.json</span></code></p>
+<p>After installation, Sliver creates an operator named <code class="docutils literal notranslate"><span class="pre">root</span></code> and stores its configuration
+under <code class="docutils literal notranslate"><span class="pre">/root/.sliver-client/configs</span></code>, which AttackMate uses to connect.</p>
+</section>
+<section id="configuration">
+<h2>Configuration<a class="headerlink" href="#configuration" title="Permalink to this heading"></a></h2>
+<p>AttackMate requires Sliver to run in daemon mode. Ensure the following is set in
+<code class="docutils literal notranslate"><span class="pre">.sliver/configs/server.json</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;daemon-mode&quot;</span><span class="p">:</span> <span class="s2">&quot;true&quot;</span>
+</pre></div>
+</div>
+</section>
 </section>
 
 

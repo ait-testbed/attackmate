@@ -91,7 +91,16 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">General:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html">AttackMate <img alt="Logo" src="/images/AttackMate_logo_no_logo.png" align="right" height="90"></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#installation">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#execute">Execute</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#documentation">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#publications">Publications</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#contribution">Contribution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#disclaimer">Disclaimer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#security">Security</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#license">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#financial-support">Financial Support</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Getting Started:</span></p>
 <ul>
@@ -154,58 +163,74 @@
              
   <section id="sessions-interactive">
 <span id="session"></span><h1>Sessions, Interactive<a class="headerlink" href="#sessions-interactive" title="Permalink to this heading"></a></h1>
-<p>Many commands of AttackMate support the setting “session” or “interactive.
-This chapter is about these important concepts of AttackMate.</p>
+<p>Many AttackMate commands support the <code class="docutils literal notranslate"><span class="pre">creates_session</span></code>, <code class="docutils literal notranslate"><span class="pre">session</span></code>, and <code class="docutils literal notranslate"><span class="pre">interactive</span></code>
+options. This page explains these concepts and when to use them.</p>
 <section id="id1">
 <h2>Session<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h2>
-<p>AttackMate executes all commands stateless. Therefore, each command is executed in a new “environment”.
-What “environment” means depends on the type of the command. For example, every stateless shell
-command spawns a new shell process. As illustrated in the following image, every shell command
-is executed in a new <cite>/bin/sh</cite> process.</p>
+<p>By default, AttackMate executes all commands statelessly — each command runs in a fresh
+environment. What “environment” means depends on the command type: a <code class="docutils literal notranslate"><span class="pre">shell</span></code> command
+spawns a new <code class="docutils literal notranslate"><span class="pre">/bin/sh</span></code> process, an <code class="docutils literal notranslate"><span class="pre">ssh</span></code> command opens a new SSH connection, and so on.</p>
 <img alt="../../_images/Stateless-Command.png" src="../../_images/Stateless-Command.png" />
-<p>The ssh-command on the other hand, establishes with every new stateless execution a new SSH connection.
-AttackMate will log in to the target with every single command execution. However, sometimes you want the AttackMate not to log on to the target system every time you execute a command. To achieve this, you can use sessions.</p>
-<p>Many commands support the “creates_session” option. This allows you to specify a session name and AttackMate saves the environment of the command. By using the session name for further commands, it is possible to continue where the previous command left off at any time. The following figure shows how the first command uses create_session to execute a stateful command. The third command can then continue in the same environment as the first command by using the session.</p>
+<p>This means that directory changes, environment variables, or open connections from one
+command are not visible to the next. To persist state across commands, AttackMate supports
+sessions.</p>
+<p>Any command that supports the <code class="docutils literal notranslate"><span class="pre">creates_session</span></code> option will save its environment under
+the given session name. Subsequent commands can then reference that name via <code class="docutils literal notranslate"><span class="pre">session</span></code>
+to continue working in the same environment, as illustrated below.</p>
 <img alt="../../_images/Stateful-Command.png" src="../../_images/Stateful-Command.png" />
 </section>
 <section id="interactive">
 <h2>Interactive<a class="headerlink" href="#interactive" title="Permalink to this heading"></a></h2>
-<p>Many commands work in such a way that they first execute something and then collect and return the output. Sometimes, however, commands are executed that do not produce any output. In such cases, AttackMate would wait forever. One such example would be executing the text editor vim on the command line. Vim is started and waits for input. AttackMate gets no output, or the process does not terminate and so it waits forever. Interactive mode is available for such cases. This mode causes commands to be executed for a limited time only. After this time has elapsed, AttackMate continues.  The following example shows how AttackMate executes vim with the help of a session and the interactive mode in a shell command and then types keyboard strokes into the open vim sessions.</p>
+<p>Most commands work by executing something and waiting for the process to finish before
+collecting its output. This breaks down for interactive programs that wait for user input
+and never terminate on their own — for example, opening <code class="docutils literal notranslate"><span class="pre">vim</span></code> from a shell command would
+cause AttackMate to wait forever for output that never comes.</p>
+<p>Interactive mode solves this by running a command for a limited time only. Instead of
+waiting for the process to finish, AttackMate reads output until no new output has arrived
+for a configurable timeout period, then moves on to the next command.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Commands executed in interactive mode <strong>MUST</strong> end with a newline character (<code class="docutils literal notranslate"><span class="pre">\n</span></code>).</p>
+</div>
+<p>The following example opens <code class="docutils literal notranslate"><span class="pre">vim</span></code>, remaps a key, types text, and saves the file — all
+using a combination of sessions and interactive mode:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">commands</span><span class="p">:</span>
+<span class="w">  </span><span class="c1"># Open vim and create a session:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">shell</span>
 <span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;vim</span><span class="nv"> </span><span class="s">/tmp/test\n&quot;</span>
 <span class="w">    </span><span class="nt">interactive</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
 <span class="w">    </span><span class="nt">creates_session</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">vim</span>
 
+<span class="w">  </span><span class="c1"># Remap &#39;jj&#39; to Escape in insert mode:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">shell</span>
 <span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;:inoremap</span><span class="nv"> </span><span class="s">jj</span><span class="nv"> </span><span class="s">&lt;ESC&gt;\n&quot;</span>
 <span class="w">    </span><span class="nt">interactive</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
 <span class="w">    </span><span class="nt">session</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">vim</span>
 
+<span class="w">  </span><span class="c1"># Enter insert mode:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">shell</span>
 <span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;o&quot;</span>
 <span class="w">    </span><span class="nt">interactive</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
 <span class="w">    </span><span class="nt">session</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">vim</span>
 
+<span class="w">  </span><span class="c1"># Type some text:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">shell</span>
 <span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Hello</span><span class="nv"> </span><span class="s">World&quot;</span>
 <span class="w">    </span><span class="nt">interactive</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
 <span class="w">    </span><span class="nt">session</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">vim</span>
 
+<span class="w">  </span><span class="c1"># Exit insert mode using the remapped key:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">shell</span>
 <span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;jj&quot;</span>
 <span class="w">    </span><span class="nt">interactive</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
 <span class="w">    </span><span class="nt">session</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">vim</span>
 
+<span class="w">  </span><span class="c1"># Save and quit:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">shell</span>
 <span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;:wq!\n&quot;</span>
 <span class="w">    </span><span class="nt">interactive</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
 <span class="w">    </span><span class="nt">session</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">vim</span>
 </pre></div>
-</div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Please note that you <strong>MUST</strong> send a newline when you execute interactive commands!</p>
 </div>
 </section>
 </section>

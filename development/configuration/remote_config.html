@@ -91,7 +91,16 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">General:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../readme_link.html">AttackMate <img alt="Logo" src="/images/AttackMate_logo_no_logo.png" align="right" height="90"></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#installation">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#execute">Execute</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#documentation">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#publications">Publications</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#contribution">Contribution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#disclaimer">Disclaimer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#security">Security</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#license">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#financial-support">Financial Support</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Getting Started:</span></p>
 <ul class="current">
@@ -158,8 +167,10 @@
              
   <section id="remote-config">
 <span id="id1"></span><h1>remote_config<a class="headerlink" href="#remote-config" title="Permalink to this heading"></a></h1>
-<p>The remote_config section defines connections to remote AttackMate instances. This allows one AttackMate instance to act as a controller, dispatching playbooks or commands to remote nodes.</p>
-<p>Like other executors, the configuration uses unique identifiers (names) for each connection. If a command in a playbook does not explicitly specify a connection, the first entry defined in this configuration is used as the default.</p>
+<p><code class="docutils literal notranslate"><span class="pre">remote_config</span></code> defines connections to remote AttackMate instances. This allows one AttackMate instance to act as a controller, dispatching playbooks or commands to remote nodes.</p>
+<p>Each connection is identified by a user-defined name that can be referenced in playbook
+commands via the <code class="docutils literal notranslate"><span class="pre">connection</span></code> field. If no connection is specified, the first entry in
+the configuration is used as the default.</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">remote_config</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">remote_server</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;https://10.0.0.5:5000&quot;</span>
@@ -173,19 +184,21 @@
 <span class="w">    </span><span class="nt">cafile</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/path/to/another_cert.pem&quot;</span>
 </pre></div>
 </div>
+<p>The following example shows how to target a specific remote instance, and how the
+default connection is used when none is specified:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">commands</span><span class="p">:</span>
-<span class="c1"># Executed on &#39;another_server&#39;</span>
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">remote</span>
-<span class="w">  </span><span class="nt">connection</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">another_server</span>
-<span class="w">  </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">execute_command</span>
-<span class="w">  </span><span class="nt">remote_command</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">shell</span>
-<span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;whoami&quot;</span>
+<span class="w">  </span><span class="c1"># Executed on &#39;another_server&#39;</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">remote</span>
+<span class="w">    </span><span class="nt">connection</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">another_server</span>
+<span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">execute_command</span>
+<span class="w">    </span><span class="nt">remote_command</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">shell</span>
+<span class="w">      </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;whoami&quot;</span>
 
-<span class="w"> </span><span class="c1"># Executed on &#39;remote_server&#39; (defaults to first remote_config entry))</span>
-<span class="w w-Error"> </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">remote</span>
-<span class="w">   </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">execute_playbook</span>
-<span class="w">   </span><span class="nt">playbook_path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">path/to/playbook.yml</span>
+<span class="w">  </span><span class="c1"># Executed on &#39;remote_server&#39; (defaults to first remote_config entry))</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">remote</span>
+<span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">execute_playbook</span>
+<span class="w">    </span><span class="nt">playbook_path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">path/to/playbook.yml</span>
 </pre></div>
 </div>
 <dl class="std confval">
@@ -196,7 +209,10 @@
 <p>The base URL of the remote AttackMate REST API.</p>
 <dl class="field-list simple">
 <dt class="field-odd">type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>str :required: True</p>
+<dd class="field-odd"><p>str</p>
+</dd>
+<dt class="field-even">required<span class="colon">:</span></dt>
+<dd class="field-even"><p>True</p>
 </dd>
 </dl>
 <dl class="std confval">
@@ -207,7 +223,10 @@
 <p>The username for authentication with the remote AttackMate instance.</p>
 <dl class="field-list simple">
 <dt class="field-odd">type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>str :required: False</p>
+<dd class="field-odd"><p>str</p>
+</dd>
+<dt class="field-even">required<span class="colon">:</span></dt>
+<dd class="field-even"><p>False</p>
 </dd>
 </dl>
 <dl class="std confval">
@@ -218,7 +237,10 @@
 <p>The password for authentication with the remote AttackMate instance.</p>
 <dl class="field-list simple">
 <dt class="field-odd">type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>str :required: False</p>
+<dd class="field-odd"><p>str</p>
+</dd>
+<dt class="field-even">required<span class="colon">:</span></dt>
+<dd class="field-even"><p>False</p>
 </dd>
 </dl>
 <dl class="std confval">
@@ -226,10 +248,13 @@
 <span class="sig-name descname"><span class="pre">cafile</span></span><a class="headerlink" href="#confval-cafile" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
-<p>The path to a CA certificate file used to verify the remote server’s SSL certificate. This is highly recommended when using HTTPS.</p>
+<p>The path to a CA certificate file used to verify the remote server’s TLS certificate. Strongly recommended when connecting over HTTPS.</p>
 <dl class="field-list simple">
 <dt class="field-odd">type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>str :required: False</p>
+<dd class="field-odd"><p>str</p>
+</dd>
+<dt class="field-even">required<span class="colon">:</span></dt>
+<dd class="field-even"><p>False</p>
 </dd>
 </dl>
 </section>

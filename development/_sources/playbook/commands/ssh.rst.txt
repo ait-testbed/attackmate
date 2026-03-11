@@ -1,12 +1,14 @@
+.. _ssh:
+
 ===
 ssh
 ===
 
-Execute commands on a remote server via SSH.
+Execute commands on a remote host via SSH.
 
 .. note::
 
-   This command caches all the settings so
+   This command caches all settings so
    that they only need to be defined once.
 
 .. code-block:: yaml
@@ -16,27 +18,29 @@ Execute commands on a remote server via SSH.
      $SSH_SERVER: 10.10.10.19
 
    commands:
-     # creates new ssh-connection and session
+     # Establish a new connection and create a named session:
      - type: ssh
        cmd: nmap $SERVER_ADDRESS
        hostname: $SSH_SERVER
        username: aecid
        key_filename: "/home/alice/.ssh/id_rsa"
-       creates_session: "attacker"
+       creates_session: attacker
 
-     # cached ssh-settings. creates new ssh-connection
+     # Reuses cached settings, opens a new connection:
      - type: ssh
-       cmd: "echo $SERVER_ADDRESS"
+       cmd: echo $SERVER_ADDRESS
 
-     # reuses existing session "attacker"
+     # Reuses the existing "attacker" session:
      - type: ssh
-       session: "attacker"
-       cmd: "id"
+       session: attacker
+       cmd: id
+
+Connection
+----------
 
 .. confval:: hostname
 
-   This option sets the hostname or ip-address of the
-   remote ssh-server.
+   Hostname or IP address of the remote SSH server.
 
    :type: str
 
@@ -49,102 +53,109 @@ Execute commands on a remote server via SSH.
 
 .. confval:: username
 
-   Specifies the user to log in as on the remote machine.
+   Username to authenticate as on the remote host.
 
    :type: str
 
 .. confval:: password
 
-   Specifies the password to use. An alternative would be to use a key_file.
-
-   :type: str
-
-.. confval:: passphrase
-
-   Use this passphrase to decrypt the key_file. This is only necessary if the
-   keyfile is protected by a passphrase.
+   Password for authentication. An alternative is to use :confval:`key_filename`.
 
    :type: str
 
 .. confval:: key_filename
 
-   Path to the keyfile.
+   Path to a private key file for authentication.
 
    :type: str
 
+.. confval:: passphrase
+
+   Passphrase to decrypt :confval:`key_filename`, if the key is passphrase-protected.
+
+   :type: str
 
 .. confval:: timeout
 
-   The timeout to drop a connection attempt in seconds.
+   Timeout in seconds for connection attempts.
 
    :type: float
+   :default: ``60``
+   :required: False
 
 .. confval:: clear_cache
 
-   Normally all settings for ssh-connections are cached. This allows to defined
-   all settings in one command and all following commands can reuse these settings
-   without set them in every single command. If a new connection with different
-   settings should be configured, this setting allows to reset the cache to default
-   values.
+   Clear all cached connection settings before this command runs, allowing a fresh
+   connection to be configured. (Normally all settings for ssh-connections are cached. This allows to define
+   all settings in one command and reuse them in the following commands without having to redefine them)
 
    :type: bool
    :default: ``False``
+   :required: False
 
-   .. note::
-
-       This setting will not clear the session store.
+Sessions
+--------
 
 .. confval:: creates_session
 
-   A session name that identifies the session that is created when
-   executing this command. This session-name can be used by using the
-   option "session"
+   Name to assign to the session opened by this command. Can be reused in subsequent
+   commands via :confval:`session`.
 
    :type: str
 
 .. confval:: session
 
-   Reuse an existing ssh-session. This setting works only if another
-   ssh-command was executed with the command-option "creates_session"
+   Name of an existing session to reuse. The session must have been created previously
+   via :confval:`creates_session`.
 
    :type: str
 
+Jump Host
+---------
+
 .. confval:: jmp_hostname
 
-   This option sets the hostname or ip-address of the
-   remote jump server.
+   Hostname or IP address of an SSH jump host to tunnel through.
 
    :type: str
 
 .. confval:: jmp_port
 
-   Port to connect to on the jump-host.
+   Port to connect to on the jump host.
 
    :type: int
    :default: ``22``
 
 .. confval:: jmp_username
 
-   Specifies the user to log in as on the jmp-host.
+   Username to authenticate as on the jump host.
 
    :type: str
-   :default: ``same as username``
+   :default: same as :confval:`username`
+
+Interactive Mode
+----------------
 
 .. confval:: interactive
 
-   When the ssh-command is executed, the command will block until the ssh-execution finishes.
-   However, for some exploits it is necessary to run a command and send keystrokes to an
-   interactive session. For example run with the first command "vim" and with the second command
-   send keystrokes to the open vim-session. In interactive-mode the command will try reading the
-   output until no output is written for a certain amount of seconds. If the output ends with any
-   string found in ``prompts``, it will stop immediately.
-
-   .. warning::
-
-      Please note that you **MUST** send a newline when you execute a ssh-command interactively.
+   Run the command in interactive mode.
 
    :type: bool
    :default: ``False``
+   :required: False
+
+   Instead of waiting for the command to finish,
+   AttackMate reads output until no new output appears for :confval:`command_timeout`
+   seconds, or until the output ends with one of the strings in :confval:`prompts`.
+
+   Useful for commands that require keystroke input (e.g. opening ``vim`` and then
+   sending keystrokes in a follow-up command).
+
+   .. warning::
+
+      Commands executed in interactive mode **MUST** end with a newline character (``\n``).
+
+
 
    .. code-block:: yaml
 
@@ -153,45 +164,43 @@ Execute commands on a remote server via SSH.
         $SSH_SERVER: 10.10.10.19
 
       commands:
-        # creates new ssh-connection and session
+        # Open nmap in interactive mode and create a session:
         - type: ssh
           cmd: "nmap --interactive\n"
           interactive: True
           hostname: $SSH_SERVER
           username: aecid
           key_filename: "/home/alice/.ssh/id_rsa"
-          creates_session: "attacker"
+          creates_session: attacker
 
-        # break out of the nmap-interactive-mode
+        # Send a command to the open interactive session:
         - type: ssh
           cmd: "!sh\n"
           interactive: True
-          session: "attacker"
+          session: attacker
 
 .. confval:: command_timeout
 
-   The interactive-mode works with timeouts while reading the output. If there is no output for some seconds,
-   the command will stop reading.
+   Seconds to wait for new output before stopping in interactive mode.
 
    :type: int
    :default: ``15``
+   :required: False
 
 .. confval:: prompts
 
-   In interactive-mode the command will try reading the output for a certain amount of seconds. If the output
-   ends with any string found in ``prompts``, the command will stop immediately.
-   If ``prompts`` is an empty list, no prompt checking will be performed.
+   List of strings that signal the end of output in interactive mode. When the output
+   ends with any of these strings, AttackMate stops reading immediately without waiting
+   for the timeout. Set to an empty list to disable prompt detection.
 
    :type: list[str]
    :default: ``["$ ", "# ", "> "]``
+   :required: False
 
    .. code-block:: yaml
 
-      vars:
-        $SSH_SERVER: 10.10.10.19
-
       commands:
-        # creates new ssh-connection and session
+        # Custom prompt list:
         - type: ssh
           cmd: "nmap --interactive\n"
           interactive: True
@@ -203,16 +212,13 @@ Execute commands on a remote server via SSH.
           hostname: $SSH_SERVER
           username: aecid
           key_filename: "/home/alice/.ssh/id_rsa"
-          creates_session: "attacker"
-
+          creates_session: attacker
 
    .. code-block:: yaml
 
       vars:
         $SSH_SERVER: 10.10.10.19
-
-      commands:
-        # prompts is an empty list
+        # Disable prompt detection entirely:
         - type: ssh
           cmd: "id\n"
           interactive: True
@@ -220,25 +226,25 @@ Execute commands on a remote server via SSH.
           hostname: $SSH_SERVER
           username: aecid
           password: password
-          creates_session: "attacker"
+          creates_session: attacker
 
+Binary Mode
+-----------
 
 .. confval:: bin
 
-   Enable binary mode. In this mode only hex-characters are allowed.
+   Enable binary mode. In this mode, ``cmd`` must be a hex-encoded string representing
+   the raw bytes to send.
 
    :type: bool
    :default: ``False``
+   :required: False
 
    .. code-block:: yaml
 
-      vars:
-        $SERVER_ADDRESS: 192.42.0.254
-        $SSH_SERVER: 10.10.10.19
-
       commands:
+        # "6964" is the hex encoding of "id":
         - type: ssh
-          # hex-code for "id"
           cmd: "6964"
           bin: True
           hostname: $SSH_SERVER

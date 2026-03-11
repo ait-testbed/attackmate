@@ -91,7 +91,16 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">General:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html">AttackMate <img alt="Logo" src="/images/AttackMate_logo_no_logo.png" align="right" height="90"></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#installation">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#execute">Execute</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#documentation">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#publications">Publications</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#contribution">Contribution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#disclaimer">Disclaimer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#security">Security</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#license">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#financial-support">Financial Support</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Getting Started:</span></p>
 <ul>
@@ -176,9 +185,8 @@
              
   <section id="shell">
 <h1>shell<a class="headerlink" href="#shell" title="Permalink to this heading"></a></h1>
-<p>Execute local shell-commands.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1">###</span>
-<span class="nt">vars</span><span class="p">:</span>
+<p>Execute local shell commands.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">vars</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">$SERVER_ADDRESS</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.42.0.254</span>
 <span class="w">  </span><span class="nt">$NMAP</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/usr/bin/nmap</span>
 
@@ -190,103 +198,13 @@
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-cmd">
 <span class="sig-name descname"><span class="pre">cmd</span></span><a class="headerlink" href="#confval-cmd" title="Permalink to this definition"></a></dt>
-<dd><p>The command-line that should be executed locally.</p>
+<dd><p>The command line to execute locally. Supports variable substitution.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str</p>
 </dd>
-</dl>
-</dd></dl>
-
-<dl class="std confval">
-<dt class="sig sig-object std" id="confval-creates_session">
-<span class="sig-name descname"><span class="pre">creates_session</span></span><a class="headerlink" href="#confval-creates_session" title="Permalink to this definition"></a></dt>
-<dd><p>A session name that identifies the session that is created when
-executing this command. This session-name can be used by using the
-option “session”.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>str</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="std confval">
-<dt class="sig sig-object std" id="confval-session">
-<span class="sig-name descname"><span class="pre">session</span></span><a class="headerlink" href="#confval-session" title="Permalink to this definition"></a></dt>
-<dd><p>Reuse an existing interactive session. This setting works only if another
-shell-command was executed with the command-option “creates_session” and “interactive” true</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>str</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="std confval">
-<dt class="sig sig-object std" id="confval-interactive">
-<span class="sig-name descname"><span class="pre">interactive</span></span><a class="headerlink" href="#confval-interactive" title="Permalink to this definition"></a></dt>
-<dd><p>When the shell-command is executed, the command will block until the execution finishes.
-However, for some exploits it is necessary to run a command and send keystrokes to an
-interactive session. For example run with the first command “vim” and with the second command
-send keystrokes to the open vim-session. In interactive-mode the command will try reading the
-output until no output is written for a certain amount of seconds.</p>
-<p>This mode works only on unix and unix-like operating systems!</p>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Please note that you <strong>MUST</strong> send a newline when you execute a ssh-command interactively.</p>
-</div>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>bool</p>
-</dd>
-<dt class="field-even">Default<span class="colon">:</span></dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">False</span></code></p>
-</dd>
-</dl>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">commands</span><span class="p">:</span>
-<span class="w">  </span><span class="c1"># creates new ssh-connection and session</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">shell</span>
-<span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;nmap</span><span class="nv"> </span><span class="s">--interactive\n&quot;</span>
-<span class="w">    </span><span class="nt">interactive</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
-<span class="w">    </span><span class="nt">creates_session</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;attacker&quot;</span>
-
-<span class="w">  </span><span class="c1"># break out of the nmap-interactive-mode</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">shell</span>
-<span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;!sh\n&quot;</span>
-<span class="w">    </span><span class="nt">interactive</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
-<span class="w">    </span><span class="nt">session</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;attacker&quot;</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="std confval">
-<dt class="sig sig-object std" id="confval-command_timeout">
-<span class="sig-name descname"><span class="pre">command_timeout</span></span><a class="headerlink" href="#confval-command_timeout" title="Permalink to this definition"></a></dt>
-<dd><p>The interactive-mode works with timeouts while reading the output. If there is no output for some seconds,
-the command will stop reading.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>int</p>
-</dd>
-<dt class="field-even">Default<span class="colon">:</span></dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">15</span></code></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="std confval">
-<dt class="sig sig-object std" id="confval-read">
-<span class="sig-name descname"><span class="pre">read</span></span><a class="headerlink" href="#confval-read" title="Permalink to this definition"></a></dt>
-<dd><p>Wait for output. This option is useful for interactive commands that do not return any output.
-Normally attackmate will wait until the command_timeout was reached. With read is False, attackmate
-will not wait for any output and simply return an empty string.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>bool</p>
-</dd>
-<dt class="field-even">Default<span class="colon">:</span></dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code></p>
+<dt class="field-even">Required<span class="colon">:</span></dt>
+<dd class="field-even"><p>True</p>
 </dd>
 </dl>
 </dd></dl>
@@ -294,7 +212,7 @@ will not wait for any output and simply return an empty string.</p>
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-command_shell">
 <span class="sig-name descname"><span class="pre">command_shell</span></span><a class="headerlink" href="#confval-command_shell" title="Permalink to this definition"></a></dt>
-<dd><p>Use this shell when executing commands.</p>
+<dd><p>The shell used to execute commands.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str</p>
@@ -302,13 +220,18 @@ will not wait for any output and simply return an empty string.</p>
 <dt class="field-even">Default<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">/bin/sh</span></code></p>
 </dd>
+<dt class="field-odd">Required<span class="colon">:</span></dt>
+<dd class="field-odd"><p>False</p>
+</dd>
 </dl>
 </dd></dl>
 
+<section id="interactive-mode">
+<h2>Interactive Mode<a class="headerlink" href="#interactive-mode" title="Permalink to this heading"></a></h2>
 <dl class="std confval">
-<dt class="sig sig-object std" id="confval-bin">
-<span class="sig-name descname"><span class="pre">bin</span></span><a class="headerlink" href="#confval-bin" title="Permalink to this definition"></a></dt>
-<dd><p>Enable binary mode. In this mode only hex-characters are allowed.</p>
+<dt class="sig sig-object std" id="confval-interactive">
+<span class="sig-name descname"><span class="pre">interactive</span></span><a class="headerlink" href="#confval-interactive" title="Permalink to this definition"></a></dt>
+<dd><p>Run the command in interactive mode.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>bool</p>
@@ -316,16 +239,132 @@ will not wait for any output and simply return an empty string.</p>
 <dt class="field-even">Default<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">False</span></code></p>
 </dd>
+<dt class="field-odd">Required<span class="colon">:</span></dt>
+<dd class="field-odd"><p>False</p>
+</dd>
 </dl>
+<p>Instead of waiting for the command to finish,
+AttackMate reads output until no new output appears for <a class="reference internal" href="ssh.html#confval-command_timeout"><code class="xref std std-confval docutils literal notranslate"><span class="pre">command_timeout</span></code></a>
+seconds. Useful for commands that require follow-up keystrokes (e.g. opening <code class="docutils literal notranslate"><span class="pre">vim</span></code>
+and sending input in a subsequent command).</p>
+<p>This mode works only on Unix and Unix-like systems.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Commands executed in interactive mode <strong>MUST</strong> end with a newline character (<code class="docutils literal notranslate"><span class="pre">\n</span></code>).</p>
+</div>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">commands</span><span class="p">:</span>
+<span class="w">  </span><span class="c1"># Open nmap in interactive mode and create a named session:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">shell</span>
-<span class="w">    </span><span class="c1"># hex-code for &quot;id&quot;</span>
-<span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;6964&quot;</span>
-<span class="w">    </span><span class="nt">bin</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;nmap</span><span class="nv"> </span><span class="s">--interactive\n&quot;</span>
+<span class="w">    </span><span class="nt">interactive</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">    </span><span class="nt">creates_session</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">attacker</span>
+
+<span class="w">  </span><span class="c1"># Send a command to the open interactive session:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">shell</span>
+<span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;!sh\n&quot;</span>
+<span class="w">    </span><span class="nt">interactive</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">    </span><span class="nt">session</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">attacker</span>
 </pre></div>
 </div>
 </dd></dl>
 
+<dl class="std confval">
+<dt class="sig sig-object std" id="confval-creates_session">
+<span class="sig-name descname"><span class="pre">creates_session</span></span><a class="headerlink" href="#confval-creates_session" title="Permalink to this definition"></a></dt>
+<dd><p>Name to assign to the interactive session opened by this command. Can be reused
+in subsequent commands via <a class="reference internal" href="vnc.html#confval-session"><code class="xref std std-confval docutils literal notranslate"><span class="pre">session</span></code></a>.</p>
+<p>Only meaningful when <a class="reference internal" href="ssh.html#confval-interactive"><code class="xref std std-confval docutils literal notranslate"><span class="pre">interactive</span></code></a> is <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+<dt class="field-even">Required<span class="colon">:</span></dt>
+<dd class="field-even"><p>False</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="std confval">
+<dt class="sig sig-object std" id="confval-session">
+<span class="sig-name descname"><span class="pre">session</span></span><a class="headerlink" href="#confval-session" title="Permalink to this definition"></a></dt>
+<dd><p>Name of an existing interactive session to reuse. The session must have been
+created previously via <a class="reference internal" href="vnc.html#confval-creates_session"><code class="xref std std-confval docutils literal notranslate"><span class="pre">creates_session</span></code></a> with <a class="reference internal" href="ssh.html#confval-interactive"><code class="xref std std-confval docutils literal notranslate"><span class="pre">interactive</span></code></a>
+set to <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+<dt class="field-even">Required<span class="colon">:</span></dt>
+<dd class="field-even"><p>False</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="std confval">
+<dt class="sig sig-object std" id="confval-command_timeout">
+<span class="sig-name descname"><span class="pre">command_timeout</span></span><a class="headerlink" href="#confval-command_timeout" title="Permalink to this definition"></a></dt>
+<dd><p>Seconds to wait for new output before stopping in interactive mode.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+<dt class="field-even">Default<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">15</span></code></p>
+</dd>
+<dt class="field-odd">Required<span class="colon">:</span></dt>
+<dd class="field-odd"><p>False</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="std confval">
+<dt class="sig sig-object std" id="confval-read">
+<span class="sig-name descname"><span class="pre">read</span></span><a class="headerlink" href="#confval-read" title="Permalink to this definition"></a></dt>
+<dd><p>Wait for output after executing the command. Set to <code class="docutils literal notranslate"><span class="pre">False</span></code> to return
+immediately with an empty result, useful for fire-and-forget interactive
+commands that produce no output.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+<dt class="field-even">Default<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code></p>
+</dd>
+<dt class="field-odd">Required<span class="colon">:</span></dt>
+<dd class="field-odd"><p>False</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="binary-mode">
+<h2>Binary Mode<a class="headerlink" href="#binary-mode" title="Permalink to this heading"></a></h2>
+<dl class="std confval">
+<dt class="sig sig-object std" id="confval-bin">
+<span class="sig-name descname"><span class="pre">bin</span></span><a class="headerlink" href="#confval-bin" title="Permalink to this definition"></a></dt>
+<dd><p>Enable binary mode. In this mode, <code class="docutils literal notranslate"><span class="pre">cmd</span></code> must be a hex-encoded string representing
+the raw bytes to execute.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+<dt class="field-even">Default<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">False</span></code></p>
+</dd>
+<dt class="field-odd">Required<span class="colon">:</span></dt>
+<dd class="field-odd"><p>False</p>
+</dd>
+</dl>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">commands</span><span class="p">:</span>
+<span class="w">  </span><span class="c1"># &quot;6964&quot; is the hex encoding of &quot;id&quot;:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">shell</span>
+<span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;6964&quot;</span>
+<span class="w">    </span><span class="nt">bin</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
 </section>
 
 

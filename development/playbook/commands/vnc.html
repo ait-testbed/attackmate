@@ -91,7 +91,16 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">General:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html">AttackMate <img alt="Logo" src="/images/AttackMate_logo_no_logo.png" align="right" height="90"></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#installation">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#execute">Execute</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#documentation">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#publications">Publications</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#contribution">Contribution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#disclaimer">Disclaimer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#security">Security</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#license">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#financial-support">Financial Support</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Getting Started:</span></p>
 <ul>
@@ -176,11 +185,13 @@
              
   <section id="vnc">
 <h1>vnc<a class="headerlink" href="#vnc" title="Permalink to this heading"></a></h1>
-<p>Execute commands on a remote server via VNC. Uses the <a class="reference external" href="https://github.com/sibson/vncdotool">vncdotool</a> library.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>This command caches all the settings so
-that they only need to be defined once.</p>
+<p>Execute commands on a remote host via VNC, using the
+<a class="reference external" href="https://github.com/sibson/vncdotool">vncdotool</a> library. Connection settings are
+cached after the first command, so subsequent commands only need to specify what changes.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>VNC sessions must be explicitly closed with <code class="docutils literal notranslate"><span class="pre">cmd:</span> <span class="pre">close</span></code>, otherwise AttackMate
+will hang on exit.</p>
 </div>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">vars</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">$SERVER_ADDRESS</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.42.0.254</span>
@@ -189,7 +200,7 @@ that they only need to be defined once.</p>
 <span class="w">  </span><span class="nt">$PASSWORD</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">password</span>
 
 <span class="nt">commands</span><span class="p">:</span>
-<span class="w">  </span><span class="c1"># creates new vnc-connection and session. If creates_session is omitted, a session named &quot;default&quot; is created</span>
+<span class="w">  </span><span class="c1"># Open a connection, take a screenshot, and create a named session:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">vnc</span>
 <span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">capture</span>
 <span class="w">    </span><span class="nt">filename</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">screenshot.png</span>
@@ -199,13 +210,13 @@ that they only need to be defined once.</p>
 <span class="w">    </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">$PASSWORD</span>
 <span class="w">    </span><span class="nt">creates_session</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my_session</span>
 
-<span class="w">  </span><span class="c1"># reuses existing session &quot;my_session</span>
+<span class="w">  </span><span class="c1"># Type text using the existing session:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">vnc</span>
 <span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">type</span>
 <span class="w">    </span><span class="nt">input</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;echo</span><span class="nv"> </span><span class="s">hello</span><span class="nv"> </span><span class="s">world&quot;</span>
 <span class="w">    </span><span class="nt">session</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my_session</span>
 
-<span class="w">  </span><span class="c1"># closes existing session &quot;my_session&quot; and deletes from session store</span>
+<span class="w">  </span><span class="c1"># Close the session and remove it from the session store:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">vnc</span>
 <span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">close</span>
 <span class="w">    </span><span class="nt">session</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my_session</span>
@@ -214,19 +225,33 @@ that they only need to be defined once.</p>
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-cmd">
 <span class="sig-name descname"><span class="pre">cmd</span></span><a class="headerlink" href="#confval-cmd" title="Permalink to this definition"></a></dt>
-<dd><p>One of <code class="docutils literal notranslate"><span class="pre">type</span></code>, <code class="docutils literal notranslate"><span class="pre">key</span></code>, <code class="docutils literal notranslate"><span class="pre">capture</span></code>, <code class="docutils literal notranslate"><span class="pre">move</span></code>, <code class="docutils literal notranslate"><span class="pre">expectscreen</span></code>, <code class="docutils literal notranslate"><span class="pre">close</span></code>, <code class="docutils literal notranslate"><span class="pre">click</span></code>, <code class="docutils literal notranslate"><span class="pre">rightclick</span></code></p>
+<dd><p>The VNC action to perform. One of:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">capture</span></code> — take a screenshot and save it to <a class="reference internal" href="#confval-filename"><code class="xref std std-confval docutils literal notranslate"><span class="pre">filename</span></code></a></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">expectscreen</span></code> — compare the current screen against <a class="reference internal" href="#confval-filename"><code class="xref std std-confval docutils literal notranslate"><span class="pre">filename</span></code></a>; continue only if they match within <a class="reference internal" href="#confval-maxrms"><code class="xref std std-confval docutils literal notranslate"><span class="pre">maxrms</span></code></a></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">type</span></code> — type a string on the remote host via <a class="reference internal" href="#confval-input"><code class="xref std std-confval docutils literal notranslate"><span class="pre">input</span></code></a></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">key</span></code> — press a key on the remote host via <a class="reference internal" href="#confval-key"><code class="xref std std-confval docutils literal notranslate"><span class="pre">key</span></code></a></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">click</span></code> — left-click at the current cursor position</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">rightclick</span></code> — right-click at the current cursor position</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">move</span></code> — move the cursor to (<a class="reference internal" href="#confval-x"><code class="xref std std-confval docutils literal notranslate"><span class="pre">x</span></code></a>, <a class="reference internal" href="#confval-y"><code class="xref std std-confval docutils literal notranslate"><span class="pre">y</span></code></a>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">close</span></code> — close the session and remove it from the session store</p></li>
+</ul>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str</p>
 </dd>
+<dt class="field-even">Required<span class="colon">:</span></dt>
+<dd class="field-even"><p>True</p>
+</dd>
 </dl>
 </dd></dl>
 
+<section id="connection">
+<h2>Connection<a class="headerlink" href="#connection" title="Permalink to this heading"></a></h2>
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-hostname">
 <span class="sig-name descname"><span class="pre">hostname</span></span><a class="headerlink" href="#confval-hostname" title="Permalink to this definition"></a></dt>
-<dd><p>This option sets the hostname or ip-address of the
-remote ssh-server.</p>
+<dd><p>Hostname or IP address of the remote VNC server.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str</p>
@@ -245,19 +270,25 @@ remote ssh-server.</p>
 <dt class="field-even">Default<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">5900</span></code></p>
 </dd>
+<dt class="field-odd">Required<span class="colon">:</span></dt>
+<dd class="field-odd"><p>False</p>
+</dd>
 </dl>
 </dd></dl>
 
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-display">
 <span class="sig-name descname"><span class="pre">display</span></span><a class="headerlink" href="#confval-display" title="Permalink to this definition"></a></dt>
-<dd><p>Specifies the display to use on the remote machine.</p>
+<dd><p>Display number to connect to on the remote host.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>str</p>
+<dd class="field-odd"><p>int</p>
 </dd>
 <dt class="field-even">Default<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">1</span></code></p>
+</dd>
+<dt class="field-odd">Required<span class="colon">:</span></dt>
+<dd class="field-odd"><p>False</p>
 </dd>
 </dl>
 </dd></dl>
@@ -265,100 +296,7 @@ remote ssh-server.</p>
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-password">
 <span class="sig-name descname"><span class="pre">password</span></span><a class="headerlink" href="#confval-password" title="Permalink to this definition"></a></dt>
-<dd><p>Specifies the password to use</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>str</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="std confval">
-<dt class="sig sig-object std" id="confval-filename">
-<span class="sig-name descname"><span class="pre">filename</span></span><a class="headerlink" href="#confval-filename" title="Permalink to this definition"></a></dt>
-<dd><p>Path where a screenshot <code class="docutils literal notranslate"><span class="pre">capture</span></code> should be saved, or file to compare a screenshot with <code class="docutils literal notranslate"><span class="pre">expectscreen</span></code>.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>str</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="std confval">
-<dt class="sig sig-object std" id="confval-maxrms">
-<span class="sig-name descname"><span class="pre">maxrms</span></span><a class="headerlink" href="#confval-maxrms" title="Permalink to this definition"></a></dt>
-<dd><p>Metric to compare a screen with <code class="docutils literal notranslate"><span class="pre">expectscreen</span></code>. Only continue if the screen matches.
-Maximum RMS (root mean square) error allowed (set a small value for near-exact match)</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>float</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="std confval">
-<dt class="sig sig-object std" id="confval-input">
-<span class="sig-name descname"><span class="pre">input</span></span><a class="headerlink" href="#confval-input" title="Permalink to this definition"></a></dt>
-<dd><p>text to type with the command <code class="docutils literal notranslate"><span class="pre">type</span></code></p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>str</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="std confval">
-<dt class="sig sig-object std" id="confval-key">
-<span class="sig-name descname"><span class="pre">key</span></span><a class="headerlink" href="#confval-key" title="Permalink to this definition"></a></dt>
-<dd><p>key to press with the command <code class="docutils literal notranslate"><span class="pre">key</span></code></p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>str</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="std confval">
-<dt class="sig sig-object std" id="confval-x">
-<span class="sig-name descname"><span class="pre">x</span></span><a class="headerlink" href="#confval-x" title="Permalink to this definition"></a></dt>
-<dd><p>x position to move the cursor to with the command <code class="docutils literal notranslate"><span class="pre">move</span></code></p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>int</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="std confval">
-<dt class="sig sig-object std" id="confval-y">
-<span class="sig-name descname"><span class="pre">y</span></span><a class="headerlink" href="#confval-y" title="Permalink to this definition"></a></dt>
-<dd><p>y position to move the cursor to with the command <code class="docutils literal notranslate"><span class="pre">move</span></code></p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>int</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="std confval">
-<dt class="sig sig-object std" id="confval-creates_session">
-<span class="sig-name descname"><span class="pre">creates_session</span></span><a class="headerlink" href="#confval-creates_session" title="Permalink to this definition"></a></dt>
-<dd><p>A session name that identifies the session that is created when
-executing this command. This session name can be used by using the
-option <code class="docutils literal notranslate"><span class="pre">session</span></code> in another vnc-command.
-If no <code class="docutils literal notranslate"><span class="pre">creates_session</span></code> name is defined and no previous session is used a session named <code class="docutils literal notranslate"><span class="pre">default</span></code> is created.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>str</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="std confval">
-<dt class="sig sig-object std" id="confval-session">
-<span class="sig-name descname"><span class="pre">session</span></span><a class="headerlink" href="#confval-session" title="Permalink to this definition"></a></dt>
-<dd><p>Reuse an existing session. This setting works only if another
-vnc-command was executed with the command-option <code class="docutils literal notranslate"><span class="pre">creates_session</span></code></p>
+<dd><p>Password for VNC authentication.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str</p>
@@ -369,7 +307,8 @@ vnc-command was executed with the command-option <code class="docutils literal n
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-connection_timeout">
 <span class="sig-name descname"><span class="pre">connection_timeout</span></span><a class="headerlink" href="#confval-connection_timeout" title="Permalink to this definition"></a></dt>
-<dd><p>timeout in seconds for the connection to be established</p>
+<dd><p>Timeout in seconds for the initial connection to be established.
+Must be set in the first command that opens the connection.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>int</p>
@@ -377,13 +316,18 @@ vnc-command was executed with the command-option <code class="docutils literal n
 <dt class="field-even">Default<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">10</span></code></p>
 </dd>
+<dt class="field-odd">Required<span class="colon">:</span></dt>
+<dd class="field-odd"><p>False</p>
+</dd>
 </dl>
 </dd></dl>
 
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-expect_timeout">
 <span class="sig-name descname"><span class="pre">expect_timeout</span></span><a class="headerlink" href="#confval-expect_timeout" title="Permalink to this definition"></a></dt>
-<dd><p>timeout in seconds for a command to finish. <strong>Gets passed as an argument to the client the first time a connection is established</strong>.</p>
+<dd><p>Timeout in seconds for a command to complete. Passed to the VNC client when
+the connection is first established — must be set in the first command that
+opens the connection.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>int</p>
@@ -391,17 +335,139 @@ vnc-command was executed with the command-option <code class="docutils literal n
 <dt class="field-even">Default<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">60</span></code></p>
 </dd>
+<dt class="field-odd">Required<span class="colon">:</span></dt>
+<dd class="field-odd"><p>False</p>
+</dd>
 </dl>
 </dd></dl>
 
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>The <code class="docutils literal notranslate"><span class="pre">connection_timeout</span></code> and <cite>expect_timeout`</cite> need to be set in the first command that establishes the connection</p>
-</div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>The vnc connection needs to be closed with the command <code class="docutils literal notranslate"><span class="pre">close</span></code> explicitely, otherwise attackmate will keep running.</p>
-</div>
+</section>
+<section id="sessions">
+<h2>Sessions<a class="headerlink" href="#sessions" title="Permalink to this heading"></a></h2>
+<dl class="std confval">
+<dt class="sig sig-object std" id="confval-creates_session">
+<span class="sig-name descname"><span class="pre">creates_session</span></span><a class="headerlink" href="#confval-creates_session" title="Permalink to this definition"></a></dt>
+<dd><p>Name to assign to the session opened by this command. Can be reused in subsequent
+commands via <a class="reference internal" href="#confval-session"><code class="xref std std-confval docutils literal notranslate"><span class="pre">session</span></code></a>. If omitted and no prior session exists, a session
+named <code class="docutils literal notranslate"><span class="pre">default</span></code> is created automatically.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+<dt class="field-even">Required<span class="colon">:</span></dt>
+<dd class="field-even"><p>False</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="std confval">
+<dt class="sig sig-object std" id="confval-session">
+<span class="sig-name descname"><span class="pre">session</span></span><a class="headerlink" href="#confval-session" title="Permalink to this definition"></a></dt>
+<dd><p>Name of an existing VNC session to reuse. The session must have been created
+previously via <a class="reference internal" href="#confval-creates_session"><code class="xref std std-confval docutils literal notranslate"><span class="pre">creates_session</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+<dt class="field-even">Required<span class="colon">:</span></dt>
+<dd class="field-even"><p>False</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="actions">
+<h2>Actions<a class="headerlink" href="#actions" title="Permalink to this heading"></a></h2>
+<dl class="std confval">
+<dt class="sig sig-object std" id="confval-filename">
+<span class="sig-name descname"><span class="pre">filename</span></span><a class="headerlink" href="#confval-filename" title="Permalink to this definition"></a></dt>
+<dd><p>Path to save a screenshot (<code class="docutils literal notranslate"><span class="pre">capture</span></code>) or path to an image file to compare
+against the current screen (<code class="docutils literal notranslate"><span class="pre">expectscreen</span></code>).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+<dt class="field-even">Required<span class="colon">:</span></dt>
+<dd class="field-even"><p>when <code class="docutils literal notranslate"><span class="pre">cmd:</span> <span class="pre">capture</span></code> or <code class="docutils literal notranslate"><span class="pre">cmd:</span> <span class="pre">expectscreen</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="std confval">
+<dt class="sig sig-object std" id="confval-maxrms">
+<span class="sig-name descname"><span class="pre">maxrms</span></span><a class="headerlink" href="#confval-maxrms" title="Permalink to this definition"></a></dt>
+<dd><p>Maximum RMS (root mean square) error allowed when comparing screens with
+<code class="docutils literal notranslate"><span class="pre">expectscreen</span></code>. Lower values require a closer match.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+<dt class="field-even">Default<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">0</span></code></p>
+</dd>
+<dt class="field-odd">Required<span class="colon">:</span></dt>
+<dd class="field-odd"><p>False</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="std confval">
+<dt class="sig sig-object std" id="confval-input">
+<span class="sig-name descname"><span class="pre">input</span></span><a class="headerlink" href="#confval-input" title="Permalink to this definition"></a></dt>
+<dd><p>Text to type on the remote host. Used with the <code class="docutils literal notranslate"><span class="pre">type</span></code> command.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+<dt class="field-even">Required<span class="colon">:</span></dt>
+<dd class="field-even"><p>when <code class="docutils literal notranslate"><span class="pre">cmd:</span> <span class="pre">type</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="std confval">
+<dt class="sig sig-object std" id="confval-key">
+<span class="sig-name descname"><span class="pre">key</span></span><a class="headerlink" href="#confval-key" title="Permalink to this definition"></a></dt>
+<dd><p>Key to press on the remote host. Used with the <code class="docutils literal notranslate"><span class="pre">key</span></code> command.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+<dt class="field-even">Required<span class="colon">:</span></dt>
+<dd class="field-even"><p>when <code class="docutils literal notranslate"><span class="pre">cmd:</span> <span class="pre">key</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="std confval">
+<dt class="sig sig-object std" id="confval-x">
+<span class="sig-name descname"><span class="pre">x</span></span><a class="headerlink" href="#confval-x" title="Permalink to this definition"></a></dt>
+<dd><p>Horizontal cursor position for the <code class="docutils literal notranslate"><span class="pre">move</span></code> command.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+<dt class="field-even">Required<span class="colon">:</span></dt>
+<dd class="field-even"><p>when <code class="docutils literal notranslate"><span class="pre">cmd:</span> <span class="pre">move</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="std confval">
+<dt class="sig sig-object std" id="confval-y">
+<span class="sig-name descname"><span class="pre">y</span></span><a class="headerlink" href="#confval-y" title="Permalink to this definition"></a></dt>
+<dd><p>Vertical cursor position for the <code class="docutils literal notranslate"><span class="pre">move</span></code> command.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+<dt class="field-even">Required<span class="colon">:</span></dt>
+<dd class="field-even"><p>when <code class="docutils literal notranslate"><span class="pre">cmd:</span> <span class="pre">move</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
 </section>
 
 

@@ -91,7 +91,16 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">General:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html">AttackMate <img alt="Logo" src="/images/AttackMate_logo_no_logo.png" align="right" height="90"></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#installation">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#execute">Execute</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#documentation">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#publications">Publications</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#contribution">Contribution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#disclaimer">Disclaimer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#security">Security</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#license">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#financial-support">Financial Support</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Getting Started:</span></p>
 <ul>
@@ -176,13 +185,14 @@
              
   <section id="http-client">
 <h1>http-client<a class="headerlink" href="#http-client" title="Permalink to this heading"></a></h1>
-<p>Execute HTTP-requests like curl does. This command also supports HTTP/2</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1">###</span>
-<span class="nt">commands</span><span class="p">:</span>
+<p>Send HTTP requests with support for common methods, custom headers, cookies, and HTTP/2.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">commands</span><span class="p">:</span>
+<span class="w">   </span><span class="c1"># Simple HTTP/2 GET request:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http-client</span>
 <span class="w">    </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://www.google.com</span>
 <span class="w">    </span><span class="nt">http2</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
 
+<span class="w">   </span><span class="c1"># POST request with headers, cookies, and form data:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http-client</span>
 <span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">POST</span>
 <span class="w">    </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://api.myapp.tld</span>
@@ -195,6 +205,7 @@
 <span class="w">      </span><span class="nt">view</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">edit</span>
 <span class="w">      </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span>
 
+<span class="w">   </span><span class="c1"># PUT request uploading a local file</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http-client</span>
 <span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PUT</span>
 <span class="w">    </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://api.myapp.tld/dav</span>
@@ -204,16 +215,8 @@
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-cmd">
 <span class="sig-name descname"><span class="pre">cmd</span></span><a class="headerlink" href="#confval-cmd" title="Permalink to this definition"></a></dt>
-<dd><p>The HTTP-Method to use. Supported methods are:</p>
-<ul class="simple">
-<li><p>GET</p></li>
-<li><p>POST</p></li>
-<li><p>PUT</p></li>
-<li><p>DELETE</p></li>
-<li><p>PATCH</p></li>
-<li><p>HEAD</p></li>
-<li><p>OPTIONS</p></li>
-</ul>
+<dd><p>HTTP method to use. Supported values: <code class="docutils literal notranslate"><span class="pre">GET</span></code>, <code class="docutils literal notranslate"><span class="pre">POST</span></code>, <code class="docutils literal notranslate"><span class="pre">PUT</span></code>, <code class="docutils literal notranslate"><span class="pre">DELETE</span></code>,
+<code class="docutils literal notranslate"><span class="pre">PATCH</span></code>, <code class="docutils literal notranslate"><span class="pre">HEAD</span></code>, <code class="docutils literal notranslate"><span class="pre">OPTIONS</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str</p>
@@ -221,19 +224,22 @@
 <dt class="field-even">Default<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">GET</span></code></p>
 </dd>
+<dt class="field-odd">Required<span class="colon">:</span></dt>
+<dd class="field-odd"><p>False</p>
+</dd>
 </dl>
 </dd></dl>
 
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-url">
 <span class="sig-name descname"><span class="pre">url</span></span><a class="headerlink" href="#confval-url" title="Permalink to this definition"></a></dt>
-<dd><p>Address of the target website.</p>
+<dd><p>URL of the target.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str</p>
 </dd>
 <dt class="field-even">Required<span class="colon">:</span></dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code></p>
+<dd class="field-even"><p>True</p>
 </dd>
 </dl>
 </dd></dl>
@@ -249,16 +255,22 @@
 <dt class="field-even">Default<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">False</span></code></p>
 </dd>
+<dt class="field-odd">Required<span class="colon">:</span></dt>
+<dd class="field-odd"><p>False</p>
+</dd>
 </dl>
 </dd></dl>
 
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-headers">
 <span class="sig-name descname"><span class="pre">headers</span></span><a class="headerlink" href="#confval-headers" title="Permalink to this definition"></a></dt>
-<dd><p>Include these extra headers in the request when sending HTTP to a server.</p>
+<dd><p>Additional HTTP headers to include in the request.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>dict[str,str]</p>
+</dd>
+<dt class="field-even">Required<span class="colon">:</span></dt>
+<dd class="field-even"><p>False</p>
 </dd>
 </dl>
 </dd></dl>
@@ -266,10 +278,13 @@
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-cookies">
 <span class="sig-name descname"><span class="pre">cookies</span></span><a class="headerlink" href="#confval-cookies" title="Permalink to this definition"></a></dt>
-<dd><p>Pass the data to the HTTP server in the Cookie header.</p>
+<dd><p>Cookies to send in the <code class="docutils literal notranslate"><span class="pre">Cookie</span></code> header.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>dict[str,str]</p>
+</dd>
+<dt class="field-even">Required<span class="colon">:</span></dt>
+<dd class="field-even"><p>False</p>
 </dd>
 </dl>
 </dd></dl>
@@ -277,12 +292,14 @@
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-data">
 <span class="sig-name descname"><span class="pre">data</span></span><a class="headerlink" href="#confval-data" title="Permalink to this definition"></a></dt>
-<dd><p>Sends  the specified data in a POST request to the HTTP server, in the same
-way that a browser does when a user has filled in an HTML form and presses
-the submit button.</p>
+<dd><p>Form data to send in the request body. Equivalent to submitting an HTML form.
+Typically used with <code class="docutils literal notranslate"><span class="pre">POST</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>dict[str,str]</p>
+</dd>
+<dt class="field-even">Required<span class="colon">:</span></dt>
+<dd class="field-even"><p>False</p>
 </dd>
 </dl>
 </dd></dl>
@@ -290,11 +307,14 @@ the submit button.</p>
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-local_path">
 <span class="sig-name descname"><span class="pre">local_path</span></span><a class="headerlink" href="#confval-local_path" title="Permalink to this definition"></a></dt>
-<dd><p>Load content from the given file and send it via HTTP. This is useful for
-dav uploads.</p>
+<dd><p>Path to a local file whose contents will be sent as the request body. Useful
+for WebDAV uploads.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str</p>
+</dd>
+<dt class="field-even">Required<span class="colon">:</span></dt>
+<dd class="field-even"><p>False</p>
 </dd>
 </dl>
 </dd></dl>
@@ -302,7 +322,7 @@ dav uploads.</p>
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-useragent">
 <span class="sig-name descname"><span class="pre">useragent</span></span><a class="headerlink" href="#confval-useragent" title="Permalink to this definition"></a></dt>
-<dd><p>Change the user-agent string.</p>
+<dd><p>Override the <code class="docutils literal notranslate"><span class="pre">User-Agent</span></code> header.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str</p>
@@ -310,19 +330,25 @@ dav uploads.</p>
 <dt class="field-even">Default<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">AttackMate</span></code></p>
 </dd>
+<dt class="field-odd">Required<span class="colon">:</span></dt>
+<dd class="field-odd"><p>False</p>
+</dd>
 </dl>
 </dd></dl>
 
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-follow">
 <span class="sig-name descname"><span class="pre">follow</span></span><a class="headerlink" href="#confval-follow" title="Permalink to this definition"></a></dt>
-<dd><p>Automatically follow redirects</p>
+<dd><p>Automatically follow HTTP redirects.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>bool</p>
 </dd>
 <dt class="field-even">Default<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">False</span></code></p>
+</dd>
+<dt class="field-odd">Required<span class="colon">:</span></dt>
+<dd class="field-odd"><p>False</p>
 </dd>
 </dl>
 </dd></dl>
@@ -330,13 +356,17 @@ dav uploads.</p>
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-verify">
 <span class="sig-name descname"><span class="pre">verify</span></span><a class="headerlink" href="#confval-verify" title="Permalink to this definition"></a></dt>
-<dd><p>This option makes attackmate skip the secure connection verification step and proceed without checking.</p>
+<dd><p>Verify the server’s TLS certificate. Set to <code class="docutils literal notranslate"><span class="pre">False</span></code> to skip verification
+(e.g. for self-signed certificates).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>bool</p>
 </dd>
 <dt class="field-even">Default<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">False</span></code></p>
+</dd>
+<dt class="field-odd">Required<span class="colon">:</span></dt>
+<dd class="field-odd"><p>False</p>
 </dd>
 </dl>
 </dd></dl>
@@ -344,13 +374,16 @@ dav uploads.</p>
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-http2">
 <span class="sig-name descname"><span class="pre">http2</span></span><a class="headerlink" href="#confval-http2" title="Permalink to this definition"></a></dt>
-<dd><p>Try to use HTTP version 2. AttackMate will negotiate the HTTP version with the server and use HTTP2 if possible.</p>
+<dd><p>Negotiate HTTP/2 with the server and use it if supported.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>bool</p>
 </dd>
 <dt class="field-even">Default<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">False</span></code></p>
+</dd>
+<dt class="field-odd">Required<span class="colon">:</span></dt>
+<dd class="field-odd"><p>False</p>
 </dd>
 </dl>
 </dd></dl>

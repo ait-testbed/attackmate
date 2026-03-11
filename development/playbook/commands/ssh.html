@@ -91,7 +91,16 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">General:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html">AttackMate <img alt="Logo" src="/images/AttackMate_logo_no_logo.png" align="right" height="90"></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#installation">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#execute">Execute</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#documentation">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#publications">Publications</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#contribution">Contribution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#disclaimer">Disclaimer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#security">Security</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#license">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#financial-support">Financial Support</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Getting Started:</span></p>
 <ul>
@@ -175,11 +184,11 @@
            <div itemprop="articleBody">
              
   <section id="ssh">
-<h1>ssh<a class="headerlink" href="#ssh" title="Permalink to this heading"></a></h1>
-<p>Execute commands on a remote server via SSH.</p>
+<span id="id1"></span><h1>ssh<a class="headerlink" href="#ssh" title="Permalink to this heading"></a></h1>
+<p>Execute commands on a remote host via SSH.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This command caches all the settings so
+<p>This command caches all settings so
 that they only need to be defined once.</p>
 </div>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">vars</span><span class="p">:</span>
@@ -187,29 +196,30 @@ that they only need to be defined once.</p>
 <span class="w">  </span><span class="nt">$SSH_SERVER</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10.10.10.19</span>
 
 <span class="nt">commands</span><span class="p">:</span>
-<span class="w">  </span><span class="c1"># creates new ssh-connection and session</span>
+<span class="w">  </span><span class="c1"># Establish a new connection and create a named session:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ssh</span>
 <span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nmap $SERVER_ADDRESS</span>
 <span class="w">    </span><span class="nt">hostname</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">$SSH_SERVER</span>
 <span class="w">    </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">aecid</span>
 <span class="w">    </span><span class="nt">key_filename</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/home/alice/.ssh/id_rsa&quot;</span>
-<span class="w">    </span><span class="nt">creates_session</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;attacker&quot;</span>
+<span class="w">    </span><span class="nt">creates_session</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">attacker</span>
 
-<span class="w">  </span><span class="c1"># cached ssh-settings. creates new ssh-connection</span>
+<span class="w">  </span><span class="c1"># Reuses cached settings, opens a new connection:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ssh</span>
-<span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;echo</span><span class="nv"> </span><span class="s">$SERVER_ADDRESS&quot;</span>
+<span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">echo $SERVER_ADDRESS</span>
 
-<span class="w">  </span><span class="c1"># reuses existing session &quot;attacker&quot;</span>
+<span class="w">  </span><span class="c1"># Reuses the existing &quot;attacker&quot; session:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ssh</span>
-<span class="w">    </span><span class="nt">session</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;attacker&quot;</span>
-<span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;id&quot;</span>
+<span class="w">    </span><span class="nt">session</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">attacker</span>
+<span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">id</span>
 </pre></div>
 </div>
+<section id="connection">
+<h2>Connection<a class="headerlink" href="#connection" title="Permalink to this heading"></a></h2>
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-hostname">
 <span class="sig-name descname"><span class="pre">hostname</span></span><a class="headerlink" href="#confval-hostname" title="Permalink to this definition"></a></dt>
-<dd><p>This option sets the hostname or ip-address of the
-remote ssh-server.</p>
+<dd><p>Hostname or IP address of the remote SSH server.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str</p>
@@ -234,7 +244,7 @@ remote ssh-server.</p>
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-username">
 <span class="sig-name descname"><span class="pre">username</span></span><a class="headerlink" href="#confval-username" title="Permalink to this definition"></a></dt>
-<dd><p>Specifies the user to log in as on the remote machine.</p>
+<dd><p>Username to authenticate as on the remote host.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str</p>
@@ -245,19 +255,7 @@ remote ssh-server.</p>
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-password">
 <span class="sig-name descname"><span class="pre">password</span></span><a class="headerlink" href="#confval-password" title="Permalink to this definition"></a></dt>
-<dd><p>Specifies the password to use. An alternative would be to use a key_file.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>str</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="std confval">
-<dt class="sig sig-object std" id="confval-passphrase">
-<span class="sig-name descname"><span class="pre">passphrase</span></span><a class="headerlink" href="#confval-passphrase" title="Permalink to this definition"></a></dt>
-<dd><p>Use this passphrase to decrypt the key_file. This is only necessary if the
-keyfile is protected by a passphrase.</p>
+<dd><p>Password for authentication. An alternative is to use <a class="reference internal" href="#confval-key_filename"><code class="xref std std-confval docutils literal notranslate"><span class="pre">key_filename</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str</p>
@@ -268,7 +266,18 @@ keyfile is protected by a passphrase.</p>
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-key_filename">
 <span class="sig-name descname"><span class="pre">key_filename</span></span><a class="headerlink" href="#confval-key_filename" title="Permalink to this definition"></a></dt>
-<dd><p>Path to the keyfile.</p>
+<dd><p>Path to a private key file for authentication.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="std confval">
+<dt class="sig sig-object std" id="confval-passphrase">
+<span class="sig-name descname"><span class="pre">passphrase</span></span><a class="headerlink" href="#confval-passphrase" title="Permalink to this definition"></a></dt>
+<dd><p>Passphrase to decrypt <a class="reference internal" href="#confval-key_filename"><code class="xref std std-confval docutils literal notranslate"><span class="pre">key_filename</span></code></a>, if the key is passphrase-protected.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str</p>
@@ -279,10 +288,16 @@ keyfile is protected by a passphrase.</p>
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-timeout">
 <span class="sig-name descname"><span class="pre">timeout</span></span><a class="headerlink" href="#confval-timeout" title="Permalink to this definition"></a></dt>
-<dd><p>The timeout to drop a connection attempt in seconds.</p>
+<dd><p>Timeout in seconds for connection attempts.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>float</p>
+</dd>
+<dt class="field-even">Default<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">60</span></code></p>
+</dd>
+<dt class="field-odd">Required<span class="colon">:</span></dt>
+<dd class="field-odd"><p>False</p>
 </dd>
 </dl>
 </dd></dl>
@@ -290,11 +305,9 @@ keyfile is protected by a passphrase.</p>
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-clear_cache">
 <span class="sig-name descname"><span class="pre">clear_cache</span></span><a class="headerlink" href="#confval-clear_cache" title="Permalink to this definition"></a></dt>
-<dd><p>Normally all settings for ssh-connections are cached. This allows to defined
-all settings in one command and all following commands can reuse these settings
-without set them in every single command. If a new connection with different
-settings should be configured, this setting allows to reset the cache to default
-values.</p>
+<dd><p>Clear all cached connection settings before this command runs, allowing a fresh
+connection to be configured. (Normally all settings for ssh-connections are cached. This allows to define
+all settings in one command and reuse them in the following commands without having to redefine them)</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>bool</p>
@@ -302,19 +315,20 @@ values.</p>
 <dt class="field-even">Default<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">False</span></code></p>
 </dd>
+<dt class="field-odd">Required<span class="colon">:</span></dt>
+<dd class="field-odd"><p>False</p>
+</dd>
 </dl>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>This setting will not clear the session store.</p>
-</div>
 </dd></dl>
 
+</section>
+<section id="sessions">
+<h2>Sessions<a class="headerlink" href="#sessions" title="Permalink to this heading"></a></h2>
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-creates_session">
 <span class="sig-name descname"><span class="pre">creates_session</span></span><a class="headerlink" href="#confval-creates_session" title="Permalink to this definition"></a></dt>
-<dd><p>A session name that identifies the session that is created when
-executing this command. This session-name can be used by using the
-option “session”</p>
+<dd><p>Name to assign to the session opened by this command. Can be reused in subsequent
+commands via <a class="reference internal" href="vnc.html#confval-session"><code class="xref std std-confval docutils literal notranslate"><span class="pre">session</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str</p>
@@ -325,8 +339,8 @@ option “session”</p>
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-session">
 <span class="sig-name descname"><span class="pre">session</span></span><a class="headerlink" href="#confval-session" title="Permalink to this definition"></a></dt>
-<dd><p>Reuse an existing ssh-session. This setting works only if another
-ssh-command was executed with the command-option “creates_session”</p>
+<dd><p>Name of an existing session to reuse. The session must have been created previously
+via <a class="reference internal" href="vnc.html#confval-creates_session"><code class="xref std std-confval docutils literal notranslate"><span class="pre">creates_session</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str</p>
@@ -334,11 +348,13 @@ ssh-command was executed with the command-option “creates_session”</p>
 </dl>
 </dd></dl>
 
+</section>
+<section id="jump-host">
+<h2>Jump Host<a class="headerlink" href="#jump-host" title="Permalink to this heading"></a></h2>
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-jmp_hostname">
 <span class="sig-name descname"><span class="pre">jmp_hostname</span></span><a class="headerlink" href="#confval-jmp_hostname" title="Permalink to this definition"></a></dt>
-<dd><p>This option sets the hostname or ip-address of the
-remote jump server.</p>
+<dd><p>Hostname or IP address of an SSH jump host to tunnel through.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str</p>
@@ -349,7 +365,7 @@ remote jump server.</p>
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-jmp_port">
 <span class="sig-name descname"><span class="pre">jmp_port</span></span><a class="headerlink" href="#confval-jmp_port" title="Permalink to this definition"></a></dt>
-<dd><p>Port to connect to on the jump-host.</p>
+<dd><p>Port to connect to on the jump host.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>int</p>
@@ -363,30 +379,24 @@ remote jump server.</p>
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-jmp_username">
 <span class="sig-name descname"><span class="pre">jmp_username</span></span><a class="headerlink" href="#confval-jmp_username" title="Permalink to this definition"></a></dt>
-<dd><p>Specifies the user to log in as on the jmp-host.</p>
+<dd><p>Username to authenticate as on the jump host.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str</p>
 </dd>
 <dt class="field-even">Default<span class="colon">:</span></dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">same</span> <span class="pre">as</span> <span class="pre">username</span></code></p>
+<dd class="field-even"><p>same as <a class="reference internal" href="#confval-username"><code class="xref std std-confval docutils literal notranslate"><span class="pre">username</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
 
+</section>
+<section id="interactive-mode">
+<h2>Interactive Mode<a class="headerlink" href="#interactive-mode" title="Permalink to this heading"></a></h2>
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-interactive">
 <span class="sig-name descname"><span class="pre">interactive</span></span><a class="headerlink" href="#confval-interactive" title="Permalink to this definition"></a></dt>
-<dd><p>When the ssh-command is executed, the command will block until the ssh-execution finishes.
-However, for some exploits it is necessary to run a command and send keystrokes to an
-interactive session. For example run with the first command “vim” and with the second command
-send keystrokes to the open vim-session. In interactive-mode the command will try reading the
-output until no output is written for a certain amount of seconds. If the output ends with any
-string found in <code class="docutils literal notranslate"><span class="pre">prompts</span></code>, it will stop immediately.</p>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Please note that you <strong>MUST</strong> send a newline when you execute a ssh-command interactively.</p>
-</div>
+<dd><p>Run the command in interactive mode.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>bool</p>
@@ -394,26 +404,38 @@ string found in <code class="docutils literal notranslate"><span class="pre">pro
 <dt class="field-even">Default<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">False</span></code></p>
 </dd>
+<dt class="field-odd">Required<span class="colon">:</span></dt>
+<dd class="field-odd"><p>False</p>
+</dd>
 </dl>
+<p>Instead of waiting for the command to finish,
+AttackMate reads output until no new output appears for <a class="reference internal" href="#confval-command_timeout"><code class="xref std std-confval docutils literal notranslate"><span class="pre">command_timeout</span></code></a>
+seconds, or until the output ends with one of the strings in <a class="reference internal" href="#confval-prompts"><code class="xref std std-confval docutils literal notranslate"><span class="pre">prompts</span></code></a>.</p>
+<p>Useful for commands that require keystroke input (e.g. opening <code class="docutils literal notranslate"><span class="pre">vim</span></code> and then
+sending keystrokes in a follow-up command).</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Commands executed in interactive mode <strong>MUST</strong> end with a newline character (<code class="docutils literal notranslate"><span class="pre">\n</span></code>).</p>
+</div>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">vars</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">$SERVER_ADDRESS</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.42.0.254</span>
 <span class="w">  </span><span class="nt">$SSH_SERVER</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10.10.10.19</span>
 
 <span class="nt">commands</span><span class="p">:</span>
-<span class="w">  </span><span class="c1"># creates new ssh-connection and session</span>
+<span class="w">  </span><span class="c1"># Open nmap in interactive mode and create a session:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ssh</span>
 <span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;nmap</span><span class="nv"> </span><span class="s">--interactive\n&quot;</span>
 <span class="w">    </span><span class="nt">interactive</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
 <span class="w">    </span><span class="nt">hostname</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">$SSH_SERVER</span>
 <span class="w">    </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">aecid</span>
 <span class="w">    </span><span class="nt">key_filename</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/home/alice/.ssh/id_rsa&quot;</span>
-<span class="w">    </span><span class="nt">creates_session</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;attacker&quot;</span>
+<span class="w">    </span><span class="nt">creates_session</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">attacker</span>
 
-<span class="w">  </span><span class="c1"># break out of the nmap-interactive-mode</span>
+<span class="w">  </span><span class="c1"># Send a command to the open interactive session:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ssh</span>
 <span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;!sh\n&quot;</span>
 <span class="w">    </span><span class="nt">interactive</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
-<span class="w">    </span><span class="nt">session</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;attacker&quot;</span>
+<span class="w">    </span><span class="nt">session</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">attacker</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -421,8 +443,7 @@ string found in <code class="docutils literal notranslate"><span class="pre">pro
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-command_timeout">
 <span class="sig-name descname"><span class="pre">command_timeout</span></span><a class="headerlink" href="#confval-command_timeout" title="Permalink to this definition"></a></dt>
-<dd><p>The interactive-mode works with timeouts while reading the output. If there is no output for some seconds,
-the command will stop reading.</p>
+<dd><p>Seconds to wait for new output before stopping in interactive mode.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>int</p>
@@ -430,15 +451,18 @@ the command will stop reading.</p>
 <dt class="field-even">Default<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">15</span></code></p>
 </dd>
+<dt class="field-odd">Required<span class="colon">:</span></dt>
+<dd class="field-odd"><p>False</p>
+</dd>
 </dl>
 </dd></dl>
 
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-prompts">
 <span class="sig-name descname"><span class="pre">prompts</span></span><a class="headerlink" href="#confval-prompts" title="Permalink to this definition"></a></dt>
-<dd><p>In interactive-mode the command will try reading the output for a certain amount of seconds. If the output
-ends with any string found in <code class="docutils literal notranslate"><span class="pre">prompts</span></code>, the command will stop immediately.
-If <code class="docutils literal notranslate"><span class="pre">prompts</span></code> is an empty list, no prompt checking will be performed.</p>
+<dd><p>List of strings that signal the end of output in interactive mode. When the output
+ends with any of these strings, AttackMate stops reading immediately without waiting
+for the timeout. Set to an empty list to disable prompt detection.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>list[str]</p>
@@ -446,12 +470,12 @@ If <code class="docutils literal notranslate"><span class="pre">prompts</span></
 <dt class="field-even">Default<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">[&quot;$</span> <span class="pre">&quot;,</span> <span class="pre">&quot;#</span> <span class="pre">&quot;,</span> <span class="pre">&quot;&gt;</span> <span class="pre">&quot;]</span></code></p>
 </dd>
+<dt class="field-odd">Required<span class="colon">:</span></dt>
+<dd class="field-odd"><p>False</p>
+</dd>
 </dl>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">vars</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">$SSH_SERVER</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10.10.10.19</span>
-
-<span class="nt">commands</span><span class="p">:</span>
-<span class="w">  </span><span class="c1"># creates new ssh-connection and session</span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">commands</span><span class="p">:</span>
+<span class="w">  </span><span class="c1"># Custom prompt list:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ssh</span>
 <span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;nmap</span><span class="nv"> </span><span class="s">--interactive\n&quot;</span>
 <span class="w">    </span><span class="nt">interactive</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
@@ -463,14 +487,12 @@ If <code class="docutils literal notranslate"><span class="pre">prompts</span></
 <span class="w">    </span><span class="nt">hostname</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">$SSH_SERVER</span>
 <span class="w">    </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">aecid</span>
 <span class="w">    </span><span class="nt">key_filename</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/home/alice/.ssh/id_rsa&quot;</span>
-<span class="w">    </span><span class="nt">creates_session</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;attacker&quot;</span>
+<span class="w">    </span><span class="nt">creates_session</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">attacker</span>
 </pre></div>
 </div>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">vars</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">$SSH_SERVER</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10.10.10.19</span>
-
-<span class="nt">commands</span><span class="p">:</span>
-<span class="w">  </span><span class="c1"># prompts is an empty list</span>
+<span class="w">  </span><span class="c1"># Disable prompt detection entirely:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ssh</span>
 <span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;id\n&quot;</span>
 <span class="w">    </span><span class="nt">interactive</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
@@ -478,15 +500,19 @@ If <code class="docutils literal notranslate"><span class="pre">prompts</span></
 <span class="w">    </span><span class="nt">hostname</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">$SSH_SERVER</span>
 <span class="w">    </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">aecid</span>
 <span class="w">    </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">password</span>
-<span class="w">    </span><span class="nt">creates_session</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;attacker&quot;</span>
+<span class="w">    </span><span class="nt">creates_session</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">attacker</span>
 </pre></div>
 </div>
 </dd></dl>
 
+</section>
+<section id="binary-mode">
+<h2>Binary Mode<a class="headerlink" href="#binary-mode" title="Permalink to this heading"></a></h2>
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-bin">
 <span class="sig-name descname"><span class="pre">bin</span></span><a class="headerlink" href="#confval-bin" title="Permalink to this definition"></a></dt>
-<dd><p>Enable binary mode. In this mode only hex-characters are allowed.</p>
+<dd><p>Enable binary mode. In this mode, <code class="docutils literal notranslate"><span class="pre">cmd</span></code> must be a hex-encoded string representing
+the raw bytes to send.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>bool</p>
@@ -494,14 +520,13 @@ If <code class="docutils literal notranslate"><span class="pre">prompts</span></
 <dt class="field-even">Default<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">False</span></code></p>
 </dd>
+<dt class="field-odd">Required<span class="colon">:</span></dt>
+<dd class="field-odd"><p>False</p>
+</dd>
 </dl>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">vars</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">$SERVER_ADDRESS</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.42.0.254</span>
-<span class="w">  </span><span class="nt">$SSH_SERVER</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10.10.10.19</span>
-
-<span class="nt">commands</span><span class="p">:</span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">commands</span><span class="p">:</span>
+<span class="w">  </span><span class="c1"># &quot;6964&quot; is the hex encoding of &quot;id&quot;:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ssh</span>
-<span class="w">    </span><span class="c1"># hex-code for &quot;id&quot;</span>
 <span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;6964&quot;</span>
 <span class="w">    </span><span class="nt">bin</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
 <span class="w">    </span><span class="nt">hostname</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">$SSH_SERVER</span>
@@ -511,6 +536,7 @@ If <code class="docutils literal notranslate"><span class="pre">prompts</span></
 </div>
 </dd></dl>
 
+</section>
 </section>
 
 

@@ -91,7 +91,16 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">General:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../readme_link.html">AttackMate <img alt="Logo" src="/images/AttackMate_logo_no_logo.png" align="right" height="90"></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#installation">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#execute">Execute</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#documentation">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#publications">Publications</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#contribution">Contribution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#disclaimer">Disclaimer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#security">Security</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#license">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#financial-support">Financial Support</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Getting Started:</span></p>
 <ul class="current">
@@ -160,8 +169,7 @@
 <h1>cmd_config<a class="headerlink" href="#cmd-config" title="Permalink to this heading"></a></h1>
 <p>Stores global variables for command options.
 These are settings for <strong>all</strong> commands.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1">###</span>
-<span class="nt">cmd_config</span><span class="p">:</span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">cmd_config</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">loop_sleep</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5</span>
 <span class="w">  </span><span class="nt">command_delay</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span>
 </pre></div>
@@ -169,10 +177,9 @@ These are settings for <strong>all</strong> commands.</p>
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-loop_sleep">
 <span class="sig-name descname"><span class="pre">loop_sleep</span></span><a class="headerlink" href="#confval-loop_sleep" title="Permalink to this definition"></a></dt>
-<dd><p>All commands can be configured to be executed in a loop. For example: if a command
-does not deliver the expected output, the command can be executed again until the
-output has the expected value. Between the executions can be a sleep time of certain
-seconds.</p>
+<dd><p>All commands can be configured to be executed in a loop. For example:
+retrying until the output of a command matches an expected value,
+with an optional sleep interval between attempts.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>int</p>
@@ -186,8 +193,8 @@ seconds.</p>
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-command_delay">
 <span class="sig-name descname"><span class="pre">command_delay</span></span><a class="headerlink" href="#confval-command_delay" title="Permalink to this definition"></a></dt>
-<dd><p>This delay in seconds is applied to all commands in the playbook.
-It is not applied to debug, setvar and sleep commands.</p>
+<dd><p>A delay in seconds applied <strong>before</strong> each command in the playbook.
+Does not apply to <code class="docutils literal notranslate"><span class="pre">debug</span></code>, <code class="docutils literal notranslate"><span class="pre">setvar</span></code>, and <code class="docutils literal notranslate"><span class="pre">sleep</span></code> commands.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>float</p>

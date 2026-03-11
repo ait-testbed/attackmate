@@ -27,7 +27,7 @@ Include and run commands from another yaml-file.
 
 .. confval:: local_path
 
-   Path to the yaml-file
+   Path to the yaml file.
 
    :type: str
-   :required: ``True``
+   :required: True

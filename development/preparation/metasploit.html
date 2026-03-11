@@ -91,7 +91,16 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">General:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../readme_link.html">AttackMate <img alt="Logo" src="/images/AttackMate_logo_no_logo.png" align="right" height="90"></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#installation">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#execute">Execute</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#documentation">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#publications">Publications</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#contribution">Contribution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#disclaimer">Disclaimer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#security">Security</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#license">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#financial-support">Financial Support</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Getting Started:</span></p>
 <ul class="current">
@@ -156,19 +165,19 @@
              
   <section id="prepare-metasploit">
 <span id="prep-msf"></span><h1>Prepare Metasploit<a class="headerlink" href="#prepare-metasploit" title="Permalink to this heading"></a></h1>
-<p>It is recommended to install Metasploit as it is described in the
+<p>It is recommended to install Metasploit as described in the official
 <a class="reference external" href="https://docs.metasploit.com/docs/using-metasploit/getting-started/nightly-installers.html">Metasploit documentation</a>.
-If you run Kali Linux, you could also install it from the Kali Linux repositories using apt:</p>
+On Kali Linux, you can also install it from the repositories using apt:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ sudo apt update &amp;&amp; sudo apt install metasploit-framework
 </pre></div>
 </div>
-<p>AttackMate needs the RPC-daemon(msfrpcd) for communication with Metasploit.
-It is possible to protect the daemon with a password. The following example
-starts the msfrpcd with a password:</p>
+<p>AttackMate communicates with Metasploit via the RPC daemon (<code class="docutils literal notranslate"><span class="pre">msfrpcd</span></code>). Start it
+(optionally with a password) before running AttackMate:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ msfrpcd -P securepassword
 </pre></div>
 </div>
-<p>After starting the msfrpcd it will listen on all interface at port <code class="docutils literal notranslate"><span class="pre">55553</span></code>.</p>
+<p>Once started, <code class="docutils literal notranslate"><span class="pre">msfrpcd</span></code> listens on all interfaces on port <code class="docutils literal notranslate"><span class="pre">55553</span></code>. Configure the
+connection in AttackMate via <a class="reference internal" href="../configuration/msf_config.html#msf-config"><span class="std std-ref">msf_config</span></a>.</p>
 </section>
 
 

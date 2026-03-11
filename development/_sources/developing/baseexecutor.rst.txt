@@ -39,6 +39,7 @@ Example:
     from attackmate.executors.base_executor import BaseExecutor
     from attackmate.result import Result
 
+    @executor_factory.register_executor('custom')
     class CustomExecutor(BaseExecutor):
         async def _exec_cmd(self, command) -> Result:
             self.logger.info(f"Executing custom command: {command.cmd}")

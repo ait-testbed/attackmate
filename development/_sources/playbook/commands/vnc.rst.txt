@@ -2,12 +2,14 @@
 vnc
 ===
 
-Execute commands on a remote server via VNC. Uses the `vncdotool <https://github.com/sibson/vncdotool>`_ library.
+Execute commands on a remote host via VNC, using the
+`vncdotool <https://github.com/sibson/vncdotool>`_ library. Connection settings are
+cached after the first command, so subsequent commands only need to specify what changes.
 
-.. note::
+.. warning::
 
-   This command caches all the settings so
-   that they only need to be defined once.
+   VNC sessions must be explicitly closed with ``cmd: close``, otherwise AttackMate
+   will hang on exit.
 
 .. code-block:: yaml
 
@@ -18,7 +20,7 @@ Execute commands on a remote server via VNC. Uses the `vncdotool <https://github
      $PASSWORD: password
 
    commands:
-     # creates new vnc-connection and session. If creates_session is omitted, a session named "default" is created
+     # Open a connection, take a screenshot, and create a named session:
      - type: vnc
        cmd: capture
        filename: screenshot.png
@@ -28,28 +30,39 @@ Execute commands on a remote server via VNC. Uses the `vncdotool <https://github
        password: $PASSWORD
        creates_session: my_session
 
-     # reuses existing session "my_session
+     # Type text using the existing session:
      - type: vnc
        cmd: type
        input: "echo hello world"
        session: my_session
 
-     # closes existing session "my_session" and deletes from session store
+     # Close the session and remove it from the session store:
      - type: vnc
        cmd: close
        session: my_session
 
-
 .. confval:: cmd
 
-   One of ``type``, ``key``, ``capture``, ``move``, ``expectscreen``, ``close``, ``click``, ``rightclick``
+   The VNC action to perform. One of:
+
+   * ``capture`` — take a screenshot and save it to :confval:`filename`
+   * ``expectscreen`` — compare the current screen against :confval:`filename`; continue only if they match within :confval:`maxrms`
+   * ``type`` — type a string on the remote host via :confval:`input`
+   * ``key`` — press a key on the remote host via :confval:`key`
+   * ``click`` — left-click at the current cursor position
+   * ``rightclick`` — right-click at the current cursor position
+   * ``move`` — move the cursor to (:confval:`x`, :confval:`y`)
+   * ``close`` — close the session and remove it from the session store
 
    :type: str
+   :required: True
+
+Connection
+----------
 
 .. confval:: hostname
 
-   This option sets the hostname or ip-address of the
-   remote ssh-server.
+   Hostname or IP address of the remote VNC server.
 
    :type: str
 
@@ -59,95 +72,105 @@ Execute commands on a remote server via VNC. Uses the `vncdotool <https://github
 
    :type: int
    :default: ``5900``
+   :required: False
 
 .. confval:: display
 
-   Specifies the display to use on the remote machine.
+   Display number to connect to on the remote host.
 
-   :type: str
+   :type: int
    :default: ``1``
+   :required: False
 
 .. confval:: password
 
-   Specifies the password to use
-
-   :type: str
-
-.. confval:: filename
-
-   Path where a screenshot ``capture`` should be saved, or file to compare a screenshot with ``expectscreen``.
-
-   :type: str
-
-.. confval:: maxrms
-
-   Metric to compare a screen with ``expectscreen``. Only continue if the screen matches.
-   Maximum RMS (root mean square) error allowed (set a small value for near-exact match)
-
-   :type: float
-
-.. confval:: input
-
-   text to type with the command ``type``
-
-   :type: str
-
-.. confval:: key
-
-   key to press with the command ``key``
-
-   :type: str
-
-
-.. confval:: x
-
-   x position to move the cursor to with the command ``move``
-
-   :type: int
-
-.. confval:: y
-
-   y position to move the cursor to with the command ``move``
-
-   :type: int
-
-
-.. confval:: creates_session
-
-   A session name that identifies the session that is created when
-   executing this command. This session name can be used by using the
-   option ``session`` in another vnc-command.
-   If no ``creates_session`` name is defined and no previous session is used a session named ``default`` is created.
-
-   :type: str
-
-.. confval:: session
-
-   Reuse an existing session. This setting works only if another
-   vnc-command was executed with the command-option ``creates_session``
+   Password for VNC authentication.
 
    :type: str
 
 .. confval:: connection_timeout
 
-   timeout in seconds for the connection to be established
+   Timeout in seconds for the initial connection to be established.
+   Must be set in the first command that opens the connection.
 
    :type: int
    :default: ``10``
+   :required: False
 
 .. confval:: expect_timeout
 
-   timeout in seconds for a command to finish. **Gets passed as an argument to the client the first time a connection is established**.
+   Timeout in seconds for a command to complete. Passed to the VNC client when
+   the connection is first established — must be set in the first command that
+   opens the connection.
 
    :type: int
    :default: ``60``
+   :required: False
 
+Sessions
+--------
 
-.. note::
+.. confval:: creates_session
 
-   The ``connection_timeout`` and `expect_timeout`` need to be set in the first command that establishes the connection
+   Name to assign to the session opened by this command. Can be reused in subsequent
+   commands via :confval:`session`. If omitted and no prior session exists, a session
+   named ``default`` is created automatically.
 
+   :type: str
+   :required: False
 
-.. note::
+.. confval:: session
 
-   The vnc connection needs to be closed with the command ``close`` explicitely, otherwise attackmate will keep running.
+   Name of an existing VNC session to reuse. The session must have been created
+   previously via :confval:`creates_session`.
+
+   :type: str
+   :required: False
+
+Actions
+-------
+
+.. confval:: filename
+
+   Path to save a screenshot (``capture``) or path to an image file to compare
+   against the current screen (``expectscreen``).
+
+   :type: str
+   :required: when ``cmd: capture`` or ``cmd: expectscreen``
+
+.. confval:: maxrms
+
+   Maximum RMS (root mean square) error allowed when comparing screens with
+   ``expectscreen``. Lower values require a closer match.
+
+   :type: float
+   :default: ``0``
+   :required: False
+
+.. confval:: input
+
+   Text to type on the remote host. Used with the ``type`` command.
+
+   :type: str
+   :required: when ``cmd: type``
+
+.. confval:: key
+
+   Key to press on the remote host. Used with the ``key`` command.
+
+   :type: str
+   :required: when ``cmd: key``
+
+.. confval:: x
+
+   Horizontal cursor position for the ``move`` command.
+
+   :type: int
+   :required: when ``cmd: move``
+
+.. confval:: y
+
+   Vertical cursor position for the ``move`` command.
+
+   :type: int
+   :required: when ``cmd: move``

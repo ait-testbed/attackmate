@@ -91,7 +91,16 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">General:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../readme_link.html">AttackMate <img alt="Logo" src="/images/AttackMate_logo_no_logo.png" align="right" height="90"></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#installation">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#execute">Execute</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#documentation">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#publications">Publications</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#contribution">Contribution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#disclaimer">Disclaimer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#security">Security</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#license">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#financial-support">Financial Support</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Getting Started:</span></p>
 <ul class="current">
@@ -102,7 +111,6 @@
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Install sliver-fix</a></li>
 <li class="toctree-l2"><a class="reference internal" href="ansible.html">Installation with Ansible</a></li>
 <li class="toctree-l2"><a class="reference internal" href="docker.html">Installation with Docker</a></li>
-<li class="toctree-l2"><a class="reference internal" href="uv.html">Installation with uv</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../preparation/index.html">Preparation</a></li>
@@ -164,7 +172,7 @@ AttackMate work with the Sliver-API it is necessary to manually compile grpc wit
 the environment variable <code class="docutils literal notranslate"><span class="pre">GRPC_PYTHON_BUILD_SYSTEM_OPENSSL=True</span></code></p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Please note that this fix is already included in the Dockerfile.</p>
+<p>Please note that this fix is already included in the Dockerfile and the Ansible role.</p>
 </div>
 <p>First install all required build-tools. This example will install the build-tools
 in Debian-based distributions:</p>
@@ -182,7 +190,7 @@ dependencies:</p>
 (venv)$ pip install -r requirements.txt
 </pre></div>
 </div>
-<p>Now remove the packages we want to compile by our own:</p>
+<p>Now remove the packages we want to compile ourselves:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>(venv)$ pip uninstall --yes protobuf
 (venv)$ pip uninstall --yes grpcio-tools
 </pre></div>

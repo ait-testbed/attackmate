@@ -4,16 +4,22 @@
 sliver
 ======
 
-There are multiple commands from type 'sliver' to controll the sliver-server via API.
+Control the Sliver C2 server via its API. All commands use ``type: sliver``.
+
+.. note::
+
+   **For developers:** The ``sliver`` and ``sliver-session`` command families use a legacy
+   ``type`` + ``cmd`` discrimination pattern and should not be replicated. New commands
+   must define a unique ``type`` literal and handle sub-behavior branching via ``cmd``
+   in the executor. See :ref:`command` for details.
 
 start_https_listener
 --------------------
 
-Start an HTTPS-Listener
+Start an HTTPS listener on the Sliver server.
 
 .. code-block:: yaml
 
-   ###
    commands:
      - type: sliver
        cmd: start_https_listener
@@ -23,70 +29,70 @@ Start an HTTPS-Listener
 
 .. confval:: host
 
-   Interface to bind server to.
+   Network interface to bind the listener to.
 
    :type: str
    :default: ``0.0.0.0``
 
 .. confval:: port
 
-   TCP-Listen port
+   TCP port to listen on.
 
    :type: int
    :default: ``443``
 
 .. confval:: domain
 
-   Limit responses to specific domain
+   Limit responses to specific domain.
 
    :type: str
    :default: `` ``
 
 .. confval:: website
 
-   Website name
+   Website name to associate with this listener.
 
    :type: str
    :default: `` ``
 
 .. confval:: acme
 
-   Attempt to provision a let's encrypt certificate
+   Attempt to provision a let's encrypt certificate.
 
    :type: bool
    :default: ``False``
 
 .. confval:: persistent
 
-   Make persistent across restarts.
+   Keep the listener running across Sliver server restarts.
 
    :type: bool
    :default: ``False``
 
 .. confval:: enforce_otp
 
-   Enable or disable OTP authentication
+   Require OTP authentication for connecting implants.
 
    :type: bool
    :default: ``True``
 
 .. confval:: randomize_jarm
 
-   Enable randomized Jarm fingerprints
+   Enable randomized JARM fingerprints.
 
    :type: bool
    :default: ``True``
 
 .. confval:: long_poll_timeout
 
-   Server-Side long poll timeout(in seconds)
+   Server-side long poll timeout(in seconds).
 
    :type: int
    :default: ``1``
 
 .. confval:: long_poll_jitter
 
-   Server-Side long poll jitter(in seconds)
+   Server-side long poll jitter(in seconds)
 
    :type: int
    :default: ``2``
@@ -103,11 +109,10 @@ generate_implant
 ----------------
 
 Generates a new sliver binary and saves the implant to a given path or to /tmp/<name>.
-The path to the implant is saved and can be retrieved from the variable store as $LAST_SLIVER_IMPLANT.
+The path to the implant is saved and can be retrieved from the :ref:`builtin variable <builtin-variables>` ``$LAST_SLIVER_IMPLANT``.
 
 .. code-block:: yaml
 
-   ###
    commands:
      - type: sliver
        cmd: generate_implant
@@ -119,8 +124,7 @@ The path to the implant is saved and can be retrieved from the variable store as
 
 .. confval:: target
 
-   Compile the binary for the given operatingsystem to the given architecture. The
-   following targets are supported:
+   Target operating system and architecture. Supported values:
 
    * darwin/amd64
    * darwin/arm64
@@ -134,14 +138,14 @@ The path to the implant is saved and can be retrieved from the variable store as
 
 .. confval:: c2url
 
-   Url which is used by the implant to find the C2 server.
+   URL which is used by the implant to reach the C2 server.
 
    :type: str
    :required: True
 
 .. confval:: format
 
-   Specifies the output format for the implant. Valid formats are:
+   Output format for the implant binary. One of:
 
    * EXECUTABLE
    * SERVICE
@@ -154,15 +158,15 @@ The path to the implant is saved and can be retrieved from the variable store as
 .. confval:: name
 
    Name of the implant.
-   This name is the session used by the attackmate command 'sliver-session'.
+   This name is the session identifier used by :ref:`sliver-session <sliver_session>` commands.
 
    :type: str
    :required: True
 
 .. confval:: filepath
 
-   The local filepath to save the implant to. If none is given the implant is saved in /tmp.
-   The <name> will be random and have the format ^tmp[a-z0-9]{8}$.
+   The local filepath to save the implant to. If omitted, the implant is saved to ``/tmp``.
+   The filename will be randomly genrated and have the format ^tmp[a-z0-9]{8}$.
 
 
    :type: str
@@ -170,24 +174,21 @@ The path to the implant is saved and can be retrieved from the variable store as
 
 .. confval:: IsBeacon
 
-   Generate a beacon binary
+   Generate a beacon-mode implant instead of a session-mode implant.
 
    :type: bool
-   :default: False
+   :default: ``False``
 
 .. confval:: RunAtLoad
 
-   Run the implant entrypoint from DllMain/Constructor(shared library only)
+   Run the implant entrypoint from DllMain/Constructor (shared library only).
 
    :type: bool
    :default: ``False``
 
 .. confval:: Evasion
 
-   Enable evasion features (e.g. overwrite user space hooks)
+   Enable evasion features such as overwriting user space hooks.
 
    :type: bool
    :default: ``False``
-
-   :type: bool
-   :default: False

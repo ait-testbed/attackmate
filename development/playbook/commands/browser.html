@@ -91,7 +91,16 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">General:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html">AttackMate <img alt="Logo" src="/images/AttackMate_logo_no_logo.png" align="right" height="90"></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#installation">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#execute">Execute</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#documentation">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#publications">Publications</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#contribution">Contribution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#disclaimer">Disclaimer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#security">Security</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#license">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#financial-support">Financial Support</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Getting Started:</span></p>
 <ul>
@@ -176,12 +185,13 @@
              
   <section id="browser">
 <h1>browser<a class="headerlink" href="#browser" title="Permalink to this heading"></a></h1>
-<p>Execute commands using a Playwright-managed browser (Chromium). This executor can launch a browser, navigate to pages, click elements, type into fields, and take screenshots.</p>
+<p>Execute commands using a Playwright-managed Chromium browser. This executor can launch a browser, navigate to pages, click elements, type into fields, and take screenshots.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>By default, if no session is provided or created, the command will run in an ephemeral browser session
-(launched and destroyed for each command). If you want to persist browser state (cookies, localStorage,
-etc.) across multiple commands, use the <a class="reference internal" href="vnc.html#confval-creates_session"><code class="xref std std-confval docutils literal notranslate"><span class="pre">creates_session</span></code></a> or <a class="reference internal" href="vnc.html#confval-session"><code class="xref std std-confval docutils literal notranslate"><span class="pre">session</span></code></a> options.</p>
+<p>By default, each command runs in an ephemeral browser session that is launched and
+destroyed automatically. To persist browser state (cookies, localStorage,
+etc.) across multiple commands, use the <a class="reference internal" href="vnc.html#confval-creates_session"><code class="xref std std-confval docutils literal notranslate"><span class="pre">creates_session</span></code></a> to open a named
+session and <a class="reference internal" href="vnc.html#confval-session"><code class="xref std std-confval docutils literal notranslate"><span class="pre">session</span></code></a> to reuse it.</p>
 </div>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">vars</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">$URL</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;https://www.wikipedia.org/&quot;</span>
@@ -193,26 +203,26 @@ etc.) across multiple commands, use the <a class="reference internal" href="vnc.
 <span class="w">    </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">$URL</span>
 <span class="w">    </span><span class="nt">creates_session</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my_session</span>
 
-<span class="w">  </span><span class="c1"># Reuse the existing &quot;my_session&quot; to type text into an input field</span>
+<span class="w">  </span><span class="c1"># Type into a field, reusing the named session:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">browser</span>
 <span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">type</span>
 <span class="w">    </span><span class="nt">selector</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;input[id=&#39;searchInput&#39;]&quot;</span>
 <span class="w">    </span><span class="nt">text</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Test&quot;</span>
 <span class="w">    </span><span class="nt">session</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;my_session&quot;</span>
 
-<span class="w">  </span><span class="c1"># Click on the &quot;submit&quot; button, still reusing &quot;my_session&quot;</span>
+<span class="w">  </span><span class="c1"># Click on the &quot;submit&quot; button, reusing the named session:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">browser</span>
 <span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">click</span>
 <span class="w">    </span><span class="nt">selector</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;button[type=&#39;submit&#39;]&quot;</span>
 <span class="w">    </span><span class="nt">session</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;my_session&quot;</span>
 
-<span class="w"> </span><span class="c1"># Take a screenshot of the current page in the &quot;my_session&quot;</span>
+<span class="w"> </span><span class="c1"># Take a screenshot of the current page, reusing the named session:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">browser</span>
 <span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">screenshot</span>
 <span class="w">    </span><span class="nt">screenshot_path</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;example.png&quot;</span>
 <span class="w">    </span><span class="nt">session</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;my_session&quot;</span>
 
-<span class="w">  </span><span class="c1"># Open a page in an ephemeral session (automatically closed)</span>
+<span class="w">  </span><span class="c1"># Open a page in an ephemeral session (automatically closed after command)</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">browser</span>
 <span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">visit</span>
 <span class="w">    </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;https://www.google.com&quot;</span>
@@ -226,16 +236,22 @@ etc.) across multiple commands, use the <a class="reference internal" href="vnc.
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str</p>
 </dd>
+<dt class="field-even">Default<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">visit</span></code></p>
+</dd>
 </dl>
 </dd></dl>
 
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-url">
 <span class="sig-name descname"><span class="pre">url</span></span><a class="headerlink" href="#confval-url" title="Permalink to this definition"></a></dt>
-<dd><p>URL to visit for the <code class="docutils literal notranslate"><span class="pre">visit</span></code> command.</p>
+<dd><p>URL to navigate to for the <code class="docutils literal notranslate"><span class="pre">visit</span></code> command.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str</p>
+</dd>
+<dt class="field-even">Required<span class="colon">:</span></dt>
+<dd class="field-even"><p>when <code class="docutils literal notranslate"><span class="pre">cmd:</span> <span class="pre">visit</span></code></p>
 </dd>
 </dl>
 </dd></dl>
@@ -243,10 +259,13 @@ etc.) across multiple commands, use the <a class="reference internal" href="vnc.
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-selector">
 <span class="sig-name descname"><span class="pre">selector</span></span><a class="headerlink" href="#confval-selector" title="Permalink to this definition"></a></dt>
-<dd><p>CSS selector identifying the element to interact with for the <code class="docutils literal notranslate"><span class="pre">click</span></code> or <code class="docutils literal notranslate"><span class="pre">type</span></code> commands.</p>
+<dd><p>CSS selector identifying the target element to interact with for the <code class="docutils literal notranslate"><span class="pre">click</span></code> or <code class="docutils literal notranslate"><span class="pre">type</span></code> commands.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str</p>
+</dd>
+<dt class="field-even">Required<span class="colon">:</span></dt>
+<dd class="field-even"><p>when <code class="docutils literal notranslate"><span class="pre">cmd:</span> <span class="pre">click</span></code> OR <code class="docutils literal notranslate"><span class="pre">cmd:</span> <span class="pre">type</span></code></p>
 </dd>
 </dl>
 </dd></dl>
@@ -259,16 +278,22 @@ etc.) across multiple commands, use the <a class="reference internal" href="vnc.
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str</p>
 </dd>
+<dt class="field-even">Required<span class="colon">:</span></dt>
+<dd class="field-even"><p>when <code class="docutils literal notranslate"><span class="pre">cmd:</span> <span class="pre">type</span></code></p>
+</dd>
 </dl>
 </dd></dl>
 
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-screenshot_path">
 <span class="sig-name descname"><span class="pre">screenshot_path</span></span><a class="headerlink" href="#confval-screenshot_path" title="Permalink to this definition"></a></dt>
-<dd><p>Specifies the file path where a screenshot should be saved for the <code class="docutils literal notranslate"><span class="pre">screenshot</span></code> command.</p>
+<dd><p>Filepath where a screenshot should be saved for the <code class="docutils literal notranslate"><span class="pre">screenshot</span></code> command.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str</p>
+</dd>
+<dt class="field-even">Required<span class="colon">:</span></dt>
+<dd class="field-even"><p>when <code class="docutils literal notranslate"><span class="pre">cmd:</span> <span class="pre">screenshot</span></code></p>
 </dd>
 </dl>
 </dd></dl>
@@ -276,12 +301,15 @@ etc.) across multiple commands, use the <a class="reference internal" href="vnc.
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-creates_session">
 <span class="sig-name descname"><span class="pre">creates_session</span></span><a class="headerlink" href="#confval-creates_session" title="Permalink to this definition"></a></dt>
-<dd><p>A session name to create when running this command. Once created, the session is retained in the
+<dd><p>Name of a new browser session to create. Once created, the session is retained in the
 session store for reuse by subsequent <code class="docutils literal notranslate"><span class="pre">browser</span></code> commands that specify <code class="docutils literal notranslate"><span class="pre">session</span></code>.</p>
-<p>If a session of the same name already exists, it is automatically closed before creating the new one.</p>
+<p>If a session with the same name already exists, it is automatically closed and replaced.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str</p>
+</dd>
+<dt class="field-even">Required<span class="colon">:</span></dt>
+<dd class="field-even"><p>False</p>
 </dd>
 </dl>
 </dd></dl>
@@ -297,6 +325,9 @@ supports that usage pattern.</p>
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str</p>
 </dd>
+<dt class="field-even">Required<span class="colon">:</span></dt>
+<dd class="field-even"><p>False</p>
+</dd>
 </dl>
 </dd></dl>
 
@@ -305,12 +336,17 @@ supports that usage pattern.</p>
 <span class="sig-name descname"><span class="pre">headless</span></span><a class="headerlink" href="#confval-headless" title="Permalink to this definition"></a></dt>
 <dd><p>Run the browser in headless mode.
 Useful for CI/CD pipelines or servers without a GUI.</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>bool</p>
 </dd>
-<dt class="field-even">Default<span class="colon">:</span></dt>
-<dd class="field-even"><p>false</p>
+<dt class="field-even">Required<span class="colon">:</span></dt>
+<dd class="field-even"><p>False</p>
+</dd>
+<dt class="field-odd">Default<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">False</span></code></p>
+</dd>
+</dl>
 <p>Example:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">browser</span>
 <span class="w">  </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">visit</span>
@@ -319,8 +355,6 @@ Useful for CI/CD pipelines or servers without a GUI.</p>
 <span class="w">  </span><span class="nt">headless</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 </pre></div>
 </div>
-</dd>
-</dl>
 </dd></dl>
 
 </section>

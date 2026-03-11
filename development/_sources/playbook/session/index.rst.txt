@@ -4,64 +4,82 @@
 Sessions, Interactive
 =====================
 
-Many commands of AttackMate support the setting "session" or "interactive.
-This chapter is about these important concepts of AttackMate.
+Many AttackMate commands support the ``creates_session``, ``session``, and ``interactive``
+options. This page explains these concepts and when to use them.
 
 Session
--------
+--------
 
-AttackMate executes all commands stateless. Therefore, each command is executed in a new "environment".
-What "environment" means depends on the type of the command. For example, every stateless shell
-command spawns a new shell process. As illustrated in the following image, every shell command
-is executed in a new `/bin/sh` process.
+By default, AttackMate executes all commands statelessly — each command runs in a fresh
+environment. What "environment" means depends on the command type: a ``shell`` command
+spawns a new ``/bin/sh`` process, an ``ssh`` command opens a new SSH connection, and so on.
 
 .. image:: /images/Stateless-Command.png
 
-The ssh-command on the other hand, establishes with every new stateless execution a new SSH connection.
-AttackMate will log in to the target with every single command execution. However, sometimes you want the AttackMate not to log on to the target system every time you execute a command. To achieve this, you can use sessions.
+This means that directory changes, environment variables, or open connections from one
+command are not visible to the next. To persist state across commands, AttackMate supports
+sessions.
 
-Many commands support the "creates_session" option. This allows you to specify a session name and AttackMate saves the environment of the command. By using the session name for further commands, it is possible to continue where the previous command left off at any time. The following figure shows how the first command uses create_session to execute a stateful command. The third command can then continue in the same environment as the first command by using the session.
+Any command that supports the ``creates_session`` option will save its environment under
+the given session name. Subsequent commands can then reference that name via ``session``
+to continue working in the same environment, as illustrated below.
 
 .. image:: /images/Stateful-Command.png
 
 Interactive
 -----------
 
-Many commands work in such a way that they first execute something and then collect and return the output. Sometimes, however, commands are executed that do not produce any output. In such cases, AttackMate would wait forever. One such example would be executing the text editor vim on the command line. Vim is started and waits for input. AttackMate gets no output, or the process does not terminate and so it waits forever. Interactive mode is available for such cases. This mode causes commands to be executed for a limited time only. After this time has elapsed, AttackMate continues.  The following example shows how AttackMate executes vim with the help of a session and the interactive mode in a shell command and then types keyboard strokes into the open vim sessions.
+Most commands work by executing something and waiting for the process to finish before
+collecting its output. This breaks down for interactive programs that wait for user input
+and never terminate on their own — for example, opening ``vim`` from a shell command would
+cause AttackMate to wait forever for output that never comes.
+
+Interactive mode solves this by running a command for a limited time only. Instead of
+waiting for the process to finish, AttackMate reads output until no new output has arrived
+for a configurable timeout period, then moves on to the next command.
+
+.. warning::
+
+   Commands executed in interactive mode **MUST** end with a newline character (``\n``).
+
+The following example opens ``vim``, remaps a key, types text, and saves the file — all
+using a combination of sessions and interactive mode:
 
 .. code-block:: yaml
 
    commands:
+     # Open vim and create a session:
      - type: shell
        cmd: "vim /tmp/test\n"
        interactive: True
        creates_session: vim
 
+     # Remap 'jj' to Escape in insert mode:
      - type: shell
        cmd: ":inoremap jj <ESC>\n"
        interactive: True
        session: vim
 
+     # Enter insert mode:
      - type: shell
        cmd: "o"
        interactive: True
        session: vim
 
+     # Type some text:
      - type: shell
        cmd: "Hello World"
        interactive: True
        session: vim
 
+     # Exit insert mode using the remapped key:
      - type: shell
        cmd: "jj"
        interactive: True
        session: vim
 
+     # Save and quit:
      - type: shell
        cmd: ":wq!\n"
        interactive: True
        session: vim
-
-.. warning::
-
-      Please note that you **MUST** send a newline when you execute interactive commands!
