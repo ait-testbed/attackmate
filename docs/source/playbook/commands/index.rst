@@ -128,16 +128,19 @@ Every command, regardless of its type supports the following general options:
    .. code-block:: yaml
 
       commands:
+        # Get the PID of the running mysqld process:
         - type: shell
           cmd: pgrep mysqld
 
+        # Extract the first captured group from the output, splitting on newlines.
+        # Stores the result in $KILLPID via the MATCH_0 capture variable:
         - type: regex
           mode: split
           cmd: "\n"
           output:
             KILLPID: $MATCH_0
 
-        # Only kill if it is not the init process:
+        # Only kill if it is not the init process with PID 1:
         - type: shell
           cmd: kill $KILLPID
           only_if: $KILLPID > 1
@@ -147,6 +150,39 @@ Every command, regardless of its type supports the following general options:
           cmd: echo "regex match found"
           only_if: some_string =~ some[_]?string
 
+   .. warning::
+
+        When comparing strings with integers, standard Python conventions apply:
+
+        **Equality / Inequality** (``==``, ``!=``):
+        A string and an integer are never equal, so ``"1" == 1`` is ``False``
+        and ``"1" != 1`` is ``True``.
+
+        **Identity** (``is``, ``is not``):
+        Compares object identity, not value. ``"1" is 1`` is always ``False``
+        because a string and an integer are distinct objects, regardless of
+        their apparent values.
+
+        **Ordering** (``<``, ``<=``, ``>``, ``>=``):
+        Comparing a string with an integer raises a ``TypeError`` in Python 3
+        since the two types have no defined ordering. These operators should
+        only be used when both operands share the same type.
+
+        **Integers and Booleans** (``==``, ``!=``):
+        In Python, ``bool`` is a subclass of ``int``, so ``1 == True`` and
+        ``0 == False`` are both ``True``, while any other integer (e.g.
+        ``2 == True``) is ``False``.  This also means that if a
+        ``$variable`` has been set to the string ``"True"`` or ``"False"``,
+        comparing it against a boolean literal (``$var == True``) will
+        always yield ``False`` — because the resolved value is a ``str``
+        while the literal is parsed as a ``bool`` by ``ast``.  Use string
+        literals for boolean-like flags stored in the ``VariableStore``:
+        ``$flag == "True"``.
+
+        Importantly, before a condition is evaluated, all ``$variable`` references are
+        resolved by the ``VariableStore``.  **The store holds every value as a
+        plain Python** ``str``, even values that were originally integers
+        are coerced to ``str`` on ingress.
 
 .. confval:: background
 
