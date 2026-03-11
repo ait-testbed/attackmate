@@ -72,6 +72,7 @@ Connection
 
    :type: int
    :default: ``5900``
+   :required: False
 
 .. confval:: display
 
@@ -79,6 +80,7 @@ Connection
 
    :type: int
    :default: ``1``
+   :required: False
 
 .. confval:: password
 
@@ -93,6 +95,7 @@ Connection
 
    :type: int
    :default: ``10``
+   :required: False
 
 .. confval:: expect_timeout
 
@@ -102,6 +105,7 @@ Connection
 
    :type: int
    :default: ``60``
+   :required: False
 
 Sessions
 --------
@@ -113,6 +117,7 @@ Sessions
    named ``default`` is created automatically.
 
    :type: str
+   :required: False
 
 .. confval:: session
 
@@ -120,6 +125,7 @@ Sessions
    previously via :confval:`creates_session`.
 
    :type: str
+   :required: False
 
 Actions
 -------
@@ -130,6 +136,7 @@ Actions
    against the current screen (``expectscreen``).
 
    :type: str
+   :required: when ``cmd: capture`` or ``cmd: expectscreen``
 
 .. confval:: maxrms
 
@@ -137,27 +144,33 @@ Actions
    ``expectscreen``. Lower values require a closer match.
 
    :type: float
+   :default: ``0``
+   :required: False
 
 .. confval:: input
 
    Text to type on the remote host. Used with the ``type`` command.
 
    :type: str
+   :required: when ``cmd: type``
 
 .. confval:: key
 
    Key to press on the remote host. Used with the ``key`` command.
 
    :type: str
+   :required: when ``cmd: key``
 
 .. confval:: x
 
    Horizontal cursor position for the ``move`` command.
 
    :type: int
+   :required: when ``cmd: move``
 
 .. confval:: y
 
    Vertical cursor position for the ``move`` command.
 
    :type: int
+   :required: when ``cmd: move``
