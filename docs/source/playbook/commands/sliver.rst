@@ -20,7 +20,6 @@ Start an HTTPS listener on the Sliver server.
 
 .. code-block:: yaml
 
-   ###
    commands:
      - type: sliver
        cmd: start_https_listener
@@ -110,7 +109,7 @@ generate_implant
 ----------------
 
 Generates a new sliver binary and saves the implant to a given path or to /tmp/<name>.
-The path to the implant is saved and can be retrieved from the builtin variable $LAST_SLIVER_IMPLANT.
+The path to the implant is saved and can be retrieved from the builtin variable ``$LAST_SLIVER_IMPLANT``.
 
 .. code-block:: yaml
 
@@ -178,7 +177,7 @@ The path to the implant is saved and can be retrieved from the builtin variable 
    Generate a beacon-mode implant instead of a session-mode implant.
 
    :type: bool
-   :default: False
+   :default: ``False``
 
 .. confval:: RunAtLoad
 
@@ -193,6 +192,3 @@ The path to the implant is saved and can be retrieved from the builtin variable 
 
    :type: bool
    :default: ``False``
-
-   :type: bool
-   :default: False

@@ -5,9 +5,10 @@ loop
 Execute a sequence of commands repeatedly, either by iterating over a list of values, a numerical range, or until a condition is met.
 
 This is useful when the number of iterations is not known in advance, for example, when processing results from a network scan.
+
 .. note::
 
-   The loop command works with two primary loop conditions: iterating over a list of values (`items`) or iterating over a numerical range (`range`).
+   The loop command works with two primary loop conditions: iterating over a list of values (``items()``) or iterating over a numerical range (``range()``).
 
 .. code-block:: yaml
 
@@ -41,14 +42,14 @@ Loop Modes
 
 **items(LIST)**:
 Iterates over the elements of a list and substitutes each element into the commands.
-The current item is accessible as the `$LOOP_ITEM` variable.
+The current item is accessible as the ``$LOOP_ITEM`` variable.
 
 **range(start, end)**
-Iterates over a range of integers ``start`` (inclusive) to ``end`` (exclusive). The current index is accessible as the `$LOOP_INDEX` variable.
+Iterates over a range of integers ``start`` (inclusive) to ``end`` (exclusive). The current index is accessible as the ``$LOOP_INDEX`` variable.
 
 **until(condition)**
 Iterates indefinitely until the condition is evaluates to ``True``, checked before every command in the loop body.
-Variables in cmd section of an until loop command until($VAR1 == $VAR2) will be substituted from the variable store on every iteration of the loop.
+Variables in cmd section of an until loop command until(``$VAR1 == $VAR2``) will be substituted from the variable store on every iteration of the loop.
 The current iteration count is available as ``$LOOP_INDEX``.
 
 Example: ``until($PORT == 7)``
@@ -59,14 +60,14 @@ Configuration
 .. confval:: cmd
 
    The loop condition. Defines how the loop iterates, either over a list or a range of values, or idefinitely until the
-   condition defined in until() is met.
+   condition defined in ``until()`` is met.
 
    :type: str
    :required: True
 
    Examples:
 
-   - **items(LISTA)**: Iterate over the elements of a list named `LISTA`.
+   - **items(LISTA)**: Iterate over the elements of a list named ``LISTA``.
    - **range(0, 10)**: Iterate over a range from 0 to 9.
    - **until($PORT == 7)**: Iterate until the condition is met
 
@@ -81,7 +82,7 @@ Configuration
 
 .. confval:: commands
 
-   The list of commands to execute during each iteration of the loop. These commands are executed once per iteration, with loop-specific variables (`$LOOP_ITEM` or `$LOOP_INDEX`) available for substitution within these commands.
+   The list of commands to execute during each iteration of the loop. These commands are executed once per iteration, with loop-specific variables (``$LOOP_ITEM`` or ``$LOOP_INDEX``) available for substitution within these commands.
 
    :type: list[Command]
    :required: True

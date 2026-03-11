@@ -2,7 +2,7 @@
 father
 ======
 
-The Fahter LD_PRELOAD rootkit requires to compile the config settings into the binary.
+The Father LD_PRELOAD rootkit requires to compile the config settings into the binary.
 This command compiles the binary and stores the path in the variable ``LAST_FATHER_PATH``.
 If ``local_path`` is not defined, the command will create a temporary directory and copy
 the sources into the directory before compiling the rootkit.

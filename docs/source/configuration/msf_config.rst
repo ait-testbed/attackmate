@@ -39,7 +39,7 @@ msf_config
    Enables encryption for the RPC connection.
 
    :type: bool
-   :default: True
+   ::default: ``True``
 
 
 .. confval:: password

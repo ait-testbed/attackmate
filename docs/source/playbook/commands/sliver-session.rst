@@ -17,7 +17,7 @@ Execute commands within an active Sliver implant session. All commands require a
 .. confval:: session
 
    Name of the Sliver implant session to operate in. The implant must have been
-   generated and deployed previously via the :ref:`sliver` generate_implant command.
+   generated and deployed previously via the sliver :ref:`generate_implant <sliver>` command.
 
    :type: str
    :required: True
@@ -289,7 +289,6 @@ List processes of the remote system.
 
 .. code-block:: yaml
 
-   ###
    commands:
      - type: sliver-session
        cmd: ps
@@ -315,20 +314,20 @@ Execute a program on the remote host.
 
 .. confval:: exe
 
-   Command to execute
+   Command to execute.
 
    :type: str
    :required: True
 
 .. confval:: args
 
-   List of command arguments
+   List of command arguments.
 
    :type: List[str]
 
 .. confval:: output
 
-   Capture command output
+   Capture command output.
 
    :type: bool
    :default: ``True``

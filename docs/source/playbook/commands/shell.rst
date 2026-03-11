@@ -33,7 +33,12 @@ Interactive Mode
 
 .. confval:: interactive
 
-   Run the command in interactive mode. Instead of waiting for the command to finish,
+   Run the command in interactive mode.
+
+   :type: bool
+   :default: ``False``
+
+   Instead of waiting for the command to finish,
    AttackMate reads output until no new output appears for :confval:`command_timeout`
    seconds. Useful for commands that require follow-up keystrokes (e.g. opening ``vim``
    and sending input in a subsequent command).
@@ -43,9 +48,6 @@ Interactive Mode
    .. warning::
 
       Commands executed in interactive mode **MUST** end with a newline character (``\n``).
-
-   :type: bool
-   :default: ``False``
 
    .. code-block:: yaml
 

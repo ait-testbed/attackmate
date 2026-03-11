@@ -3,8 +3,8 @@ remote
 ======
 
 Execute playbooks or commands on a remote AttackMate instance.
-Remote conenctions are defined in the ``remote_config`` section of the configuration file.
-If no connection is specified, the first entry in the ``remote_config`` section is used as default.
+Remote connections are defined in the ``remote_config`` section of the configuration file.
+If no ``connection`` is specified, the first entry in the ``remote_config`` section is used as default.
 
 .. warning::
 
@@ -90,9 +90,9 @@ Options
 
 .. confval:: remote_command
 
-   An inline AttackMate command dto execute on the remote instance.
+   An inline AttackMate command to execute on the remote instance.
    Supports any command type that the remote AttackMate instance is configured to handle
-   (e.g., ``shell``, ``sliver``, etc., EXCEPT ``remote``  itself). Required when ``cmd`` is ``execute_command``.
+   (e.g., ``type: shell``, ``type: sliver``, etc., EXCEPT ``type: remote``  itself). Required when ``cmd`` is ``execute_command``.
 
    :type: RemotelyExecutableCommand
 

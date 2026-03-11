@@ -94,7 +94,7 @@ Generate a Metasploit payload and save it to a file.
    :type: bool
    :default: ``False``
 
-   .. confval:: iter
+.. confval:: iter
 
    Number of times to apply the encoder.
 

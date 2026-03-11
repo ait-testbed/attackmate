@@ -3,14 +3,14 @@ regex
 =====
 
 Parse and transform variables using regular expressions. For more information
-about regular expressions and regex syntax see `Python Regex  <https://docs.python.org/3/library/re.html>`_
+about regular expressions and regex syntax see `Python Regex  <https://docs.python.org/3/library/re.html>`_.
 
 .. note::
 
    This command does not modify ``RESULT_STDOUT``.
 
 
-The following example extracts a port number from the output of a shell command and stores it in the variable "UNREALPORT":
+The following example extracts a port number from the output of a shell command and stores it in the variable ``UNREALPORT``:
 
 .. code-block:: yaml
 
@@ -27,8 +27,7 @@ The following example extracts a port number from the output of a shell command 
        cmd: "Port: $UNREALPORT"
 
 
-Using ``mode: split``, a string can be tokenized by a delimiter, in this case,
-whitespace:
+Using ``mode: split``, a string can be tokenized by a delimiter, in this case, whitespace ``"\ +"``:
 
 .. code-block:: yaml
 
@@ -66,8 +65,8 @@ whitespace:
    :default: ``findall``
 
 .. confval:: replace
-
-   This variable must be set for sub mode. It holds the replacement-string for the substitution.
+``
+   This variable must be set for ``mode: sub``. It holds the replacement-string for the substitution.
 
    :type: str
    :default: ``None``

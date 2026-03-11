@@ -36,8 +36,7 @@ transforming existing variables.
 
 .. confval:: encoder
 
-   Encode or decode the value of ``cmd`` before storing it in ``variable``..
-   Note that if encoding fails, the plain value is stored and a warning is printed.
+   Encode or decode the value of ``cmd`` before storing it in ``variable``.
 
    Supported values:
 
@@ -48,6 +47,10 @@ transforming existing variables.
    * ``urldecoder`` — decode percent-encoded strings
 
    :type: str['base64-encoder', 'base64-decoder', 'rot13', 'urlencoder', 'urldecoder']
+
+   .. note::
+
+      Note that if encoding fails, the plain value is stored and a warning is printed.
 
    Example:
 
