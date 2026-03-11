@@ -6,16 +6,16 @@ Variables
 
 Variables are defined as key-value pairs in the ``vars`` section and can be used as
 placeholders in command settings. Variable names do not require a ``$`` prefix when
-defined in the ``vars`` section, but **must** be prefixed with ``$`` when referenced
+defined in the ``vars`` section, but **MUST** be prefixed with ``$`` when referenced
 in the ``commands`` section.
 If an environment variable with the prefix ``ATTACKMATE_`` exists with the same name,
-it will override the playbook variable. For example,  the playbookvariabel $FOO will
-be overwritten be environment variabel ``$ATTACKMATE_FOO``.
+it will override the playbook variable. For example,  the playbook variabel ``$FOO`` will
+be overwritten by the environment variabel ``$ATTACKMATE_FOO``.
 
 .. code-block:: yaml
 
    vars:
-   # the $-sign is optional here:
+     # the $-sign is optional here:
      $SERVER_ADDRESS: 192.42.0.254
      $NMAP: /usr/bin/nmap
 
@@ -32,7 +32,10 @@ be overwritten be environment variabel ``$ATTACKMATE_FOO``.
 
 .. note::
 
-   Variables in ``cmd`` settings of a ``loop`` command will be substituted on every iteration of the loop, see :ref:`loop` for details.
+   Variables in ``cmd`` settings of a ``loop`` command will be substituted on every iteration of the loop, see the  :ref:`loop` command for details.
+
+
+.. _builtin-variables:
 
 Builtin Variables
 =================

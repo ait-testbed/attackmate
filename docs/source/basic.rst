@@ -48,7 +48,7 @@ and a conditional nikto scan:
        cmd: nikto -host $TARGET -port $PORT
        only_if: $PORT == 8000
 
-.. warning::
+.. note::
 
    This playbook requires ``nmap`` and ``nikto`` to be installed, and a web server
    running on ``localhost:8000``. You can start one with:
@@ -113,7 +113,7 @@ how to use variables: Variables are substituted at runtime using ``$VARNAME`` sy
 As soon as nmap finishes, its output is automatically stored in the built-in variable ``RESULT_STDOUT``.
 The regex command searches this output using the expression ``(\d+)/tcp open\s+http``.
 If it matches, the captured port number is stored in the volatile variable ``$MATCH_0`` (deleted after the regex-command finishes),
-which is then assigned to the persistent variable``PORT`` via the ``output`` mapping:
+which is then assigned to the persistent variable ``PORT`` via the ``output`` mapping:
 
 .. code-block:: yaml
 

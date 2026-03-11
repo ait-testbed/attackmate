@@ -56,4 +56,4 @@ Run AttackMate via:
 
    Please note that you if you install from source you also need to install :ref:`sliver-fix` if you want
    to use the sliver commands!
-   The ansible role :ref:`ansible` already includes the sliver-fix.
+   The Dockerfile and ansible role :ref:`ansible` already include the sliver-fix.

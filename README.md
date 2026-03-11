@@ -51,17 +51,19 @@ $ uv run attackmate playbook.yml
 
 ## Documentation
 
-Please take a look at our documentation for how to install and use attackmate:
+Please take a look at our documentation on how to install and use attackmate:
 
 * [Installation](https://ait-testbed.github.io/attackmate/main/installation/index.html)
 * [Documentation](https://ait-testbed.github.io/attackmate/main/index.html)
 * [Command Reference](https://ait-testbed.github.io/attackmate/main/playbook/commands/index.html)
 * [Example Playbooks](https://ait-testbed.github.io/attackmate/main/playbook/examples.html)
-* [Arxiv Paper](https://arxiv.org/pdf/2601.14108)
+
+## Publications
+* [AttackMate: Realistic Emulation and Automation of Cyber Attack Scenarios Across the Kill Chain](https://arxiv.org/pdf/2601.14108) on Arxiv
 
 ## Contribution
 
-We're happily taking patches and other contributions. Please see the following links for how to get started:
+We're happily taking patches and other contributions. Please see the following links on how to get started:
 
 - [Contribution Guide](https://ait-testbed.github.io/attackmate/main/developing/contribution.html)
 
@@ -76,13 +78,12 @@ information may result in criminal charges.
 
 ## Security
 
-AttackMate should only be executed against own test or training systems.
-For this reason, every software bug is treated equally, regardless of
-whether it is security relevant or not.
+AttackMate should only be executed against systems you own or have explicit permission to test.
+For this reason, all software bugs are treated with equal priority, regardless of whether they have security implications.
 
 *Please note that AttackMate could easily be executed in a dangerous way. For example, by
 parsing the RESULT_STDOUT of a malicious server. The server response could lead to
-a command injection. Keep that in mind!
+a command injection. Keep that in mind and always treat external input with caution!
 
 ## License
 

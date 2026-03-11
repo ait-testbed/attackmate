@@ -12,6 +12,6 @@ commands can be found in the :ref:`commands <commands>` reference.
 
    AttackMate executes real attacks and requires intentionally vulnerable or
    dedicated test systems. Never run AttackMate against systems
-   you do not own or have explicit permission to test.
+   you do not own or do not have explicit permission to test.
 
 .. image:: images/attackmate-schema.png

@@ -4,14 +4,14 @@
 Commands
 ========
 
-The *'commands-section'* holds a list of AttackMate-commands that are executed sequentially from
+The ``commands:`` section of a playbook holds a list of AttackMate commands that are executed sequentially from
 top to bottom.
 
-Every command, regardless of the type supports the following general options:
+Every command, regardless of its type supports the following general options:
 
 .. confval:: cmd
 
-   Defines the command that should be executed. The meaning of this option varies depending on the type of command.
+   The command that should be executed. The meaning of this option varies depending on the type of command.
 
    :type: str
 
@@ -30,7 +30,7 @@ Every command, regardless of the type supports the following general options:
 
 .. confval:: exit_on_error
 
-   If ``True``, attackmate will exit with an error if the command returns a non-zero exit code.
+   Attackmate will exit with an error if the command returns a non-zero exit code.
 
    :type: bool
    :default: ``True``
@@ -100,9 +100,9 @@ Every command, regardless of the type supports the following general options:
           url: https://www.google.com
           loop_if_not: ".*bing.*"
 
-   .. confval:: loop_count
+.. confval:: loop_count
 
-      Maximum number of repetitions when *loop_if* or *loop_if_not* is set.
+      Maximum number of repetitions when ``loop_if* or ``loop_if_not`` is set.
 
    :type: int
    :default: ``3``
@@ -122,8 +122,8 @@ Every command, regardless of the type supports the following general options:
 
    .. note::
 
-      The =~ operator is used to check if a string matches a regular expression pattern.
-      The !~ operator is used to check if a string does not match a regular expression pattern.
+      The ``=~`` operator is used to check if a string matches a regular expression pattern.
+      The ``!~`` operator is used to check if a string does **not** match a regular expression pattern.
 
    .. code-block:: yaml
 
@@ -153,12 +153,15 @@ Every command, regardless of the type supports the following general options:
    Execute the command as a background subprocess. When enabled, output is not printed
    and ``error_if`` / ``error_if_not`` have no effect.
 
+   :type: bool
+   :default: ``False``
+
    .. note::
 
-      The command in background-mode will change global variables like
-      RESULT_STDOUT to "Command started in Background" and RESULT_CODE to 0.
+      The command in background-mode will change the :ref:`builtin variables <builtin-variables>`
+      ``RESULT_STDOUT`` to "Command started in Background" and ``RESULT_CODE`` to 0.
 
-   Background mode is not supported for::
+   Background mode is not supported for
 
    * MsfModuleCommand
    * IncludeCommand
@@ -170,14 +173,13 @@ Every command, regardless of the type supports the following general options:
    * SSHCommand
    * SFTPCommand
 
-   :type: bool
-   :default: ``False``
+
 
 
 
 .. confval:: kill_on_exit
 
-   If this command runs in background mode, the option *kill_on_exit* controls
+   If this command runs in background mode, the option ``kill_on_exit`` controls
    whether the main process kills the subprocess on exit (``True``) or waits for it to finish (``False``).
 
    :type: bool

@@ -5,7 +5,7 @@ Installation with Ansible
 =========================
 
 It is possible to automatically install AttackMate using
-Ansible. The `ansible-role <https://github.com/ait-aecid/attackmate-ansible>`_ also deploys the sliver-fix.
+Ansible. The `ansible-role <https://github.com/ait-aecid/attackmate-ansible>`_ also deploys the :ref:`sliver-fix`.
 
 .. note::
 

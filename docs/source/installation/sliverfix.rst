@@ -12,7 +12,7 @@ the environment variable ``GRPC_PYTHON_BUILD_SYSTEM_OPENSSL=True``
 
 .. note::
 
-   Please note that this fix is already included in the Dockerfile.
+   Please note that this fix is already included in the Dockerfile and the Ansible role.
 
 First install all required build-tools. This example will install the build-tools
 in Debian-based distributions:
