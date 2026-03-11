@@ -23,6 +23,15 @@ from attackmate.executors.executor_factory import executor_factory
 
 
 class AttackMate:
+    """
+    Reads a playbook and executes the attack chain.
+
+    :param playbook: The playbook to execute.
+    :param config: AttackMate configuration.
+    :param varstore: Initial variable store.
+    :param is_api_instance: Whether this instance is used as an API.
+    """
+
     def __init__(
         self,
         playbook: Optional[Playbook] = None,

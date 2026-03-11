@@ -20,14 +20,22 @@ from attackmate.processmanager import ProcessManager
 
 class BaseExecutor(ExitOnError, CmdVars, Looper, Background):
     """
+    Base class for all AttackMate executors.
 
-    The BaseExecutor is the base class of all Executors.
-    It enables base functionality for all Executors and
-    provides a structure for all Executors.
+    Provides the core execution pipeline for commands, including variable
+    substitution, conditional execution (``only_if``), background mode,
+    loop control (``loop_if`` / ``loop_if_not``), error handling, output
+    logging, and JSON audit logging.
 
-    In order to create a custom Executor, one must simply
-    derive from the BaseExecutor and implement the method
-    _exec_cmd()
+    To implement a custom executor, subclass ``BaseExecutor`` and override
+    :meth:`_exec_cmd`. All other pipeline behaviour is inherited.
+
+    Example::
+
+        class MyExecutor(BaseExecutor):
+            async def _exec_cmd(self, command: MyCommand) -> Result:
+                output = run_my_tool(command.cmd)
+                return Result(stdout=output, returncode=0)
 
     """
 
@@ -38,17 +46,24 @@ class BaseExecutor(ExitOnError, CmdVars, Looper, Background):
             cmdconfig=CommandConfig(),
             substitute_cmd_vars=True,
             is_api_instance: bool = False):
-        """Constructor for BaseExecutor
+        """
+        Initialise the executor with shared infrastructure.
+
         Parameters
         ----------
         pm : ProcessManager
-            Process manager instance.
+            Process manager used to track and clean up background processes.
         varstore : VariableStore
-            Variable store instance.
-        cmdconfig : CommandConfig, default `None`
-            Command configuration settings.
-        substitute_cmd_vars : bool, default `True`
-            Flag to enable or disable variable substitution in command.cmd
+            Variable store used for template substitution in commands.
+        cmdconfig : CommandConfig, optional
+            Global command configuration (e.g. delays, loop defaults).
+            Defaults to an empty ``CommandConfig``.
+        substitute_cmd_vars : bool, optional
+            If ``True`` (default), variable references in ``command.cmd``
+            are substituted from the variable store before execution.
+        is_api_instance : bool, optional
+            If ``True``, suppresses ``exit_on_error`` behaviour so that
+            API callers receive errors as results rather than process exits.
         """
 
         Background.__init__(self, pm)
@@ -63,19 +78,29 @@ class BaseExecutor(ExitOnError, CmdVars, Looper, Background):
         self.is_api_instance = is_api_instance
 
     async def run(self, command: BaseCommand, is_api_instance: bool = False) -> Result:
-        """Execute the command
+        """
+        Entry point for executing a command.
 
-        This method is executed by AttackMate and
-        executes the given command. This method sets the
-        run_count to 1 and runs the method exec(). Please note
-        that this function will exchange all variables of the BaseCommand
-        with the values of the VariableStore if substitute_cmd_vars is True!
+        Called by AttackMate for each command in the playbook. Evaluates the
+        ``only_if`` condition first and skips the command if it is not met.
+        In background mode, the command is dispatched asynchronously and
+        returns immediately with a placeholder result. Otherwise, the full
+        synchronous execution pipeline is run via :meth:`exec`.
 
         Parameters
         ----------
         command : BaseCommand
-            The settings for the command to execute
+            The command to execute, including all configured options.
+        is_api_instance : bool, optional
+            Overrides the instance-level ``is_api_instance`` flag for this
+            execution. Defaults to ``False``.
 
+        Returns
+        -------
+        Result
+            The result of the command execution, containing stdout and
+            return code. Returns ``Result(None, None)`` if the ``only_if``
+            condition is not met.
         """
         self.is_api_instance = is_api_instance
         if command.only_if:
@@ -101,15 +126,30 @@ class BaseExecutor(ExitOnError, CmdVars, Looper, Background):
         return result
 
     def log_command(self, command):
-        """Log starting-status of the command"""
+        """Log the start of a command execution at INFO level."""
         self.logger.info(f"Executing '{command}'")
 
     def log_metadata(self, logger: logging.Logger, command):
-        """Log metadata of the command"""
+        """Log command metadata as a JSON string, if present."""
         if command.metadata:
             logger.info(f'Metadata: {json.dumps(command.metadata)}')
 
     def log_json(self, logger: logging.Logger, command, time):
+        """
+        Serialize a command to JSON and write it to the JSON audit log.
+
+        If serialization fails due to non-serializable types, a warning is
+        logged instead and execution continues.
+
+        Parameters
+        ----------
+        logger : logging.Logger
+            The logger to write the JSON entry to.
+        command : BaseCommand
+            The command to serialize.
+        time : str
+            ISO 8601 timestamp of when the command started.
+        """
         command_dict = self.make_command_serializable(command, time)
 
         try:
@@ -143,9 +183,17 @@ class BaseExecutor(ExitOnError, CmdVars, Looper, Background):
         return command_dict
 
     def save_output(self, command: BaseCommand, result: Result):
-        """Save output of command to a file. This method will
-        ignore all exceptions and won't stop the programm
-        on error.
+        """
+        Write command output to a file if ``command.save`` is set.
+
+        Failures are logged as warnings and do not interrupt execution.
+
+        Parameters
+        ----------
+        command : BaseCommand
+            The command whose output should be saved.
+        result : Result
+            The result containing the stdout to write.
         """
         if command.save:
             try:
@@ -155,6 +203,23 @@ class BaseExecutor(ExitOnError, CmdVars, Looper, Background):
                 self.logger.warning(f'Unable to write output to file {command.save}: {e}')
 
     async def exec(self, command: BaseCommand) -> Result:
+        """
+        Run the full synchronous execution pipeline for a command.
+
+        Calls :meth:`_exec_cmd`, then handles JSON logging, output saving,
+        error checking, variable store updates, and loop condition evaluation.
+
+        Parameters
+        ----------
+        command : BaseCommand
+            The command to execute.
+
+        Returns
+        -------
+        Result
+            The result of the command, or a ``Result(str(error), 1)`` if an
+            :class:`~attackmate.execexception.ExecException` is raised.
+        """
         try:
             self.log_command(command)
             self.log_metadata(self.logger, command)
@@ -179,4 +244,21 @@ class BaseExecutor(ExitOnError, CmdVars, Looper, Background):
         return result
 
     async def _exec_cmd(self, command: Any) -> Result:
+        """
+        Execute the command. Override this method in subclasses.
+
+        This is the only method that must be implemented in a custom executor.
+        The base implementation is a no-op that returns ``Result(None, None)``.
+
+        Parameters
+        ----------
+        command : Any
+            The command to execute. Subclasses should type this as their
+            specific command schema class.
+
+        Returns
+        -------
+        Result
+            The result of the command execution.
+        """
         return Result(None, None)
