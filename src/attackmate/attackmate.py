@@ -23,13 +23,29 @@ from attackmate.executors.executor_factory import executor_factory
 
 
 class AttackMate:
-    """
-    Reads a playbook and executes the attack chain.
+    """Reads a playbook and executes the attack chain.
 
-    :param playbook: The playbook to execute.
-    :param config: AttackMate configuration.
-    :param varstore: Initial variable store.
-    :param is_api_instance: Whether this instance is used as an API.
+    Creates instances of all registered executors, iterates over the commands
+    in the playbook, and dispatches each to the appropriate executor.
+
+    Can be used standalone via :meth:`main`, or embedded in a Python script
+    using :meth:`run_command` for single-command execution.
+
+    :param playbook: The playbook to execute. Defaults to an empty playbook.
+    :param config: AttackMate configuration. Defaults to a default :class:`Config`.
+    :param varstore: Initial variables passed as a plain dictionary. If omitted,
+        variables are read from the playbook's ``vars`` section.
+    :param is_api_instance: Set to ``True`` when AttackMate is used as an embedded
+        API rather than a standalone CLI process.
+
+    Example::
+
+        attackmate = AttackMate(config=config, varstore={"HOST": "10.0.0.1"})
+        command = Command.create(type="shell", cmd="whoami")
+        result = await attackmate.run_command(command)
+
+    .. seealso::
+        :ref:`integration` for full documentation on scripted usage.
     """
 
     def __init__(
@@ -81,7 +97,7 @@ class AttackMate:
         """
         self.varstore = VariableStore()
         # if attackmate is imported and initialized in another project, vars can be passed as dict
-        # otherwise variable store is initializen with vars from playbook
+        # otherwise variable store is initialized with vars from playbook
         self.varstore.from_dict(varstore if varstore else self.playbook.vars)
         self.varstore.replace_with_prefixed_env_vars()
 
@@ -100,6 +116,15 @@ class AttackMate:
         return config
 
     def _get_executor(self, command_type: str) -> BaseExecutor:
+        """Return the executor instance for the given command type.
+
+        Executors are instantiated lazily on first use and cached for subsequent
+        calls. If no executor for ``command_type`` exists yet, one is created via
+        :func:`executor_factory.create_executor` and stored for reuse.
+
+        :param command_type: The command type string (e.g. ``"shell"``, ``"ssh"``).
+        :returns: The :class:`BaseExecutor` instance for that command type.
+        """
         if command_type not in self.executors:
             self.executors[command_type] = executor_factory.create_executor(
                 command_type, **self.executor_config
@@ -108,6 +133,21 @@ class AttackMate:
         return self.executors[command_type]
 
     async def _run_commands(self, commands: Commands):
+        """Execute a sequence of commands in order.
+
+        Iterates over ``commands``, resolves the appropriate executor for each,
+        and runs them sequentially. A configurable delay is applied before each
+        command, except for ``sleep``, ``debug``, and ``setvar`` commands which
+        are exempt from the delay.
+
+        ``sftp`` commands are dispatched to the ``ssh`` executor.
+
+        :param commands: A sequence of command instances to execute.
+
+        .. note::
+            The delay between commands is controlled by ``cmd_config.command_delay``
+            in the :class:`Config`. Defaults to ``0`` if not set.
+        """
         delay = self.pyconfig.cmd_config.command_delay or 0
         self.logger.info(f'Delay before commands: {delay} seconds')
         for command in commands:
@@ -119,6 +159,19 @@ class AttackMate:
                 await executor.run(command, is_api_instance=self.is_api_instance)
 
     async def run_command(self, command: Command) -> Result:
+        """Execute a single command and return its result.
+
+        Looks up the appropriate executor for the command type and runs it.
+        One exception:``sftp`` commands are dispatched to the ``ssh`` executor.
+
+        :param command: A command instance created via :meth:`Command.create`.
+        :returns: A :class:`Result` object containing ``stdout`` and ``returncode``.
+            Returns ``Result(None, None)`` if no executor is found.
+
+        .. note::
+            Commands running in :ref:`background-mode` return
+            ``Result('Command started in background', 0)`` immediately.
+        """
         command_type = 'ssh' if command.type == 'sftp' else command.type
         executor = self._get_executor(command_type)
         if executor:
@@ -148,10 +201,13 @@ class AttackMate:
             remote_executor.cleanup()
 
     async def main(self):
-        """The main function
+        """Execute the full playbook and clean up all sessions.
 
-        Passes the main playbook-commands to run_commands
+        Passes all commands from the playbook to :meth:`_run_commands`, then
+        tears down open sessions and background processes. Handles
+        :exc:`KeyboardInterrupt` gracefully.
 
+        :returns: ``0`` on completion.
         """
         try:
             await self._run_commands(self.playbook.commands)
