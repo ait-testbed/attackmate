@@ -23,7 +23,7 @@ class CommandRegistry:
         :param type_: The command type string (e.g. ``"shell"``, ``"sleep"``).
         :param cmd: An optional ``cmd`` value for more specific registration.
             If provided, the class is registered under ``(type_, cmd)`` and will
-            only be returned when both match. This is a LEGACY pattern and should **NOT** be used anymore
+            only be returned when both match. This is a LEGACY pattern and should **NOT** be used anymore.
 
         Example::
 

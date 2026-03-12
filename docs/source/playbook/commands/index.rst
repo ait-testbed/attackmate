@@ -228,15 +228,15 @@ Every command, regardless of its type supports the following general options:
 
    Background mode is not supported for
 
-   * MsfModuleCommand
-   * IncludeCommand
-   * VncCommand
-   * BrowserCommand
+   * :ref:`MsfModuleCommand <msf-module>`
+   * :ref:`IncludeCommand <include>`
+   * :ref:`VncCommand <vnc>`
+   * :ref:`BrowserCommand <browser>`
 
    Background mode together with a session is not supported for the following commands:
 
-   * SSHCommand
-   * SFTPCommand
+   * :ref:`SSHCommand <ssh>`
+   * :ref:`SFTPCommand <sftp>`
 
 
 .. confval:: kill_on_exit
