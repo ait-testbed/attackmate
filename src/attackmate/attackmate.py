@@ -1,11 +1,17 @@
-"""AttackMate reads a playbook and executes the attack
+"""AttackMate reads a playbook and executes the attack chain.
 
-A playbook stored in a dictionary with a list of attacks. Attacks
-are executed by "Executors". There are many different
-Executors like: ShellExecutor, SleepExecutor or MsfModuleExecutor
-This class creates instances of all possible Executors, iterates
-over all attacks and runs the specific Executor with the given
-configuration.
+A playbook is a structured sequence of commands, each dispatched to the
+appropriate executor based on its type. Executors are instantiated lazily
+on first use and cached for reuse. Available executors include
+:class:`ShellExecutor`, :class:`SleepExecutor`, :class:`MsfModuleExecutor`,
+and others registered via the executor factory.
+
+This module exposes :class:`AttackMate`, which can be used standalone via
+its :meth:`~AttackMate.main` entry point or embedded in a Python script
+using :meth:`~AttackMate.run_command` for single-command execution.
+
+.. seealso::
+    :ref:`integration` for documentation on scripted usage.
 """
 
 import time
@@ -43,9 +49,6 @@ class AttackMate:
         attackmate = AttackMate(config=config, varstore={"HOST": "10.0.0.1"})
         command = Command.create(type="shell", cmd="whoami")
         result = await attackmate.run_command(command)
-
-    .. seealso::
-        :ref:`integration` for full documentation on scripted usage.
     """
 
     def __init__(
@@ -169,7 +172,7 @@ class AttackMate:
             Returns ``Result(None, None)`` if no executor is found.
 
         .. note::
-            Commands running in :ref:`background-mode` return
+            Commands running in backgound return
             ``Result('Command started in background', 0)`` immediately.
         """
         command_type = 'ssh' if command.type == 'sftp' else command.type

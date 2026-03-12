@@ -51,7 +51,7 @@ class LoopExecutor(BaseExecutor):
         Replaces all occurrences of placeholders in *any* string attribute
         of the command_obj with the values from placeholders.
         E.g. if placeholders = {'LOOP_ITEM': 'https://example.com'},
-             and command_obj.url = '$LOOP_ITEM', then it becomes 'https://example.com'.
+        and command_obj.url = '$LOOP_ITEM', then it becomes 'https://example.com'.
         """
         for attr_name, attr_val in vars(command_obj).items():
             if isinstance(attr_val, str) and '$' in attr_val:
