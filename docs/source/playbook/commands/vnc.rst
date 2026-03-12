@@ -11,6 +11,10 @@ cached after the first command, so subsequent commands only need to specify what
    VNC sessions must be explicitly closed with ``cmd: close``, otherwise AttackMate
    will hang on exit.
 
+.. note::
+
+   Background mode is not supported for this commands.
+
 .. code-block:: yaml
 
    vars:

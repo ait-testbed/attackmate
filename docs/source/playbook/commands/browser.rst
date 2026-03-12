@@ -11,6 +11,9 @@ Execute commands using a Playwright-managed Chromium browser. This executor can 
    etc.) across multiple commands, use the :confval:`creates_session` to open a named
    session and :confval:`session` to reuse it.
 
+   Background mode is not supported for this commands.
+
+
 .. code-block:: yaml
 
    vars:
