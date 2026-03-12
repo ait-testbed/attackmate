@@ -118,6 +118,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../playbook/commands/index.html">Commands</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../playbook/session/index.html">Sessions, Interactive</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../playbook/examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../playbook/troubleshooting.html">Troubleshooting</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Developing:</span></p>
 <ul class="current">
@@ -188,7 +189,8 @@ It provides a structured approach to implementing custom executors.</p>
 </section>
 <section id="implementing-a-custom-executor">
 <h3>Implementing a Custom Executor<a class="headerlink" href="#implementing-a-custom-executor" title="Permalink to this heading"></a></h3>
-<p>To create a custom executor, inherit from <code class="docutils literal notranslate"><span class="pre">BaseExecutor</span></code> and implement the <code class="docutils literal notranslate"><span class="pre">_exec_cmd()</span></code> method. Other methods can be overriden as needed.</p>
+<p>To create a custom executor, inherit from <code class="docutils literal notranslate"><span class="pre">BaseExecutor</span></code> and implement the <code class="docutils literal notranslate"><span class="pre">_exec_cmd()</span></code> method. Other methods can be overriden as needed.
+New executors must be registered using the &#64;executor_factory.register_executor(‘&lt;command_type&gt;’) decorator.</p>
 <p>Example:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">attackmate.executors.base_executor</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseExecutor</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">attackmate.result</span><span class="w"> </span><span class="kn">import</span> <span class="n">Result</span>
@@ -242,7 +244,22 @@ It includes condition checking, logging, and calling the actual execution logic.
 <h3>executor __init__.py<a class="headerlink" href="#executor-init-py" title="Permalink to this heading"></a></h3>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Add the new executor to the <code class="docutils literal notranslate"><span class="pre">__all__</span></code> list in the <code class="docutils literal notranslate"><span class="pre">__init__.py</span></code> file of the <code class="docutils literal notranslate"><span class="pre">attackmate.executors</span></code> module.</p>
+<p>Add the new executor to the <code class="docutils literal notranslate"><span class="pre">__all__</span></code> list in the <code class="docutils literal notranslate"><span class="pre">__init__.py</span></code> file of the <code class="docutils literal notranslate"><span class="pre">attackmate.executors</span></code> module so it can be imported elsewhere.</p>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># src/attackmate/executors/__init__.py</span>
+<span class="c1"># other imports</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.shell.shellexecutor</span><span class="w"> </span><span class="kn">import</span> <span class="n">ShellExecutor</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.metasploit.msfsessionexecutor</span><span class="w"> </span><span class="kn">import</span> <span class="n">CustomExecutor</span> <span class="c1"># new executor</span>
+<span class="c1"># other imports</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s1">&#39;RemoteExecutor&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;BrowserExecutor&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;ShellExecutor&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;CustomExecutor&#39;</span><span class="p">,</span> <span class="c1"># new executor</span>
+    <span class="c1"># other executors</span>
+<span class="p">]</span>
+</pre></div>
 </div>
 </section>
 </section>

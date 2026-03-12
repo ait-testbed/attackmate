@@ -115,12 +115,15 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="structure.html">Structure</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Variables</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#variable-types-and-storage">Variable Types and Storage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#comparing-variables">Comparing Variables</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#builtin-variables">Builtin Variables</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="commands/index.html">Commands</a></li>
 <li class="toctree-l1"><a class="reference internal" href="session/index.html">Sessions, Interactive</a></li>
 <li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html">Troubleshooting</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Developing:</span></p>
 <ul>
@@ -167,8 +170,8 @@ placeholders in command settings. Variable names do not require a <code class="d
 defined in the <code class="docutils literal notranslate"><span class="pre">vars</span></code> section, but <strong>MUST</strong> be prefixed with <code class="docutils literal notranslate"><span class="pre">$</span></code> when referenced
 in the <code class="docutils literal notranslate"><span class="pre">commands</span></code> section.
 If an environment variable with the prefix <code class="docutils literal notranslate"><span class="pre">ATTACKMATE_</span></code> exists with the same name,
-it will override the playbook variable. For example,  the playbook variabel <code class="docutils literal notranslate"><span class="pre">$FOO</span></code> will
-be overwritten by the environment variabel <code class="docutils literal notranslate"><span class="pre">$ATTACKMATE_FOO</span></code>.</p>
+it will override the playbook variable. For example, the playbook variable <code class="docutils literal notranslate"><span class="pre">$FOO</span></code> will
+be overwritten by the environment variable <code class="docutils literal notranslate"><span class="pre">$ATTACKMATE_FOO</span></code>.</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">vars</span><span class="p">:</span>
 <span class="w">  </span><span class="c1"># the $-sign is optional here:</span>
 <span class="w">  </span><span class="nt">$SERVER_ADDRESS</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.42.0.254</span>
@@ -186,17 +189,101 @@ be overwritten by the environment variabel <code class="docutils literal notrans
 </div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Variables in <code class="docutils literal notranslate"><span class="pre">cmd</span></code> settings of a <code class="docutils literal notranslate"><span class="pre">loop</span></code> command will be substituted on every iteration of the loop, see the  <a class="reference internal" href="commands/loop.html#loop"><span class="std std-ref">loop</span></a> command for details.</p>
+<p>Variables in <code class="docutils literal notranslate"><span class="pre">cmd</span></code> settings of a <code class="docutils literal notranslate"><span class="pre">loop</span></code> command will be substituted on every
+iteration of the loop, see the <a class="reference internal" href="commands/loop.html#loop"><span class="std std-ref">loop</span></a> command for details.</p>
 </div>
+<section id="variable-types-and-storage">
+<span id="variable-types"></span><h2>Variable Types and Storage<a class="headerlink" href="#variable-types-and-storage" title="Permalink to this heading"></a></h2>
+<p>All variables are stored internally as plain Python <code class="docutils literal notranslate"><span class="pre">str</span></code> values, regardless of
+how they were originally defined. Integer values are coerced to strings on ingress —
+<code class="docutils literal notranslate"><span class="pre">set_variable</span></code> explicitly converts <code class="docutils literal notranslate"><span class="pre">int</span></code> to <code class="docutils literal notranslate"><span class="pre">str</span></code> before storing. This means
+that even if a variable is set programmatically to the integer <code class="docutils literal notranslate"><span class="pre">42</span></code>, it will be
+stored and retrieved as the string <code class="docutils literal notranslate"><span class="pre">&quot;42&quot;</span></code>.</p>
+<p>The store holds two separate namespaces:</p>
+<ul class="simple">
+<li><p><strong>Scalar variables</strong> — simple <code class="docutils literal notranslate"><span class="pre">str</span></code> key-value pairs, accessed as <code class="docutils literal notranslate"><span class="pre">$varname</span></code>.</p></li>
+<li><p><strong>List variables</strong> — ordered sequences of <code class="docutils literal notranslate"><span class="pre">str</span></code> values, accessed by index as
+<code class="docutils literal notranslate"><span class="pre">$varname[0]</span></code>, <code class="docutils literal notranslate"><span class="pre">$varname[1]</span></code>, etc.</p></li>
+</ul>
+<p>A name cannot be both a scalar and a list simultaneously. Assigning a list value to
+an existing scalar name (or vice versa) silently replaces the previous entry.</p>
+</section>
+<section id="comparing-variables">
+<span id="variable-comparison"></span><h2>Comparing Variables<a class="headerlink" href="#comparing-variables" title="Permalink to this heading"></a></h2>
+<p>When a variable is used in a conditional expression (see <span class="xref std std-ref">conditionals</span>), its
+<code class="docutils literal notranslate"><span class="pre">$</span></code> reference is substituted <em>before</em> the expression is evaluated. Because the
+store always holds strings, the resolved value will be a <code class="docutils literal notranslate"><span class="pre">str</span></code> — even if the
+original value looked like a number or a boolean.</p>
+<p>This has important consequences depending on the operator used:</p>
+<dl>
+<dt><strong>Strings and integers</strong> (<code class="docutils literal notranslate"><span class="pre">==</span></code>, <code class="docutils literal notranslate"><span class="pre">!=</span></code>, <code class="docutils literal notranslate"><span class="pre">&lt;</span></code>, <code class="docutils literal notranslate"><span class="pre">&lt;=</span></code>, <code class="docutils literal notranslate"><span class="pre">&gt;</span></code>, <code class="docutils literal notranslate"><span class="pre">&gt;=</span></code>, <code class="docutils literal notranslate"><span class="pre">is</span></code>, <code class="docutils literal notranslate"><span class="pre">is</span> <span class="pre">not</span></code>)</dt><dd><p>The resolved variable is always a <code class="docutils literal notranslate"><span class="pre">str</span></code>. If the right-hand side of the condition
+is written as a bare integer literal (e.g. <code class="docutils literal notranslate"><span class="pre">$exit_code</span> <span class="pre">==</span> <span class="pre">0</span></code>), Python will compare
+a <code class="docutils literal notranslate"><span class="pre">str</span></code> against an <code class="docutils literal notranslate"><span class="pre">int</span></code>. Always use string literals on the right-hand side:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># Wrong — &quot;0&quot; == 0 is False in Python:</span>
+<span class="nt">condition</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">$exit_code == 0</span>
+
+<span class="c1"># Correct:</span>
+<span class="nt">condition</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">$exit_code == &quot;0&quot;</span>
+</pre></div>
+</div>
+<p>Ordering operators (<code class="docutils literal notranslate"><span class="pre">&lt;</span></code>, <code class="docutils literal notranslate"><span class="pre">&lt;=</span></code>, <code class="docutils literal notranslate"><span class="pre">&gt;</span></code>, <code class="docutils literal notranslate"><span class="pre">&gt;=</span></code>) between a <code class="docutils literal notranslate"><span class="pre">str</span></code> and an <code class="docutils literal notranslate"><span class="pre">int</span></code>
+raise a <code class="docutils literal notranslate"><span class="pre">TypeError</span></code>. If both sides are string literals the comparison uses
+<strong>lexicographic</strong> ordering (<code class="docutils literal notranslate"><span class="pre">&quot;9&quot;</span> <span class="pre">&gt;</span> <span class="pre">&quot;10&quot;</span></code> is <code class="docutils literal notranslate"><span class="pre">True</span></code>), so take care when
+comparing numeric strings.</p>
+</dd>
+<dt><strong>Strings and booleans</strong> (<code class="docutils literal notranslate"><span class="pre">==</span></code>, <code class="docutils literal notranslate"><span class="pre">!=</span></code>)</dt><dd><p>In Python, <code class="docutils literal notranslate"><span class="pre">bool</span></code> is a subclass of <code class="docutils literal notranslate"><span class="pre">int</span></code>, so <code class="docutils literal notranslate"><span class="pre">True</span></code> equals <code class="docutils literal notranslate"><span class="pre">1</span></code> and
+<code class="docutils literal notranslate"><span class="pre">False</span></code> equals <code class="docutils literal notranslate"><span class="pre">0</span></code>. However, a variable set to <code class="docutils literal notranslate"><span class="pre">&quot;True&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;False&quot;</span></code>
+is a <code class="docutils literal notranslate"><span class="pre">str</span></code>, and <code class="docutils literal notranslate"><span class="pre">&quot;True&quot;</span> <span class="pre">==</span> <span class="pre">True</span></code> is <code class="docutils literal notranslate"><span class="pre">False</span></code> because the types differ.
+Use string literals for boolean-like flags:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># Wrong — &quot;True&quot; == True is False:</span>
+<span class="nt">condition</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">$flag == True</span>
+
+<span class="c1"># Correct:</span>
+<span class="nt">condition</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">$flag == &quot;True&quot;</span>
+</pre></div>
+</div>
+</dd>
+<dt><strong>Identity</strong> (<code class="docutils literal notranslate"><span class="pre">is</span></code>, <code class="docutils literal notranslate"><span class="pre">is</span> <span class="pre">not</span></code>)</dt><dd><p>These operators test object identity, not value equality. Because every resolved
+variable is a freshly substituted <code class="docutils literal notranslate"><span class="pre">str</span></code>, <code class="docutils literal notranslate"><span class="pre">$var</span> <span class="pre">is</span> <span class="pre">&quot;hello&quot;</span></code> is unreliable even
+when the values appear equal. Use <code class="docutils literal notranslate"><span class="pre">==</span></code> and <code class="docutils literal notranslate"><span class="pre">!=</span></code> for value comparisons; reserve
+<code class="docutils literal notranslate"><span class="pre">is</span></code> / <code class="docutils literal notranslate"><span class="pre">is</span> <span class="pre">not</span></code> for checks between two variables where identity is
+intentionally meaningful.</p>
+</dd>
+<dt><strong>Regex</strong> (<code class="docutils literal notranslate"><span class="pre">=~</span></code>, <code class="docutils literal notranslate"><span class="pre">!~</span></code>)</dt><dd><p>Regex conditions bypass <code class="docutils literal notranslate"><span class="pre">ast</span></code> parsing entirely and operate directly on the
+substituted string, so type-mismatch issues do not apply. This is the most
+robust operator for testing variable values that may contain numbers, booleans,
+or mixed content:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">condition</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">$exit_code =~ ^0$</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference external" href="https://docs.python.org/3/reference/expressions.html#comparisons">Python reference — Comparisons</a></p>
+<p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool">Python built-in — bool (subclass of int)</a></p>
+<p><a class="reference external" href="https://docs.python.org/3/library/ast.html#ast.Constant">Python ast — Constant node</a></p>
+</div>
+</section>
 <section id="builtin-variables">
 <span id="id2"></span><h2>Builtin Variables<a class="headerlink" href="#builtin-variables" title="Permalink to this heading"></a></h2>
 <p>The following variables are set automatically by AttackMate during execution:</p>
-<p><code class="docutils literal notranslate"><span class="pre">RESULT_STDOUT</span></code> Stores the standard output of the most recently executed command. Not set by <code class="docutils literal notranslate"><span class="pre">debug</span></code>, <code class="docutils literal notranslate"><span class="pre">regex</span></code>, or <code class="docutils literal notranslate"><span class="pre">setvar</span></code> commands.</p>
-<p><code class="docutils literal notranslate"><span class="pre">RESULT_CODE</span></code> Stores the return code of the most recently executed command.</p>
-<p><code class="docutils literal notranslate"><span class="pre">LAST_MSF_SESSION</span></code> Set whenever a new Metasploit session is created. Contains the session number.</p>
-<p><code class="docutils literal notranslate"><span class="pre">LAST_SLIVER_IMPLANT</span></code> Set whenever a new Sliver implant is generated. Contains the path to the implant file.</p>
-<p><code class="docutils literal notranslate"><span class="pre">LAST_FATHER_PATH</span></code> Set whenever a Father rootkit is generated. Contains the path to the rootkit.</p>
-<p><code class="docutils literal notranslate"><span class="pre">REGEX_MATCHES_LIST</span></code> Set every time a regex command yields matches. Contains a list of all matches. If <code class="docutils literal notranslate"><span class="pre">sub</span></code> or <code class="docutils literal notranslate"><span class="pre">split</span></code> finds no match, the original input string is returned.</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">RESULT_STDOUT</span></code></dt><dd><p>Stores the standard output of the most recently executed command.
+Not set by <code class="docutils literal notranslate"><span class="pre">debug</span></code>, <code class="docutils literal notranslate"><span class="pre">regex</span></code>, or <code class="docutils literal notranslate"><span class="pre">setvar</span></code> commands.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">RESULT_CODE</span></code></dt><dd><p>Stores the return code of the most recently executed command.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">LAST_MSF_SESSION</span></code></dt><dd><p>Set whenever a new Metasploit session is created. Contains the session number.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">LAST_SLIVER_IMPLANT</span></code></dt><dd><p>Set whenever a new Sliver implant is generated. Contains the path to the implant file.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">LAST_FATHER_PATH</span></code></dt><dd><p>Set whenever a Father rootkit is generated. Contains the path to the rootkit.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">REGEX_MATCHES_LIST</span></code></dt><dd><p>Set every time a regex command yields matches. Contains a list of all matches.
+If <code class="docutils literal notranslate"><span class="pre">sub</span></code> or <code class="docutils literal notranslate"><span class="pre">split</span></code> finds no match, the original input string is returned.</p>
+</dd>
+</dl>
 </section>
 </section>
 

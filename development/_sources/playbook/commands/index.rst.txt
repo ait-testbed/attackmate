@@ -28,6 +28,24 @@ Every command, regardless of its type supports the following general options:
           cmd: nmap localhost
           save: /tmp/nmap_localhost.txt
 
+.. confval:: metadata
+
+   An optional dictionary of key-value pairs that are logged alongside the command
+   but have no effect on execution.
+
+   :type: Dict
+   :default: None
+
+   .. code-block:: yaml
+
+      commands:
+        - type: debug
+          cmd: Come on, Cat
+          metadata:
+            version: 1
+            author: Ellen Ripley
+
+
 .. confval:: exit_on_error
 
    Attackmate will exit with an error if the command returns a non-zero exit code.
@@ -107,6 +125,8 @@ Every command, regardless of its type supports the following general options:
    :type: int
    :default: ``3``
 
+.. _conditionals:
+
 .. confval:: only_if
 
    Execute this command only if the condition evaluates to ``True``. Supported operators:
@@ -153,6 +173,8 @@ Every command, regardless of its type supports the following general options:
    .. warning::
 
         When comparing strings with integers, standard Python conventions apply:
+        see `Python reference — Comparisons
+        <https://docs.python.org/3/reference/expressions.html#comparisons>`_
 
         **Equality / Inequality** (``==``, ``!=``):
         A string and an integer are never equal, so ``"1" == 1`` is ``False``
@@ -161,7 +183,8 @@ Every command, regardless of its type supports the following general options:
         **Identity** (``is``, ``is not``):
         Compares object identity, not value. ``"1" is 1`` is always ``False``
         because a string and an integer are distinct objects, regardless of
-        their apparent values.
+        their apparent values.  see `Python reference — Value vs. identity
+        <https://docs.python.org/3/reference/expressions.html#is>`_
 
         **Ordering** (``<``, ``<=``, ``>``, ``>=``):
         Comparing a string with an integer raises a ``TypeError`` in Python 3
@@ -178,11 +201,17 @@ Every command, regardless of its type supports the following general options:
         while the literal is parsed as a ``bool`` by ``ast``.  Use string
         literals for boolean-like flags stored in the ``VariableStore``:
         ``$flag == "True"``.
+        see `Python built-in — bool (subclass of int)
+        <https://docs.python.org/3/library/functions.html#bool>`_
 
         Importantly, before a condition is evaluated, all ``$variable`` references are
         resolved by the ``VariableStore``.  **The store holds every value as a
         plain Python** ``str``, even values that were originally integers
         are coerced to ``str`` on ingress.
+
+
+.. _background:
+
 
 .. confval:: background
 
@@ -194,23 +223,20 @@ Every command, regardless of its type supports the following general options:
 
    .. note::
 
-      The command in background-mode will change the :ref:`builtin variables <builtin-variables>`
+      The command in background mode will change the :ref:`builtin variables <builtin-variables>`
       ``RESULT_STDOUT`` to "Command started in Background" and ``RESULT_CODE`` to 0.
 
    Background mode is not supported for
 
-   * MsfModuleCommand
-   * IncludeCommand
-   * VncCommand
-   * BrowserCommand
+   * :ref:`MsfModuleCommand <msf-module>`
+   * :ref:`IncludeCommand <include>`
+   * :ref:`VncCommand <vnc>`
+   * :ref:`BrowserCommand <browser>`
 
    Background mode together with a session is not supported for the following commands:
 
-   * SSHCommand
-   * SFTPCommand
-
-
-
+   * :ref:`SSHCommand <ssh>`
+   * :ref:`SFTPCommand <sftp>`
 
 
 .. confval:: kill_on_exit
@@ -220,23 +246,6 @@ Every command, regardless of its type supports the following general options:
 
    :type: bool
    :default: ``True``
-
-.. confval:: metadata
-
-   An optional dictionary of key-value pairs that are logged alongside the command
-   but have no effect on execution.
-
-   :type: Dict
-   :default: None
-
-   .. code-block:: yaml
-
-      commands:
-        - type: debug
-          cmd: Come on, Cat
-          metadata:
-            version: 1
-            author: Ellen Ripley
 
 
 The next pages will describe each command type in detail.

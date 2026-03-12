@@ -118,6 +118,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../playbook/commands/index.html">Commands</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../playbook/session/index.html">Sessions, Interactive</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../playbook/examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../playbook/troubleshooting.html">Troubleshooting</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Developing:</span></p>
 <ul class="current">
@@ -128,9 +129,10 @@
 <li class="toctree-l2"><a class="reference internal" href="#define-the-command-schema">1. Define the Command Schema</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#implement-the-command-execution">2. Implement the Command Execution</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#ensure-the-executor-handles-the-new-command">3. Ensure the Executor Handles the New Command</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#modify-the-loop-command-to-include-the-new-command">4. Modify the Loop Command to Include the New Command</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#modify-the-remotelyexecutablecommand-union-to-include-the-new-command">4. Modify the RemotelyExecutableCommand Union to Include the New Command</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#add-documentation">6. Add Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#add-the-executor-to-the-init-file-of-the-attackmate-executors-module">4. Add the Executor to the __init__ file of the attackmate.executors module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#modify-the-loop-command-to-include-the-new-command">5. Modify the Loop Command to Include the New Command</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#modify-the-remotelyexecutablecommand-union-to-include-the-new-command">6. Modify the RemotelyExecutableCommand Union to Include the New Command</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#add-documentation">7. Add Documentation</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="baseexecutor.html">Adding a New Executor</a></li>
@@ -190,7 +192,7 @@ used to identify a command in the union.</p></li>
 </ul>
 </div>
 <p><strong>Example: a simple command with no sub-behaviors</strong></p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Literal</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Literal</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseCommand</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">attackmate.command</span><span class="w"> </span><span class="kn">import</span> <span class="n">CommandRegistry</span>
 
@@ -204,7 +206,7 @@ used to identify a command in the union.</p></li>
 </pre></div>
 </div>
 <p><strong>Example: a command with sub-behaviors expressed via</strong> <code class="docutils literal notranslate"><span class="pre">cmd</span></code></p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Literal</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Literal</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseCommand</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">attackmate.command</span><span class="w"> </span><span class="kn">import</span> <span class="n">CommandRegistry</span>
 
@@ -219,7 +221,7 @@ used to identify a command in the union.</p></li>
 <section id="implement-the-command-execution">
 <h2>2. Implement the Command Execution<a class="headerlink" href="#implement-the-command-execution" title="Permalink to this heading"></a></h2>
 <p>The new command should be handled by an executor in <cite>src/attackmate/executors</cite> that extends <code class="docutils literal notranslate"><span class="pre">BaseExecutor</span></code> and implements the <code class="docutils literal notranslate"><span class="pre">_exec_cmd()</span></code> method. For example:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">attackmate.executors.base_executor</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseExecutor</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">attackmate.executors.base_executor</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseExecutor</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">attackmate.result</span><span class="w"> </span><span class="kn">import</span> <span class="n">Result</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">attackmate.executors.executor_factory</span><span class="w"> </span><span class="kn">import</span> <span class="n">executor_factory</span>
 
@@ -238,7 +240,7 @@ It maintains a registry (<code class="docutils literal notranslate"><span class=
 Executors are registered using the <code class="docutils literal notranslate"><span class="pre">register_executor</span></code> method, which provides a decorator to associate a command type with a class.</p>
 <p>When a command is executed, the <code class="docutils literal notranslate"><span class="pre">create_executor</span></code> method retrieves the corresponding executor class, filters the constructor arguments based on the class’s signature, and then creates an instance.</p>
 <p>Accordingly, executors must be registered using the <code class="docutils literal notranslate"><span class="pre">&#64;executor_factory.register_executor('&lt;command_type&gt;')</span></code> decorator.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@executor_factory</span><span class="o">.</span><span class="n">register_executor</span><span class="p">(</span><span class="s1">&#39;debug&#39;</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@executor_factory</span><span class="o">.</span><span class="n">register_executor</span><span class="p">(</span><span class="s1">&#39;debug&#39;</span><span class="p">)</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">DebugExecutor</span><span class="p">(</span><span class="n">BaseExecutor</span><span class="p">):</span>
     <span class="c1"># implementation of the executor</span>
 </pre></div>
@@ -246,7 +248,7 @@ Executors are registered using the <code class="docutils literal notranslate"><s
 <p>If the new executor class requires additional initialization arguments, these must be added to the <code class="docutils literal notranslate"><span class="pre">_get_executor_config</span></code> method in <code class="docutils literal notranslate"><span class="pre">attackmate.py</span></code>.
 All configurations are always passed to the <code class="docutils literal notranslate"><span class="pre">ExecutorFactory</span></code>.
 The factory filters the provided configurations based on the class constructor signature, ensuring that only the required parameters are used.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">_get_executor_config</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">_get_executor_config</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
 <span class="n">config</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s1">&#39;pm&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">pm</span><span class="p">,</span>
     <span class="s1">&#39;varstore&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">varstore</span><span class="p">,</span>
@@ -261,10 +263,29 @@ The factory filters the provided configurations based on the class constructor s
 </pre></div>
 </div>
 </section>
+<section id="add-the-executor-to-the-init-file-of-the-attackmate-executors-module">
+<h2>4. Add the Executor to the __init__ file of the attackmate.executors module<a class="headerlink" href="#add-the-executor-to-the-init-file-of-the-attackmate-executors-module" title="Permalink to this heading"></a></h2>
+<p>Add the new executor to the __all__ list in the __init__.py file of the attackmate.executors module so it can be imported elsewhere.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># src/attackmate/executors/__init__.py</span>
+<span class="c1"># other imports</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.shell.shellexecutor</span><span class="w"> </span><span class="kn">import</span> <span class="n">ShellExecutor</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.metasploit.msfsessionexecutor</span><span class="w"> </span><span class="kn">import</span> <span class="n">CustomExecutor</span> <span class="c1"># new executor</span>
+<span class="c1"># other imports</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s1">&#39;RemoteExecutor&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;BrowserExecutor&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;ShellExecutor&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;CustomExecutor&#39;</span><span class="p">,</span> <span class="c1"># new executor</span>
+    <span class="c1"># other executors</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+</section>
 <section id="modify-the-loop-command-to-include-the-new-command">
-<h2>4. Modify the Loop Command to Include the New Command<a class="headerlink" href="#modify-the-loop-command-to-include-the-new-command" title="Permalink to this heading"></a></h2>
+<h2>5. Modify the Loop Command to Include the New Command<a class="headerlink" href="#modify-the-loop-command-to-include-the-new-command" title="Permalink to this heading"></a></h2>
 <p>in <cite>/src/attackmate/schemas/loop.py</cite> update the <code class="docutils literal notranslate"><span class="pre">LoopCommand</span></code> schema to include the new command.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Command</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Command</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span>
         <span class="n">ShellCommand</span><span class="p">,</span>
         <span class="n">DebugCommand</span><span class="p">,</span>  <span class="c1"># Newly added command</span>
         <span class="c1"># ... other command classes ...</span>
@@ -273,9 +294,9 @@ The factory filters the provided configurations based on the class constructor s
 </div>
 </section>
 <section id="modify-the-remotelyexecutablecommand-union-to-include-the-new-command">
-<h2>4. Modify the RemotelyExecutableCommand Union to Include the New Command<a class="headerlink" href="#modify-the-remotelyexecutablecommand-union-to-include-the-new-command" title="Permalink to this heading"></a></h2>
+<h2>6. Modify the RemotelyExecutableCommand Union to Include the New Command<a class="headerlink" href="#modify-the-remotelyexecutablecommand-union-to-include-the-new-command" title="Permalink to this heading"></a></h2>
 <p>in <cite>src/attackmate/schemas/command_subtypes.py</cite>, update the <code class="docutils literal notranslate"><span class="pre">RemotelyExecutableCommand</span></code> type alias to include the new command</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">RemotelyExecutableCommand</span><span class="p">:</span> <span class="n">TypeAlias</span> <span class="o">=</span> <span class="n">Annotated</span><span class="p">[</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">RemotelyExecutableCommand</span><span class="p">:</span> <span class="n">TypeAlias</span> <span class="o">=</span> <span class="n">Annotated</span><span class="p">[</span>
     <span class="n">Union</span><span class="p">[</span>
         <span class="n">SliverSessionCommands</span><span class="p">,</span>
         <span class="n">SliverCommands</span><span class="p">,</span>
@@ -309,7 +330,7 @@ but couples sub-behavior decisions into the schema layer. New command families m
 <p>Once these steps are completed, the new command will be fully integrated into AttackMate and available for execution.</p>
 </section>
 <section id="add-documentation">
-<h2>6. Add Documentation<a class="headerlink" href="#add-documentation" title="Permalink to this heading"></a></h2>
+<h2>7. Add Documentation<a class="headerlink" href="#add-documentation" title="Permalink to this heading"></a></h2>
 <p>Finally, update the documentation in <cite>docs/source/playbook/commands</cite> to include the new command.</p>
 </section>
 </section>

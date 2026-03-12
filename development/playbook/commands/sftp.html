@@ -143,6 +143,7 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../session/index.html">Sessions, Interactive</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../troubleshooting.html">Troubleshooting</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Developing:</span></p>
 <ul>
@@ -184,14 +185,14 @@
            <div itemprop="articleBody">
              
   <section id="sftp">
-<h1>sftp<a class="headerlink" href="#sftp" title="Permalink to this heading"></a></h1>
+<span id="id1"></span><h1>sftp<a class="headerlink" href="#sftp" title="Permalink to this heading"></a></h1>
 <p>Upload or download files over SSH. This command shares the same connection settings and
 session cache as the <a class="reference internal" href="ssh.html#ssh"><span class="std std-ref">ssh</span></a> command — all SSH options apply, and sessions
 created by either command can be reused by the other.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This command caches all settings so
-that they only need to be defined once.</p>
+<p>This command caches all settings so that they only need to be defined once.</p>
+<p>Background mode with a session is not supported for this commands.</p>
 </div>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">vars</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">$SERVER_ADDRESS</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.42.0.254</span>
@@ -227,8 +228,8 @@ that they only need to be defined once.</p>
 <span class="sig-name descname"><span class="pre">cmd</span></span><a class="headerlink" href="#confval-cmd" title="Permalink to this definition"></a></dt>
 <dd><p>The SFTP operation to perform.</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">put</span></code> — upload a file from the local machine to the remote host</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">get</span></code> — download a file from the remote host to the local machine</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">put</span></code> - upload a file from the local machine to the remote host</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">get</span></code> - download a file from the remote host to the local machine</p></li>
 </ul>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>

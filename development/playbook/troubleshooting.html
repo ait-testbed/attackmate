@@ -1,0 +1,373 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Troubleshooting &mdash; AttackMate 0.6.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css" />
+
+  
+      <script src="../_static/jquery.js"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+      <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+      <script src="../_static/doctools.js"></script>
+      <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Contributing" href="../developing/contribution.html" />
+    <link rel="prev" title="Examples" href="examples.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            AttackMate
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+
+<div class="version-switcher" style="margin: 0.5em 0;">
+    <select onchange="if (this.value) window.location.href=this.value;" style="width: 100%; padding: 0.2em;">
+        
+        <option value="../../v0.1.0/index.html" >
+            v0.1.0
+        </option>
+        
+        <option value="../../v0.2.0/index.html" >
+            v0.2.0
+        </option>
+        
+        <option value="../../v0.3.0/index.html" >
+            v0.3.0
+        </option>
+        
+        <option value="../../v0.3.1/index.html" >
+            v0.3.1
+        </option>
+        
+        <option value="../../v0.4.0/index.html" >
+            v0.4.0
+        </option>
+        
+        <option value="../../v0.5.0/index.html" >
+            v0.5.0
+        </option>
+        
+        <option value="../../v0.6.0/index.html" >
+            v0.6.0
+        </option>
+        
+        <option value="troubleshooting.html" selected>
+            development
+        </option>
+        
+        <option value="../../main/index.html" >
+            main
+        </option>
+        
+    </select>
+</div>
+
+
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">General:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#installation">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#execute">Execute</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#documentation">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#publications">Publications</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#contribution">Contribution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#disclaimer">Disclaimer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#security">Security</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#license">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#financial-support">Financial Support</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Getting Started:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../about.html">About</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../how.html">How it works</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation/index.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../preparation/index.html">Preparation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration/index.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basic.html">Basic Usage</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Playbook:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="structure.html">Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vars.html">Variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="commands/index.html">Commands</a></li>
+<li class="toctree-l1"><a class="reference internal" href="session/index.html">Sessions, Interactive</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Troubleshooting</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#playbook-validation-errors">Playbook Validation Errors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#sliver-command-execution-errors">Sliver Command Execution Errors</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developing:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../developing/contribution.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developing/development.html">Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developing/architecture.html">System Architecture (C4)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developing/command.html">Adding a New Command</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developing/baseexecutor.html">Adding a New Executor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developing/integration.html">Using AttackMate in a Python Script</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Package:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../attackmate/attackmate.html">attackmate package</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">AttackMate</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Troubleshooting</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/playbook/troubleshooting.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="troubleshooting">
+<span id="id1"></span><h1>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permalink to this heading"></a></h1>
+<p>This page lists common error messages and their solutions.</p>
+<section id="playbook-validation-errors">
+<span id="error-validation"></span><h2>Playbook Validation Errors<a class="headerlink" href="#playbook-validation-errors" title="Permalink to this heading"></a></h2>
+<p>These errors occur when AttackMate cannot parse the playbook file.
+They are reported as <code class="docutils literal notranslate"><span class="pre">ValidationError</span></code> and originate from Pydantic’s
+model validation.</p>
+<hr class="docutils" />
+<section id="invalid-command-type">
+<span id="error-invalid-command-type"></span><h3>Invalid Command Type<a class="headerlink" href="#invalid-command-type" title="Permalink to this heading"></a></h3>
+<p><strong>Symptom</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>ERROR | A Validation error occured when parsing playbook file playbooks/example.yml
+ERROR | Traceback (most recent call last):
+  ...
+pydantic_core._pydantic_core.ValidationError: 1 validation error for Playbook
+commands.0
+  Input tag &#39;shel&#39; found using &#39;type&#39; does not match any of the expected tags:
+  &#39;sliver-session&#39;, &#39;sliver&#39;, &#39;browser&#39;, &#39;shell&#39;, &#39;msf-module&#39;, &#39;msf-session&#39;,
+  &#39;msf-payload&#39;, &#39;sleep&#39;, &#39;ssh&#39;, &#39;father&#39;, &#39;sftp&#39;, &#39;debug&#39;, &#39;setvar&#39;, &#39;regex&#39;,
+  &#39;mktemp&#39;, &#39;include&#39;, &#39;loop&#39;, &#39;webserv&#39;, &#39;http-client&#39;, &#39;json&#39;, &#39;vnc&#39;,
+  &#39;bettercap&#39;, &#39;remote&#39;
+  [type=union_tag_invalid, input_value={&#39;type&#39;: &#39;shel&#39;, &#39;cmd&#39;: &#39;whoami&#39;}, input_type=dict]
+</pre></div>
+</div>
+<p><strong>Cause</strong></p>
+<p>The <code class="docutils literal notranslate"><span class="pre">type</span></code> field of a command does not match any registered command type.
+In the example above, <code class="docutils literal notranslate"><span class="pre">shel</span></code> is a typo for <code class="docutils literal notranslate"><span class="pre">shell</span></code>.</p>
+<p><strong>Solution</strong></p>
+<ul class="simple">
+<li><p>Check the spelling of the <code class="docutils literal notranslate"><span class="pre">type</span></code> field in your playbook. Valid types are
+listed in the error message itself.</p></li>
+<li><p>If this is a new command type you are trying to implement, verify that it is correctly
+registered in the <code class="xref py py-class docutils literal notranslate"><span class="pre">CommandRegistry</span></code> and included in the executor
+factory. see <a class="reference internal" href="../developing/command.html#command"><span class="std std-ref">Adding a new Command</span></a>.</p></li>
+</ul>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>see <a class="reference internal" href="commands/index.html#commands"><span class="std std-ref">Commands</span></a> for a full list of available command types.</p>
+</div>
+<hr class="docutils" />
+</section>
+<section id="missing-required-field">
+<span id="error-missing-field"></span><h3>Missing Required Field<a class="headerlink" href="#missing-required-field" title="Permalink to this heading"></a></h3>
+<p><strong>Symptom</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>ERROR | A Validation error occured when parsing playbook file playbooks/example.yml
+ERROR | Missing field in shell command: cmd - Field required
+ERROR | Traceback (most recent call last):
+  ...
+pydantic_core._pydantic_core.ValidationError: 1 validation error for Playbook
+commands.0.shell.cmd
+  Field required [type=missing, input_value={&#39;type&#39;: &#39;shell&#39;}, input_type=dict]
+</pre></div>
+</div>
+<p><strong>Cause</strong></p>
+<p>A required field is missing from a command definition. In the example above,
+the <code class="docutils literal notranslate"><span class="pre">cmd</span></code> field is missing from a <code class="docutils literal notranslate"><span class="pre">shell</span></code> command.</p>
+<p><strong>Solution</strong></p>
+<ul class="simple">
+<li><p>Check the command definition in your playbook and ensure all required fields
+are present.</p></li>
+<li><p>Refer to the documentation for the specific command type to see which fields
+are required.</p></li>
+</ul>
+</section>
+</section>
+<hr class="docutils" />
+<section id="sliver-command-execution-errors">
+<h2>Sliver Command Execution Errors<a class="headerlink" href="#sliver-command-execution-errors" title="Permalink to this heading"></a></h2>
+<p>These errors occor when there is a faulty sliver configuration, sliver is not installed etc.</p>
+<section id="sliver-client-not-defined">
+<span id="error-sliver-client-not-defined"></span><h3>Sliver Client Not Defined<a class="headerlink" href="#sliver-client-not-defined" title="Permalink to this heading"></a></h3>
+<p><strong>Symptom</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>INFO  | Executing Sliver-command: &#39;start_https_listener&#39;
+ERROR | Sliver execution failed: SliverClient is not defined
+ERROR | SliverClient is not defined
+</pre></div>
+</div>
+<p><strong>Cause</strong></p>
+<p>A Sliver command was executed but no <code class="docutils literal notranslate"><span class="pre">SliverClient</span></code> was defined.</p>
+<p><strong>Solution</strong></p>
+<ul class="simple">
+<li><p>Verify that the <code class="docutils literal notranslate"><span class="pre">sliver_config</span></code> in your configuration points to a valid
+Sliver client configuration file and that sliver is installed.</p></li>
+</ul>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="commands/sliver.html#sliver"><span class="std std-ref">sliver</span></a> and <a class="reference internal" href="../configuration/sliver_config.html#sliver-config"><span class="std std-ref">sliver_config</span></a> for setup instructions and required configuration fields.</p>
+</div>
+<hr class="docutils" />
+</section>
+<section id="sliver-server-unreachable">
+<span id="error-sliver-connection-refused"></span><h3>Sliver Server Unreachable<a class="headerlink" href="#sliver-server-unreachable" title="Permalink to this heading"></a></h3>
+<p><strong>Symptom</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>INFO  | Executing Sliver-command: &#39;start_https_listener&#39;
+ERROR | An error occurred: &lt;AioRpcError of RPC that terminated with:
+      status = StatusCode.UNAVAILABLE
+      details = &quot;failed to connect to all addresses; last error: UNKNOWN:
+      ipv4:127.0.0.1:31337: Failed to connect to remote host: connect:
+      Connection refused (111)&quot;
+      debug_error_string = &quot;UNKNOWN:Error received from peer {grpc_status:14,
+      grpc_message:&quot;failed to connect to all addresses; last error: UNKNOWN:
+      ipv4:127.0.0.1:31337: Failed to connect to remote host: connect:
+      Connection refused (111)&quot;}&quot;&gt;
+</pre></div>
+</div>
+<p><strong>Cause</strong></p>
+<p>AttackMate could not establish a gRPC connection to the Sliver C2 server.
+The server is either not running, not reachable at the configured address
+and port, or is blocked by a firewall.</p>
+<p><strong>Solution</strong></p>
+<ul class="simple">
+<li><p>Verify that the Sliver C2 server is running, the command to start it is <code class="docutils literal notranslate"><span class="pre">sliver-server</span></code>,
+per default it listens on port <code class="docutils literal notranslate"><span class="pre">31337</span></code></p></li>
+<li><p>Check that the <code class="docutils literal notranslate"><span class="pre">config_file</span></code> in <code class="docutils literal notranslate"><span class="pre">sliver_config</span></code> points to the correct
+client configuration file and that the host and port match the running
+server (default: <code class="docutils literal notranslate"><span class="pre">127.0.0.1:31337</span></code>).</p></li>
+<li><p>Ensure no firewall or network policy is blocking the connection.</p></li>
+</ul>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="commands/sliver.html#sliver"><span class="std std-ref">sliver</span></a> and <a class="reference internal" href="../configuration/sliver_config.html#sliver-config"><span class="std std-ref">sliver_config</span></a> for setup instructions and required configuration fields.</p>
+</div>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="examples.html" class="btn btn-neutral float-left" title="Examples" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../developing/contribution.html" class="btn btn-neutral float-right" title="Contributing" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Wolfgang Hotwagner.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  
+<div class="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version">
+        <span class="fa fa-book"> Version</span>
+        development
+    </span>
+
+    <div class="rst-other-versions">
+        <dl>
+            <dt>Versions</dt>
+            
+            <dd>
+                <a href="../../v0.1.0/index.html">v0.1.0</a>
+            </dd>
+            
+            <dd>
+                <a href="../../v0.2.0/index.html">v0.2.0</a>
+            </dd>
+            
+            <dd>
+                <a href="../../v0.3.0/index.html">v0.3.0</a>
+            </dd>
+            
+            <dd>
+                <a href="../../v0.3.1/index.html">v0.3.1</a>
+            </dd>
+            
+            <dd>
+                <a href="../../v0.4.0/index.html">v0.4.0</a>
+            </dd>
+            
+            <dd>
+                <a href="../../v0.5.0/index.html">v0.5.0</a>
+            </dd>
+            
+            <dd>
+                <a href="../../v0.6.0/index.html">v0.6.0</a>
+            </dd>
+            
+            <dd>
+                <a href="troubleshooting.html">development</a>
+            </dd>
+            
+            <dd>
+                <a href="../../main/index.html">main</a>
+            </dd>
+            
+        </dl>
+    </div>
+</div>
+<script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

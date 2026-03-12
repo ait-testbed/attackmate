@@ -143,6 +143,7 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../session/index.html">Sessions, Interactive</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../troubleshooting.html">Troubleshooting</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Developing:</span></p>
 <ul>
@@ -184,7 +185,7 @@
            <div itemprop="articleBody">
              
   <section id="vnc">
-<h1>vnc<a class="headerlink" href="#vnc" title="Permalink to this heading"></a></h1>
+<span id="id1"></span><h1>vnc<a class="headerlink" href="#vnc" title="Permalink to this heading"></a></h1>
 <p>Execute commands on a remote host via VNC, using the
 <a class="reference external" href="https://github.com/sibson/vncdotool">vncdotool</a> library. Connection settings are
 cached after the first command, so subsequent commands only need to specify what changes.</p>
@@ -192,6 +193,10 @@ cached after the first command, so subsequent commands only need to specify what
 <p class="admonition-title">Warning</p>
 <p>VNC sessions must be explicitly closed with <code class="docutils literal notranslate"><span class="pre">cmd:</span> <span class="pre">close</span></code>, otherwise AttackMate
 will hang on exit.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Background mode is not supported for this commands.</p>
 </div>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">vars</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">$SERVER_ADDRESS</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.42.0.254</span>

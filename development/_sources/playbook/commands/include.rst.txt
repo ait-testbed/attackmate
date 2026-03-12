@@ -1,8 +1,14 @@
+.. _include:
+
 =======
 include
 =======
 
 Include and run commands from another yaml-file.
+
+.. note::
+
+   Background mode is not supported for this commands.
 
 .. code-block:: yaml
 

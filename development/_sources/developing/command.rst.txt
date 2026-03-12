@@ -33,7 +33,7 @@ make it usable in external python scripts.
 
 **Example: a simple command with no sub-behaviors**
 
-::
+.. code-block:: python
 
     from typing import Literal
     from .base import BaseCommand
@@ -50,7 +50,7 @@ make it usable in external python scripts.
 
 **Example: a command with sub-behaviors expressed via** ``cmd``
 
-::
+.. code-block:: python
 
     from typing import Literal
     from .base import BaseCommand
@@ -68,7 +68,7 @@ make it usable in external python scripts.
 
 The new command should be handled by an executor in `src/attackmate/executors` that extends ``BaseExecutor`` and implements the ``_exec_cmd()`` method. For example:
 
-::
+.. code-block:: python
 
     from attackmate.executors.base_executor import BaseExecutor
     from attackmate.result import Result
@@ -92,7 +92,7 @@ When a command is executed, the ``create_executor`` method retrieves the corresp
 
 Accordingly, executors must be registered using the ``@executor_factory.register_executor('<command_type>')`` decorator.
 
-::
+.. code-block:: python
 
     @executor_factory.register_executor('debug')
     class DebugExecutor(BaseExecutor):
@@ -103,7 +103,7 @@ If the new executor class requires additional initialization arguments, these mu
 All configurations are always passed to the ``ExecutorFactory``.
 The factory filters the provided configurations based on the class constructor signature, ensuring that only the required parameters are used.
 
-::
+.. code-block:: python
 
         def _get_executor_config(self) -> dict:
         config = {
@@ -118,13 +118,35 @@ The factory filters the provided configurations based on the class constructor s
         }
         return config
 
+4. Add the Executor to the __init__ file of the attackmate.executors module
+===========================================================================
 
-4. Modify the Loop Command to Include the New Command
+Add the new executor to the __all__ list in the __init__.py file of the attackmate.executors module so it can be imported elsewhere.
+
+.. code-block:: python
+
+    # src/attackmate/executors/__init__.py
+    # other imports
+    from .shell.shellexecutor import ShellExecutor
+    from .metasploit.msfsessionexecutor import CustomExecutor # new executor
+    # other imports
+
+    __all__ = [
+        'RemoteExecutor',
+        'BrowserExecutor',
+        'ShellExecutor',
+        'CustomExecutor', # new executor
+        # other executors
+    ]
+
+
+
+5. Modify the Loop Command to Include the New Command
 =====================================================
 
 in `/src/attackmate/schemas/loop.py` update the ``LoopCommand`` schema to include the new command.
 
-::
+.. code-block:: python
 
     Command = Union[
             ShellCommand,
@@ -133,11 +155,12 @@ in `/src/attackmate/schemas/loop.py` update the ``LoopCommand`` schema to includ
         ]
 
 
-4. Modify the RemotelyExecutableCommand Union to Include the New Command
+6. Modify the RemotelyExecutableCommand Union to Include the New Command
 ========================================================================
 
 in `src/attackmate/schemas/command_subtypes.py`, update the ``RemotelyExecutableCommand`` type alias to include the new command
-::
+
+.. code-block:: python
 
     RemotelyExecutableCommand: TypeAlias = Annotated[
         Union[
@@ -176,7 +199,7 @@ in `src/attackmate/schemas/command_subtypes.py`, update the ``RemotelyExecutable
 
 Once these steps are completed, the new command will be fully integrated into AttackMate and available for execution.
 
-6. Add Documentation
+7. Add Documentation
 =====================
 
 Finally, update the documentation in `docs/source/playbook/commands` to include the new command.

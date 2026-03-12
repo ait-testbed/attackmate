@@ -143,6 +143,7 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../session/index.html">Sessions, Interactive</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../troubleshooting.html">Troubleshooting</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Developing:</span></p>
 <ul>
@@ -184,7 +185,7 @@
            <div itemprop="articleBody">
              
   <section id="browser">
-<h1>browser<a class="headerlink" href="#browser" title="Permalink to this heading"></a></h1>
+<span id="id1"></span><h1>browser<a class="headerlink" href="#browser" title="Permalink to this heading"></a></h1>
 <p>Execute commands using a Playwright-managed Chromium browser. This executor can launch a browser, navigate to pages, click elements, type into fields, and take screenshots.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -192,6 +193,7 @@
 destroyed automatically. To persist browser state (cookies, localStorage,
 etc.) across multiple commands, use the <a class="reference internal" href="vnc.html#confval-creates_session"><code class="xref std std-confval docutils literal notranslate"><span class="pre">creates_session</span></code></a> to open a named
 session and <a class="reference internal" href="vnc.html#confval-session"><code class="xref std std-confval docutils literal notranslate"><span class="pre">session</span></code></a> to reuse it.</p>
+<p>Background mode is not supported for this commands.</p>
 </div>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">vars</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">$URL</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;https://www.wikipedia.org/&quot;</span>

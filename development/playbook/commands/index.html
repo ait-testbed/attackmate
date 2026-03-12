@@ -143,6 +143,7 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../session/index.html">Sessions, Interactive</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../troubleshooting.html">Troubleshooting</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Developing:</span></p>
 <ul>
@@ -211,6 +212,29 @@ top to bottom.</p>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">shell</span>
 <span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nmap localhost</span>
 <span class="w">    </span><span class="nt">save</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/tmp/nmap_localhost.txt</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="std confval">
+<dt class="sig sig-object std" id="confval-metadata">
+<span class="sig-name descname"><span class="pre">metadata</span></span><a class="headerlink" href="#confval-metadata" title="Permalink to this definition"></a></dt>
+<dd><p>An optional dictionary of key-value pairs that are logged alongside the command
+but have no effect on execution.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Dict</p>
+</dd>
+<dt class="field-even">Default<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">commands</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">debug</span>
+<span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Come on, Cat</span>
+<span class="w">    </span><span class="nt">metadata</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="w">      </span><span class="nt">author</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Ellen Ripley</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -320,7 +344,7 @@ until the pattern matches or <code class="docutils literal notranslate"><span cl
 </dl>
 </dd></dl>
 
-<dl class="std confval">
+<span class="target" id="conditionals"></span><dl class="std confval">
 <dt class="sig sig-object std" id="confval-only_if">
 <span class="sig-name descname"><span class="pre">only_if</span></span><a class="headerlink" href="#confval-only_if" title="Permalink to this definition"></a></dt>
 <dd><p>Execute this command only if the condition evaluates to <code class="docutils literal notranslate"><span class="pre">True</span></code>. Supported operators:</p>
@@ -368,14 +392,15 @@ The <code class="docutils literal notranslate"><span class="pre">!~</span></code
 </div>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>When comparing strings with integers, standard Python conventions apply:</p>
+<p>When comparing strings with integers, standard Python conventions apply:
+see <a class="reference external" href="https://docs.python.org/3/reference/expressions.html#comparisons">Python reference — Comparisons</a></p>
 <p><strong>Equality / Inequality</strong> (<code class="docutils literal notranslate"><span class="pre">==</span></code>, <code class="docutils literal notranslate"><span class="pre">!=</span></code>):
 A string and an integer are never equal, so <code class="docutils literal notranslate"><span class="pre">&quot;1&quot;</span> <span class="pre">==</span> <span class="pre">1</span></code> is <code class="docutils literal notranslate"><span class="pre">False</span></code>
 and <code class="docutils literal notranslate"><span class="pre">&quot;1&quot;</span> <span class="pre">!=</span> <span class="pre">1</span></code> is <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
 <p><strong>Identity</strong> (<code class="docutils literal notranslate"><span class="pre">is</span></code>, <code class="docutils literal notranslate"><span class="pre">is</span> <span class="pre">not</span></code>):
 Compares object identity, not value. <code class="docutils literal notranslate"><span class="pre">&quot;1&quot;</span> <span class="pre">is</span> <span class="pre">1</span></code> is always <code class="docutils literal notranslate"><span class="pre">False</span></code>
 because a string and an integer are distinct objects, regardless of
-their apparent values.</p>
+their apparent values.  see <a class="reference external" href="https://docs.python.org/3/reference/expressions.html#is">Python reference — Value vs. identity</a></p>
 <p><strong>Ordering</strong> (<code class="docutils literal notranslate"><span class="pre">&lt;</span></code>, <code class="docutils literal notranslate"><span class="pre">&lt;=</span></code>, <code class="docutils literal notranslate"><span class="pre">&gt;</span></code>, <code class="docutils literal notranslate"><span class="pre">&gt;=</span></code>):
 Comparing a string with an integer raises a <code class="docutils literal notranslate"><span class="pre">TypeError</span></code> in Python 3
 since the two types have no defined ordering. These operators should
@@ -389,7 +414,8 @@ comparing it against a boolean literal (<code class="docutils literal notranslat
 always yield <code class="docutils literal notranslate"><span class="pre">False</span></code> — because the resolved value is a <code class="docutils literal notranslate"><span class="pre">str</span></code>
 while the literal is parsed as a <code class="docutils literal notranslate"><span class="pre">bool</span></code> by <code class="docutils literal notranslate"><span class="pre">ast</span></code>.  Use string
 literals for boolean-like flags stored in the <code class="docutils literal notranslate"><span class="pre">VariableStore</span></code>:
-<code class="docutils literal notranslate"><span class="pre">$flag</span> <span class="pre">==</span> <span class="pre">&quot;True&quot;</span></code>.</p>
+<code class="docutils literal notranslate"><span class="pre">$flag</span> <span class="pre">==</span> <span class="pre">&quot;True&quot;</span></code>.
+see <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool">Python built-in — bool (subclass of int)</a></p>
 <p>Importantly, before a condition is evaluated, all <code class="docutils literal notranslate"><span class="pre">$variable</span></code> references are
 resolved by the <code class="docutils literal notranslate"><span class="pre">VariableStore</span></code>.  <strong>The store holds every value as a
 plain Python</strong> <code class="docutils literal notranslate"><span class="pre">str</span></code>, even values that were originally integers
@@ -397,7 +423,7 @@ are coerced to <code class="docutils literal notranslate"><span class="pre">str<
 </div>
 </dd></dl>
 
-<dl class="std confval">
+<span class="target" id="background"></span><dl class="std confval">
 <dt class="sig sig-object std" id="confval-background">
 <span class="sig-name descname"><span class="pre">background</span></span><a class="headerlink" href="#confval-background" title="Permalink to this definition"></a></dt>
 <dd><p>Execute the command as a background subprocess. When enabled, output is not printed
@@ -412,20 +438,20 @@ and <code class="docutils literal notranslate"><span class="pre">error_if</span>
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The command in background-mode will change the <a class="reference internal" href="../vars.html#builtin-variables"><span class="std std-ref">builtin variables</span></a>
+<p>The command in background mode will change the <a class="reference internal" href="../vars.html#builtin-variables"><span class="std std-ref">builtin variables</span></a>
 <code class="docutils literal notranslate"><span class="pre">RESULT_STDOUT</span></code> to “Command started in Background” and <code class="docutils literal notranslate"><span class="pre">RESULT_CODE</span></code> to 0.</p>
 </div>
 <p>Background mode is not supported for</p>
 <ul class="simple">
-<li><p>MsfModuleCommand</p></li>
-<li><p>IncludeCommand</p></li>
-<li><p>VncCommand</p></li>
-<li><p>BrowserCommand</p></li>
+<li><p><a class="reference internal" href="msf-module.html#msf-module"><span class="std std-ref">MsfModuleCommand</span></a></p></li>
+<li><p><a class="reference internal" href="include.html#include"><span class="std std-ref">IncludeCommand</span></a></p></li>
+<li><p><a class="reference internal" href="vnc.html#vnc"><span class="std std-ref">VncCommand</span></a></p></li>
+<li><p><a class="reference internal" href="browser.html#browser"><span class="std std-ref">BrowserCommand</span></a></p></li>
 </ul>
 <p>Background mode together with a session is not supported for the following commands:</p>
 <ul class="simple">
-<li><p>SSHCommand</p></li>
-<li><p>SFTPCommand</p></li>
+<li><p><a class="reference internal" href="ssh.html#ssh"><span class="std std-ref">SSHCommand</span></a></p></li>
+<li><p><a class="reference internal" href="sftp.html#sftp"><span class="std std-ref">SFTPCommand</span></a></p></li>
 </ul>
 </dd></dl>
 
@@ -442,29 +468,6 @@ whether the main process kills the subprocess on exit (<code class="docutils lit
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code></p>
 </dd>
 </dl>
-</dd></dl>
-
-<dl class="std confval">
-<dt class="sig sig-object std" id="confval-metadata">
-<span class="sig-name descname"><span class="pre">metadata</span></span><a class="headerlink" href="#confval-metadata" title="Permalink to this definition"></a></dt>
-<dd><p>An optional dictionary of key-value pairs that are logged alongside the command
-but have no effect on execution.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Dict</p>
-</dd>
-<dt class="field-even">Default<span class="colon">:</span></dt>
-<dd class="field-even"><p>None</p>
-</dd>
-</dl>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">commands</span><span class="p">:</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">debug</span>
-<span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Come on, Cat</span>
-<span class="w">    </span><span class="nt">metadata</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
-<span class="w">      </span><span class="nt">author</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Ellen Ripley</span>
-</pre></div>
-</div>
 </dd></dl>
 
 <p>The next pages will describe each command type in detail.</p>

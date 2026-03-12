@@ -118,6 +118,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../playbook/commands/index.html">Commands</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../playbook/session/index.html">Sessions, Interactive</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../playbook/examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../playbook/troubleshooting.html">Troubleshooting</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Developing:</span></p>
 <ul class="current">
@@ -219,11 +220,11 @@ Commands can be created with the <code class="docutils literal notranslate"><spa
 <section id="understanding-the-result-object">
 <h2>Understanding the Result Object<a class="headerlink" href="#understanding-the-result-object" title="Permalink to this heading"></a></h2>
 <p>When executing a command with AttackMate, the result is returned as an instance of the <code class="docutils literal notranslate"><span class="pre">Result</span></code> class. This object contains the standard output (<cite>stdout</cite>) and the return code (<cite>returncode</cite>) of the executed command.
-Commands that run in the Background return Result(‘Command started in background’, 0)</p>
+Commands that run in the <span class="xref std std-ref">background</span> return Result(‘Command started in background’, 0)</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Regular Commands return a <code class="docutils literal notranslate"><span class="pre">Result</span></code> object.
-Commands that run in background mode return <code class="docutils literal notranslate"><span class="pre">Result('Command</span> <span class="pre">started</span> <span class="pre">in</span> <span class="pre">background',</span> <span class="pre">0)</span></code>.</p>
+Commands that run in <span class="xref std std-ref">background</span> mode return <code class="docutils literal notranslate"><span class="pre">Result('Command</span> <span class="pre">started</span> <span class="pre">in</span> <span class="pre">background',</span> <span class="pre">0)</span></code>.</p>
 </div>
 <section id="attributes">
 <h3>Attributes<a class="headerlink" href="#attributes" title="Permalink to this heading"></a></h3>

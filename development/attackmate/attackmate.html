@@ -117,6 +117,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../playbook/commands/index.html">Commands</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../playbook/session/index.html">Sessions, Interactive</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../playbook/examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../playbook/troubleshooting.html">Troubleshooting</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Developing:</span></p>
 <ul>
@@ -165,28 +166,46 @@
 <h1>attackmate package<a class="headerlink" href="#attackmate-package" title="Permalink to this heading"></a></h1>
 <section id="module-attackmate.attackmate">
 <span id="core"></span><h2>Core<a class="headerlink" href="#module-attackmate.attackmate" title="Permalink to this heading"></a></h2>
-<p>AttackMate reads a playbook and executes the attack</p>
-<p>A playbook stored in a dictionary with a list of attacks. Attacks
-are executed by “Executors”. There are many different
-Executors like: ShellExecutor, SleepExecutor or MsfModuleExecutor
-This class creates instances of all possible Executors, iterates
-over all attacks and runs the specific Executor with the given
-configuration.</p>
+<p>AttackMate reads a playbook and executes the attack chain.</p>
+<p>A playbook is a structured sequence of commands, each dispatched to the
+appropriate executor based on its type. Executors are instantiated lazily
+on first use and cached for reuse. Available executors include
+<code class="xref py py-class docutils literal notranslate"><span class="pre">ShellExecutor</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">SleepExecutor</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">MsfModuleExecutor</span></code>,
+and others registered via the executor factory.</p>
+<p>This module exposes <a class="reference internal" href="#attackmate.attackmate.AttackMate" title="attackmate.attackmate.AttackMate"><code class="xref py py-class docutils literal notranslate"><span class="pre">AttackMate</span></code></a>, which can be used standalone via
+its <a class="reference internal" href="#attackmate.attackmate.AttackMate.main" title="attackmate.attackmate.AttackMate.main"><code class="xref py py-meth docutils literal notranslate"><span class="pre">main()</span></code></a> entry point or embedded in a Python script
+using <a class="reference internal" href="#attackmate.attackmate.AttackMate.run_command" title="attackmate.attackmate.AttackMate.run_command"><code class="xref py py-meth docutils literal notranslate"><span class="pre">run_command()</span></code></a> for single-command execution.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="../developing/integration.html#integration"><span class="std std-ref">Using AttackMate in a Python Script</span></a> for documentation on scripted usage.</p>
+</div>
 <dl class="py class">
 <dt class="sig sig-object py" id="attackmate.attackmate.AttackMate">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">attackmate.attackmate.</span></span><span class="sig-name descname"><span class="pre">AttackMate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">playbook</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#attackmate.schemas.playbook.Playbook" title="attackmate.schemas.playbook.Playbook"><span class="pre">Playbook</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#attackmate.schemas.config.Config" title="attackmate.schemas.config.Config"><span class="pre">Config</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">varstore</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_api_instance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#attackmate.attackmate.AttackMate" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Reads a playbook and executes the attack chain.</p>
+<p>Creates instances of all registered executors, iterates over the commands
+in the playbook, and dispatches each to the appropriate executor.</p>
+<p>Can be used standalone via <a class="reference internal" href="#attackmate.attackmate.AttackMate.main" title="attackmate.attackmate.AttackMate.main"><code class="xref py py-meth docutils literal notranslate"><span class="pre">main()</span></code></a>, or embedded in a Python script
+using <a class="reference internal" href="#attackmate.attackmate.AttackMate.run_command" title="attackmate.attackmate.AttackMate.run_command"><code class="xref py py-meth docutils literal notranslate"><span class="pre">run_command()</span></code></a> for single-command execution.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>playbook</strong> – The playbook to execute.</p></li>
-<li><p><strong>config</strong> – AttackMate configuration.</p></li>
-<li><p><strong>varstore</strong> – Initial variable store.</p></li>
-<li><p><strong>is_api_instance</strong> – Whether this instance is used as an API.</p></li>
+<li><p><strong>playbook</strong> – The playbook to execute. Defaults to an empty playbook.</p></li>
+<li><p><strong>config</strong> – AttackMate configuration. Defaults to a default <code class="xref py py-class docutils literal notranslate"><span class="pre">Config</span></code>.</p></li>
+<li><p><strong>varstore</strong> – Initial variables passed as a plain dictionary. If omitted,
+variables are read from the playbook’s <code class="docutils literal notranslate"><span class="pre">vars</span></code> section.</p></li>
+<li><p><strong>is_api_instance</strong> – Set to <code class="docutils literal notranslate"><span class="pre">True</span></code> when AttackMate is used as an embedded
+API rather than a standalone CLI process.</p></li>
 </ul>
 </dd>
 </dl>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">attackmate</span> <span class="o">=</span> <span class="n">AttackMate</span><span class="p">(</span><span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">,</span> <span class="n">varstore</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;HOST&quot;</span><span class="p">:</span> <span class="s2">&quot;10.0.0.1&quot;</span><span class="p">})</span>
+<span class="n">command</span> <span class="o">=</span> <span class="n">Command</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s2">&quot;shell&quot;</span><span class="p">,</span> <span class="n">cmd</span><span class="o">=</span><span class="s2">&quot;whoami&quot;</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">attackmate</span><span class="o">.</span><span class="n">run_command</span><span class="p">(</span><span class="n">command</span><span class="p">)</span>
+</pre></div>
+</div>
 <dl class="py method">
 <dt class="sig sig-object py" id="attackmate.attackmate.AttackMate.clean_session_stores">
 <em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">clean_session_stores</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#attackmate.attackmate.AttackMate.clean_session_stores" title="Permalink to this definition"></a></dt>
@@ -195,14 +214,38 @@ configuration.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="attackmate.attackmate.AttackMate.main">
 <em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#attackmate.attackmate.AttackMate.main" title="Permalink to this definition"></a></dt>
-<dd><p>The main function</p>
-<p>Passes the main playbook-commands to run_commands</p>
+<dd><p>Execute the full playbook and clean up all sessions.</p>
+<p>Passes all commands from the playbook to <code class="xref py py-meth docutils literal notranslate"><span class="pre">_run_commands()</span></code>, then
+tears down open sessions and background processes. Handles
+<code class="xref py py-exc docutils literal notranslate"><span class="pre">KeyboardInterrupt</span></code> gracefully.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">0</span></code> on completion.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="attackmate.attackmate.AttackMate.run_command">
 <em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">run_command</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">command</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#attackmate.schemas.sliver.SliverSessionCDCommand" title="attackmate.schemas.sliver.SliverSessionCDCommand"><span class="pre">SliverSessionCDCommand</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="#attackmate.schemas.sliver.SliverSessionLSCommand" title="attackmate.schemas.sliver.SliverSessionLSCommand"><span class="pre">SliverSessionLSCommand</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="#attackmate.schemas.sliver.SliverSessionNETSTATCommand" title="attackmate.schemas.sliver.SliverSessionNETSTATCommand"><span class="pre">SliverSessionNETSTATCommand</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="#attackmate.schemas.sliver.SliverSessionEXECCommand" title="attackmate.schemas.sliver.SliverSessionEXECCommand"><span class="pre">SliverSessionEXECCommand</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="#attackmate.schemas.sliver.SliverSessionMKDIRCommand" title="attackmate.schemas.sliver.SliverSessionMKDIRCommand"><span class="pre">SliverSessionMKDIRCommand</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="#attackmate.schemas.sliver.SliverSessionSimpleCommand" title="attackmate.schemas.sliver.SliverSessionSimpleCommand"><span class="pre">SliverSessionSimpleCommand</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="#attackmate.schemas.sliver.SliverSessionDOWNLOADCommand" title="attackmate.schemas.sliver.SliverSessionDOWNLOADCommand"><span class="pre">SliverSessionDOWNLOADCommand</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="#attackmate.schemas.sliver.SliverSessionUPLOADCommand" title="attackmate.schemas.sliver.SliverSessionUPLOADCommand"><span class="pre">SliverSessionUPLOADCommand</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="#attackmate.schemas.sliver.SliverSessionPROCDUMPCommand" title="attackmate.schemas.sliver.SliverSessionPROCDUMPCommand"><span class="pre">SliverSessionPROCDUMPCommand</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="#attackmate.schemas.sliver.SliverSessionRMCommand" title="attackmate.schemas.sliver.SliverSessionRMCommand"><span class="pre">SliverSessionRMCommand</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="#attackmate.schemas.sliver.SliverSessionTERMINATECommand" title="attackmate.schemas.sliver.SliverSessionTERMINATECommand"><span class="pre">SliverSessionTERMINATECommand</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="#attackmate.schemas.sliver.SliverHttpsListenerCommand" title="attackmate.schemas.sliver.SliverHttpsListenerCommand"><span class="pre">SliverHttpsListenerCommand</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="#attackmate.schemas.sliver.SliverGenerateCommand" title="attackmate.schemas.sliver.SliverGenerateCommand"><span class="pre">SliverGenerateCommand</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="#attackmate.schemas.browser.BrowserCommand" title="attackmate.schemas.browser.BrowserCommand"><span class="pre">BrowserCommand</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="#attackmate.schemas.shell.ShellCommand" title="attackmate.schemas.shell.ShellCommand"><span class="pre">ShellCommand</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="#attackmate.schemas.metasploit.MsfModuleCommand" title="attackmate.schemas.metasploit.MsfModuleCommand"><span class="pre">MsfModuleCommand</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="#attackmate.schemas.metasploit.MsfSessionCommand" title="attackmate.schemas.metasploit.MsfSessionCommand"><span class="pre">MsfSessionCommand</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="#attackmate.schemas.metasploit.MsfPayloadCommand" title="attackmate.schemas.metasploit.MsfPayloadCommand"><span class="pre">MsfPayloadCommand</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="#attackmate.schemas.sleep.SleepCommand" title="attackmate.schemas.sleep.SleepCommand"><span class="pre">SleepCommand</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="#attackmate.schemas.ssh.SSHCommand" title="attackmate.schemas.ssh.SSHCommand"><span class="pre">SSHCommand</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="#attackmate.schemas.father.FatherCommand" title="attackmate.schemas.father.FatherCommand"><span class="pre">FatherCommand</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="#attackmate.schemas.ssh.SFTPCommand" title="attackmate.schemas.ssh.SFTPCommand"><span class="pre">SFTPCommand</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="#attackmate.schemas.debug.DebugCommand" title="attackmate.schemas.debug.DebugCommand"><span class="pre">DebugCommand</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="#attackmate.schemas.setvar.SetVarCommand" title="attackmate.schemas.setvar.SetVarCommand"><span class="pre">SetVarCommand</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="#attackmate.schemas.regex.RegExCommand" title="attackmate.schemas.regex.RegExCommand"><span class="pre">RegExCommand</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="#attackmate.schemas.tempfile.TempfileCommand" title="attackmate.schemas.tempfile.TempfileCommand"><span class="pre">TempfileCommand</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="#attackmate.schemas.include.IncludeCommand" title="attackmate.schemas.include.IncludeCommand"><span class="pre">IncludeCommand</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="#attackmate.schemas.loop.LoopCommand" title="attackmate.schemas.loop.LoopCommand"><span class="pre">LoopCommand</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="#attackmate.schemas.http.WebServCommand" title="attackmate.schemas.http.WebServCommand"><span class="pre">WebServCommand</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="#attackmate.schemas.http.HttpClientCommand" title="attackmate.schemas.http.HttpClientCommand"><span class="pre">HttpClientCommand</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="#attackmate.schemas.json.JsonCommand" title="attackmate.schemas.json.JsonCommand"><span class="pre">JsonCommand</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="#attackmate.schemas.vnc.VncCommand" title="attackmate.schemas.vnc.VncCommand"><span class="pre">VncCommand</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="#attackmate.schemas.bettercap.BettercapCommand" title="attackmate.schemas.bettercap.BettercapCommand"><span class="pre">BettercapCommand</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="#attackmate.schemas.remote.AttackMateRemoteCommand" title="attackmate.schemas.remote.AttackMateRemoteCommand"><span class="pre">AttackMateRemoteCommand</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#attackmate.result.Result" title="attackmate.result.Result"><span class="pre">Result</span></a></span></span><a class="headerlink" href="#attackmate.attackmate.AttackMate.run_command" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Execute a single command and return its result.</p>
+<p>Looks up the appropriate executor for the command type and runs it.
+One exception:<code class="docutils literal notranslate"><span class="pre">sftp</span></code> commands are dispatched to the <code class="docutils literal notranslate"><span class="pre">ssh</span></code> executor.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>command</strong> – A command instance created via <code class="xref py py-meth docutils literal notranslate"><span class="pre">Command.create()</span></code>.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A <code class="xref py py-class docutils literal notranslate"><span class="pre">Result</span></code> object containing <code class="docutils literal notranslate"><span class="pre">stdout</span></code> and <code class="docutils literal notranslate"><span class="pre">returncode</span></code>.
+Returns <code class="docutils literal notranslate"><span class="pre">Result(None,</span> <span class="pre">None)</span></code> if no executor is found.</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Commands running in backgound return
+<code class="docutils literal notranslate"><span class="pre">Result('Command</span> <span class="pre">started</span> <span class="pre">in</span> <span class="pre">background',</span> <span class="pre">0)</span></code> immediately.</p>
+</div>
+</dd></dl>
 
 </dd></dl>
 
@@ -244,15 +287,44 @@ variable does not exist in the variablestore.</p>
 <dt class="sig sig-object py" id="attackmate.variablestore.VariableStore">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">attackmate.variablestore.</span></span><span class="sig-name descname"><span class="pre">VariableStore</span></span><a class="headerlink" href="#attackmate.variablestore.VariableStore" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Stores and resolves variables for use in AttackMate playbooks.</p>
+<p>Variables are held in two separate namespaces:</p>
+<ul class="simple">
+<li><p><strong>Scalar variables</strong> — simple string key-value pairs, accessed as <code class="docutils literal notranslate"><span class="pre">$varname</span></code>.</p></li>
+<li><p><strong>List variables</strong> — ordered sequences of strings, accessed by index as
+<code class="docutils literal notranslate"><span class="pre">$varname[0]</span></code>, <code class="docutils literal notranslate"><span class="pre">$varname[1]</span></code>, etc.</p></li>
+</ul>
+<p>All values are stored as plain Python <code class="docutils literal notranslate"><span class="pre">str</span></code>, regardless of their original type.
+Integer values are coerced to <code class="docutils literal notranslate"><span class="pre">str</span></code> on ingress. Variable substitution uses
+Python’s <code class="xref py py-class docutils literal notranslate"><span class="pre">string.Template</span></code> syntax.</p>
+<p>If an environment variable prefixed with <code class="docutils literal notranslate"><span class="pre">ATTACKMATE_</span></code> exists with the same name
+as a stored variable, it will override the stored value when
+<a class="reference internal" href="#attackmate.variablestore.VariableStore.replace_with_prefixed_env_vars" title="attackmate.variablestore.VariableStore.replace_with_prefixed_env_vars"><code class="xref py py-meth docutils literal notranslate"><span class="pre">replace_with_prefixed_env_vars()</span></code></a> is called.</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">store</span> <span class="o">=</span> <span class="n">VariableStore</span><span class="p">()</span>
+<span class="n">store</span><span class="o">.</span><span class="n">set_variable</span><span class="p">(</span><span class="s2">&quot;HOST&quot;</span><span class="p">,</span> <span class="s2">&quot;192.168.1.1&quot;</span><span class="p">)</span>
+<span class="n">store</span><span class="o">.</span><span class="n">substitute_str</span><span class="p">(</span><span class="s2">&quot;Target: $HOST&quot;</span><span class="p">)</span>  <span class="c1"># returns &quot;Target: 192.168.1.1&quot;</span>
+</pre></div>
+</div>
 <dl class="py method">
 <dt class="sig sig-object py" id="attackmate.variablestore.VariableStore.clear">
 <span class="sig-name descname"><span class="pre">clear</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#attackmate.variablestore.VariableStore.clear" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Reset the store, removing all scalar variables and lists.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="attackmate.variablestore.VariableStore.from_dict">
 <span class="sig-name descname"><span class="pre">from_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">variables</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#attackmate.variablestore.VariableStore.from_dict" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Populate the store from a dictionary.</p>
+<p>Each key-value pair is passed to <a class="reference internal" href="#attackmate.variablestore.VariableStore.set_variable" title="attackmate.variablestore.VariableStore.set_variable"><code class="xref py py-meth docutils literal notranslate"><span class="pre">set_variable()</span></code></a>. Keys may optionally
+include a leading <code class="docutils literal notranslate"><span class="pre">$</span></code>, which is stripped before storing.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>variables</strong> – A dictionary of variable names to values. Non-dict values
+are silently ignored.</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="attackmate.variablestore.VariableStore.get_list">
@@ -267,7 +339,16 @@ variable does not exist in the variablestore.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="attackmate.variablestore.VariableStore.get_prefixed_env_vars">
 <span class="sig-name descname"><span class="pre">get_prefixed_env_vars</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'ATTACKMATE_'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#attackmate.variablestore.VariableStore.get_prefixed_env_vars" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Return all environment variables that start with <code class="docutils literal notranslate"><span class="pre">prefix</span></code>, stripped of the prefix.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>prefix</strong> – The prefix to filter and strip. Defaults to <code class="docutils literal notranslate"><span class="pre">'ATTACKMATE_'</span></code>.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A dictionary mapping unprefixed names to their environment values.</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="attackmate.variablestore.VariableStore.get_str">
@@ -277,7 +358,20 @@ variable does not exist in the variablestore.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="attackmate.variablestore.VariableStore.get_variable">
 <span class="sig-name descname"><span class="pre">get_variable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">variable</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#attackmate.variablestore.VariableStore.get_variable" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Retrieve a variable by name.</p>
+<p>Checks scalar variables first, then list variables.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>variable</strong> – The variable name (without <code class="docutils literal notranslate"><span class="pre">$</span></code> prefix).</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The stored <code class="docutils literal notranslate"><span class="pre">str</span></code> value or <code class="docutils literal notranslate"><span class="pre">list[str]</span></code>.</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#attackmate.variablestore.VariableNotFound" title="attackmate.variablestore.VariableNotFound"><strong>VariableNotFound</strong></a> – If no variable with that name exists.</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="attackmate.variablestore.VariableStore.is_list">
@@ -297,23 +391,70 @@ variable does not exist in the variablestore.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="attackmate.variablestore.VariableStore.replace_with_prefixed_env_vars">
 <span class="sig-name descname"><span class="pre">replace_with_prefixed_env_vars</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#attackmate.variablestore.VariableStore.replace_with_prefixed_env_vars" title="Permalink to this definition"></a></dt>
-<dd><p>Replaces the current variables with corresponding prefixed environment variables if they exist.</p>
+<dd><p>Override stored variables with matching prefixed environment variables.</p>
+<p>For each scalar variable currently in the store, if an environment variable
+named <code class="docutils literal notranslate"><span class="pre">ATTACKMATE_&lt;varname&gt;</span></code> exists, its value replaces the stored one.</p>
+<p>Example: the stored variable <code class="docutils literal notranslate"><span class="pre">FOO</span></code> is overridden by the environment
+variable <code class="docutils literal notranslate"><span class="pre">ATTACKMATE_FOO</span></code> if it is set.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="attackmate.variablestore.VariableStore.set_variable">
 <span class="sig-name descname"><span class="pre">set_variable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">variable</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#attackmate.variablestore.VariableStore.set_variable" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Store a variable by name.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">value</span></code> is an <code class="docutils literal notranslate"><span class="pre">int</span></code> it is coerced to <code class="docutils literal notranslate"><span class="pre">str</span></code> before storing.
+If <code class="docutils literal notranslate"><span class="pre">variable</span></code> refers to a list index (e.g. <code class="docutils literal notranslate"><span class="pre">mylist[0]</span></code>), the value
+is written into the corresponding position of the existing list.
+If <code class="docutils literal notranslate"><span class="pre">value</span></code> is a <code class="docutils literal notranslate"><span class="pre">list</span></code>, it is stored as a list variable.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>variable</strong> – The variable name, with or without a leading <code class="docutils literal notranslate"><span class="pre">$</span></code>.</p></li>
+<li><p><strong>value</strong> – The value to store. Integers are coerced to <code class="docutils literal notranslate"><span class="pre">str</span></code>.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="attackmate.variablestore.VariableStore.substitute">
 <span class="sig-name descname"><span class="pre">substitute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">blank</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Any</span></span></span><a class="headerlink" href="#attackmate.variablestore.VariableStore.substitute" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Substitute variables in <code class="docutils literal notranslate"><span class="pre">data</span></code> if it is a string.</p>
+<p>Non-string values are returned unchanged.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> – The value to substitute into. Only <code class="docutils literal notranslate"><span class="pre">str</span></code> values are processed.</p></li>
+<li><p><strong>blank</strong> – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, unresolved variable references are replaced with
+an empty string. If <code class="docutils literal notranslate"><span class="pre">False</span></code> (default), they are left as-is.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The substituted string, or the original value if not a string.</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="attackmate.variablestore.VariableStore.substitute_str">
 <span class="sig-name descname"><span class="pre">substitute_str</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">template_str</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">blank</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#attackmate.variablestore.VariableStore.substitute_str" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Substitute all <code class="docutils literal notranslate"><span class="pre">$variable</span></code> references in a template string.</p>
+<p>Resolves both scalar variables and indexed list variables
+(e.g. <code class="docutils literal notranslate"><span class="pre">$mylist[0]</span></code>).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>template_str</strong> – A string containing <code class="docutils literal notranslate"><span class="pre">$variable</span></code> placeholders.</p></li>
+<li><p><strong>blank</strong> – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, unresolved references are replaced with <code class="docutils literal notranslate"><span class="pre">''</span></code>
+and a <code class="xref py py-exc docutils literal notranslate"><span class="pre">KeyError</span></code> causes the entire result to be <code class="docutils literal notranslate"><span class="pre">''</span></code>.
+If <code class="docutils literal notranslate"><span class="pre">False</span></code> (default), unresolved references are left as-is.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The string with all known variables substituted.</p>
+</dd>
+</dl>
+</dd></dl>
 
 </dd></dl>
 
@@ -356,10 +497,38 @@ and the returncode.</p>
 <dt class="sig sig-object py" id="attackmate.command.Command">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">attackmate.command.</span></span><span class="sig-name descname"><span class="pre">Command</span></span><a class="headerlink" href="#attackmate.command.Command" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Factory interface for creating command instances.</p>
+<p>Command classes are looked up from the <a class="reference internal" href="#attackmate.command.CommandRegistry" title="attackmate.command.CommandRegistry"><code class="xref py py-class docutils literal notranslate"><span class="pre">CommandRegistry</span></code></a> based on
+<code class="docutils literal notranslate"><span class="pre">type</span></code> and optionally <code class="docutils literal notranslate"><span class="pre">cmd</span></code>, then instantiated with the remaining keyword
+arguments.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="attackmate.command.Command.create">
 <em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">create</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmd</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#attackmate.command.Command.create" title="Permalink to this definition"></a></dt>
-<dd><p>return a command instance based on type and cmd.</p>
+<dd><p>Create and return a command instance.</p>
+<p>Looks up the appropriate command class via <a class="reference internal" href="#attackmate.command.CommandRegistry" title="attackmate.command.CommandRegistry"><code class="xref py py-class docutils literal notranslate"><span class="pre">CommandRegistry</span></code></a> and
+instantiates it with the provided arguments.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>type</strong> – The command type (e.g. <code class="docutils literal notranslate"><span class="pre">&quot;shell&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;sleep&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;debug&quot;</span></code>).</p></li>
+<li><p><strong>cmd</strong> – An optional <code class="docutils literal notranslate"><span class="pre">cmd</span></code> value used for more specific class lookup.</p></li>
+<li><p><strong>kwargs</strong> – Additional keyword arguments passed to the command class
+constructor (e.g. <code class="docutils literal notranslate"><span class="pre">seconds</span></code>, <code class="docutils literal notranslate"><span class="pre">varstore</span></code>).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>An instance of the resolved command class.</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ValueError</strong> – If no command class is registered for the given
+<code class="docutils literal notranslate"><span class="pre">type</span></code> and <code class="docutils literal notranslate"><span class="pre">cmd</span></code> combination.</p>
+</dd>
+</dl>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">command</span> <span class="o">=</span> <span class="n">Command</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s2">&quot;sleep&quot;</span><span class="p">,</span> <span class="n">cmd</span><span class="o">=</span><span class="s2">&quot;sleep&quot;</span><span class="p">,</span> <span class="n">seconds</span><span class="o">=</span><span class="s2">&quot;1&quot;</span><span class="p">)</span>
+<span class="n">command</span> <span class="o">=</span> <span class="n">Command</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s2">&quot;debug&quot;</span><span class="p">,</span> <span class="n">cmd</span><span class="o">=</span><span class="s2">&quot;$TEST&quot;</span><span class="p">,</span> <span class="n">varstore</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </dd></dl>
@@ -368,16 +537,56 @@ and the returncode.</p>
 <dt class="sig sig-object py" id="attackmate.command.CommandRegistry">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">attackmate.command.</span></span><span class="sig-name descname"><span class="pre">CommandRegistry</span></span><a class="headerlink" href="#attackmate.command.CommandRegistry" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Registry mapping command types (and optional <code class="docutils literal notranslate"><span class="pre">cmd</span></code> values) to command classes.</p>
+<p>Command classes are registered via the <a class="reference internal" href="#attackmate.command.CommandRegistry.register" title="attackmate.command.CommandRegistry.register"><code class="xref py py-meth docutils literal notranslate"><span class="pre">register()</span></code></a> decorator. The registry
+supports two lookup keys:</p>
+<ul class="simple">
+<li><p><strong>type only</strong> — e.g. <code class="docutils literal notranslate"><span class="pre">&quot;shell&quot;</span></code> maps to <code class="xref py py-class docutils literal notranslate"><span class="pre">ShellCommand</span></code>.</p></li>
+<li><p><strong>type + cmd</strong> — e.g. <code class="docutils literal notranslate"><span class="pre">(&quot;sliver&quot;,</span> <span class="pre">&quot;cd&quot;)</span></code> maps to a more specific class.</p></li>
+</ul>
+<p>The more specific <code class="docutils literal notranslate"><span class="pre">(type,</span> <span class="pre">cmd)</span></code> key takes precedence over the <code class="docutils literal notranslate"><span class="pre">type</span></code>-only key.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="attackmate.command.CommandRegistry.get_command_class">
 <em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_command_class</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">type_</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmd</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#attackmate.command.CommandRegistry.get_command_class" title="Permalink to this definition"></a></dt>
-<dd><p>Retrieve the command class based on type or type + cmd.</p>
+<dd><p>Look up a registered command class.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">(type_,</span> <span class="pre">cmd)</span></code> key is checked first; if not found, falls back to
+the <code class="docutils literal notranslate"><span class="pre">type_</span></code>-only key.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>type</strong> – The command type string.</p></li>
+<li><p><strong>cmd</strong> – An optional <code class="docutils literal notranslate"><span class="pre">cmd</span></code> value for specific lookup.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The registered command class.</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ValueError</strong> – If no class is registered for the given type and cmd.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="attackmate.command.CommandRegistry.register">
 <em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">register</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">type_</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmd</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#attackmate.command.CommandRegistry.register" title="Permalink to this definition"></a></dt>
-<dd><p>register a command class by type or type + cmd.</p>
+<dd><p>Decorator to register a command class.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>type</strong> – The command type string (e.g. <code class="docutils literal notranslate"><span class="pre">&quot;shell&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;sleep&quot;</span></code>).</p></li>
+<li><p><strong>cmd</strong> – An optional <code class="docutils literal notranslate"><span class="pre">cmd</span></code> value for more specific registration.
+If provided, the class is registered under <code class="docutils literal notranslate"><span class="pre">(type_,</span> <span class="pre">cmd)</span></code> and will
+only be returned when both match. This is a LEGACY pattern and should <strong>NOT</strong> be used anymore.</p></li>
+</ul>
+</dd>
+</dl>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@CommandRegistry</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;shell&quot;</span><span class="p">)</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">ShellCommand</span><span class="p">(</span><span class="n">BaseCommand</span><span class="p">):</span>
+    <span class="o">...</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </dd></dl>
@@ -2803,14 +3012,10 @@ All commands for this session are queued to make sure they run synchronously in 
 <dt class="sig sig-object py" id="attackmate.executors.browser.sessionstore.SessionThread.submit_command">
 <span class="sig-name descname"><span class="pre">submit_command</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cmd_name</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#attackmate.executors.browser.sessionstore.SessionThread.submit_command" title="Permalink to this definition"></a></dt>
 <dd><p>Called from outside to run a command in this thread.
-This is a synchronous call from the caller’s perspective:</p>
-<blockquote>
-<div><ul class="simple">
-<li><p>we place the command on cmd_queue,</p></li>
-<li><p>then wait for the response in res_queue</p></li>
-<li><p>re-raise the exception to preserve traceback if it failed</p></li>
-</ul>
-</div></blockquote>
+This is a synchronous call from the caller’s perspective:
+- we place the command on cmd_queue,
+- then wait for the response in res_queue
+- re-raise the exception to preserve traceback if it failed</p>
 </dd></dl>
 
 </dd></dl>
@@ -2920,10 +3125,8 @@ This is a synchronous call from the caller’s perspective:</p>
 <span class="sig-name descname"><span class="pre">substitute_variables_in_command</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">command_obj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">placeholders</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#attackmate.executors.common.loopexecutor.LoopExecutor.substitute_variables_in_command" title="Permalink to this definition"></a></dt>
 <dd><p>Replaces all occurrences of placeholders in <em>any</em> string attribute
 of the command_obj with the values from placeholders.
-E.g. if placeholders = {‘LOOP_ITEM’: ‘<a class="reference external" href="https://example.com">https://example.com</a>’},</p>
-<blockquote>
-<div><p>and command_obj.url = ‘$LOOP_ITEM’, then it becomes ‘<a class="reference external" href="https://example.com">https://example.com</a>’.</p>
-</div></blockquote>
+E.g. if placeholders = {‘LOOP_ITEM’: ‘<a class="reference external" href="https://example.com">https://example.com</a>’},
+and command_obj.url = ‘$LOOP_ITEM’, then it becomes ‘<a class="reference external" href="https://example.com">https://example.com</a>’.</p>
 </dd></dl>
 
 </dd></dl>
