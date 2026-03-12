@@ -109,9 +109,9 @@ class SessionThread(threading.Thread):
         """
         Called from outside to run a command in this thread.
         This is a synchronous call from the caller’s perspective:
-         - we place the command on cmd_queue,
-         - then wait for the response in res_queue
-         - re-raise the exception to preserve traceback if it failed
+        - we place the command on cmd_queue,
+        - then wait for the response in res_queue
+        - re-raise the exception to preserve traceback if it failed
         """
         self.cmd_queue.put((cmd_name, args, kwargs))
         result, error = self.res_queue.get()

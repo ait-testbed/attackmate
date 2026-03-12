@@ -67,11 +67,11 @@ Understanding the Result Object
 ===============================
 
 When executing a command with AttackMate, the result is returned as an instance of the ``Result`` class. This object contains the standard output (`stdout`) and the return code (`returncode`) of the executed command.
-Commands that run in the Background return Result('Command started in background', 0)
+Commands that run in the :ref:`background` return Result('Command started in background', 0)
 
 .. note::
    Regular Commands return a ``Result`` object.
-   Commands that run in background mode return ``Result('Command started in background', 0)``.
+   Commands that run in :ref:`background` mode return ``Result('Command started in background', 0)``.
 
 Attributes
 ----------

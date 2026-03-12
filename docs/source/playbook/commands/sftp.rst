@@ -1,3 +1,5 @@
+.. _sftp:
+
 ====
 sftp
 ====
@@ -8,8 +10,11 @@ created by either command can be reused by the other.
 
 .. note::
 
-   This command caches all settings so
-   that they only need to be defined once.
+   This command caches all settings so that they only need to be defined once.
+
+   Background mode with a session is not supported for this commands.
+
+
 .. code-block:: yaml
 
    vars:
@@ -45,8 +50,8 @@ File Transfer
 
    The SFTP operation to perform.
 
-   * ``put`` — upload a file from the local machine to the remote host
-   * ``get`` — download a file from the remote host to the local machine
+   * ``put`` - upload a file from the local machine to the remote host
+   * ``get`` - download a file from the remote host to the local machine
 
    :type: str
    :required: True
