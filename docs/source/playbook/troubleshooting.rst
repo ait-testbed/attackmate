@@ -87,6 +87,49 @@ the ``cmd`` field is missing from a ``shell`` command.
 
 ----
 
+.. _error-commands-not-a-list:
+
+Commands Not Formatted as a List
+---------------------------------
+
+**Symptom**
+
+.. code-block:: text
+
+    ERROR | A Validation error occured when parsing playbook file playbooks/example.yml
+    ERROR | Traceback (most recent call last):
+      ...
+    pydantic_core._pydantic_core.ValidationError: 1 validation error for Playbook
+    commands
+      Input should be a valid list [type=list_type, input_value={'type': 'shell',
+      'cmd': 'whoami'}, input_type=dict]
+
+**Cause**
+
+The ``commands`` field in the playbook is not formatted as a YAML list.
+A command was defined as a plain mapping instead of a list entry.
+
+**Solution**
+
+Each command must be a list item, prefixed with ``-``:
+
+.. code-block:: yaml
+
+    # Wrong — commands is a plain mapping:
+    commands:
+      type: shell
+      cmd: whoami
+
+    # Correct — commands is a list:
+    commands:
+      - type: shell
+        cmd: whoami
+
+.. seealso::
+    See * :ref:`Basic Usage <basic-usage>` for the full playbook structure.
+
+----
+
 Sliver Command Execution Errors
 ===============================
 
@@ -156,3 +199,57 @@ and port, or is blocked by a firewall.
 
 .. seealso::
     :ref:`sliver` and :ref:`sliver_config` for setup instructions and required configuration fields.
+
+Remote Command Execution Errors
+===============================
+
+.. _error-remote-connection-not-found:
+
+Remote Connection Not Found in Config
+--------------------------------------
+
+**Symptom**
+
+.. code-block:: text
+
+    INFO  | Executing REMOTE AttackMate command: Type='remote', RemoteCmd='execute_command' on server attackmate_server
+    ERROR | Execution failed: Remote connection 'attackmate_server' not found in config.
+    ...
+    attackmate.execexception.ExecException: Remote connection 'attackmate_server' not found in config.
+    ERROR | Error: Remote connection 'attackmate_server' not found in config.
+
+**Cause**
+
+A ``remote`` command references a connection name (here ``attackmate_server``)
+that has no corresponding entry in the ``remote_config`` section of the
+configuration file.
+
+**Solution**
+
+* Ensure the connection name used in the playbook command matches an entry
+  defined in ``remote_config`` in your configuration file.
+* Check for typos in the connection name - it is case-sensitive.
+
+.. code-block:: yaml
+
+    # In your config file — define the connection:
+    remote_config:
+      attackmate_server:
+        url: https://theremoteserver:8445
+        username: testuser
+        password: testuser
+        cafile: /path/to/cert.pem
+
+    # In your playbook — reference the same name:
+    commands:
+      - type: remote
+        cmd: execute_command
+        connection: attackmate_server
+        remote_command:
+            type: shell
+            cmd: whoami
+
+.. seealso::
+    :ref:`remote_config` for the full list of required configuration fields.
+
+----
