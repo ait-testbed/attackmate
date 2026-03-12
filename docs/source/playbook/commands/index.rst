@@ -223,7 +223,7 @@ Every command, regardless of its type supports the following general options:
 
    .. note::
 
-      The command in background-mode will change the :ref:`builtin variables <builtin-variables>`
+      The command in background mode will change the :ref:`builtin variables <builtin-variables>`
       ``RESULT_STDOUT`` to "Command started in Background" and ``RESULT_CODE`` to 0.
 
    Background mode is not supported for
