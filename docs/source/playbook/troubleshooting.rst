@@ -269,8 +269,7 @@ Remote Authentication Failed
     INFO  | Attempting login to https://localhost:8445/login for user 'admin'...
     ERROR | Login failed for 'admin' at https://localhost:8445: 401 - {"detail":"Incorrect username or password"}
     ERROR | Authentication failed or credentials not provided for https://localhost:8445
-    ERROR | No response received from remote server (client communication failed).
-    ERROR | Error: No response received from remote server (client communication failed).
+
 
 **Cause**
 
@@ -308,8 +307,7 @@ Remote SSL Certificate Not Found
     ...
     httpx.ConnectError: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: self-signed certificate (_ssl.c:1010)
     ERROR | Authentication failed or credentials not provided for https://localhost:8445
-    ERROR | No response received from remote server (client communication failed).
-    ERROR | Error: No response received from remote server (client communication failed).
+
 
 **Cause**
 
