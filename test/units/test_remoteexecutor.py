@@ -2,6 +2,7 @@ import os
 import tempfile
 import pytest
 from unittest.mock import MagicMock, patch
+from pydantic import SecretStr
 from attackmate.executors.remote.remoteexecutor import RemoteExecutor
 from attackmate.execexception import ExecException
 from attackmate.schemas.config import RemoteConfig
@@ -151,12 +152,12 @@ class TestSetupConnection:
         client = executor.setup_connection(mock_remote_command)
 
         assert client == mock_client_instance
-        mock_client_class.assert_called_once_with(
-            server_url='https://primary.example.com',
-            username='user1',
-            password='pass1',
-            cacert='/path/to/ca.pem'
-        )
+        call_kwargs = mock_client_class.call_args.kwargs
+        assert call_kwargs['server_url'] == 'https://primary.example.com'
+        assert call_kwargs['username'] == 'user1'
+        assert isinstance(call_kwargs['password'], SecretStr)
+        assert call_kwargs['password'].get_secret_value() == 'pass1'
+        assert call_kwargs['cacert'] == '/path/to/ca.pem'
         assert executor._clients_cache['primary'] == mock_client_instance
 
     @patch('attackmate.executors.remote.remoteexecutor.RemoteAttackMateClient')
