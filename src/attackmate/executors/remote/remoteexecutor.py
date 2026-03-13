@@ -1,6 +1,7 @@
 import logging
 import json
 from typing import Dict, Any, Optional
+from pydantic import SecretStr
 
 from attackmate.executors.executor_factory import executor_factory
 from attackmate_client import RemoteAttackMateClient
@@ -81,7 +82,7 @@ class RemoteExecutor(BaseExecutor):
             client = RemoteAttackMateClient(
                 server_url=info['url'],
                 username=info['user'],
-                password=info['pass'],
+                password=SecretStr(info['pass']),
                 cacert=info['cafile']
             )
             self._clients_cache[conn_name] = client
