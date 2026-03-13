@@ -399,8 +399,6 @@ Invalid Playbook Submitted to Remote Instance (422 Server Error)
     INFO  | Login successful for 'testuser' at https://localhost:8445. Token stored.
     ERROR | API Error (POST https://localhost:8445/playbooks/execute/yaml): 422
     ERROR | Server Detail: {'message': 'Invalid playbook: 1 validation error(s).', 'errors': ["'commands': Input should be a valid list"]}
-    ERROR | No response received from remote server (client communication failed).
-    ERROR | Error: No response received from remote server (client communication failed).
 
 **Cause**
 
