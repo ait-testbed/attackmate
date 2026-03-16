@@ -445,3 +445,181 @@ by the remote instance rather than locally.
     :ref:`remote` for documentation on the ``execute_playbook`` command.
 
 ----
+
+SSH Command Errors
+==================
+
+.. _error-ssh-no-session:
+
+No Existing SSH Session
+-----------------------
+
+**Symptom**
+
+.. code-block:: text
+
+  INFO     | Executing SSH-Command: 'id'
+  ERROR    | No existing session
+
+**Cause**
+
+An ``ssh`` command was executed, but AttackMate could not find an active session for the target host. This typically happens when:
+* The user specified in the playbook does not exist on the remote target.
+
+
+**Solution**
+
+* Verify User Existence: Ensure the ``user`` specified in your playbook actually exists on the target machine.
+
+.. seealso::
+    :ref:`ssh` for details on how ssh sessions are used within AttackMate.
+
+----
+
+.. _error-unable-to-connect-session:
+
+Unable to connect SSH Session
+-----------------------
+
+**Symptom**
+
+.. code-block:: text
+
+  INFO     | Executing SSH-Command: 'id'
+  ERROR    | [Errno None] Unable to connect to port 22 on 10.110.0.17
+
+**Cause**
+
+An ``ssh`` command was executed, but AttackMate could not establish a TCP
+connection to the specified port on the target host. This typically means
+one of the following:
+
+* The target host is unreachable (e.g. routing issue, host is down).
+* The SSH service is not running or is listening on a different port.
+* A firewall or network policy is blocking the connection.
+* The IP address or port in the SSH configuration is incorrect.
+
+**Solution**
+* Verify that the target host is reachable, for example with ``ping`` or
+  ``traceroute``.
+* Confirm that an SSH service is running on the target and listening on the
+  configured port (default: ``22``).
+* Check that no firewall rule is blocking the connection on either the
+  client or the target side.
+* Review the ``host`` and ``port`` fields in your SSH configuration and
+  ensure they match the target.
+* Check Credentials: If you are using password or key-based authentication,
+  verify that the credentials in your configuration/playbook are valid for that remote user.
+
+.. seealso::
+    :ref:`ssh` for details on how ssh sessions are used within AttackMate.
+
+----
+
+.. _error-ssh-session-not-in-store:
+
+SSH Session Not Found in Session Store
+---------------------------------------
+
+**Symptom**
+
+.. code-block:: text
+
+    INFO  | Executing SSH-Command: 'id'
+    ERROR | SSH-Session not in Session-Store: example-session
+
+**Cause**
+
+An ``ssh`` command references a named session that does not exist in
+AttackMate's session store. This happens when the ``session`` field in
+the command points to a session that was never established — either
+because the session-opening command was never executed, was skipped due
+to a prior error, or the session name contains a typo.
+
+**Solution**
+* Review the playbook order and confirm the session is established before
+  it is used.
+* Ensure that a session-opening SSH command with the matching session name
+  runs successfully before any commands that reference it.
+* Check for typos in the ``session`` field — session names are case-sensitive.
+
+.. code-block:: yaml
+
+    # Wrong — session name does not match the created session:
+    commands:
+      - type: ssh
+        cmd: id
+        username: user
+        key_filename: /home/user/.ssh/key
+        hostname: 10.0.0.1
+        creates_session: "foothold"
+      - type: ssh
+        cmd: id
+        session: "typo-session"   # does not match "foothold"
+
+    # Correct — session name matches exactly:
+    commands:
+      - type: ssh
+        cmd: id
+        username: user
+        key_filename: /home/user/.ssh/key
+        hostname: 10.0.0.1
+        creates_session: "foothold"
+      - type: ssh
+        cmd: id
+        session: "foothold"
+
+
+.. seealso::
+    :ref:`ssh` for details on how SSH sessions are created and referenced
+    within AttackMate.
+
+----
+
+Webserv Command Errors
+======================
+
+.. _error-webserv-hangs:
+
+Playbook Hangs After webserv Command
+--------------------------------------
+
+**Symptom**
+
+The playbook stops progressing and hangs indefinitely after a ``webserv``
+command. No subsequent commands are executed.
+
+.. code-block:: text
+
+  2026-03-16 16:22:19 INFO     | Delay before commands: 1.0 seconds
+  2026-03-16 16:22:20 INFO     | Serving /home/user/files/example.txt via HTTP on Port 8000
+
+**Cause**
+
+The ``webserv`` command starts an HTTP file server and blocks execution
+until the server is stopped. Without setting ``background: true``, AttackMate
+waits for the server to finish before continuing, which causes the playbook
+to hang indefinitely.
+
+**Solution**
+
+* Always set ``background: true`` on ``webserv`` commands so that the server
+  is started in the background and playbook execution continues immediately.
+
+.. code-block:: yaml
+
+    # Wrong — webserv blocks playbook execution:
+    commands:
+      - type: webserv
+        local_path: /home/user/files/example.txt
+        port: 8000
+
+    # Correct — webserv runs in the background:
+    commands:
+      - type: webserv
+        local_path: /home/user/files/example.txt
+        port: 8000
+        background: true
+
+.. seealso::
+    :ref:`webserv` for the full list of available configuration fields.
