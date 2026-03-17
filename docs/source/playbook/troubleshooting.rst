@@ -333,6 +333,55 @@ failed because the remote server uses a self-signed certificate.
 .. seealso::
     :ref:`remote` and :ref:`remote_config` for the full list of required configuration fields.
 
+
+----
+
+.. _error-remote-ssl-cert-invalid:
+
+Remote SSL Certificate Invalid
+--------------------------------
+
+**Symptom**
+
+.. code-block:: text
+
+    INFO  | Executing REMOTE AttackMate command: Type='remote', RemoteCmd='execute_command' on server attackmate_server (https://localhost:8445)
+    INFO  | Client will verify https://localhost:8445 SSL using CA: /path/to/wrong.pem
+    INFO  | Successfully created remote client for: attackmate_server
+    INFO  | Attempting login to https://localhost:8445/login for user 'testuser'...
+    ERROR | Login request to https://localhost:8445 failed: [X509] PEM lib (_ssl.c:4106)
+
+**Cause**
+
+The CA certificate file specified in ``remote_config`` was found and loaded,
+but its contents are not valid for verifying the remote server's certificate.
+This happens when the ``cafile`` points to the wrong certificate — for example
+a certificate from a different CA or an unrelated server.
+
+**Solution**
+
+* Ensure that the ``cafile`` in your ``remote_config`` points to the correct
+  CA certificate that was used to sign the remote AttackMate server's
+  certificate.
+* If you are unsure which certificate to use, check the server setup
+  documentation or regenerate the certificate and update both the server
+  and the ``cafile`` path accordingly.
+
+.. code-block:: yaml
+
+    remote_config:
+      attackmate_server:
+        url: https://localhost:8445
+        username: testuser
+        password: testuser
+        cafile: /path/to/correct-ca.pem   # must match the server's CA
+
+.. seealso::
+
+    :ref:`remote` and :ref:`remote_config` for the full list of required
+    configuration fields.
+``
+
 ----
 
 .. _error-remote-command-not-supported:
@@ -445,6 +494,7 @@ by the remote instance rather than locally.
     :ref:`remote` for documentation on the ``execute_playbook`` command.
 
 ----
+
 
 SSH Command Errors
 ==================
