@@ -673,3 +673,46 @@ to hang indefinitely.
 
 .. seealso::
     :ref:`webserv` for the full list of available configuration fields.
+
+----
+
+Msf Command Errors
+======================
+
+.. _error-msf-connection-refused:
+
+Metasploit RPC Server Unreachable
+-----------------------------------
+
+**Symptom**
+
+.. code-block:: text
+
+    INFO    | Delay before commands: 0 seconds
+    WARNING | Creating temporary file..
+    ERROR   | HTTPSConnectionPool(host='127.0.0.1', port=55553): Max retries exceeded
+              with url: /api/ (Caused by NewConnectionError('Failed to establish a
+              new connection: [Errno 111] Connection refused'))
+
+**Cause**
+
+AttackMate could not connect to the Metasploit RPC server (``msfrpcd``).
+The server is either not running, not listening on the configured port, or
+is blocked by a firewall.
+
+**Solution**
+
+* Start the Metasploit RPC server before running the playbook. The default
+  command to start it is:
+
+.. code-block:: bash
+
+    msfrpcd -P yourpassword -p 55553 -S
+
+* Verify that the ``port`` in your ``msf_config`` matches the port
+  ``msfrpcd`` is listening on.
+* Ensure no firewall rule is blocking the connection to the configured port.
+
+.. seealso::
+    :ref:`msf-module` and :ref:`msf_config` for setup instructions and required
+    configuration fields.
