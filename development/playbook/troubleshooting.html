@@ -121,6 +121,10 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Troubleshooting</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#playbook-validation-errors">Playbook Validation Errors</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#sliver-command-execution-errors">Sliver Command Execution Errors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#remote-command-execution-errors">Remote Command Execution Errors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ssh-command-errors">SSH Command Errors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#webserv-command-errors">Webserv Command Errors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#msf-command-errors">Msf Command Errors</a></li>
 </ul>
 </li>
 </ul>
@@ -226,6 +230,40 @@ are present.</p></li>
 <li><p>Refer to the documentation for the specific command type to see which fields
 are required.</p></li>
 </ul>
+<hr class="docutils" />
+</section>
+<section id="commands-not-formatted-as-a-list">
+<span id="error-commands-not-a-list"></span><h3>Commands Not Formatted as a List<a class="headerlink" href="#commands-not-formatted-as-a-list" title="Permalink to this heading"></a></h3>
+<p><strong>Symptom</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>ERROR | A Validation error occured when parsing playbook file playbooks/example.yml
+ERROR | Traceback (most recent call last):
+  ...
+pydantic_core._pydantic_core.ValidationError: 1 validation error for Playbook
+commands
+  Input should be a valid list [type=list_type, input_value={&#39;type&#39;: &#39;shell&#39;,
+  &#39;cmd&#39;: &#39;whoami&#39;}, input_type=dict]
+</pre></div>
+</div>
+<p><strong>Cause</strong></p>
+<p>The <code class="docutils literal notranslate"><span class="pre">commands</span></code> field in the playbook is not formatted as a YAML list.
+A command was defined as a plain mapping instead of a list entry.</p>
+<p><strong>Solution</strong></p>
+<p>Each command must be a list item, prefixed with <code class="docutils literal notranslate"><span class="pre">-</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># Wrong — commands is a plain mapping:</span>
+<span class="nt">commands</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">shell</span>
+<span class="w">  </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">whoami</span>
+
+<span class="c1"># Correct — commands is a list:</span>
+<span class="nt">commands</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">shell</span>
+<span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">whoami</span>
+</pre></div>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>See * <a class="reference internal" href="../basic.html#basic-usage"><span class="std std-ref">Basic Usage</span></a> for the full playbook structure.</p>
+</div>
 </section>
 </section>
 <hr class="docutils" />
@@ -284,6 +322,446 @@ server (default: <code class="docutils literal notranslate"><span class="pre">12
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
 <p><a class="reference internal" href="commands/sliver.html#sliver"><span class="std std-ref">sliver</span></a> and <a class="reference internal" href="../configuration/sliver_config.html#sliver-config"><span class="std std-ref">sliver_config</span></a> for setup instructions and required configuration fields.</p>
+</div>
+</section>
+</section>
+<section id="remote-command-execution-errors">
+<h2>Remote Command Execution Errors<a class="headerlink" href="#remote-command-execution-errors" title="Permalink to this heading"></a></h2>
+<section id="remote-connection-not-found-in-config">
+<span id="error-remote-connection-not-found"></span><h3>Remote Connection Not Found in Config<a class="headerlink" href="#remote-connection-not-found-in-config" title="Permalink to this heading"></a></h3>
+<p><strong>Symptom</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>INFO  | Executing REMOTE AttackMate command: Type=&#39;remote&#39;, RemoteCmd=&#39;execute_command&#39; on server attackmate_server
+ERROR | Execution failed: Remote connection &#39;attackmate_server&#39; not found in config.
+...
+attackmate.execexception.ExecException: Remote connection &#39;attackmate_server&#39; not found in config.
+ERROR | Error: Remote connection &#39;attackmate_server&#39; not found in config.
+</pre></div>
+</div>
+<p><strong>Cause</strong></p>
+<p>A <code class="docutils literal notranslate"><span class="pre">remote</span></code> command references a connection name (here <code class="docutils literal notranslate"><span class="pre">attackmate_server</span></code>)
+that has no corresponding entry in the <code class="docutils literal notranslate"><span class="pre">remote_config</span></code> section of the
+configuration file.</p>
+<p><strong>Solution</strong></p>
+<ul class="simple">
+<li><p>Ensure the connection name used in the playbook command matches an entry
+defined in <code class="docutils literal notranslate"><span class="pre">remote_config</span></code> in your configuration file.</p></li>
+<li><p>Check for typos in the connection name - it is case-sensitive.</p></li>
+</ul>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># In your config file — define the connection:</span>
+<span class="nt">remote_config</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">attackmate_server</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://theremoteserver:8445</span>
+<span class="w">    </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">testuser</span>
+<span class="w">    </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">testuser</span>
+<span class="w">    </span><span class="nt">cafile</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/path/to/cert.pem</span>
+
+<span class="c1"># In your playbook — reference the same name:</span>
+<span class="nt">commands</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">remote</span>
+<span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">execute_command</span>
+<span class="w">    </span><span class="nt">connection</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">attackmate_server</span>
+<span class="w">    </span><span class="nt">remote_command</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">shell</span>
+<span class="w">        </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">whoami</span>
+</pre></div>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="../configuration/remote_config.html#remote-config"><span class="std std-ref">remote_config</span></a> for the full list of required configuration fields.</p>
+</div>
+<hr class="docutils" />
+</section>
+<section id="remote-authentication-failed">
+<span id="error-remote-authentication-failed"></span><h3>Remote Authentication Failed<a class="headerlink" href="#remote-authentication-failed" title="Permalink to this heading"></a></h3>
+<p><strong>Symptom</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>INFO  | Executing REMOTE AttackMate command: Type=&#39;remote&#39;, RemoteCmd=&#39;execute_command&#39; on server attackmate_server (https://localhost:8445)
+INFO  | Client will verify https://localhost:8445 SSL using CA: /path/to/cert.pem
+INFO  | Successfully created remote client for: attackmate_server
+INFO  | Attempting login to https://localhost:8445/login for user &#39;admin&#39;...
+ERROR | Login failed for &#39;admin&#39; at https://localhost:8445: 401 - {&quot;detail&quot;:&quot;Incorrect username or password&quot;}
+ERROR | Authentication failed or credentials not provided for https://localhost:8445
+</pre></div>
+</div>
+<p><strong>Cause</strong></p>
+<p>The credentials provided in the configuration do not match those expected
+by the remote AttackMate server. The server returned a <code class="docutils literal notranslate"><span class="pre">401</span> <span class="pre">Unauthorized</span></code>
+response.</p>
+<p><strong>Solution</strong></p>
+<ul class="simple">
+<li><p>Check that the <code class="docutils literal notranslate"><span class="pre">username</span></code> and <code class="docutils literal notranslate"><span class="pre">password</span></code> in your <code class="docutils literal notranslate"><span class="pre">remote_config</span></code>
+entry are correct.</p></li>
+<li><p>Verify that the user account exists on the remote AttackMate server and
+that the password has not changed.</p></li>
+</ul>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><span class="xref std std-ref">remote</span> and <a class="reference internal" href="../configuration/remote_config.html#remote-config"><span class="std std-ref">remote_config</span></a> for the full list of required configuration fields.</p>
+</div>
+<hr class="docutils" />
+</section>
+<section id="remote-ssl-certificate-not-found">
+<span id="error-remote-ssl-cert-not-found"></span><h3>Remote SSL Certificate Not Found<a class="headerlink" href="#remote-ssl-certificate-not-found" title="Permalink to this heading"></a></h3>
+<p><strong>Symptom</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>INFO  | Executing REMOTE AttackMate command: Type=&#39;remote&#39;, RemoteCmd=&#39;execute_command&#39; on server attackmate_server (https://localhost:8445)
+ERROR | CA certificate file not found: /path/to/certificate.pem. Falling back to default verification.
+INFO  | Successfully created remote client for: attackmate_server
+INFO  | Attempting login to https://localhost:8445/login for user &#39;testuser&#39;...
+ERROR | Login request to https://localhost:8445 failed: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: self-signed certificate (_ssl.c:1010)
+...
+httpx.ConnectError: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: self-signed certificate (_ssl.c:1010)
+ERROR | Authentication failed or credentials not provided for https://localhost:8445
+</pre></div>
+</div>
+<p><strong>Cause</strong></p>
+<p>The CA certificate file specified in <code class="docutils literal notranslate"><span class="pre">remote_config</span></code> could not be found at
+the given path. AttackMate fell back to default SSL verification, which then
+failed because the remote server uses a self-signed certificate.</p>
+<p><strong>Solution</strong></p>
+<ul class="simple">
+<li><p>Check that the <code class="docutils literal notranslate"><span class="pre">cafile</span></code> path in your <code class="docutils literal notranslate"><span class="pre">remote_config</span></code> points to the
+correct certificate file and that the file exists.</p></li>
+<li><p>Ensure the path is absolute or correctly relative to the working directory
+from which AttackMate is invoked.</p></li>
+</ul>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">remote_config</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">attackmate_server</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://theremoteserver:8445</span>
+<span class="w">    </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">testuser</span>
+<span class="w">    </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">testuser</span>
+<span class="w">    </span><span class="nt">cafile</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/path/to/cert.pem</span>
+</pre></div>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><span class="xref std std-ref">remote</span> and <a class="reference internal" href="../configuration/remote_config.html#remote-config"><span class="std std-ref">remote_config</span></a> for the full list of required configuration fields.</p>
+</div>
+<hr class="docutils" />
+</section>
+<section id="remote-ssl-certificate-invalid">
+<span id="error-remote-ssl-cert-invalid"></span><h3>Remote SSL Certificate Invalid<a class="headerlink" href="#remote-ssl-certificate-invalid" title="Permalink to this heading"></a></h3>
+<p><strong>Symptom</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>INFO  | Executing REMOTE AttackMate command: Type=&#39;remote&#39;, RemoteCmd=&#39;execute_command&#39; on server attackmate_server (https://localhost:8445)
+INFO  | Client will verify https://localhost:8445 SSL using CA: /path/to/wrong.pem
+INFO  | Successfully created remote client for: attackmate_server
+INFO  | Attempting login to https://localhost:8445/login for user &#39;testuser&#39;...
+ERROR | Login request to https://localhost:8445 failed: [X509] PEM lib (_ssl.c:4106)
+</pre></div>
+</div>
+<p><strong>Cause</strong></p>
+<p>The CA certificate file specified in <code class="docutils literal notranslate"><span class="pre">remote_config</span></code> was found and loaded,
+but its contents are not valid for verifying the remote server’s certificate.
+This happens when the <code class="docutils literal notranslate"><span class="pre">cafile</span></code> points to the wrong certificate — for example
+a certificate from a different CA or an unrelated server.</p>
+<p><strong>Solution</strong></p>
+<ul class="simple">
+<li><p>Ensure that the <code class="docutils literal notranslate"><span class="pre">cafile</span></code> in your <code class="docutils literal notranslate"><span class="pre">remote_config</span></code> points to the correct
+CA certificate that was used to sign the remote AttackMate server’s
+certificate.</p></li>
+<li><p>If you are unsure which certificate to use, check the server setup
+documentation or regenerate the certificate and update both the server
+and the <code class="docutils literal notranslate"><span class="pre">cafile</span></code> path accordingly.</p></li>
+</ul>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">remote_config</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">attackmate_server</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://localhost:8445</span>
+<span class="w">    </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">testuser</span>
+<span class="w">    </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">testuser</span>
+<span class="w">    </span><span class="nt">cafile</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/path/to/correct-ca.pem</span><span class="w">   </span><span class="c1"># must match the server&#39;s CA</span>
+</pre></div>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><span class="xref std std-ref">remote</span> and <a class="reference internal" href="../configuration/remote_config.html#remote-config"><span class="std std-ref">remote_config</span></a> for the full list of required
+configuration fields.</p>
+</div>
+<p><a href="#id2"><span class="problematic" id="id3">``</span></a></p>
+<hr class="docutils" />
+</section>
+<section id="command-type-not-supported-on-remote-instances">
+<span id="error-remote-command-not-supported"></span><h3>Command Type Not Supported on Remote Instances<a class="headerlink" href="#command-type-not-supported-on-remote-instances" title="Permalink to this heading"></a></h3>
+<p><strong>Symptom</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>ERROR | A Validation error occured when parsing playbook file playbooks/remote_remote.yml
+ERROR | Traceback (most recent call last):
+  ...
+pydantic_core._pydantic_core.ValidationError: 1 validation error for Playbook
+commands.0.remote.remote_command
+  Input tag &#39;remote&#39; found using &#39;type&#39; does not match any of the expected tags:
+  &#39;sliver-session&#39;, &#39;sliver&#39;, &#39;browser&#39;, &#39;shell&#39;, &#39;msf-module&#39;, &#39;msf-session&#39;,
+  &#39;msf-payload&#39;, &#39;sleep&#39;, &#39;ssh&#39;, &#39;father&#39;, &#39;sftp&#39;, &#39;debug&#39;, &#39;setvar&#39;, &#39;regex&#39;,
+  &#39;mktemp&#39;, &#39;include&#39;, &#39;loop&#39;, &#39;webserv&#39;, &#39;http-client&#39;, &#39;json&#39;, &#39;vnc&#39;, &#39;bettercap&#39;
+  [type=union_tag_invalid, input_value={&#39;type&#39;: &#39;remote&#39;, &#39;cmd&#39;:...&#39;path/to/playbook&#39;}, input_type=dict]
+</pre></div>
+</div>
+<p><strong>Cause</strong></p>
+<p>A <code class="docutils literal notranslate"><span class="pre">remote</span></code> command was used as the <code class="docutils literal notranslate"><span class="pre">remote_command</span></code> of another <code class="docutils literal notranslate"><span class="pre">remote</span></code>
+command - that is, a remote command was nested inside another remote command.
+This is not supported; a remote AttackMate instance cannot itself dispatch
+further remote commands.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># Wrong — remote cannot be used as a remote_command:</span>
+<span class="nt">commands</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">remote</span>
+<span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">execute_command</span>
+<span class="w">    </span><span class="nt">connection</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">attackmate_server</span>
+<span class="w">    </span><span class="nt">remote_command</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">remote</span>
+<span class="w">      </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">execute_playbook</span>
+<span class="w">      </span><span class="nt">connection</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">another_server</span>
+<span class="w">      </span><span class="nt">playbook_path</span><span class="p">:</span>
+</pre></div>
+</div>
+<p><strong>Solution</strong></p>
+<ul class="simple">
+<li><p>Remove the nesting — a <code class="docutils literal notranslate"><span class="pre">remote</span></code> command can only wrap command types that
+are executable on the target AttackMate instance directly.</p></li>
+<li><p>If you tried to execute a RemotelyExecutableCommand on the remote instance check for spelling mistakes in the <code class="docutils literal notranslate"><span class="pre">type</span></code> field</p></li>
+</ul>
+<hr class="docutils" />
+</section>
+<section id="invalid-playbook-submitted-to-remote-instance-422-server-error">
+<span id="error-remote-playbook-invalid"></span><h3>Invalid Playbook Submitted to Remote Instance (422 Server Error)<a class="headerlink" href="#invalid-playbook-submitted-to-remote-instance-422-server-error" title="Permalink to this heading"></a></h3>
+<p><strong>Symptom</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>INFO  | Executing REMOTE AttackMate command: Type=&#39;remote&#39;, RemoteCmd=&#39;execute_playbook&#39; on server attackmate_server (https://localhost:8445)
+INFO  | Login successful for &#39;testuser&#39; at https://localhost:8445. Token stored.
+ERROR | API Error (POST https://localhost:8445/playbooks/execute/yaml): 422
+ERROR | Server Detail: {&#39;message&#39;: &#39;Invalid playbook: 1 validation error(s).&#39;, &#39;errors&#39;: [&quot;&#39;commands&#39;: Input should be a valid list&quot;]}
+</pre></div>
+</div>
+<p><strong>Cause</strong></p>
+<p>The playbook submitted to the remote AttackMate instance failed validation
+on the server side. Authentication succeeded, but the server rejected the
+playbook with a <code class="docutils literal notranslate"><span class="pre">422</span> <span class="pre">Unprocessable</span> <span class="pre">Entity</span></code> response. The server returns
+a <code class="docutils literal notranslate"><span class="pre">422</span></code> in three cases:</p>
+<ul class="simple">
+<li><p><strong>YAML parse error</strong> — the playbook file is not valid YAML. The error
+message will read <code class="docutils literal notranslate"><span class="pre">Invalid</span> <span class="pre">playbook</span> <span class="pre">YAML:</span> <span class="pre">failed</span> <span class="pre">to</span> <span class="pre">parse</span> <span class="pre">YAML.</span></code></p></li>
+<li><p><strong>Validation error</strong> — the playbook is valid YAML but fails Pydantic
+model validation, for example a missing required field or an invalid
+command type. The error message will read
+<code class="docutils literal notranslate"><span class="pre">Invalid</span> <span class="pre">playbook:</span> <span class="pre">N</span> <span class="pre">validation</span> <span class="pre">error(s).</span></code></p></li>
+<li><p><strong>Value error</strong> — the playbook contains a semantic error that cannot be
+caught by schema validation alone. The error message will read
+<code class="docutils literal notranslate"><span class="pre">Invalid</span> <span class="pre">playbook</span> <span class="pre">YAML.</span></code></p></li>
+</ul>
+<p>In the example above the <code class="docutils literal notranslate"><span class="pre">commands</span></code> field is not a valid list — the same
+underlying issue described in <a class="reference internal" href="#error-commands-not-a-list"><span class="std std-ref">Commands Not Formatted as a List</span></a>, but caught
+by the remote instance rather than locally.</p>
+<p><strong>Solution</strong></p>
+<ul class="simple">
+<li><p>Inspect the <code class="docutils literal notranslate"><span class="pre">errors</span></code> field in the server detail for the specific
+validation message.</p></li>
+<li><p>Validate the playbook locally first by running it directly with AttackMate
+before submitting it to a remote instance — local validation produces more
+detailed error output:</p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>uv<span class="w"> </span>run<span class="w"> </span>attackmate<span class="w"> </span>playbooks/whoami.yml
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>For YAML syntax errors, check the playbook file for incorrect indentation,
+missing colons, or unquoted special characters.</p></li>
+<li><p>For validation errors, refer to the playbook schema</p></li>
+</ul>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#error-commands-not-a-list"><span class="std std-ref">Commands Not Formatted as a List</span></a> for the command not a valid list validation error.</p>
+<p><a class="reference internal" href="#error-invalid-command-type"><span class="std std-ref">Invalid Command Type</span></a> for invalid command type errors.</p>
+<p><a class="reference internal" href="#error-missing-field"><span class="std std-ref">Missing Required Field</span></a> for missing required field errors.</p>
+<p><span class="xref std std-ref">remote</span> for documentation on the <code class="docutils literal notranslate"><span class="pre">execute_playbook</span></code> command.</p>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="ssh-command-errors">
+<h2>SSH Command Errors<a class="headerlink" href="#ssh-command-errors" title="Permalink to this heading"></a></h2>
+<section id="no-existing-ssh-session">
+<span id="error-ssh-no-session"></span><h3>No Existing SSH Session<a class="headerlink" href="#no-existing-ssh-session" title="Permalink to this heading"></a></h3>
+<p><strong>Symptom</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>INFO     | Executing SSH-Command: &#39;id&#39;
+ERROR    | No existing session
+</pre></div>
+</div>
+<p><strong>Cause</strong></p>
+<p>An <code class="docutils literal notranslate"><span class="pre">ssh</span></code> command was executed, but AttackMate could not find an active session for the target host. This typically happens when:
+* The user specified in the playbook does not exist on the remote target.</p>
+<p><strong>Solution</strong></p>
+<ul class="simple">
+<li><p>Verify User Existence: Ensure the <code class="docutils literal notranslate"><span class="pre">user</span></code> specified in your playbook actually exists on the target machine.</p></li>
+</ul>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="commands/ssh.html#ssh"><span class="std std-ref">ssh</span></a> for details on how ssh sessions are used within AttackMate.</p>
+</div>
+<hr class="docutils" />
+</section>
+<section id="unable-to-connect-ssh-session">
+<span id="error-unable-to-connect-session"></span><h3>Unable to connect SSH Session<a class="headerlink" href="#unable-to-connect-ssh-session" title="Permalink to this heading"></a></h3>
+<p><strong>Symptom</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>INFO     | Executing SSH-Command: &#39;id&#39;
+ERROR    | [Errno None] Unable to connect to port 22 on 10.110.0.17
+</pre></div>
+</div>
+<p><strong>Cause</strong></p>
+<p>An <code class="docutils literal notranslate"><span class="pre">ssh</span></code> command was executed, but AttackMate could not establish a TCP
+connection to the specified port on the target host. This typically means
+one of the following:</p>
+<ul class="simple">
+<li><p>The target host is unreachable (e.g. routing issue, host is down).</p></li>
+<li><p>The SSH service is not running or is listening on a different port.</p></li>
+<li><p>A firewall or network policy is blocking the connection.</p></li>
+<li><p>The IP address or port in the SSH configuration is incorrect.</p></li>
+</ul>
+<p><strong>Solution</strong>
+* Verify that the target host is reachable, for example with <code class="docutils literal notranslate"><span class="pre">ping</span></code> or</p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">traceroute</span></code>.</p>
+</div></blockquote>
+<ul class="simple">
+<li><p>Confirm that an SSH service is running on the target and listening on the
+configured port (default: <code class="docutils literal notranslate"><span class="pre">22</span></code>).</p></li>
+<li><p>Check that no firewall rule is blocking the connection on either the
+client or the target side.</p></li>
+<li><p>Review the <code class="docutils literal notranslate"><span class="pre">host</span></code> and <code class="docutils literal notranslate"><span class="pre">port</span></code> fields in your SSH configuration and
+ensure they match the target.</p></li>
+<li><p>Check Credentials: If you are using password or key-based authentication,
+verify that the credentials in your configuration/playbook are valid for that remote user.</p></li>
+</ul>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="commands/ssh.html#ssh"><span class="std std-ref">ssh</span></a> for details on how ssh sessions are used within AttackMate.</p>
+</div>
+<hr class="docutils" />
+</section>
+<section id="ssh-session-not-found-in-session-store">
+<span id="error-ssh-session-not-in-store"></span><h3>SSH Session Not Found in Session Store<a class="headerlink" href="#ssh-session-not-found-in-session-store" title="Permalink to this heading"></a></h3>
+<p><strong>Symptom</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>INFO  | Executing SSH-Command: &#39;id&#39;
+ERROR | SSH-Session not in Session-Store: example-session
+</pre></div>
+</div>
+<p><strong>Cause</strong></p>
+<p>An <code class="docutils literal notranslate"><span class="pre">ssh</span></code> command references a named session that does not exist in
+AttackMate’s session store. This happens when the <code class="docutils literal notranslate"><span class="pre">session</span></code> field in
+the command points to a session that was never established — either
+because the session-opening command was never executed, was skipped due
+to a prior error, or the session name contains a typo.</p>
+<p><strong>Solution</strong>
+* Review the playbook order and confirm the session is established before</p>
+<blockquote>
+<div><p>it is used.</p>
+</div></blockquote>
+<ul class="simple">
+<li><p>Ensure that a session-opening SSH command with the matching session name
+runs successfully before any commands that reference it.</p></li>
+<li><p>Check for typos in the <code class="docutils literal notranslate"><span class="pre">session</span></code> field — session names are case-sensitive.</p></li>
+</ul>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># Wrong — session name does not match the created session:</span>
+<span class="nt">commands</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ssh</span>
+<span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">id</span>
+<span class="w">    </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">user</span>
+<span class="w">    </span><span class="nt">key_filename</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/home/user/.ssh/key</span>
+<span class="w">    </span><span class="nt">hostname</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10.0.0.1</span>
+<span class="w">    </span><span class="nt">creates_session</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;foothold&quot;</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ssh</span>
+<span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">id</span>
+<span class="w">    </span><span class="nt">session</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;typo-session&quot;</span><span class="w">   </span><span class="c1"># does not match &quot;foothold&quot;</span>
+
+<span class="c1"># Correct — session name matches exactly:</span>
+<span class="nt">commands</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ssh</span>
+<span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">id</span>
+<span class="w">    </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">user</span>
+<span class="w">    </span><span class="nt">key_filename</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/home/user/.ssh/key</span>
+<span class="w">    </span><span class="nt">hostname</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10.0.0.1</span>
+<span class="w">    </span><span class="nt">creates_session</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;foothold&quot;</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ssh</span>
+<span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">id</span>
+<span class="w">    </span><span class="nt">session</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;foothold&quot;</span>
+</pre></div>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="commands/ssh.html#ssh"><span class="std std-ref">ssh</span></a> for details on how SSH sessions are created and referenced
+within AttackMate.</p>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="webserv-command-errors">
+<h2>Webserv Command Errors<a class="headerlink" href="#webserv-command-errors" title="Permalink to this heading"></a></h2>
+<section id="playbook-hangs-after-webserv-command">
+<span id="error-webserv-hangs"></span><h3>Playbook Hangs After webserv Command<a class="headerlink" href="#playbook-hangs-after-webserv-command" title="Permalink to this heading"></a></h3>
+<p><strong>Symptom</strong></p>
+<p>The playbook stops progressing and hangs indefinitely after a <code class="docutils literal notranslate"><span class="pre">webserv</span></code>
+command. No subsequent commands are executed.</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>2026-03-16 16:22:19 INFO     | Delay before commands: 1.0 seconds
+2026-03-16 16:22:20 INFO     | Serving /home/user/files/example.txt via HTTP on Port 8000
+</pre></div>
+</div>
+<p><strong>Cause</strong></p>
+<p>The <code class="docutils literal notranslate"><span class="pre">webserv</span></code> command starts an HTTP file server and blocks execution
+until the server is stopped. Without setting <code class="docutils literal notranslate"><span class="pre">background:</span> <span class="pre">true</span></code>, AttackMate
+waits for the server to finish before continuing, which causes the playbook
+to hang indefinitely.</p>
+<p><strong>Solution</strong></p>
+<ul class="simple">
+<li><p>Always set <code class="docutils literal notranslate"><span class="pre">background:</span> <span class="pre">true</span></code> on <code class="docutils literal notranslate"><span class="pre">webserv</span></code> commands so that the server
+is started in the background and playbook execution continues immediately.</p></li>
+</ul>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># Wrong — webserv blocks playbook execution:</span>
+<span class="nt">commands</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">webserv</span>
+<span class="w">    </span><span class="nt">local_path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/home/user/files/example.txt</span>
+<span class="w">    </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8000</span>
+
+<span class="c1"># Correct — webserv runs in the background:</span>
+<span class="nt">commands</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">webserv</span>
+<span class="w">    </span><span class="nt">local_path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/home/user/files/example.txt</span>
+<span class="w">    </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8000</span>
+<span class="w">    </span><span class="nt">background</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+</pre></div>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="commands/webserv.html#webserv"><span class="std std-ref">webserv</span></a> for the full list of available configuration fields.</p>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="msf-command-errors">
+<h2>Msf Command Errors<a class="headerlink" href="#msf-command-errors" title="Permalink to this heading"></a></h2>
+<section id="metasploit-rpc-server-unreachable">
+<span id="error-msf-connection-refused"></span><h3>Metasploit RPC Server Unreachable<a class="headerlink" href="#metasploit-rpc-server-unreachable" title="Permalink to this heading"></a></h3>
+<p><strong>Symptom</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>INFO    | Delay before commands: 0 seconds
+WARNING | Creating temporary file..
+ERROR   | HTTPSConnectionPool(host=&#39;127.0.0.1&#39;, port=55553): Max retries exceeded
+          with url: /api/ (Caused by NewConnectionError(&#39;Failed to establish a
+          new connection: [Errno 111] Connection refused&#39;))
+</pre></div>
+</div>
+<p><strong>Cause</strong></p>
+<p>AttackMate could not connect to the Metasploit RPC server (<code class="docutils literal notranslate"><span class="pre">msfrpcd</span></code>).
+The server is either not running, not listening on the configured port, or
+is blocked by a firewall.</p>
+<p><strong>Solution</strong></p>
+<ul class="simple">
+<li><p>Start the Metasploit RPC server before running the playbook. The default
+command to start it is:</p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>msfrpcd<span class="w"> </span>-P<span class="w"> </span>yourpassword<span class="w"> </span>-p<span class="w"> </span><span class="m">55553</span><span class="w"> </span>-S
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Verify that the <code class="docutils literal notranslate"><span class="pre">port</span></code> in your <code class="docutils literal notranslate"><span class="pre">msf_config</span></code> matches the port
+<code class="docutils literal notranslate"><span class="pre">msfrpcd</span></code> is listening on.</p></li>
+<li><p>Ensure no firewall rule is blocking the connection to the configured port.</p></li>
+</ul>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="commands/msf-module.html#msf-module"><span class="std std-ref">msf-module</span></a> and <a class="reference internal" href="../configuration/msf_config.html#msf-config"><span class="std std-ref">msf_config</span></a> for setup instructions and required
+configuration fields.</p>
 </div>
 </section>
 </section>
