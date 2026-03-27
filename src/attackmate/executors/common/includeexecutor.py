@@ -5,7 +5,7 @@ Execute commands from a yaml-file
 """
 
 import yaml
-from typing import Callable
+from typing import Callable, Awaitable
 from attackmate.executors.baseexecutor import BaseExecutor
 from attackmate.result import Result
 from attackmate.schemas.include import IncludeCommand
@@ -24,7 +24,7 @@ class IncludeExecutor(BaseExecutor):
         cmdconfig=None,
         *,
         varstore: VariableStore,
-        runfunc: Callable[[Commands], None],
+        runfunc: Callable[[Commands], Awaitable[None]],
     ):
         self.runfunc = runfunc
         super().__init__(pm, varstore, cmdconfig)
@@ -42,5 +42,5 @@ class IncludeExecutor(BaseExecutor):
 
     async def _exec_cmd(self, command: IncludeCommand) -> Result:
         playbook = self.load_file(command.local_path)
-        self.runfunc(playbook.commands)
+        await self.runfunc(playbook.commands)
         return Result('', 0)
