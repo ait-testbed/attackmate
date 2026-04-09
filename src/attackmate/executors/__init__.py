@@ -20,6 +20,7 @@ from .common.loopexecutor import LoopExecutor
 from .common.regexexecutor import RegExExecutor
 from .common.jsonexecutor import JsonExecutor
 from .remote.remoteexecutor import RemoteExecutor
+from .browser.browserexecutor import BrowserExecutor
 
 __all__ = [
     'RemoteExecutor'
