@@ -1,4 +1,4 @@
-from typing import Optional, Literal, List
+from typing import Optional, Literal, List, Dict
 from pydantic import ValidationInfo, field_validator
 from .base import BaseCommand, StringNumber
 from attackmate.command import CommandRegistry
@@ -22,6 +22,7 @@ class SSHBase(BaseCommand):
     session: Optional[str] = None
     clear_cache: bool = False
     timeout: float = 60
+    disabled_algorithms: Optional[Dict[str, List[str]]] = None
     jmp_hostname: Optional[str] = None
     jmp_port: StringNumber = None
     jmp_username: Optional[str] = None
