@@ -85,6 +85,33 @@ Connection
    :default: ``60``
    :required: False
 
+.. confval:: disabled_algorithms
+
+   Mapping of algorithm categories to lists of algorithm names that paramiko
+   should not offer during negotiation. Useful when connecting to legacy SSH
+   servers that reject newer algorithm variants.
+
+   :type: dict[str, list[str]]
+   :default: ``None``
+   :required: False
+
+   The most common use case is forcing plain ``ssh-rsa`` when the server
+   (e.g. OpenSSH 4.7) does not support the ``rsa-sha2-256`` / ``rsa-sha2-512``
+   variants that modern paramiko prefers:
+
+   .. code-block:: yaml
+
+      commands:
+        - type: ssh
+          cmd: id
+          hostname: $METASPLOITABLE2
+          username: root
+          key_filename: /tmp/backdoor_key
+          disabled_algorithms:
+            pubkeys:
+              - rsa-sha2-256
+              - rsa-sha2-512
+
 .. confval:: clear_cache
 
    Clear all cached connection settings before this command runs, allowing a fresh

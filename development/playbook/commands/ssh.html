@@ -305,6 +305,40 @@ that they only need to be defined once.</p>
 </dd></dl>
 
 <dl class="std confval">
+<dt class="sig sig-object std" id="confval-disabled_algorithms">
+<span class="sig-name descname"><span class="pre">disabled_algorithms</span></span><a class="headerlink" href="#confval-disabled_algorithms" title="Permalink to this definition"></a></dt>
+<dd><p>Mapping of algorithm categories to lists of algorithm names that paramiko
+should not offer during negotiation. Useful when connecting to legacy SSH
+servers that reject newer algorithm variants.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict[str, list[str]]</p>
+</dd>
+<dt class="field-even">Default<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+</dd>
+<dt class="field-odd">Required<span class="colon">:</span></dt>
+<dd class="field-odd"><p>False</p>
+</dd>
+</dl>
+<p>The most common use case is forcing plain <code class="docutils literal notranslate"><span class="pre">ssh-rsa</span></code> when the server
+(e.g. OpenSSH 4.7) does not support the <code class="docutils literal notranslate"><span class="pre">rsa-sha2-256</span></code> / <code class="docutils literal notranslate"><span class="pre">rsa-sha2-512</span></code>
+variants that modern paramiko prefers:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">commands</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ssh</span>
+<span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">id</span>
+<span class="w">    </span><span class="nt">hostname</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">$METASPLOITABLE2</span>
+<span class="w">    </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">root</span>
+<span class="w">    </span><span class="nt">key_filename</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/tmp/backdoor_key</span>
+<span class="w">    </span><span class="nt">disabled_algorithms</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">pubkeys</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rsa-sha2-256</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rsa-sha2-512</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="std confval">
 <dt class="sig sig-object std" id="confval-clear_cache">
 <span class="sig-name descname"><span class="pre">clear_cache</span></span><a class="headerlink" href="#confval-clear_cache" title="Permalink to this definition"></a></dt>
 <dd><p>Clear all cached connection settings before this command runs, allowing a fresh
