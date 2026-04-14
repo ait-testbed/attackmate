@@ -50,6 +50,7 @@ class HttpClientExecutor(BaseExecutor):
             content=self.load_content(command.local_path),
             follow_redirects=command.follow,
             data=command.data,
+            timeout=30,
         )
         return response
 
@@ -63,6 +64,7 @@ class HttpClientExecutor(BaseExecutor):
             data=command.data,
             follow_redirects=command.follow,
             verify=command.verify,
+            timeout=30,
         )
 
     def _exec_cmd(self, command: HttpClientCommand) -> Result:
