@@ -13,8 +13,8 @@
 #     3. Target a Metasploitable2-VM
 #
 vars:
-  METASPLOITABLE: "192.168.10.225"
-  ATTACKER: "172.17.0.127"
+  METASPLOITABLE: 192.168.0.146
+  ATTACKER: 192.168.0.29
   PAYLOAD: cmd/unix/reverse_perl
   LPORT: "4422"
 

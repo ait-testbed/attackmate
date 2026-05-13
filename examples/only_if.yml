@@ -14,7 +14,7 @@
 #
 vars:
   NMAP: /usr/bin/nmap
-  METASPLOITABLE: 172.17.0.106
+  METASPLOITABLE: 192.168.0.146
 
 commands:
   # Perform nmap scan

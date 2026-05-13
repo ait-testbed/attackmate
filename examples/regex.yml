@@ -51,7 +51,7 @@ commands:
     # MODE SUB
   - type: regex
     input: INPUT
-    replace: SUBSTITUTION
+    replace: "9219"
     cmd: tcp
     mode: sub
     output:

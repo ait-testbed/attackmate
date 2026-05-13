@@ -1,0 +1,10 @@
+vars:
+  METASPLOITABLE: 192.168.0.146
+  ATTACKER: 192.168.0.30
+commands:
+  - type: remote
+    cmd: execute_command
+    connection: primary_node
+    remote_command:
+      type: shell
+      cmd: hostname

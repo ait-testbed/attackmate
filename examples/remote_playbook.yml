@@ -1,0 +1,14 @@
+commands:
+  - type: remote
+    cmd: execute_playbook
+    playbook_path: examples/http-put_example.yml
+    #playbook_path: examples/include.yml
+    #playbook_path: examples/include.yml
+    #playbook_path: examples/includes
+    #playbook_path: examples/only_if.yml
+    #playbook_path: examples/regex.yml
+    #playbook_path: examples/remote_put.yml
+    #playbook_path: examples/ssh_example.yml
+    #playbook_path: examples/upgrade_to_meterpreter.yml
+    #playbook_path: examples/webdemo.yml
+    #playbook_path: examples/webserv.yml
