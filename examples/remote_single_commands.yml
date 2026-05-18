@@ -8,3 +8,5 @@ commands:
     remote_command:
       type: shell
       cmd: hostname
+    metadata:
+      description: "Execute the shellcommand 'hostname' on a remote attackmate instance"

@@ -20,6 +20,11 @@ commands:
   # Perform nmap scan
   - type: shell
     cmd: $NMAP -p 80 $METASPLOITABLE
+    metadata:
+      description: "Execute a portscan against the target"
+      techniques: "T1595,T1592.002"
+      tactics: "Reconnaissance"
+
 
   # Parse output of nmap-scan to
   # grep the port-number of the http service
@@ -28,13 +33,21 @@ commands:
     input: RESULT_STDOUT
     output:
       PORT: $MATCH_0
+    metadata:
+      description: "Parse the portnumber from the nmap output"
 
   # Print port for debugging purposes
   - type: debug
     cmd: $PORT
+    metadata:
+      description: "Print the portnumber"
 
   # Run nikto only if http-port is port 80
   - type: shell
     cmd: nikto -host $METASPLOITABLE -port $PORT
     only_if: $PORT == 80
     exit_on_error: False
+    metadata:
+      description: "If the port number is 80 then execute a webscan against that port"
+      techniques: "T1595.002"
+      tactics: "Reconnaissance"

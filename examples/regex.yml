@@ -11,6 +11,9 @@ commands:
   - type: setvar
     variable: $INPUT
     cmd: "6667/tcp open  irc UnrealIRCd"
+    metadata:
+      description: "Set a variable to demonstrate the parsing capabilities"
+
 
   # MODE FINDALL
   - type: regex
@@ -20,9 +23,13 @@ commands:
     output:
         # {'MATCH_0': '666'}
         FIRST_MATCH: "$MATCH_0"
+    metadata:
+      description: "Find the string '666' and save the result in the var 'FIRST_MATCH'"
 
   - type: debug
     cmd: "Match: $FIRST_MATCH"
+    metadata:
+      description: "Print the content of FIRST_MATCH"
 
   # MODE SPLIT
   - type: regex
@@ -32,9 +39,13 @@ commands:
     output:
         # {'MATCH_0': '6667/tcp', 'MATCH_1': 'open', 'MATCH_2': 'irc', 'MATCH_3': 'UnrealIRCd\n'}
         UNREALPORT: "$MATCH_0"
+    metadata:
+      description: "Split the content of the variable INPUT using whitespace as delimiter. Save the first match to the variable UNREALPORT"
 
   - type: debug
     cmd: "Port: $UNREALPORT"
+    metadata:
+      description: "Print the content of UNREALPORT"
 
   # MODE SEARCH
   - type: regex
@@ -44,9 +55,13 @@ commands:
     output:
         # {'MATCH_0': 'tcp'}
         SEARCH: "$MATCH_0"
+    metadata:
+      description: "Search for tcp in the content of the variable INPUT and save the first match to the variable SEARCH."
 
   - type: debug
     cmd: "Search Result: $SEARCH"
+    metadata:
+      description: "Print the content of SEARCH"
 
     # MODE SUB
   - type: regex
@@ -57,6 +72,10 @@ commands:
     output:
         # {'MATCH_0': '6667/SUBSTITUTION open  irc UnrealIRCd'}
         SUBSTITUTED: "$MATCH_0"
+    metadata:
+      description: "Search for the string 'tcp' in the content of the variable INPUT and replace it with 9219. Save the result in SUBSTITUTED"
 
   - type: debug
     cmd: "Result string: $SUBSTITUTED"
+    metadata:
+      description: "Print the content of SUBSTITUTED"
