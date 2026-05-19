@@ -125,5 +125,6 @@ commands:
     cmd: cat /etc/shadow
     session: root
     metadata:
+      description: "Read out password hashes"
       techniques: "T1003.008"
       tactics: "Credential Access"

