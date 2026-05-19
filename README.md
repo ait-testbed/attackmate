@@ -29,7 +29,26 @@ Using pip:
 $ pip3 install attackmate
 ```
 
+Using uv (recommended):
+
+```
+$ curl -LsSf https://astral.sh/uv/install.sh | sh
+$ git clone https://github.com/ait-testbed/attackmate.git
+$ cd attackmate
+$ uv venv
+$ uv build
+$ uv pip install .
+```
+
 ## Execute
+
+Using uv (recommended):
+
+```
+$ uv run attackmate playbook.yml
+```
+
+Otherwise:
 
 ```
 $ attackmate playbook.yml

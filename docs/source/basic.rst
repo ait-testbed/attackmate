@@ -61,6 +61,14 @@ First Run
 Now we can run the playbook using the following command:
 (We can supply the full path to the playbook, otherwise the parser tries to find it in the current working directory or in the folder /etc/attackmate/playbooks)
 
+If you installed AttackMate using ``uv`` (recommended), run:
+
+::
+
+  $ uv run attackmate --debug playbook.yml
+
+Otherwise, if you installed it manually or via pip, run:
+
 ::
 
   $ attackmate --debug playbook.yml

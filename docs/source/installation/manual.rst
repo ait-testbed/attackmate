@@ -37,6 +37,11 @@ Finally install attackmate and it's dependencies:
 
   $ pip3 install .
 
+.. note::
+
+   For a more modern installation approach, consider using ``uv`` package manager.
+   See :ref:`uv` for installation instructions using ``uv``.
+
 .. warning::
 
    Please note that you need to :ref:`sliver-fix` if you want
