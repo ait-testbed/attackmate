@@ -8,7 +8,7 @@
 
 # Requirements:
 #     1. One attackmate instance configured as api-server
-#     2. One attackmate instance configured as client
+#     2. The attackmate instance that executes this playbook must be configured as client
 #
 #     See:
 #     docs/source/configuration/remote_config.rst
