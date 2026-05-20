@@ -78,7 +78,7 @@ default connection is used when none is specified:
 .. confval:: cafile
    :noindex:
 
-   The path to a CA certificate file used to verify the remote server's TLS certificate. Strongly recommended when connecting over HTTPS.
+   The path to a CA certificate file used to verify the remote server's TLS certificate.
 
    :type: str
    :required: False
