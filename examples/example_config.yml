@@ -1,0 +1,45 @@
+#
+# Example AttackMate configuration file
+#
+# Pass this file to AttackMate with the --config flag:
+#   uv run attackmate --config example_config.yml playbook.yml
+#
+# change the values (usernames, passwords, conenctions) in this file to match your environment
+
+# Global defaults applied to all commands
+cmd_config:
+  loop_sleep: 5       # seconds to wait between loop iterations
+  command_delay: 0    # seconds to wait before each command
+
+# Connection to the Metasploit RPC daemon (msfrpcd)
+msf_config:
+  server: 127.0.0.1
+  port: 55553
+  ssl: true
+  password: securepassword # change this to your msf password
+
+# Connections to remote AttackMate API server instances
+# Each key is a user-defined name referenced by the `connection` field
+# in remote commands. The first entry is used as default when no
+# connection is specified.
+# The remote node must be running the AttackMate API Server:
+#   https://github.com/ait-testbed/attackmate-api-server
+remote_config:
+  attackmate-server:
+    url: https://192.168.1.10:8443 # change this to your remote adress and port
+    username: admin
+    password: secret
+    cafile: /path/to/ca.pem
+  another-attackmate-server:
+    url: https://10.0.0.5:8443 # change this to your remote adress and port
+    username: admin
+    password: anothersecret
+    cafile: /path/to/ca.pem
+
+# Connections to Bettercap REST API instances
+# The first entry is used as default when no connection is specified.
+bettercap_config:
+  default:
+    url: http://localhost:8081
+    username: user
+    password: password
