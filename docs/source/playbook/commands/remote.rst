@@ -92,6 +92,7 @@ Options
 =======
 
 .. confval:: cmd
+   :noindex:
 
    The operation to perform on the remote instance. One of:
 

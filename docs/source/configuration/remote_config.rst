@@ -52,29 +52,33 @@ default connection is used when none is specified:
       playbook_path: path/to/playbook.yml
 
 .. confval:: url
+   :noindex:
 
-The base URL of the remote AttackMate REST API.
+   The base URL of the remote AttackMate REST API.
 
-:type: str
-:required: True
+   :type: str
+   :required: True
 
 .. confval:: username
+   :noindex:
 
-The username for authentication with the remote AttackMate instance.
+   The username for authentication with the remote AttackMate instance.
 
-:type: str
-:required: False
+   :type: str
+   :required: False
 
 .. confval:: password
+   :noindex:
 
-The password for authentication with the remote AttackMate instance.
+   The password for authentication with the remote AttackMate instance.
 
-:type: str
-:required: False
+   :type: str
+   :required: False
 
 .. confval:: cafile
+   :noindex:
 
-The path to a CA certificate file used to verify the remote server's TLS certificate. Strongly recommended when connecting over HTTPS.
+   The path to a CA certificate file used to verify the remote server's TLS certificate. Strongly recommended when connecting over HTTPS.
 
-:type: str
-:required: False
+   :type: str
+   :required: False
