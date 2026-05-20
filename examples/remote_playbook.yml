@@ -12,3 +12,5 @@ commands:
     #playbook_path: examples/upgrade_to_meterpreter.yml
     #playbook_path: examples/webdemo.yml
     #playbook_path: examples/webserv.yml
+    metadata:
+      description: "Execute a playbook on a remote attackmate instance"

