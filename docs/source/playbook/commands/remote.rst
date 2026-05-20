@@ -47,11 +47,15 @@ The two operation modes have different state semantics on the remote instance.
    itself). Variables set during a previous ``execute_playbook`` call are not available
    in subsequent runs.
 
+.. image:: /images/remote_attackmate-execute_playbook.drawio.png
+
 **execute_command**
    The remote instance maintains a persistent variable store across separate
    ``execute_command`` calls within the same connection. Variables set or captured
    by earlier commands are therefore available to later commands dispatched to the
    same remote.
+
+.. image:: /images/remote_attackmate-execute_command.drawio.png
 
 Commands
 ========
