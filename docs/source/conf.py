@@ -12,8 +12,8 @@ sys.path.insert(0, os.path.abspath('../../src'))
 
 project = 'AttackMate'
 copyright = '2023, Wolfgang Hotwagner'
-author = 'Wolfgang Hotwagner'
-release = '0.6.0'
+author = 'Wolfgang Hotwagner, Thorina Boenke, Erik Grafendorfer, Anna Erdi'
+release = '1.0.0'
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
