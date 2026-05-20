@@ -6,6 +6,13 @@ remote_config
 
 ``remote_config`` defines connections to remote AttackMate instances. This allows one AttackMate instance to act as a controller, dispatching playbooks or commands to remote nodes.
 
+.. note::
+
+   The remote node must be running the `AttackMate API Server <https://github.com/ait-testbed/attackmate-api-server>`_.
+   Refer to its README for installation and setup instructions.
+   The `AttackMate Ansible role <https://github.com/ait-testbed/attackmate-ansible>`_ also supports
+   deploying AttackMate as an API server via a role variable.
+
 Each connection is identified by a user-defined name that can be referenced in playbook
 commands via the ``connection`` field. If no connection is specified, the first entry in
 the configuration is used as the default.
