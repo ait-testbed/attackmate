@@ -4,7 +4,12 @@
 # Pass this file to AttackMate with the --config flag:
 #   uv run attackmate --config example_config.yml playbook.yml
 #
-# change the values (usernames, passwords, conenctions) in this file to match your environment
+# If the --config flag is not provided, AttackMate will look for a configuration file in the following locations, in order:
+# **.attackmate.yml**
+# **$HOME/.config/attackmate.yml**
+# **/etc/attackmate.yml**
+#
+# change the values (usernames, passwords, connections) in this file to match your environment
 
 # Global defaults applied to all commands
 cmd_config:
@@ -25,12 +30,12 @@ msf_config:
 # The remote node must be running the AttackMate API Server:
 #   https://github.com/ait-testbed/attackmate-api-server
 remote_config:
-  attackmate-server:
+  attackmate-server: # this name is referenced by the `connection` field in remote commands
     url: https://192.168.1.10:8443 # change this to your remote adress and port
     username: admin
     password: secret
     cafile: /path/to/ca.pem
-  another-attackmate-server:
+  another-attackmate-server: # this name is referenced by the `connection` field in remote commands
     url: https://10.0.0.5:8443 # change this to your remote adress and port
     username: admin
     password: anothersecret
