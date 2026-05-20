@@ -3,19 +3,17 @@ remote
 ======
 
 Execute playbooks or commands on a remote AttackMate instance.
+
+.. note::
+
+   The remote node must be running the `AttackMate API Server <https://github.com/ait-testbed/attackmate-api-server>`_.
+   Refer to its README for installation and setup instructions.
+   The `AttackMate Ansible role <https://github.com/ait-testbed/attackmate-ansible>`_ also supports
+   deploying AttackMate as an API server via a role variable.
+
 Remote connections are defined in the ``remote_config`` section of the configuration file.
 If no ``connection`` is specified, the first entry in the ``remote_config`` section is used as default.
 
-.. warning::
-
-   Options such as ``background`` and ``only_if`` defined on the ``remote`` command apply
-   to the **local** execution context, not to the command or playbook running on the remote
-   instance.
-
-Configuration
-=============
-
-Remote connections are defined under the ``remote_config`` key in the AttackMate configuration file.
 Each entry requires at minimum a ``url`` a ``username``, ``password``, and ``cafile``
 for TLS certificate verification.
 
@@ -27,6 +25,37 @@ for TLS certificate verification.
        username: admin
        password: secret
        cafile: /path/to/ca.pem
+
+.. seealso::
+
+   :ref:`remote_config`  for full reference for configuring remote connections
+
+.. warning::
+
+   Options such as ``background`` and ``only_if`` defined on the ``remote`` command apply
+   to the **local** execution context, not to the command or playbook running on the remote
+   instance.
+
+Context and State
+=================
+
+The two operation modes have different state semantics on the remote instance.
+
+**execute_playbook**
+   Each call starts a completely fresh execution on the remote. The remote server initializes a new
+   AttackMate instance and a new, empty variable store (beyond any ``vars`` defined in the playbook
+   itself). Variables set during a previous ``execute_playbook`` call are not available
+   in subsequent runs.
+
+.. image:: /images/remote_attackmate-execute_playbook.drawio.png
+
+**execute_command**
+   The remote instance maintains a persistent variable store across separate
+   ``execute_command`` calls within the same connection. Variables set or captured
+   by earlier commands are therefore available to later commands dispatched to the
+   same remote.
+
+.. image:: /images/remote_attackmate-execute_command.drawio.png
 
 Commands
 ========
@@ -63,6 +92,7 @@ Options
 =======
 
 .. confval:: cmd
+   :noindex:
 
    The operation to perform on the remote instance. One of:
 
