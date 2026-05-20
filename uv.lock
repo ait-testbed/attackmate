@@ -151,7 +151,7 @@ dev = [
 [[package]]
 name = "attackmate-client"
 version = "0.1.0"
-source = { git = "https://github.com/ait-testbed/attackmate-client.git#b2f52f5b40fbdf2472ab7c944ba0383134f25313" }
+source = { git = "https://github.com/ait-testbed/attackmate-client.git#9e07272a1b53e2c4f78fb951e1aa0f99646a141d" }
 dependencies = [
     { name = "httpx" },
     { name = "pydantic" },
