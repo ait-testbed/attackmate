@@ -53,7 +53,6 @@ For detailed information about each config section see:
 .. toctree::
    :maxdepth: 4
 
-   config_vars
    command_config
    bettercap_config
    msf_config
