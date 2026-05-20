@@ -3,7 +3,7 @@ Examples
 ========
 
 The following example playbooks require an installed `Metasploitable2 <https://docs.rapid7.com/metasploit/metasploitable-2/>`_ virtual machine and
-a `Kali Linux <https://www.kali.org/>`_ with some packages installed:
+a `Kali Linux <https://www.kali.org/>`_ with the following packages installed:
 
 * AttackMate
 * NMap

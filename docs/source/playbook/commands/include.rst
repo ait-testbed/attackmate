@@ -1,8 +1,14 @@
+.. _include:
+
 =======
 include
 =======
 
 Include and run commands from another yaml-file.
+
+.. note::
+
+   Background mode is not supported for this commands.
 
 .. code-block:: yaml
 
@@ -27,7 +33,7 @@ Include and run commands from another yaml-file.
 
 .. confval:: local_path
 
-   Path to the yaml-file
+   Path to the yaml file.
 
    :type: str
-   :required: ``True``
+   :required: True

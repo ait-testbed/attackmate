@@ -1,8 +1,10 @@
 from typing import Optional, Literal
 from .base import BaseCommand, StringNumber
 from pydantic import model_validator
+from attackmate.command import CommandRegistry
 
 
+@CommandRegistry.register('vnc')
 class VncCommand(BaseCommand):
 
     type: Literal['vnc']
@@ -23,12 +25,12 @@ class VncCommand(BaseCommand):
     connection_timeout: Optional[int] = 60
 
     @model_validator(mode='after')
-    def check_cmd_requirements(cls, values):
-        cmd = values.cmd
+    def check_cmd_requirements(self) -> 'VncCommand':
+        cmd = self.cmd
 
-        if values.background:
+        if self.background:
             raise ValueError('background mode is unsupported for VNC')
-        if values.creates_session is not None and values.session is not None:
+        if self.creates_session is not None and self.session is not None:
             raise ValueError('Cannot specify both "creates_session" and "session" at the same time.')
 
         required_fields = {
@@ -40,8 +42,8 @@ class VncCommand(BaseCommand):
         }
 
         if cmd in required_fields:
-            missing_fields = [field for field in required_fields[cmd] if getattr(values, field, None) is None]
+            missing_fields = [field for field in required_fields[cmd] if getattr(self, field, None) is None]
             if missing_fields:
                 raise ValueError(f'Command "{cmd}" requires {", ".join(missing_fields)} field(s).')
 
-        return values
+        return self

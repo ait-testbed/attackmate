@@ -4,17 +4,29 @@
 Prepare Sliver
 ==============
 
-`Sliver <https://github.com/BishopFox/sliver>`_ is a Post-Exploitation framework with implants for Linux, Windows and MacOs.
-In order to use the sliver-commands in AttackMate, a sliver installation is required.
-Sliver offers an API on port ``31337`` which is used by AttackMate to interact with it.
-Follow the `Instructions offered by BishopFox <https://github.com/BishopFox/sliver>`_
-to install the Sliver Framework. The simplest method is a curl oneliner:
+`Sliver <https://github.com/BishopFox/sliver>`_ is a post-exploitation framework with
+implants for Linux, Windows, and macOS. AttackMate communicates with Sliver via its API
+on port ``31337``.
+
+Installation
+------------
+
+Follow the `installation instructions by BishopFox <https://github.com/BishopFox/sliver>`_
+to set up the Sliver framework. The quickest method is:
 
 ::
 
-  $ curl https://sliver.sh/install|sudo bash
+  $ curl https://sliver.sh/install | sudo bash
 
-Sliver will create an operator named "root" and save the configs under ``/root/.sliver-client/configs``
-which can be used by AttackMate.
+After installation, Sliver creates an operator named ``root`` and stores its configuration
+under ``/root/.sliver-client/configs``, which AttackMate uses to connect.
 
-attackm8 only works if daemon-mode is enabled: ``"daemon-mode": "true"`` in the sliver-server under ``.sliver/configs/server.json``
+Configuration
+-------------
+
+AttackMate requires Sliver to run in daemon mode. Ensure the following is set in
+``.sliver/configs/server.json``:
+
+::
+
+  "daemon-mode": "true"

@@ -2,11 +2,15 @@
 regex
 =====
 
-This command parses variables using regular expressions. For more information
-about regular expressions see `Python Regex  <https://docs.python.org/3/library/re.html>`_
-This command does not modify the Builtin Variable ``RESULT_STDOUT``.
+Parse and transform variables using regular expressions. For more information
+about regular expressions and regex syntax see `Python Regex  <https://docs.python.org/3/library/re.html>`_.
 
-The following example parses the portnumber from the output of the last command and stores it in variable "UNREALPORT":
+.. note::
+
+   This command does not modify ``RESULT_STDOUT``.
+
+
+The following example extracts a port number from the output of a shell command and stores it in the variable ``UNREALPORT``:
 
 .. code-block:: yaml
 
@@ -23,7 +27,7 @@ The following example parses the portnumber from the output of the last command 
        cmd: "Port: $UNREALPORT"
 
 
-By using the mode "split", strings that are seperated by whitespaces can be tokenized:
+Using ``mode: split``, a string can be tokenized by a delimiter, in this case, whitespace ``"\ +"``:
 
 .. code-block:: yaml
 
@@ -41,19 +45,33 @@ By using the mode "split", strings that are seperated by whitespaces can be toke
      - type: debug
        cmd: "Port: $UNREALPORT"
 
-.. confval:: mode
+.. confval:: cmd
 
-   Specifies the python regex-function. One of: ``search``, ``split``, ``sub`` or ``findall``.
+   The regular expression pattern to apply.
 
    :type: str
-   :default: ``findall``
+   :required: True
+
+.. confval:: mode
+
+  The Python regex function to use. One of:
+
+   * ``findall`` - find all non-overlapping matches
+   * ``search`` - find the first match anywhere in the string
+   * ``split`` - split the string by occurrences of the pattern
+   * ``sub`` - replace occurrences of the pattern with :confval:`replace`
+
+  :type: str
+  :default: ``findall``
+  :required: False
 
 .. confval:: replace
 
-   This variable must be set for sub mode. It holds the replacement-string for the substitution.
+  This variable must be set for ``mode: sub``. It holds the replacement-string for the substitution.
 
-   :type: str
-   :default: ``None``
+  :type: str
+  :default: ``None``
+  :required: when ``mode: sub``
 
    .. code-block:: yaml
 
@@ -76,27 +94,30 @@ By using the mode "split", strings that are seperated by whitespaces can be toke
 
 .. confval:: input
 
-   Parse the value of this variable.
+   Name of the variable whose value will be used as the regex input
+   (without the leading ``$``).
 
    :type: str
    :default: ``RESULT_STDOUT``
+   :required: False
 
 .. confval:: output
 
-   Defines where to store the results of the regular expression. This
-   must be a list of key-value pairs("variable-name": "$MATCH"). The matches
-   of the regular expressions are stored in temporary variables $MATCH. If the
-   match is stored in a list or in a list of tuples the variablename will be
-   numbered by the index. For example: "$MATCH_0_0" for the first element in the
-   first occurance. The first match (even if there is only one) is indexed MATCH_0.
-   If the regex-command does not match, no output variable will be set!
-   Note that if sub() or split() do not have a match the input string is returned.
-   Additionally, ``REGEX_MATCHES_LIST`` is set every time a regex command yields matches and it contains a list of all matches.
+   Mapping of variable names to match references (e.g. ``MYVAR: $MATCH_0``).
+
+   :type: dict[str,str]
+   :required: True
+
+   Matches are indexed as ``$MATCH_0``, ``$MATCH_1``, etc. For nested results
+   (lists of tuples), matches are indexed as ``$MATCH_0_0``, ``$MATCH_0_1``, etc.
+
+   If the pattern does not match, no output variables are set. If ``sub`` or
+   ``split`` find no match, the original input string is returned.
+
+   The :ref:`builtin variables <builtin-variables>` ``REGEX_MATCHES_LIST`` is also populated with a list of
+   all matches whenever the command produces results.
 
 
    .. note::
 
-       A dump containing all matches will be printed if attackmate runs in debug-mode.
-
-   :type: dict[str,str]
-   :required: True
+       Running AttackMate in debug mode (--debug) prints a full dump of all matches.

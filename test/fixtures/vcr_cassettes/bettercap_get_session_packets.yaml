@@ -1,0 +1,52 @@
+interactions:
+- request:
+    body: '{}'
+    headers:
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      authorization:
+      - Basic dXNlcjpwYXNz
+      connection:
+      - keep-alive
+      content-length:
+      - '2'
+      content-type:
+      - application/json
+      host:
+      - 127.0.0.1:8081
+      user-agent:
+      - AttackMate
+    method: GET
+    uri: http://127.0.0.1:8081/api/session/packets
+  response:
+    body:
+      string: '{"stats":{"sent":0,"received":7380340,"pkts_received":58953,"errors":0},"protos":{"ARP":6,"Ethernet":58953,"ICMPv6":1,"ICMPv6RouterSolicitation":1,"IPv4":58946,"IPv6":1,"TCP":58946},"traffic":{"192.168.233.1":{"sent":2840721,"received":4539189}}}
+
+        '
+    headers:
+      Access-Control-Allow-Headers:
+      - Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization
+      Access-Control-Allow-Methods:
+      - POST, GET, OPTIONS, PUT, DELETE
+      Access-Control-Allow-Origin:
+      - '*'
+      Content-Length:
+      - '247'
+      Content-Type:
+      - application/json
+      Date:
+      - Mon, 25 Aug 2025 16:11:08 GMT
+      Referrer-Policy:
+      - same-origin
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - DENY
+      X-Xss-Protection:
+      - 1; mode=block
+    status:
+      code: 200
+      message: OK
+version: 1

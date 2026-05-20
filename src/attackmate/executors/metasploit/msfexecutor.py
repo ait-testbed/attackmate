@@ -10,6 +10,7 @@ from attackmate.schemas.base import BaseCommand
 from attackmate.schemas.metasploit import MsfModuleCommand
 from attackmate.executors.metasploit.msfsessionstore import MsfSessionStore
 from attackmate.processmanager import ProcessManager
+from multiprocessing.managers import BaseManager
 from multiprocessing import Manager
 from multiprocessing.queues import JoinableQueue
 from attackmate.executors.executor_factory import executor_factory
@@ -29,6 +30,7 @@ class MsfModuleExecutor(BaseExecutor):
         self.msfconfig = msfconfig
         self.sessionstore = msfsessionstore
         self.msf = None
+        self.manager: Optional[BaseManager] = None
         super().__init__(pm, varstore, cmdconfig)
 
     def _create_queue(self) -> Optional[JoinableQueue]:
@@ -88,6 +90,7 @@ class MsfModuleExecutor(BaseExecutor):
             for option, setting in command.options.items():
                 if setting.isnumeric():
                     exploit[option] = int(setting)
+                    continue
                 if setting.lower() in ['true', 'false', '1', '0', 'y', 'n', 'yes', 'no']:
                     exploit[option] = CmdVars.variable_to_bool(option, setting)
                 else:
@@ -106,7 +109,7 @@ class MsfModuleExecutor(BaseExecutor):
         exploit.target = CmdVars.variable_to_int('target', command.target)
         return exploit
 
-    def _exec_cmd(self, command: MsfModuleCommand) -> Result:
+    async def _exec_cmd(self, command: MsfModuleCommand) -> Result:
         if self.msf is None:
             raise ExecException('ConnectionError')
 
@@ -139,12 +142,10 @@ class MsfModuleExecutor(BaseExecutor):
             if active_sessions:
                 for session_id, session_data in active_sessions.items():
                     try:
-                        self.logger.debug(f"Stopping msf session {session_id}")
+                        self.logger.debug(f'Stopping msf session {session_id}')
                         self.msf.sessions.session(session_id).stop()
-                        self.logger.info(f"Msf session {session_id} stopped successfully.")
+                        self.logger.info(f'Msf session {session_id} stopped successfully.')
                     except Exception as e:
-                        self.logger.error(f"Failed to stop msf session {session_id}: {str(e)}")
+                        self.logger.error(f'Failed to stop msf session {session_id}: {str(e)}')
             else:
-                self.logger.debug("No active msf sessions found.")
-
-#msf.session returs shell manager
+                self.logger.debug('No active msf sessions found.')

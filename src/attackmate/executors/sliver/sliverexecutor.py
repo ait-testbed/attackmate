@@ -4,7 +4,6 @@ sliverexecutor.py
 Execute Sliver Commands
 """
 
-import asyncio
 import os
 import tempfile
 from typing import Any, Optional
@@ -136,23 +135,47 @@ class SliverExecutor(BaseExecutor):
         self.logger.debug(f'Saved {implant.File.Name} to {implant_path}')
         self.result.returncode = 0
 
+    async def cleanup(self):
+        """
+        Cleans up listeners (jobs), sessions, and beacons to release ports and resources.
+        """
+        if not self.client:
+            return
+        try:
+            if not self.client.is_connected:
+                await self.client.connect()
+            # 1. Kill Jobs (releases ports)
+            jobs = await self.client.jobs()
+            for job in jobs:
+                self.logger.debug(f'Killing sliver job {job}')
+                await self.client.kill_job(job.ID)
+            # 2. Kill Sessions
+            sessions = await self.client.sessions()
+            for session in sessions:
+                self.logger.debug(f'Killing sliver session {session.ID}')
+                await self.client.kill_session(session.ID)
+            # 3. Kill Beacons
+            beacons = await self.client.beacons()
+            for beacon in beacons:
+                self.logger.debug(f'Killing sliver beacon {beacon.ID}')
+                await self.client.kill_beacon(beacon.ID)
+        except Exception as e:
+            self.logger.error(f'Error during SliverExecutor cleanup: {e}')
+
     def log_command(self, command: BaseCommand):
         self.logger.info(f"Executing Sliver-command: '{command.cmd}'")
-        loop = asyncio.get_event_loop()
-        coro = self.connect()
-        loop.run_until_complete(coro)
 
-    def _exec_cmd(self, command: BaseCommand) -> Result:
-        loop = asyncio.get_event_loop()
-
-        if command.cmd == 'start_https_listener' and isinstance(command, SliverHttpsListenerCommand):
-            coro = self.start_https_listener(command)
-        elif command.cmd == 'generate_implant' and isinstance(command, SliverGenerateCommand):
-            coro = self.generate_implant(command)
-        else:
-            raise ExecException('Sliver Command unknown or faulty Command-config')
+    async def _exec_cmd(self, command: BaseCommand) -> Result:
+        await self.connect()
         try:
-            loop.run_until_complete(coro)
+            if command.cmd == 'start_https_listener' and isinstance(command, SliverHttpsListenerCommand):
+                await self.start_https_listener(command)
+            elif command.cmd == 'generate_implant' and isinstance(command, SliverGenerateCommand):
+                await self.generate_implant(command)
+            else:
+                raise ExecException('Sliver Command unknown or faulty Command-config')
+
         except Exception as e:
-            raise ExecException(e)
+            self.logger.error(f'Sliver execution failed: {e}')
+            raise ExecException(str(e))
         return self.result

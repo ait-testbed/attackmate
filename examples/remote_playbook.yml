@@ -1,0 +1,31 @@
+# Authors: Erik Grafendorfer
+# Description:
+#   This playbook reads a whole local playbook and runs it on a remote attackmate-api-server.  
+#   In the playbooks you will have to configure the Attacker IP as the attackmate-api-server IP.
+#
+#   See:
+#   docs/source/playbook/commands/remote.rst
+
+# Requirements:
+#     1. One attackmate instance configured as api-server
+#     2. The attackmate instance that executes this playbook must be configured as client
+#
+#     See:
+#     docs/source/configuration/remote_config.rst
+#     
+commands:
+  - type: remote
+    cmd: execute_playbook
+    playbook_path: examples/http-put_example.yml
+    #playbook_path: examples/include.yml
+    #playbook_path: examples/include.yml
+    #playbook_path: examples/includes
+    #playbook_path: examples/only_if.yml
+    #playbook_path: examples/regex.yml
+    #playbook_path: examples/remote_put.yml
+    #playbook_path: examples/ssh_example.yml
+    #playbook_path: examples/upgrade_to_meterpreter.yml
+    #playbook_path: examples/webdemo.yml
+    #playbook_path: examples/webserv.yml
+    metadata:
+      description: "Execute a playbook on a remote attackmate instance"

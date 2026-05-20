@@ -1,0 +1,52 @@
+interactions:
+- request:
+    body: ''
+    headers:
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      authorization:
+      - Basic dXNlcjpwYXNz
+      connection:
+      - keep-alive
+      content-length:
+      - '0'
+      host:
+      - 127.0.0.1:8081
+      user-agent:
+      - AttackMate
+    method: POST
+    uri: http://127.0.0.1:8081/api/session
+  response:
+    body:
+      string: 'Bad Request
+
+        {"success":true,"msg":""}
+
+        '
+    headers:
+      Access-Control-Allow-Headers:
+      - Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization
+      Access-Control-Allow-Methods:
+      - POST, GET, OPTIONS, PUT, DELETE
+      Access-Control-Allow-Origin:
+      - '*'
+      Content-Length:
+      - '38'
+      Content-Type:
+      - text/plain; charset=utf-8
+      Date:
+      - Wed, 03 Dec 2025 14:43:34 GMT
+      Referrer-Policy:
+      - same-origin
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - DENY
+      X-Xss-Protection:
+      - 1; mode=block
+    status:
+      code: 400
+      message: Bad Request
+version: 1

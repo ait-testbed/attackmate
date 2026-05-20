@@ -78,7 +78,7 @@ class MsfPayloadExecutor(BaseExecutor):
             payload_path = tmpfile.name
         return payload_path
 
-    def _exec_cmd(self, command: MsfPayloadCommand) -> Result:
+    async def _exec_cmd(self, command: MsfPayloadCommand) -> Result:
         payload = self.prepare_payload(command)
         try:
             data = payload.payload_generate()

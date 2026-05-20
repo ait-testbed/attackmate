@@ -62,7 +62,7 @@ class FatherExecutor(BaseExecutor):
     def log_command(self, command: FatherCommand):
         self.logger.info('Generating Father-Binary')
 
-    def _exec_cmd(self, command: FatherCommand) -> Result:
+    async def _exec_cmd(self, command: FatherCommand) -> Result:
         if platform.system() != 'Linux':
             return Result('Compiling Father only works for Linux!', 1)
 

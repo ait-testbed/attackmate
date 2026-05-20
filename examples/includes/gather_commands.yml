@@ -3,23 +3,43 @@ commands:
     cmd: post/linux/gather/checkvm
     options:
       SESSION: $GATHER_SESSION
+    metadata:
+      description: "Check if systems runs in a vm"
+      techniques: "T1497.001"
+      tactics: "Discovery"
 
   - type: msf-module
     cmd: post/linux/gather/checkcontainer
     options:
       SESSION: $GATHER_SESSION
+    metadata:
+      description: "Check if systems runs in a container"
+      techniques: "T1613"
+      tactics: "Discovery"
 
   - type: msf-module
     cmd: post/linux/gather/enum_network
     options:
       SESSION: $GATHER_SESSION
+    metadata:
+      description: "Gather linux network information"
+      techniques: "T1016"
+      tactics: "Discovery"
 
   - type: msf-module
     cmd: post/linux/gather/enum_users_history
     options:
       SESSION: $GATHER_SESSION
+    metadata:
+      description: "Gather user history from various files"
+      techniques: "T1087,T1552.003"
+      tactics: "Discovery,Credential Access"
 
   - type: msf-module
     cmd: post/linux/gather/enum_protections
     options:
       SESSION: $GATHER_SESSION
+    metadata:
+      description: "Gather information about various protection systems"
+      techniques: "T1082,T1518"
+      tactics: "Discovery"

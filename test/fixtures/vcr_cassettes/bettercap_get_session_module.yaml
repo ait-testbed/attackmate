@@ -1,0 +1,587 @@
+interactions:
+- request:
+    body: '{}'
+    headers:
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      authorization:
+      - Basic dXNlcjpwYXNz
+      connection:
+      - keep-alive
+      content-length:
+      - '2'
+      content-type:
+      - application/json
+      host:
+      - 127.0.0.1:8081
+      user-agent:
+      - AttackMate
+    method: GET
+    uri: http://127.0.0.1:8081/api/session/modules
+  response:
+    body:
+      string: '[{"name":"any.proxy","description":"A firewall redirection to any custom
+        proxy.","author":"Simone Margaritelli \u003cevilsocket@gmail.com\u003e","parameters":{"any.proxy.dst_address":{"name":"any.proxy.dst_address","type":0,"description":"Address
+        where the proxy is listening.","default_value":"\u003cinterface address\u003e","current_value":"192.168.233.117","validator":""},"any.proxy.dst_port":{"name":"any.proxy.dst_port","type":2,"description":"Port
+        where the proxy is listening.","default_value":"8080","current_value":"8080","validator":"^[\\-\\+]?[\\d]+$"},"any.proxy.iface":{"name":"any.proxy.iface","type":0,"description":"Interface
+        to redirect packets from.","default_value":"\u003cinterface name\u003e","current_value":"enp0s3","validator":""},"any.proxy.protocol":{"name":"any.proxy.protocol","type":0,"description":"Proxy
+        protocol.","default_value":"TCP","current_value":"TCP","validator":"(TCP|UDP)"},"any.proxy.src_address":{"name":"any.proxy.src_address","type":0,"description":"Leave
+        empty to intercept any source address.","default_value":"","current_value":"","validator":""},"any.proxy.src_port":{"name":"any.proxy.src_port","type":0,"description":"Remote
+        port to redirect when the module is activated, also supported a comma separated
+        list of ports and/or port-ranges.","default_value":"80","current_value":"80","validator":""}},"handlers":[{"name":"any.proxy
+        on","description":"Start the custom proxy redirection.","parser":""},{"name":"any.proxy
+        off","description":"Stop the custom proxy redirection.","parser":""}],"running":false,"state":{}},{"name":"api.rest","description":"Expose
+        a RESTful API.","author":"Simone Margaritelli \u003cevilsocket@gmail.com\u003e","parameters":{"api.rest.address":{"name":"api.rest.address","type":0,"description":"Address
+        to bind the API REST server to.","default_value":"127.0.0.1","current_value":"127.0.0.1","validator":"^(?:[0-9]{1,3}\\.){3}[0-9]{1,3}$"},"api.rest.alloworigin":{"name":"api.rest.alloworigin","type":0,"description":"Value
+        of the Access-Control-Allow-Origin header of the API server.","default_value":"*","current_value":"*","validator":""},"api.rest.certificate":{"name":"api.rest.certificate","type":0,"description":"API
+        TLS certificate.","default_value":"","current_value":"","validator":""},"api.rest.certificate.bits":{"name":"api.rest.certificate.bits","type":2,"description":"Number
+        of bits of the RSA private key of the generated HTTPS certificate.","default_value":"4096","current_value":"4096","validator":"^[\\-\\+]?[\\d]+$"},"api.rest.certificate.commonname":{"name":"api.rest.certificate.commonname","type":0,"description":"Common
+        Name field of the generated HTTPS certificate.","default_value":"bettercap","current_value":"bettercap","validator":".*"},"api.rest.certificate.country":{"name":"api.rest.certificate.country","type":0,"description":"Country
+        field of the generated HTTPS certificate.","default_value":"US","current_value":"US","validator":".*"},"api.rest.certificate.locality":{"name":"api.rest.certificate.locality","type":0,"description":"Locality
+        field of the generated HTTPS certificate.","default_value":"","current_value":"","validator":".*"},"api.rest.certificate.organization":{"name":"api.rest.certificate.organization","type":0,"description":"Organization
+        field of the generated HTTPS certificate.","default_value":"bettercap devteam","current_value":"bettercap
+        devteam","validator":".*"},"api.rest.certificate.organizationalunit":{"name":"api.rest.certificate.organizationalunit","type":0,"description":"Organizational
+        Unit field of the generated HTTPS certificate.","default_value":"https://bettercap.org/","current_value":"https://bettercap.org/","validator":".*"},"api.rest.key":{"name":"api.rest.key","type":0,"description":"API
+        TLS key","default_value":"","current_value":"","validator":""},"api.rest.password":{"name":"api.rest.password","type":0,"description":"API
+        authentication password.","default_value":"pass","current_value":"pass","validator":""},"api.rest.port":{"name":"api.rest.port","type":2,"description":"Port
+        to bind the API REST server to.","default_value":"8081","current_value":"8081","validator":"^[\\-\\+]?[\\d]+$"},"api.rest.record.clock":{"name":"api.rest.record.clock","type":2,"description":"Number
+        of seconds to wait while recording with api.rest.record between one sample
+        and the next one.","default_value":"1","current_value":"1","validator":"^[\\-\\+]?[\\d]+$"},"api.rest.username":{"name":"api.rest.username","type":0,"description":"API
+        authentication username.","default_value":"user","current_value":"user","validator":""},"api.rest.websocket":{"name":"api.rest.websocket","type":1,"description":"If
+        true the /api/events route will be available as a websocket endpoint instead
+        of HTTPS.","default_value":"false","current_value":"false","validator":"^(true|false)$"}},"handlers":[{"name":"api.rest
+        on","description":"Start REST API server.","parser":""},{"name":"api.rest
+        off","description":"Stop REST API server.","parser":""},{"name":"api.rest.record
+        off","description":"Stop recording the session.","parser":""},{"name":"api.rest.record
+        FILENAME","description":"Start polling the rest API periodically recording
+        each sample in a compressed file that can be later replayed.","parser":"api\\.rest\\.record
+        (.+)"},{"name":"api.rest.replay off","description":"Stop replaying the recorded
+        session.","parser":""},{"name":"api.rest.replay FILENAME","description":"Start
+        the rest API module in replay mode using FILENAME as the recorded session
+        file, will revert to normal mode once the replay is over.","parser":"api\\.rest\\.replay
+        (.+)"}],"running":true,"state":{"load_progress":0,"loading":false,"rec_clock":1,"rec_cur_frame":0,"rec_filename":"","rec_frames":0,"rec_started":"0001-01-01T00:00:00Z","rec_stopped":"0001-01-01T00:00:00Z","rec_time":0,"recording":false,"replaying":false}},{"name":"arp.spoof","description":"Keep
+        spoofing selected hosts on the network.","author":"Simone Margaritelli \u003cevilsocket@gmail.com\u003e","parameters":{"arp.spoof.fullduplex":{"name":"arp.spoof.fullduplex","type":1,"description":"If
+        true, both the targets and the gateway will be attacked, otherwise only the
+        target (if the router has ARP spoofing protections in place this will make
+        the attack fail).","default_value":"false","current_value":"false","validator":"^(true|false)$"},"arp.spoof.internal":{"name":"arp.spoof.internal","type":1,"description":"If
+        true, local connections among computers of the network will be spoofed, otherwise
+        only connections going to and coming from the external network.","default_value":"false","current_value":"false","validator":"^(true|false)$"},"arp.spoof.skip_restore":{"name":"arp.spoof.skip_restore","type":1,"description":"If
+        set to true, targets arp cache won''t be restored when spoofing is stopped.","default_value":"false","current_value":"false","validator":"^(true|false)$"},"arp.spoof.targets":{"name":"arp.spoof.targets","type":0,"description":"Comma
+        separated list of IP addresses, MAC addresses or aliases to spoof, also supports
+        nmap style IP ranges.","default_value":"\u003centire subnet\u003e","current_value":"192.168.233.0/24","validator":""},"arp.spoof.whitelist":{"name":"arp.spoof.whitelist","type":0,"description":"Comma
+        separated list of IP addresses, MAC addresses or aliases to skip while spoofing.","default_value":"","current_value":"","validator":""}},"handlers":[{"name":"arp.spoof
+        on","description":"Start ARP spoofer.","parser":""},{"name":"arp.ban on","description":"Start
+        ARP spoofer in ban mode, meaning the target(s) connectivity will not work.","parser":""},{"name":"arp.spoof
+        off","description":"Stop ARP spoofer.","parser":""},{"name":"arp.ban off","description":"Stop
+        ARP spoofer.","parser":""}],"running":false,"state":{}},{"name":"ble.recon","description":"Bluetooth
+        Low Energy devices discovery.","author":"Simone Margaritelli \u003cevilsocket@gmail.com\u003e","parameters":{"ble.device":{"name":"ble.device","type":2,"description":"Index
+        of the HCI device to use, -1 to autodetect.","default_value":"-1","current_value":"-1","validator":"^[\\-\\+]?[\\d]+$"},"ble.show.filter":{"name":"ble.show.filter","type":0,"description":"Defines
+        a regular expression filter for ble.show","default_value":"","current_value":"","validator":""},"ble.show.limit":{"name":"ble.show.limit","type":2,"description":"Defines
+        limit for ble.show","default_value":"0","current_value":"0","validator":"^[\\-\\+]?[\\d]+$"},"ble.show.sort":{"name":"ble.show.sort","type":0,"description":"Defines
+        sorting field (rssi, mac, seen) and direction (asc or desc) for ble.show","default_value":"rssi
+        asc","current_value":"rssi asc","validator":"(rssi|mac|seen) (desc|asc)"},"ble.timeout":{"name":"ble.timeout","type":2,"description":"Connection
+        timeout in seconds.","default_value":"5","current_value":"5","validator":"^[\\-\\+]?[\\d]+$"},"ble.ttl":{"name":"ble.ttl","type":2,"description":"Seconds
+        of inactivity for a device to be pruned.","default_value":"30","current_value":"30","validator":"^[\\-\\+]?[\\d]+$"}},"handlers":[{"name":"ble.recon
+        on","description":"Start Bluetooth Low Energy devices discovery.","parser":""},{"name":"ble.recon
+        off","description":"Stop Bluetooth Low Energy devices discovery.","parser":""},{"name":"ble.clear","description":"Clear
+        all devices collected by the BLE discovery module.","parser":""},{"name":"ble.show","description":"Show
+        discovered Bluetooth Low Energy devices.","parser":""},{"name":"ble.enum MAC","description":"Enumerate
+        services and characteristics for the given BLE device.","parser":"ble.enum
+        ([a-fA-F0-9]{1,2}:[a-fA-F0-9]{1,2}:[a-fA-F0-9]{1,2}:[a-fA-F0-9]{1,2}:[a-fA-F0-9]{1,2}:[a-fA-F0-9]{1,2})"},{"name":"ble.write
+        MAC UUID HEX_DATA","description":"Write the HEX_DATA buffer to the BLE device
+        with the specified MAC address, to the characteristics with the given UUID.","parser":"ble.write
+        ([a-fA-F0-9]{1,2}:[a-fA-F0-9]{1,2}:[a-fA-F0-9]{1,2}:[a-fA-F0-9]{1,2}:[a-fA-F0-9]{1,2}:[a-fA-F0-9]{1,2})
+        ([a-fA-F0-9]+) ([a-fA-F0-9]+)"}],"running":false,"state":{"scanning":null}},{"name":"c2","description":"A
+        CnC module that connects to an IRC server for reporting and commands.","author":"Simone
+        Margaritelli \u003cevilsocket@gmail.com\u003e","parameters":{"c2.channel.control":{"name":"c2.channel.control","type":0,"description":"IRC
+        channel to receive commands from.","default_value":"#events","current_value":"#events","validator":""},"c2.channel.events":{"name":"c2.channel.events","type":0,"description":"IRC
+        channel to send events to.","default_value":"#events","current_value":"#events","validator":""},"c2.channel.output":{"name":"c2.channel.output","type":0,"description":"IRC
+        channel to send commands output to.","default_value":"#events","current_value":"#events","validator":""},"c2.nick":{"name":"c2.nick","type":0,"description":"IRC
+        nickname.","default_value":"bettercap","current_value":"bettercap","validator":""},"c2.operator":{"name":"c2.operator","type":0,"description":"IRC
+        nickname of the user allowed to run commands.","default_value":"admin","current_value":"admin","validator":""},"c2.password":{"name":"c2.password","type":0,"description":"IRC
+        server password.","default_value":"password","current_value":"password","validator":""},"c2.sasl.password":{"name":"c2.sasl.password","type":0,"description":"IRC
+        server SASL password.","default_value":"","current_value":"","validator":""},"c2.sasl.username":{"name":"c2.sasl.username","type":0,"description":"IRC
+        SASL username.","default_value":"","current_value":"","validator":""},"c2.server":{"name":"c2.server","type":0,"description":"IRC
+        server address and port.","default_value":"localhost:6697","current_value":"localhost:6697","validator":""},"c2.server.tls":{"name":"c2.server.tls","type":1,"description":"Enable
+        TLS.","default_value":"true","current_value":"true","validator":"^(true|false)$"},"c2.server.tls.verify":{"name":"c2.server.tls.verify","type":1,"description":"Enable
+        TLS certificate validation.","default_value":"false","current_value":"false","validator":"^(true|false)$"},"c2.username":{"name":"c2.username","type":0,"description":"IRC
+        username.","default_value":"bettercap","current_value":"bettercap","validator":""}},"handlers":[{"name":"c2
+        on","description":"Start the C2 module.","parser":""},{"name":"c2 off","description":"Stop
+        the C2 module.","parser":""},{"name":"c2.channel.set EVENT_TYPE CHANNEL","description":"Set
+        a specific channel to report events of this type.","parser":"c2.channel.set
+        ([^\\s]+) (.+)"},{"name":"c2.channel.clear EVENT_TYPE","description":"Clear
+        the channel to use for a specific event type.","parser":"c2.channel.clear
+        ([^\\s]+)"},{"name":"c2.template.set EVENT_TYPE TEMPLATE","description":"Set
+        the reporting template to use for a specific event type.","parser":"c2.template.set
+        ([^\\s]+) (.+)"},{"name":"c2.template.clear EVENT_TYPE","description":"Clear
+        the reporting template to use for a specific event type.","parser":"c2.template.clear
+        ([^\\s]+)"}],"running":false,"state":{}},{"name":"can","description":"A scanner
+        and frames injection module for CAN-bus.","author":"Simone Margaritelli \u003cevilsocket@gmail.com\u003e","parameters":{"can.device":{"name":"can.device","type":0,"description":"CAN-bus
+        device.","default_value":"can0","current_value":"can0","validator":""},"can.dump":{"name":"can.dump","type":0,"description":"Load
+        CAN traffic from this candump log file.","default_value":"","current_value":"","validator":""},"can.dump.inject":{"name":"can.dump.inject","type":1,"description":"Write
+        CAN traffic read form the candump log file to the selected can.device.","default_value":"false","current_value":"false","validator":"^(true|false)$"},"can.filter":{"name":"can.filter","type":0,"description":"Optional
+        boolean expression to select frames to report.","default_value":"","current_value":"","validator":""},"can.parse.obd2":{"name":"can.parse.obd2","type":1,"description":"Enable
+        built in OBD2 PID parsing.","default_value":"false","current_value":"false","validator":"^(true|false)$"},"can.transport":{"name":"can.transport","type":0,"description":"Network
+        type, can be ''can'' for SocketCAN or ''udp''.","default_value":"can","current_value":"can","validator":""}},"handlers":[{"name":"can.recon
+        on","description":"Start CAN-bus discovery.","parser":""},{"name":"can.recon
+        off","description":"Stop CAN-bus discovery.","parser":""},{"name":"can.clear","description":"Clear
+        everything collected by the discovery module.","parser":""},{"name":"can.show","description":"Show
+        a list of detected CAN devices.","parser":""},{"name":"can.dbc.load NAME","description":"Load
+        a DBC file from the list of available ones or from disk.","parser":"can.dbc.load
+        (.+)"},{"name":"can.inject FRAME_EXPRESSION","description":"Parse FRAME_EXPRESSION
+        as ''id#data'' and inject it as a CAN frame.","parser":"(?i)^can\\.inject\\s+([a-fA-F0-9#R]+)$"},{"name":"can.fuzz
+        ID_OR_NODE_NAME OPTIONAL_SIZE","description":"If an hexadecimal frame ID is
+        specified, create a randomized version of it and inject it. If a node name
+        is specified, a random message for the given node will be instead used.","parser":"(?i)^can\\.fuzz\\s+([^\\s]+)\\s*(\\d*)$"}],"running":false,"state":{}},{"name":"caplets","description":"A
+        module to list and update caplets.","author":"Simone Margaritelli \u003cevilsocket@gmail.com\u003e","parameters":{},"handlers":[{"name":"caplets.show","description":"Show
+        a list of installed caplets.","parser":""},{"name":"caplets.paths","description":"Show
+        a list caplet search paths.","parser":""},{"name":"caplets.update","description":"Install/updates
+        the caplets.","parser":""}],"running":false,"state":{}},{"name":"dhcp6.spoof","description":"Replies
+        to DHCPv6 messages, providing victims with a link-local IPv6 address and setting
+        the attackers host as default DNS server (https://github.com/fox-it/mitm6/).","author":"Simone
+        Margaritelli \u003cevilsocket@gmail.com\u003e","parameters":{"dhcp6.spoof.domains":{"name":"dhcp6.spoof.domains","type":0,"description":"Comma
+        separated values of domain names to spoof.","default_value":"microsoft.com,
+        google.com, facebook.com, apple.com, twitter.com","current_value":"microsoft.com,
+        google.com, facebook.com, apple.com, twitter.com","validator":""}},"handlers":[{"name":"dhcp6.spoof
+        on","description":"Start the DHCPv6 spoofer in the background.","parser":""},{"name":"dhcp6.spoof
+        off","description":"Stop the DHCPv6 spoofer in the background.","parser":""}],"running":false,"state":{}},{"name":"dns.proxy","description":"A
+        full featured DNS proxy that can be used to manipulate DNS traffic.","author":"Yarwin
+        Kolff \u003c@buffermet\u003e","parameters":{"dns.port":{"name":"dns.port","type":2,"description":"DNS
+        port to redirect when the proxy is activated.","default_value":"53","current_value":"53","validator":"^[\\-\\+]?[\\d]+$"},"dns.proxy.address":{"name":"dns.proxy.address","type":0,"description":"Address
+        to bind the DNS proxy to.","default_value":"\u003cinterface address\u003e","current_value":"192.168.233.117","validator":"^(?:[0-9]{1,3}\\.){3}[0-9]{1,3}$"},"dns.proxy.blacklist":{"name":"dns.proxy.blacklist","type":0,"description":"Comma
+        separated list of client IPs to skip while proxying (wildcard allowed).","default_value":"","current_value":"","validator":""},"dns.proxy.certificate":{"name":"dns.proxy.certificate","type":0,"description":"DNS
+        proxy certification authority TLS certificate file.","default_value":"~/.bettercap-ca.cert.pem","current_value":"~/.bettercap-ca.cert.pem","validator":""},"dns.proxy.certificate.bits":{"name":"dns.proxy.certificate.bits","type":2,"description":"Number
+        of bits of the RSA private key of the generated HTTPS certificate.","default_value":"4096","current_value":"4096","validator":"^[\\-\\+]?[\\d]+$"},"dns.proxy.certificate.commonname":{"name":"dns.proxy.certificate.commonname","type":0,"description":"Common
+        Name field of the generated HTTPS certificate.","default_value":"cloudflare-dns.com","current_value":"cloudflare-dns.com","validator":".*"},"dns.proxy.certificate.country":{"name":"dns.proxy.certificate.country","type":0,"description":"Country
+        field of the generated HTTPS certificate.","default_value":"US","current_value":"US","validator":".*"},"dns.proxy.certificate.locality":{"name":"dns.proxy.certificate.locality","type":0,"description":"Locality
+        field of the generated HTTPS certificate.","default_value":"San Francisco","current_value":"San
+        Francisco","validator":".*"},"dns.proxy.certificate.organization":{"name":"dns.proxy.certificate.organization","type":0,"description":"Organization
+        field of the generated HTTPS certificate.","default_value":"Cloudflare, Inc.","current_value":"Cloudflare,
+        Inc.","validator":".*"},"dns.proxy.certificate.organizationalunit":{"name":"dns.proxy.certificate.organizationalunit","type":0,"description":"Organizational
+        Unit field of the generated HTTPS certificate.","default_value":"","current_value":"","validator":".*"},"dns.proxy.key":{"name":"dns.proxy.key","type":0,"description":"DNS
+        proxy certification authority TLS key file.","default_value":"~/.bettercap-ca.key.pem","current_value":"~/.bettercap-ca.key.pem","validator":""},"dns.proxy.nameserver":{"name":"dns.proxy.nameserver","type":0,"description":"DNS
+        resolver address.","default_value":"1.1.1.1","current_value":"1.1.1.1","validator":"^(?:[0-9]{1,3}\\.){3}[0-9]{1,3}$"},"dns.proxy.port":{"name":"dns.proxy.port","type":2,"description":"Port
+        to bind the DNS proxy to.","default_value":"8053","current_value":"8053","validator":"^[\\-\\+]?[\\d]+$"},"dns.proxy.protocol":{"name":"dns.proxy.protocol","type":0,"description":"Network
+        protocol for the DNS proxy server to use. Accepted values: udp, tcp, tcp-tls","default_value":"udp","current_value":"udp","validator":"^(udp|tcp|tcp-tls)$"},"dns.proxy.redirect":{"name":"dns.proxy.redirect","type":1,"description":"Enable
+        or disable port redirection with iptables.","default_value":"true","current_value":"true","validator":"^(true|false)$"},"dns.proxy.script":{"name":"dns.proxy.script","type":0,"description":"Path
+        of a JS proxy script.","default_value":"","current_value":"","validator":""},"dns.proxy.whitelist":{"name":"dns.proxy.whitelist","type":0,"description":"Comma
+        separated list of client IPs to proxy if the blacklist is used.","default_value":"","current_value":"","validator":""}},"handlers":[{"name":"dns.proxy
+        on","description":"Start the DNS proxy.","parser":""},{"name":"dns.proxy off","description":"Stop
+        the DNS proxy.","parser":""}],"running":false,"state":{}},{"name":"dns.spoof","description":"Replies
+        to DNS messages with spoofed responses.","author":"Simone Margaritelli \u003cevilsocket@gmail.com\u003e","parameters":{"dns.spoof.address":{"name":"dns.spoof.address","type":0,"description":"IP
+        address to map the domains to.","default_value":"\u003cinterface address\u003e","current_value":"192.168.233.117","validator":"^(?:[0-9]{1,3}\\.){3}[0-9]{1,3}$"},"dns.spoof.all":{"name":"dns.spoof.all","type":1,"description":"If
+        true the module will reply to every DNS request, otherwise it will only reply
+        to the one targeting the local pc.","default_value":"false","current_value":"false","validator":"^(true|false)$"},"dns.spoof.domains":{"name":"dns.spoof.domains","type":0,"description":"Comma
+        separated values of domain names to spoof.","default_value":"","current_value":"","validator":""},"dns.spoof.hosts":{"name":"dns.spoof.hosts","type":0,"description":"If
+        not empty, this hosts file will be used to map domains to IP addresses.","default_value":"","current_value":"","validator":""},"dns.spoof.ttl":{"name":"dns.spoof.ttl","type":0,"description":"TTL
+        of spoofed DNS replies.","default_value":"1024","current_value":"1024","validator":"^[0-9]+$"}},"handlers":[{"name":"dns.spoof
+        on","description":"Start the DNS spoofer in the background.","parser":""},{"name":"dns.spoof
+        off","description":"Stop the DNS spoofer in the background.","parser":""}],"running":false,"state":{}},{"name":"events.stream","description":"Print
+        events as a continuous stream.","author":"Simone Margaritelli \u003cevilsocket@gmail.com\u003e","parameters":{"events.stream.http.format.hex":{"name":"events.stream.http.format.hex","type":1,"description":"If
+        true dumped HTTP bodies will be in hexadecimal format.","default_value":"true","current_value":"true","validator":"^(true|false)$"},"events.stream.http.request.dump":{"name":"events.stream.http.request.dump","type":1,"description":"If
+        true all HTTP requests will be dumped.","default_value":"false","current_value":"false","validator":"^(true|false)$"},"events.stream.http.response.dump":{"name":"events.stream.http.response.dump","type":1,"description":"If
+        true all HTTP responses will be dumped.","default_value":"false","current_value":"false","validator":"^(true|false)$"},"events.stream.output":{"name":"events.stream.output","type":0,"description":"If
+        not empty, events will be written to this file instead of the standard output.","default_value":"","current_value":"","validator":""},"events.stream.output.rotate":{"name":"events.stream.output.rotate","type":1,"description":"If
+        true will enable log rotation.","default_value":"true","current_value":"true","validator":"^(true|false)$"},"events.stream.output.rotate.compress":{"name":"events.stream.output.rotate.compress","type":1,"description":"If
+        true will enable log rotation compression.","default_value":"true","current_value":"true","validator":"^(true|false)$"},"events.stream.output.rotate.format":{"name":"events.stream.output.rotate.format","type":0,"description":"Datetime
+        format to use for log rotation file names.","default_value":"2006-01-02 15:04:05","current_value":"2006-01-02
+        15:04:05","validator":""},"events.stream.output.rotate.how":{"name":"events.stream.output.rotate.how","type":0,"description":"Rotate
+        by ''size'' or ''time''.","default_value":"size","current_value":"size","validator":"(size|time)"},"events.stream.output.rotate.when":{"name":"events.stream.output.rotate.when","type":3,"description":"File
+        size (in MB) or time duration (in seconds) for log rotation.","default_value":"10","current_value":"10","validator":"^[\\-\\+]?[\\d]+(\\.\\d+)?$"},"events.stream.time.format":{"name":"events.stream.time.format","type":0,"description":"Date
+        and time format to use for events reporting.","default_value":"15:04:05","current_value":"15:04:05","validator":""}},"handlers":[{"name":"events.stream
+        on","description":"Start events stream.","parser":""},{"name":"events.stream
+        off","description":"Stop events stream.","parser":""},{"name":"events.show
+        LIMIT?","description":"Show events stream.","parser":"events.show(\\s\\d+)?"},{"name":"events.on
+        TAG COMMANDS","description":"Run COMMANDS when an event with the specified
+        TAG is triggered.","parser":"events\\.on ([^\\s]+) (.+)"},{"name":"events.triggers","description":"Show
+        the list of event triggers created by the events.on command.","parser":""},{"name":"events.trigger.delete
+        TRIGGER_ID","description":"Remove an event trigger given its TRIGGER_ID (use
+        events.triggers to see the list of triggers).","parser":"events\\.trigger\\.delete
+        ([^\\s]+)"},{"name":"events.triggers.clear","description":"Remove all event
+        triggers (use events.triggers to see the list of triggers).","parser":""},{"name":"events.waitfor
+        TAG TIMEOUT?","description":"Wait for an event with the given tag either forever
+        or for a timeout in seconds.","parser":"events.waitfor ([^\\s]+)([\\s\\d]*)"},{"name":"events.ignore
+        FILTER","description":"Events with an identifier matching this filter will
+        not be shown (use multiple times to add more filters).","parser":"events.ignore
+        ([^\\s]+)"},{"name":"events.include FILTER","description":"Used to remove
+        filters passed with the events.ignore command.","parser":"events.include ([^\\s]+)"},{"name":"events.filters","description":"Print
+        the list of filters used to ignore events.","parser":""},{"name":"events.filters.clear","description":"Clear
+        the list of filters passed with the events.ignore command.","parser":""},{"name":"events.clear","description":"Clear
+        events stream.","parser":""}],"running":true,"state":{"ignoring":[]}},{"name":"gps","description":"A
+        module talking with GPS hardware on a serial interface or via GPSD.","author":"Simone
+        Margaritelli \u003cevilsocket@gmail.com\u003e","parameters":{"gps.baudrate":{"name":"gps.baudrate","type":2,"description":"Baud
+        rate of the GPS serial device.","default_value":"4800","current_value":"4800","validator":"^[\\-\\+]?[\\d]+$"},"gps.device":{"name":"gps.device","type":0,"description":"Serial
+        device of the GPS hardware or hostname:port for a GPSD instance.","default_value":"/dev/ttyUSB0","current_value":"/dev/ttyUSB0","validator":""}},"handlers":[{"name":"gps
+        on","description":"Start acquiring from the GPS hardware.","parser":""},{"name":"gps
+        off","description":"Stop acquiring from the GPS hardware.","parser":""},{"name":"gps.show","description":"Show
+        the last coordinates returned by the GPS hardware.","parser":""},{"name":"gps.set
+        LAT LON","description":"Manually set GPS location.","parser":"(?i)^gps\\.set\\s+([0-9\\.]+)\\s+([0-9\\.]+)$"}],"running":false,"state":{}},{"name":"graph","description":"A
+        module to build a graph of WiFi and LAN nodes.","author":"Simone Margaritelli
+        \u003cevilsocket@gmail.com\u003e","parameters":{"graph.disconnected":{"name":"graph.disconnected","type":1,"description":"Include
+        disconnected edges in then output graph.","default_value":"false","current_value":"false","validator":"^(true|false)$"},"graph.dot.layout":{"name":"graph.dot.layout","type":0,"description":"Layout
+        for dot output.","default_value":"neato","current_value":"neato","validator":""},"graph.dot.name":{"name":"graph.dot.name","type":0,"description":"Graph
+        name in the dot output.","default_value":"bettergraph","current_value":"bettergraph","validator":""},"graph.dot.output":{"name":"graph.dot.output","type":0,"description":"File
+        name for dot output.","default_value":"bettergraph.dot","current_value":"bettergraph.dot","validator":""},"graph.json.output":{"name":"graph.json.output","type":0,"description":"File
+        name for JSON output.","default_value":"bettergraph.json","current_value":"bettergraph.json","validator":""},"graph.path":{"name":"graph.path","type":0,"description":"Base
+        path for the graph database.","default_value":"/usr/local/share/bettercap/graph","current_value":"/usr/local/share/bettercap/graph","validator":""},"graph.privacy":{"name":"graph.privacy","type":1,"description":"Obfuscate
+        mac addresses.","default_value":"false","current_value":"false","validator":"^(true|false)$"}},"handlers":[{"name":"graph
+        on","description":"Start the Module module.","parser":""},{"name":"graph off","description":"Stop
+        the Module module.","parser":""},{"name":"graph.to_dot MAC?","description":"Generate
+        a dot graph file from the current graph.","parser":"graph\\.to_dot\\s*([^\\s]*)"},{"name":"graph.to_json
+        MAC?","description":"Generate a JSON graph file from the current graph.","parser":"graph\\.to_json\\s*([^\\s]*)"}],"running":false,"state":{}},{"name":"hid","description":"A
+        scanner and frames injection module for HID devices on the 2.4Ghz spectrum,
+        using Nordic Semiconductor nRF24LU1+ based USB dongles and Bastille Research
+        RFStorm firmware.","author":"Simone Margaritelli \u003cevilsocket@gmail.com\u003e
+        (this module and the nrf24 client library), Bastille Research (the rfstorm
+        firmware and original research), phikshun and infamy for JackIt.","parameters":{"hid.force.type":{"name":"hid.force.type","type":0,"description":"If
+        the device is not visible or its type has not being detected, force the device
+        type to this value. Accepted values: logitech, amazon, microsoft","default_value":"logitech","current_value":"logitech","validator":"(logitech|amazon|microsoft)"},"hid.hop.period":{"name":"hid.hop.period","type":2,"description":"Time
+        in milliseconds to stay on each channel before hopping to the next one.","default_value":"100","current_value":"100","validator":"^[\\-\\+]?[\\d]+$"},"hid.lna":{"name":"hid.lna","type":1,"description":"If
+        true, enable the LNA power amplifier for CrazyRadio devices.","default_value":"true","current_value":"true","validator":"^(true|false)$"},"hid.ping.period":{"name":"hid.ping.period","type":2,"description":"Time
+        in milliseconds to attempt to ping a device on a given channel while in sniffer
+        mode.","default_value":"100","current_value":"100","validator":"^[\\-\\+]?[\\d]+$"},"hid.show.filter":{"name":"hid.show.filter","type":0,"description":"Defines
+        a regular expression filter for hid.show","default_value":"","current_value":"","validator":""},"hid.show.limit":{"name":"hid.show.limit","type":2,"description":"Defines
+        limit for hid.show","default_value":"0","current_value":"0","validator":"^[\\-\\+]?[\\d]+$"},"hid.show.sort":{"name":"hid.show.sort","type":0,"description":"Defines
+        sorting field (mac, seen) and direction (asc or desc) for hid.show","default_value":"mac
+        desc","current_value":"mac desc","validator":"(mac|seen) (desc|asc)"},"hid.sniff.period":{"name":"hid.sniff.period","type":2,"description":"Time
+        in milliseconds to automatically sniff payloads from a device, once it''s
+        detected, in order to determine its type.","default_value":"500","current_value":"500","validator":"^[\\-\\+]?[\\d]+$"},"hid.ttl":{"name":"hid.ttl","type":2,"description":"Seconds
+        of inactivity to consider a device as not in range.","default_value":"1200","current_value":"1200","validator":"^[\\-\\+]?[\\d]+$"}},"handlers":[{"name":"hid.recon
+        on","description":"Start scanning for HID devices on the 2.4Ghz spectrum.","parser":""},{"name":"hid.recon
+        off","description":"Stop scanning for HID devices on the 2.4Ghz spectrum.","parser":""},{"name":"hid.clear","description":"Clear
+        all devices collected by the HID discovery module.","parser":""},{"name":"hid.sniff
+        ADDRESS","description":"Start sniffing a specific ADDRESS in order to collect
+        payloads, use ''clear'' to stop collecting.","parser":"(?i)^hid\\.sniff ([a-f0-9]{2}:[a-f0-9]{2}:[a-f0-9]{2}:[a-f0-9]{2}:[a-f0-9]{2}|clear)$"},{"name":"hid.show","description":"Show
+        a list of detected HID devices on the 2.4Ghz spectrum.","parser":""},{"name":"hid.inject
+        ADDRESS LAYOUT FILENAME","description":"Parse the duckyscript FILENAME and
+        inject it as HID frames spoofing the device ADDRESS, using the LAYOUT keyboard
+        mapping.","parser":"(?i)^hid\\.inject ([a-f0-9]{2}:[a-f0-9]{2}:[a-f0-9]{2}:[a-f0-9]{2}:[a-f0-9]{2})\\s+(.+)\\s+(.+)$"}],"running":false,"state":{"injecting":false,"layouts":["BE","BR","CA","CH","DE","DK","ES","FI","FR","GB","HR","IT","NO","PT","RU","SI","SV","TR","US"],"sniffing":""}},{"name":"http.proxy","description":"A
+        full featured HTTP proxy that can be used to inject malicious contents into
+        webpages, all HTTP traffic will be redirected to it.","author":"Simone Margaritelli
+        \u003cevilsocket@gmail.com\u003e","parameters":{"http.port":{"name":"http.port","type":2,"description":"HTTP
+        port to redirect when the proxy is activated.","default_value":"80","current_value":"80","validator":"^[\\-\\+]?[\\d]+$"},"http.proxy.address":{"name":"http.proxy.address","type":0,"description":"Address
+        to bind the HTTP proxy to.","default_value":"\u003cinterface address\u003e","current_value":"192.168.233.117","validator":"^(?:[0-9]{1,3}\\.){3}[0-9]{1,3}$"},"http.proxy.blacklist":{"name":"http.proxy.blacklist","type":0,"description":"Comma
+        separated list of hostnames to skip while proxying (wildcard expressions can
+        be used).","default_value":"","current_value":"","validator":""},"http.proxy.injectjs":{"name":"http.proxy.injectjs","type":0,"description":"URL,
+        path or javascript code to inject into every HTML page.","default_value":"","current_value":"","validator":""},"http.proxy.port":{"name":"http.proxy.port","type":2,"description":"Port
+        to bind the HTTP proxy to.","default_value":"8080","current_value":"8080","validator":"^[\\-\\+]?[\\d]+$"},"http.proxy.redirect":{"name":"http.proxy.redirect","type":1,"description":"Enable
+        or disable port redirection with iptables.","default_value":"true","current_value":"true","validator":"^(true|false)$"},"http.proxy.script":{"name":"http.proxy.script","type":0,"description":"Path
+        of a proxy JS script.","default_value":"","current_value":"","validator":""},"http.proxy.sslstrip":{"name":"http.proxy.sslstrip","type":1,"description":"Enable
+        or disable SSL stripping.","default_value":"false","current_value":"false","validator":"^(true|false)$"},"http.proxy.whitelist":{"name":"http.proxy.whitelist","type":0,"description":"Comma
+        separated list of hostnames to proxy if the blacklist is used (wildcard expressions
+        can be used).","default_value":"","current_value":"","validator":""}},"handlers":[{"name":"http.proxy
+        on","description":"Start HTTP proxy.","parser":""},{"name":"http.proxy off","description":"Stop
+        HTTP proxy.","parser":""}],"running":false,"state":{"stripper":null}},{"name":"http.server","description":"A
+        simple HTTP server, to be used to serve files and scripts across the network.","author":"Simone
+        Margaritelli \u003cevilsocket@gmail.com\u003e","parameters":{"http.server.address":{"name":"http.server.address","type":0,"description":"Address
+        to bind the HTTP server to.","default_value":"\u003cinterface address\u003e","current_value":"192.168.233.117","validator":"^(?:[0-9]{1,3}\\.){3}[0-9]{1,3}$"},"http.server.path":{"name":"http.server.path","type":0,"description":"Server
+        folder.","default_value":".","current_value":".","validator":""},"http.server.port":{"name":"http.server.port","type":2,"description":"Port
+        to bind the HTTP server to.","default_value":"80","current_value":"80","validator":"^[\\-\\+]?[\\d]+$"}},"handlers":[{"name":"http.server
+        on","description":"Start HTTP server.","parser":""},{"name":"http.server off","description":"Stop
+        HTTP server.","parser":""}],"running":false,"state":{}},{"name":"https.proxy","description":"A
+        full featured HTTPS proxy that can be used to inject malicious contents into
+        webpages, all HTTPS traffic will be redirected to it.","author":"Simone Margaritelli
+        \u003cevilsocket@gmail.com\u003e","parameters":{"https.port":{"name":"https.port","type":2,"description":"HTTPS
+        port to redirect when the proxy is activated.","default_value":"443","current_value":"443","validator":"^[\\-\\+]?[\\d]+$"},"https.proxy.address":{"name":"https.proxy.address","type":0,"description":"Address
+        to bind the HTTPS proxy to.","default_value":"\u003cinterface address\u003e","current_value":"192.168.233.117","validator":"^(?:[0-9]{1,3}\\.){3}[0-9]{1,3}$"},"https.proxy.blacklist":{"name":"https.proxy.blacklist","type":0,"description":"Comma
+        separated list of hostnames to skip while proxying (wildcard expressions can
+        be used).","default_value":"","current_value":"","validator":""},"https.proxy.certificate":{"name":"https.proxy.certificate","type":0,"description":"HTTPS
+        proxy certification authority TLS certificate file.","default_value":"~/.bettercap-ca.cert.pem","current_value":"~/.bettercap-ca.cert.pem","validator":""},"https.proxy.certificate.bits":{"name":"https.proxy.certificate.bits","type":2,"description":"Number
+        of bits of the RSA private key of the generated HTTPS certificate.","default_value":"4096","current_value":"4096","validator":"^[\\-\\+]?[\\d]+$"},"https.proxy.certificate.commonname":{"name":"https.proxy.certificate.commonname","type":0,"description":"Common
+        Name field of the generated HTTPS certificate.","default_value":"Go Daddy
+        Secure Certificate Authority - G2","current_value":"Go Daddy Secure Certificate
+        Authority - G2","validator":".*"},"https.proxy.certificate.country":{"name":"https.proxy.certificate.country","type":0,"description":"Country
+        field of the generated HTTPS certificate.","default_value":"US","current_value":"US","validator":".*"},"https.proxy.certificate.locality":{"name":"https.proxy.certificate.locality","type":0,"description":"Locality
+        field of the generated HTTPS certificate.","default_value":"Scottsdale","current_value":"Scottsdale","validator":".*"},"https.proxy.certificate.organization":{"name":"https.proxy.certificate.organization","type":0,"description":"Organization
+        field of the generated HTTPS certificate.","default_value":"GoDaddy.com, Inc.","current_value":"GoDaddy.com,
+        Inc.","validator":".*"},"https.proxy.certificate.organizationalunit":{"name":"https.proxy.certificate.organizationalunit","type":0,"description":"Organizational
+        Unit field of the generated HTTPS certificate.","default_value":"https://certs.godaddy.com/repository/","current_value":"https://certs.godaddy.com/repository/","validator":".*"},"https.proxy.injectjs":{"name":"https.proxy.injectjs","type":0,"description":"URL,
+        path or javascript code to inject into every HTML page.","default_value":"","current_value":"","validator":""},"https.proxy.key":{"name":"https.proxy.key","type":0,"description":"HTTPS
+        proxy certification authority TLS key file.","default_value":"~/.bettercap-ca.key.pem","current_value":"~/.bettercap-ca.key.pem","validator":""},"https.proxy.port":{"name":"https.proxy.port","type":2,"description":"Port
+        to bind the HTTPS proxy to.","default_value":"8083","current_value":"8083","validator":"^[\\-\\+]?[\\d]+$"},"https.proxy.redirect":{"name":"https.proxy.redirect","type":1,"description":"Enable
+        or disable port redirection with iptables.","default_value":"true","current_value":"true","validator":"^(true|false)$"},"https.proxy.script":{"name":"https.proxy.script","type":0,"description":"Path
+        of a proxy JS script.","default_value":"","current_value":"","validator":""},"https.proxy.sslstrip":{"name":"https.proxy.sslstrip","type":1,"description":"Enable
+        or disable SSL stripping.","default_value":"false","current_value":"false","validator":"^(true|false)$"},"https.proxy.whitelist":{"name":"https.proxy.whitelist","type":0,"description":"Comma
+        separated list of hostnames to proxy if the blacklist is used (wildcard expressions
+        can be used).","default_value":"","current_value":"","validator":""}},"handlers":[{"name":"https.proxy
+        on","description":"Start HTTPS proxy.","parser":""},{"name":"https.proxy off","description":"Stop
+        HTTPS proxy.","parser":""}],"running":false,"state":{"stripper":null}},{"name":"https.server","description":"A
+        simple HTTPS server, to be used to serve files and scripts across the network.","author":"Simone
+        Margaritelli \u003cevilsocket@gmail.com\u003e","parameters":{"https.server.address":{"name":"https.server.address","type":0,"description":"Address
+        to bind the HTTPS server to.","default_value":"\u003cinterface address\u003e","current_value":"192.168.233.117","validator":"^(?:[0-9]{1,3}\\.){3}[0-9]{1,3}$"},"https.server.certificate":{"name":"https.server.certificate","type":0,"description":"TLS
+        certificate file (will be auto generated if filled but not existing).","default_value":"~/.bettercap-httpd.cert.pem","current_value":"~/.bettercap-httpd.cert.pem","validator":""},"https.server.certificate.bits":{"name":"https.server.certificate.bits","type":2,"description":"Number
+        of bits of the RSA private key of the generated HTTPS certificate.","default_value":"4096","current_value":"4096","validator":"^[\\-\\+]?[\\d]+$"},"https.server.certificate.commonname":{"name":"https.server.certificate.commonname","type":0,"description":"Common
+        Name field of the generated HTTPS certificate.","default_value":"bettercap","current_value":"bettercap","validator":".*"},"https.server.certificate.country":{"name":"https.server.certificate.country","type":0,"description":"Country
+        field of the generated HTTPS certificate.","default_value":"US","current_value":"US","validator":".*"},"https.server.certificate.locality":{"name":"https.server.certificate.locality","type":0,"description":"Locality
+        field of the generated HTTPS certificate.","default_value":"","current_value":"","validator":".*"},"https.server.certificate.organization":{"name":"https.server.certificate.organization","type":0,"description":"Organization
+        field of the generated HTTPS certificate.","default_value":"bettercap devteam","current_value":"bettercap
+        devteam","validator":".*"},"https.server.certificate.organizationalunit":{"name":"https.server.certificate.organizationalunit","type":0,"description":"Organizational
+        Unit field of the generated HTTPS certificate.","default_value":"https://bettercap.org/","current_value":"https://bettercap.org/","validator":".*"},"https.server.key":{"name":"https.server.key","type":0,"description":"TLS
+        key file (will be auto generated if filled but not existing).","default_value":"~/.bettercap-httpd.key.pem","current_value":"~/.bettercap-httpd.key.pem","validator":""},"https.server.path":{"name":"https.server.path","type":0,"description":"Server
+        folder.","default_value":".","current_value":".","validator":""},"https.server.port":{"name":"https.server.port","type":2,"description":"Port
+        to bind the HTTPS server to.","default_value":"443","current_value":"443","validator":"^[\\-\\+]?[\\d]+$"}},"handlers":[{"name":"https.server
+        on","description":"Start HTTPS server.","parser":""},{"name":"https.server
+        off","description":"Stop HTTPS server.","parser":""}],"running":false,"state":{}},{"name":"mac.changer","description":"Change
+        active interface mac address.","author":"Simone Margaritelli \u003cevilsocket@gmail.com\u003e","parameters":{"mac.changer.address":{"name":"mac.changer.address","type":0,"description":"Hardware
+        address to apply to the interface.","default_value":"\u003crandom mac\u003e","current_value":"2d:49:c5:b0:21:e1","validator":"[a-fA-F0-9]{2}:[a-fA-F0-9]{2}:[a-fA-F0-9]{2}:[a-fA-F0-9]{2}:[a-fA-F0-9]{2}:[a-fA-F0-9]{2}"},"mac.changer.iface":{"name":"mac.changer.iface","type":0,"description":"Name
+        of the interface to use.","default_value":"\u003cinterface name\u003e","current_value":"enp0s3","validator":""}},"handlers":[{"name":"mac.changer
+        on","description":"Start mac changer module.","parser":""},{"name":"mac.changer
+        off","description":"Stop mac changer module and restore original mac address.","parser":""}],"running":false,"state":{}},{"name":"mysql.server","description":"A
+        simple Rogue MySQL server, to be used to exploit LOCAL INFILE and read arbitrary
+        files from the client.","author":"Bernardo Rodrigues (https://twitter.com/bernardomr)","parameters":{"mysql.server.address":{"name":"mysql.server.address","type":0,"description":"Address
+        to bind the mysql server to.","default_value":"\u003cinterface address\u003e","current_value":"192.168.233.117","validator":"^(?:[0-9]{1,3}\\.){3}[0-9]{1,3}$"},"mysql.server.infile":{"name":"mysql.server.infile","type":0,"description":"File
+        you want to read. UNC paths are also supported.","default_value":"/etc/passwd","current_value":"/etc/passwd","validator":""},"mysql.server.outfile":{"name":"mysql.server.outfile","type":0,"description":"If
+        filled, the INFILE buffer will be saved to this path instead of being logged.","default_value":"","current_value":"","validator":""},"mysql.server.port":{"name":"mysql.server.port","type":2,"description":"Port
+        to bind the mysql server to.","default_value":"3306","current_value":"3306","validator":"^[\\-\\+]?[\\d]+$"}},"handlers":[{"name":"mysql.server
+        on","description":"Start mysql server.","parser":""},{"name":"mysql.server
+        off","description":"Stop mysql server.","parser":""}],"running":false,"state":{}},{"name":"ndp.spoof","description":"Keep
+        spoofing selected hosts on the network by sending spoofed NDP router advertisements.","author":"Simone
+        Margaritelli \u003cevilsocket@gmail.com\u003e","parameters":{"ndp.spoof.neighbour":{"name":"ndp.spoof.neighbour","type":0,"description":"Neighbour
+        IPv6 address to spoof, clear to disable NA.","default_value":"fe80::1","current_value":"fe80::1","validator":"^([:a-fA-F0-9]{6,})?$"},"ndp.spoof.prefix":{"name":"ndp.spoof.prefix","type":0,"description":"IPv6
+        prefix for router advertisements spoofing, clear to disable RA.","default_value":"d00d::","current_value":"d00d::","validator":""},"ndp.spoof.prefix.length":{"name":"ndp.spoof.prefix.length","type":2,"description":"IPv6
+        prefix length for router advertisements.","default_value":"64","current_value":"64","validator":"^[\\-\\+]?[\\d]+$"},"ndp.spoof.router_lifetime":{"name":"ndp.spoof.router_lifetime","type":2,"description":"Router
+        lifetime for router advertisements in seconds.","default_value":"10","current_value":"10","validator":"^[\\-\\+]?[\\d]+$"},"ndp.spoof.targets":{"name":"ndp.spoof.targets","type":0,"description":"Comma
+        separated list of IPv6 victim addresses.","default_value":"","current_value":"","validator":""}},"handlers":[{"name":"ndp.spoof
+        on","description":"Start NDP spoofer.","parser":""},{"name":"ndp.ban on","description":"Start
+        NDP spoofer in ban mode, meaning the target(s) connectivity will not work.","parser":""},{"name":"ndp.spoof
+        off","description":"Stop NDP spoofer.","parser":""},{"name":"ndp.ban off","description":"Stop
+        NDP spoofer.","parser":""}],"running":false,"state":{}},{"name":"net.probe","description":"Keep
+        probing for new hosts on the network by sending dummy UDP packets to every
+        possible IP on the subnet.","author":"Simone Margaritelli \u003cevilsocket@gmail.com\u003e","parameters":{"net.probe.mdns":{"name":"net.probe.mdns","type":1,"description":"Enable
+        mDNS discovery probes.","default_value":"true","current_value":"true","validator":"^(true|false)$"},"net.probe.nbns":{"name":"net.probe.nbns","type":1,"description":"Enable
+        NetBIOS name service discovery probes.","default_value":"true","current_value":"true","validator":"^(true|false)$"},"net.probe.throttle":{"name":"net.probe.throttle","type":2,"description":"If
+        greater than 0, probe packets will be throttled by this value in milliseconds.","default_value":"10","current_value":"10","validator":"^[\\-\\+]?[\\d]+$"},"net.probe.upnp":{"name":"net.probe.upnp","type":1,"description":"Enable
+        UPNP discovery probes.","default_value":"true","current_value":"true","validator":"^(true|false)$"},"net.probe.wsd":{"name":"net.probe.wsd","type":1,"description":"Enable
+        WSD discovery probes.","default_value":"true","current_value":"true","validator":"^(true|false)$"}},"handlers":[{"name":"net.probe
+        on","description":"Start network hosts probing in background.","parser":""},{"name":"net.probe
+        off","description":"Stop network hosts probing in background.","parser":""}],"running":false,"state":{}},{"name":"net.recon","description":"Read
+        periodically the ARP cache in order to monitor for new hosts on the network.","author":"Simone
+        Margaritelli \u003cevilsocket@gmail.com\u003e","parameters":{"net.show.filter":{"name":"net.show.filter","type":0,"description":"Defines
+        a regular expression filter for net.show","default_value":"","current_value":"","validator":""},"net.show.limit":{"name":"net.show.limit","type":2,"description":"Defines
+        limit for net.show","default_value":"0","current_value":"0","validator":"^[\\-\\+]?[\\d]+$"},"net.show.meta":{"name":"net.show.meta","type":1,"description":"If
+        true, the net.show command will show all metadata collected about each endpoint.","default_value":"false","current_value":"false","validator":"^(true|false)$"},"net.show.sort":{"name":"net.show.sort","type":0,"description":"Defines
+        sorting field (ip, mac, seen, sent, rcvd) and direction (asc or desc) for
+        net.show","default_value":"ip asc","current_value":"ip asc","validator":"(ip|mac|seen|sent|rcvd)
+        (desc|asc)"}},"handlers":[{"name":"net.recon on","description":"Start network
+        hosts discovery.","parser":""},{"name":"net.recon off","description":"Stop
+        network hosts discovery.","parser":""},{"name":"net.clear","description":"Clear
+        all endpoints collected by the hosts discovery module.","parser":""},{"name":"net.show","description":"Show
+        cache hosts list (default sorting by ip).","parser":""},{"name":"net.show
+        ADDRESS1, ADDRESS2","description":"Show information about a specific comma
+        separated list of addresses (by IP or MAC).","parser":"net.show (.+)"},{"name":"net.show.meta
+        ADDRESS1, ADDRESS2","description":"Show meta information about a specific
+        comma separated list of addresses (by IP or MAC).","parser":"net\\.show\\.meta
+        (.+)"}],"running":false,"state":{}},{"name":"net.sniff","description":"Sniff
+        packets from the network.","author":"Simone Margaritelli \u003cevilsocket@gmail.com\u003e","parameters":{"net.fuzz.layers":{"name":"net.fuzz.layers","type":0,"description":"Types
+        of layer to fuzz.","default_value":"Payload","current_value":"Payload","validator":""},"net.fuzz.rate":{"name":"net.fuzz.rate","type":3,"description":"Rate
+        in the [0.0,1.0] interval of packets to fuzz.","default_value":"1.0","current_value":"1.0","validator":"^[\\-\\+]?[\\d]+(\\.\\d+)?$"},"net.fuzz.ratio":{"name":"net.fuzz.ratio","type":3,"description":"Rate
+        in the [0.0,1.0] interval of bytes to fuzz for each packet.","default_value":"0.4","current_value":"0.4","validator":"^[\\-\\+]?[\\d]+(\\.\\d+)?$"},"net.fuzz.silent":{"name":"net.fuzz.silent","type":1,"description":"If
+        true it will not report fuzzed packets.","default_value":"false","current_value":"false","validator":"^(true|false)$"},"net.sniff.filter":{"name":"net.sniff.filter","type":0,"description":"BPF
+        filter for the sniffer.","default_value":"not arp","current_value":"not arp","validator":""},"net.sniff.interface":{"name":"net.sniff.interface","type":0,"description":"Interface
+        to sniff on.","default_value":"","current_value":"","validator":""},"net.sniff.local":{"name":"net.sniff.local","type":1,"description":"If
+        true it will consider packets from/to this computer, otherwise it will skip
+        them.","default_value":"false","current_value":"false","validator":"^(true|false)$"},"net.sniff.output":{"name":"net.sniff.output","type":0,"description":"If
+        set, the sniffer will write captured packets to this file.","default_value":"","current_value":"","validator":""},"net.sniff.regexp":{"name":"net.sniff.regexp","type":0,"description":"If
+        set, only packets matching this regular expression will be considered.","default_value":"","current_value":"","validator":""},"net.sniff.source":{"name":"net.sniff.source","type":0,"description":"If
+        set, the sniffer will read from this pcap file instead of the current interface.","default_value":"","current_value":"","validator":""},"net.sniff.verbose":{"name":"net.sniff.verbose","type":1,"description":"If
+        true, every captured and parsed packet will be sent to the events.stream for
+        displaying, otherwise only the ones parsed at the application layer (sni,
+        http, etc).","default_value":"false","current_value":"false","validator":"^(true|false)$"}},"handlers":[{"name":"net.sniff
+        stats","description":"Print sniffer session configuration and statistics.","parser":""},{"name":"net.sniff
+        on","description":"Start network sniffer in background.","parser":""},{"name":"net.sniff
+        off","description":"Stop network sniffer in background.","parser":""},{"name":"net.fuzz
+        on","description":"Enable fuzzing for every sniffed packet containing the
+        specified layers.","parser":""},{"name":"net.fuzz off","description":"Disable
+        fuzzing","parser":""}],"running":false,"state":{}},{"name":"packet.proxy","description":"A
+        Linux only module that relies on NFQUEUEs in order to filter packets.","author":"Simone
+        Margaritelli \u003cevilsocket@gmail.com\u003e","parameters":{"packet.proxy.chain":{"name":"packet.proxy.chain","type":0,"description":"Chain
+        name of the iptables rule.","default_value":"OUTPUT","current_value":"OUTPUT","validator":""},"packet.proxy.plugin":{"name":"packet.proxy.plugin","type":0,"description":"Go
+        plugin file to load and call for every packet.","default_value":"","current_value":"","validator":""},"packet.proxy.queue.num":{"name":"packet.proxy.queue.num","type":2,"description":"NFQUEUE
+        number to bind to.","default_value":"0","current_value":"0","validator":"^[\\-\\+]?[\\d]+$"},"packet.proxy.rule":{"name":"packet.proxy.rule","type":0,"description":"Any
+        additional iptables rule to make the queue more selective (ex. --destination
+        8.8.8.8).","default_value":"","current_value":"","validator":""}},"handlers":[{"name":"packet.proxy
+        on","description":"Start the NFQUEUE based packet proxy.","parser":""},{"name":"packet.proxy
+        off","description":"Stop the NFQUEUE based packet proxy.","parser":""}],"running":false,"state":{}},{"name":"syn.scan","description":"A
+        module to perform SYN port scanning.","author":"Simone Margaritelli \u003cevilsocket@gmail.com\u003e","parameters":{"syn.scan.show-progress-every":{"name":"syn.scan.show-progress-every","type":2,"description":"Period
+        in seconds for the scanning progress reporting.","default_value":"1","current_value":"1","validator":"^[\\-\\+]?[\\d]+$"}},"handlers":[{"name":"syn.scan
+        stop","description":"Stop the current syn scanning session.","parser":"syn\\.scan
+        (stop|off)"},{"name":"syn.scan IP-RANGE START-PORT END-PORT","description":"Perform
+        a syn port scanning against an IP address within the provided ports range.","parser":"syn.scan
+        ([^\\s]+) ?(\\d+)?([\\s\\d]*)?"},{"name":"syn.scan.progress","description":"Print
+        progress of the current syn scanning session.","parser":"syn\\.scan\\.progress"}],"running":false,"state":{"progress":0,"scanning":[]}},{"name":"tcp.proxy","description":"A
+        full featured TCP proxy and tunnel, all TCP traffic to a given remote address
+        and port will be redirected to it.","author":"Simone Margaritelli \u003cevilsocket@gmail.com\u003e","parameters":{"tcp.address":{"name":"tcp.address","type":0,"description":"Remote
+        address of the TCP proxy.","default_value":"","current_value":"","validator":"^(?:[0-9]{1,3}\\.){3}[0-9]{1,3}$"},"tcp.port":{"name":"tcp.port","type":2,"description":"Remote
+        port to redirect when the TCP proxy is activated.","default_value":"443","current_value":"443","validator":"^[\\-\\+]?[\\d]+$"},"tcp.proxy.address":{"name":"tcp.proxy.address","type":0,"description":"Address
+        to bind the TCP proxy to.","default_value":"\u003cinterface address\u003e","current_value":"192.168.233.117","validator":"^(?:[0-9]{1,3}\\.){3}[0-9]{1,3}$"},"tcp.proxy.port":{"name":"tcp.proxy.port","type":2,"description":"Port
+        to bind the TCP proxy to.","default_value":"8443","current_value":"8443","validator":"^[\\-\\+]?[\\d]+$"},"tcp.proxy.script":{"name":"tcp.proxy.script","type":0,"description":"Path
+        of a TCP proxy JS script.","default_value":"","current_value":"","validator":""},"tcp.tunnel.address":{"name":"tcp.tunnel.address","type":0,"description":"Address
+        to redirect the TCP tunnel to (optional).","default_value":"","current_value":"","validator":""},"tcp.tunnel.port":{"name":"tcp.tunnel.port","type":2,"description":"Port
+        to redirect the TCP tunnel to (optional).","default_value":"0","current_value":"0","validator":"^[\\-\\+]?[\\d]+$"}},"handlers":[{"name":"tcp.proxy
+        on","description":"Start TCP proxy.","parser":""},{"name":"tcp.proxy off","description":"Stop
+        TCP proxy.","parser":""}],"running":false,"state":{}},{"name":"ticker","description":"A
+        module to execute one or more commands every given amount of seconds.","author":"Simone
+        Margaritelli \u003cevilsocket@gmail.com\u003e","parameters":{"ticker.commands":{"name":"ticker.commands","type":0,"description":"List
+        of commands for the main ticker separated by a ;","default_value":"clear;
+        net.show; events.show 20","current_value":"clear; net.show; events.show 20","validator":""},"ticker.period":{"name":"ticker.period","type":2,"description":"Main
+        ticker period in seconds","default_value":"1","current_value":"1","validator":"^[\\-\\+]?[\\d]+$"}},"handlers":[{"name":"ticker
+        on","description":"Start the main ticker.","parser":""},{"name":"ticker off","description":"Stop
+        the main ticker.","parser":""},{"name":"ticker.create \u003cname\u003e \u003cperiod\u003e
+        \u003ccommands\u003e","description":"Create and start a named ticker.","parser":"(?i)^ticker\\.create\\s+([^\\s]+)\\s+(\\d+)\\s+(.+)$"},{"name":"ticker.destroy
+        \u003cname\u003e","description":"Stop a named ticker.","parser":"(?i)^ticker\\.destroy\\s+([^\\s]+)$"}],"running":false,"state":{}},{"name":"ui","description":"Web
+        User Interface.","author":"Simone Margaritelli \u003cevilsocket@gmail.com\u003e","parameters":{"ui.address":{"name":"ui.address","type":0,"description":"Address
+        to bind the web ui to.","default_value":"127.0.0.1","current_value":"127.0.0.1","validator":"^(?:[0-9]{1,3}\\.){3}[0-9]{1,3}$"},"ui.port":{"name":"ui.port","type":2,"description":"Port
+        to bind the web ui server to.","default_value":"8080","current_value":"8080","validator":"^[\\-\\+]?[\\d]+$"}},"handlers":[{"name":"ui
+        on","description":"Start the web user interface.","parser":""},{"name":"ui
+        off","description":"Stop the web user interface.","parser":""}],"running":false,"state":{}},{"name":"update","description":"A
+        module to check for bettercap''s updates.","author":"Simone Margaritelli \u003cevilsocket@gmail.com\u003e","parameters":{},"handlers":[{"name":"update.check
+        on","description":"Check latest available stable version and compare it with
+        the one being used.","parser":""}],"running":false,"state":{}},{"name":"wifi","description":"A
+        module to monitor and perform wireless attacks on 802.11.","author":"Simone
+        Margaritelli \u003cevilsocket@gmail.com\u003e \u0026\u0026 Gianluca Braga
+        \u003cmatrix86@gmail.com\u003e","parameters":{"wifi.ap.bssid":{"name":"wifi.ap.bssid","type":0,"description":"BSSID
+        of the fake access point.","default_value":"\u003crandom mac\u003e","current_value":"59:0d:b8:1b:a6:ec","validator":"[a-fA-F0-9]{2}:[a-fA-F0-9]{2}:[a-fA-F0-9]{2}:[a-fA-F0-9]{2}:[a-fA-F0-9]{2}:[a-fA-F0-9]{2}"},"wifi.ap.channel":{"name":"wifi.ap.channel","type":2,"description":"Channel
+        of the fake access point.","default_value":"1","current_value":"1","validator":"^[\\-\\+]?[\\d]+$"},"wifi.ap.encryption":{"name":"wifi.ap.encryption","type":1,"description":"If
+        true, the fake access point will use WPA2, otherwise it''ll result as an open
+        AP.","default_value":"true","current_value":"true","validator":"^(true|false)$"},"wifi.ap.ssid":{"name":"wifi.ap.ssid","type":0,"description":"SSID
+        of the fake access point.","default_value":"FreeWiFi","current_value":"FreeWiFi","validator":""},"wifi.ap.ttl":{"name":"wifi.ap.ttl","type":2,"description":"Seconds
+        of inactivity for an access points to be considered not in range anymore.","default_value":"300","current_value":"300","validator":"^[\\-\\+]?[\\d]+$"},"wifi.assoc.acquired":{"name":"wifi.assoc.acquired","type":1,"description":"Send
+        association to AP''s for which key material was already acquired.","default_value":"false","current_value":"false","validator":"^(true|false)$"},"wifi.assoc.open":{"name":"wifi.assoc.open","type":1,"description":"Send
+        association requests to open networks.","default_value":"false","current_value":"false","validator":"^(true|false)$"},"wifi.assoc.silent":{"name":"wifi.assoc.silent","type":1,"description":"If
+        true, messages from wifi.assoc will be suppressed.","default_value":"false","current_value":"false","validator":"^(true|false)$"},"wifi.assoc.skip":{"name":"wifi.assoc.skip","type":0,"description":"Comma
+        separated list of BSSID to skip while sending association requests.","default_value":"","current_value":"","validator":""},"wifi.bruteforce.stop_at_first":{"name":"wifi.bruteforce.stop_at_first","type":1,"description":"Stop
+        bruteforcing after the first successful attempt.","default_value":"true","current_value":"true","validator":"^(true|false)$"},"wifi.bruteforce.target":{"name":"wifi.bruteforce.target","type":0,"description":"One
+        or more comma separated targets to bruteforce as ESSID or BSSID. Leave empty
+        to bruteforce all visibile access points.","default_value":"","current_value":"","validator":""},"wifi.bruteforce.timeout":{"name":"wifi.bruteforce.timeout","type":2,"description":"Timeout
+        in seconds for each association attempt.","default_value":"15","current_value":"15","validator":"^[\\-\\+]?[\\d]+$"},"wifi.bruteforce.wide":{"name":"wifi.bruteforce.wide","type":1,"description":"Attempt
+        a password for each access point before moving to the next one.","default_value":"false","current_value":"false","validator":"^(true|false)$"},"wifi.bruteforce.wordlist":{"name":"wifi.bruteforce.wordlist","type":0,"description":"Wordlist
+        file to use for bruteforcing.","default_value":"/usr/share/dict/words","current_value":"/usr/share/dict/words","validator":""},"wifi.bruteforce.workers":{"name":"wifi.bruteforce.workers","type":2,"description":"How
+        many parallel workers. WARNING: Some routers will ban multiple concurrent
+        attempts.","default_value":"1","current_value":"1","validator":"^[\\-\\+]?[\\d]+$"},"wifi.channel_switch_announce.silent":{"name":"wifi.channel_switch_announce.silent","type":1,"description":"If
+        true, messages from wifi.channel_switch_announce will be suppressed.","default_value":"false","current_value":"false","validator":"^(true|false)$"},"wifi.deauth.acquired":{"name":"wifi.deauth.acquired","type":1,"description":"Send
+        wifi deauth packets from AP''s for which key material was already acquired.","default_value":"false","current_value":"false","validator":"^(true|false)$"},"wifi.deauth.open":{"name":"wifi.deauth.open","type":1,"description":"Send
+        wifi deauth packets to open networks.","default_value":"true","current_value":"true","validator":"^(true|false)$"},"wifi.deauth.silent":{"name":"wifi.deauth.silent","type":1,"description":"If
+        true, messages from wifi.deauth will be suppressed.","default_value":"false","current_value":"false","validator":"^(true|false)$"},"wifi.deauth.skip":{"name":"wifi.deauth.skip","type":0,"description":"Comma
+        separated list of BSSID to skip while sending deauth packets.","default_value":"","current_value":"","validator":""},"wifi.fake_auth.silent":{"name":"wifi.fake_auth.silent","type":1,"description":"If
+        true, messages from wifi.fake_auth will be suppressed.","default_value":"false","current_value":"false","validator":"^(true|false)$"},"wifi.handshakes.aggregate":{"name":"wifi.handshakes.aggregate","type":1,"description":"If
+        true, all handshakes will be saved inside a single file, otherwise a folder
+        with per-network pcap files will be created.","default_value":"true","current_value":"true","validator":"^(true|false)$"},"wifi.handshakes.file":{"name":"wifi.handshakes.file","type":0,"description":"File
+        path of the pcap file to save handshakes to.","default_value":"~/bettercap-wifi-handshakes.pcap","current_value":"~/bettercap-wifi-handshakes.pcap","validator":""},"wifi.hop.period":{"name":"wifi.hop.period","type":2,"description":"If
+        channel hopping is enabled (empty wifi.recon.channel), this is the time in
+        milliseconds the algorithm will hop on every channel (it''ll be doubled if
+        both 2.4 and 5.0 bands are available).","default_value":"250","current_value":"250","validator":"^[\\-\\+]?[\\d]+$"},"wifi.interface":{"name":"wifi.interface","type":0,"description":"If
+        filled, will use this interface name instead of the one provided by the -iface
+        argument or detected automatically.","default_value":"","current_value":"","validator":""},"wifi.region":{"name":"wifi.region","type":0,"description":"Set
+        the WiFi region to this value before activating the interface.","default_value":"","current_value":"","validator":""},"wifi.rssi.min":{"name":"wifi.rssi.min","type":2,"description":"Minimum
+        WiFi signal strength in dBm.","default_value":"-200","current_value":"-200","validator":"^[\\-\\+]?[\\d]+$"},"wifi.show.filter":{"name":"wifi.show.filter","type":0,"description":"Defines
+        a regular expression filter for wifi.show","default_value":"","current_value":"","validator":""},"wifi.show.limit":{"name":"wifi.show.limit","type":2,"description":"Defines
+        limit for wifi.show","default_value":"0","current_value":"0","validator":"^[\\-\\+]?[\\d]+$"},"wifi.show.manufacturer":{"name":"wifi.show.manufacturer","type":1,"description":"If
+        true, wifi.show will also show the devices manufacturers.","default_value":"false","current_value":"false","validator":"^(true|false)$"},"wifi.show.sort":{"name":"wifi.show.sort","type":0,"description":"Defines
+        sorting field (rssi, bssid, essid, channel, encryption, clients, seen, sent,
+        rcvd) and direction (asc or desc) for wifi.show","default_value":"rssi asc","current_value":"rssi
+        asc","validator":"(rssi|bssid|essid|channel|encryption|clients|seen|sent|rcvd)
+        (desc|asc)"},"wifi.skip-broken":{"name":"wifi.skip-broken","type":1,"description":"If
+        true, dot11 packets with an invalid checksum will be skipped.","default_value":"true","current_value":"true","validator":"^(true|false)$"},"wifi.source.file":{"name":"wifi.source.file","type":0,"description":"If
+        set, the wifi module will read from this pcap file instead of the hardware
+        interface.","default_value":"","current_value":"","validator":""},"wifi.sta.ttl":{"name":"wifi.sta.ttl","type":2,"description":"Seconds
+        of inactivity for a client station to be considered not in range or not connected
+        to its access point anymore.","default_value":"300","current_value":"300","validator":"^[\\-\\+]?[\\d]+$"},"wifi.txpower":{"name":"wifi.txpower","type":2,"description":"Set
+        WiFi transmission power to this value before activating the interface.","default_value":"30","current_value":"30","validator":"^[\\-\\+]?[\\d]+$"}},"handlers":[{"name":"wifi.recon
+        on","description":"Start 802.11 wireless base stations discovery and channel
+        hopping.","parser":""},{"name":"wifi.recon off","description":"Stop 802.11
+        wireless base stations discovery and channel hopping.","parser":""},{"name":"wifi.bruteforce
+        on","description":"Attempts to bruteforce WiFi authentication.","parser":""},{"name":"wifi.bruteforce
+        off","description":"Stop previously started bruteforcing.","parser":""},{"name":"wifi.clear","description":"Clear
+        all access points collected by the WiFi discovery module.","parser":""},{"name":"wifi.recon
+        MAC","description":"Set 802.11 base station address to filter for.","parser":"wifi.recon
+        ((?:[0-9A-Fa-f]{2}[:-]){5}(?:[0-9A-Fa-f]{2}))"},{"name":"wifi.recon clear","description":"Remove
+        the 802.11 base station filter.","parser":""},{"name":"wifi.client.probe.sta.filter
+        FILTER","description":"Use this regular expression on the station address
+        to filter client probes, ''clear'' to reset the filter.","parser":"wifi.client.probe.sta.filter
+        (.+)"},{"name":"wifi.client.probe.ap.filter FILTER","description":"Use this
+        regular expression on the access point name to filter client probes, ''clear''
+        to reset the filter.","parser":"wifi.client.probe.ap.filter (.+)"},{"name":"wifi.deauth
+        BSSID","description":"Start a 802.11 deauth attack, if an access point BSSID
+        is provided, every client will be deauthenticated, otherwise only the selected
+        client. Use ''all'', ''*'' or a broadcast BSSID (ff:ff:ff:ff:ff:ff) to iterate
+        every access point with at least one client and start a deauth attack for
+        each one.","parser":"wifi\\.deauth ((?:[a-fA-F0-9:]{11,})|all|\\*)"},{"name":"wifi.probe
+        BSSID ESSID","description":"Sends a fake client probe with the given station
+        BSSID, searching for ESSID.","parser":"wifi\\.probe\\s+([a-fA-F0-9:]{11,})\\s+([^\\s].+)"},{"name":"wifi.channel_switch_announce
+        BSSID CHANNEL ","description":"Start a 802.11 channel hop attack, all client
+        will be forced to change the channel lead to connection down.","parser":"wifi\\.channel_switch_announce
+        ((?:[a-fA-F0-9:]{11,}))\\s+((?:[0-9]+))"},{"name":"wifi.fake_auth bssid client","description":"send
+        an fake authentication with client mac to ap lead to client disconnect","parser":"wifi\\.fake_auth
+        ((?:[a-fA-F0-9:]{11,}))\\s+((?:[a-fA-F0-9:]{11,}))"},{"name":"wifi.assoc BSSID","description":"Send
+        an association request to the selected BSSID in order to receive a RSN PMKID
+        key. Use ''all'', ''*'' or a broadcast BSSID (ff:ff:ff:ff:ff:ff) to iterate
+        for every access point.","parser":"wifi\\.assoc ((?:[a-fA-F0-9:]{11,})|all|\\*)"},{"name":"wifi.ap","description":"Inject
+        fake management beacons in order to create a rogue access point.","parser":""},{"name":"wifi.show.wps
+        BSSID","description":"Show WPS information about a given station (use ''all'',
+        ''*'' or a broadcast BSSID for all).","parser":"wifi\\.show\\.wps ((?:[a-fA-F0-9:]{11,})|all|\\*)"},{"name":"wifi.show","description":"Show
+        current wireless stations list (default sorting by essid).","parser":""},{"name":"wifi.recon.channel
+        CHANNEL","description":"WiFi channels (comma separated) or ''clear'' for channel
+        hopping.","parser":"wifi\\.recon\\.channel[\\s]+([0-9]+(?:[, ]+[0-9]+)*|clear)"}],"running":false,"state":{"channel":0,"channels":[]}},{"name":"wol","description":"A
+        module to send Wake On LAN packets in broadcast or to a specific MAC.","author":"Simone
+        Margaritelli \u003cevilsocket@gmail.com\u003e","parameters":{},"handlers":[{"name":"wol.eth
+        MAC","description":"Send a WOL as a raw ethernet packet of type 0x0847 (if
+        no MAC is specified, ff:ff:ff:ff:ff:ff will be used).","parser":"wol.eth(\\s.+)?"},{"name":"wol.udp
+        MAC","description":"Send a WOL as an IPv4 broadcast packet to UDP port 9 (if
+        no MAC is specified, ff:ff:ff:ff:ff:ff will be used).","parser":"wol.udp(\\s.+)?"}],"running":false,"state":{}},{"name":"zerogod","description":"A
+        DNS-SD / mDNS / Bonjour / Zeroconf module for discovery and spoofing.","author":"Simone
+        Margaritelli \u003cevilsocket@gmail.com\u003e","parameters":{"zerogod.advertise.certificate":{"name":"zerogod.advertise.certificate","type":0,"description":"TLS
+        certificate file (will be auto generated if filled but not existing) to use
+        for advertised TCP services.","default_value":"~/.bettercap-zerogod.cert.pem","current_value":"~/.bettercap-zerogod.cert.pem","validator":""},"zerogod.advertise.certificate.bits":{"name":"zerogod.advertise.certificate.bits","type":2,"description":"Number
+        of bits of the RSA private key of the generated HTTPS certificate.","default_value":"4096","current_value":"4096","validator":"^[\\-\\+]?[\\d]+$"},"zerogod.advertise.certificate.commonname":{"name":"zerogod.advertise.certificate.commonname","type":0,"description":"Common
+        Name field of the generated HTTPS certificate.","default_value":"bettercap","current_value":"bettercap","validator":".*"},"zerogod.advertise.certificate.country":{"name":"zerogod.advertise.certificate.country","type":0,"description":"Country
+        field of the generated HTTPS certificate.","default_value":"US","current_value":"US","validator":".*"},"zerogod.advertise.certificate.locality":{"name":"zerogod.advertise.certificate.locality","type":0,"description":"Locality
+        field of the generated HTTPS certificate.","default_value":"","current_value":"","validator":".*"},"zerogod.advertise.certificate.organization":{"name":"zerogod.advertise.certificate.organization","type":0,"description":"Organization
+        field of the generated HTTPS certificate.","default_value":"bettercap devteam","current_value":"bettercap
+        devteam","validator":".*"},"zerogod.advertise.certificate.organizationalunit":{"name":"zerogod.advertise.certificate.organizationalunit","type":0,"description":"Organizational
+        Unit field of the generated HTTPS certificate.","default_value":"https://bettercap.org/","current_value":"https://bettercap.org/","validator":".*"},"zerogod.advertise.key":{"name":"zerogod.advertise.key","type":0,"description":"TLS
+        key file (will be auto generated if filled but not existing) to use for advertised
+        TCP services.","default_value":"~/.bettercap-zerogod.key.pem","current_value":"~/.bettercap-zerogod.key.pem","validator":""},"zerogod.ipp.save_path":{"name":"zerogod.ipp.save_path","type":0,"description":"If
+        an IPP acceptor is started, this setting defines where to save documents received
+        for printing.","default_value":"~/.bettercap/zerogod/documents/","current_value":"~/.bettercap/zerogod/documents/","validator":""},"zerogod.verbose":{"name":"zerogod.verbose","type":1,"description":"Log
+        every mDNS query.","default_value":"false","current_value":"false","validator":"^(true|false)$"}},"handlers":[{"name":"zerogod.discovery
+        on","description":"Start DNS-SD / mDNS discovery.","parser":""},{"name":"zerogod.discovery
+        off","description":"Stop DNS-SD / mDNS discovery.","parser":""},{"name":"zerogod.show-full
+        ADDRESS","description":"Show discovered services and DNS records given an
+        ip address.","parser":"zerogod\\.show-full(.*)"},{"name":"zerogod.show ADDRESS","description":"Show
+        discovered services given an ip ADDRESS.","parser":"zerogod\\.show(.*)"},{"name":"zerogod.save
+        ADDRESS FILENAME","description":"Save the mDNS information of a given ADDRESS
+        in the FILENAME yaml file.","parser":"zerogod.save (.+) (.+)"},{"name":"zerogod.advertise
+        FILENAME","description":"Start advertising the mDNS services from the FILENAME
+        yaml file. Use ''off'' to stop advertising.","parser":"zerogod.advertise (.+)"},{"name":"zerogod.impersonate
+        ADDRESS","description":"Impersonate ADDRESS by advertising the same discovery
+        information. Use ''off'' to stop impersonation.","parser":"zerogod.impersonate
+        (.+)"}],"running":false,"state":{}}]
+
+        '
+    headers:
+      Access-Control-Allow-Headers:
+      - Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization
+      Access-Control-Allow-Methods:
+      - POST, GET, OPTIONS, PUT, DELETE
+      Access-Control-Allow-Origin:
+      - '*'
+      Content-Type:
+      - application/json
+      Date:
+      - Fri, 22 Aug 2025 15:06:10 GMT
+      Referrer-Policy:
+      - same-origin
+      Transfer-Encoding:
+      - chunked
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - DENY
+      X-Xss-Protection:
+      - 1; mode=block
+    status:
+      code: 200
+      message: OK
+version: 1
