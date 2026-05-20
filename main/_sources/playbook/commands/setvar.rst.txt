@@ -2,13 +2,15 @@
 setvar
 ======
 
-Set a variable. This could be used for string interpolation or for
-copying variables.
-This command does not modify the Builtin Variable ``RESULT_STDOUT``.
+Set a variable to a string value. Useful for string interpolation and copying or
+transforming existing variables.
+
+.. note::
+
+   This command does not modify ``RESULT_STDOUT``.
 
 .. code-block:: yaml
 
-   ###
    vars:
      FOO: "WORLD"
 
@@ -19,24 +21,38 @@ This command does not modify the Builtin Variable ``RESULT_STDOUT``.
 
 .. confval:: variable
 
-   The variable-name that stores the value of *cmd*
+   Name of the variable to set (without the leading ``$``).
 
    :type: str
-   :required: ``True``
+   :required: True
 
 
 .. confval:: cmd
 
-   The value of the variable
+   The value to assign to the variable. Supports variable substitution.
 
    :type: str
-   :required: ``True``
+   :required: True
 
 .. confval:: encoder
 
-   If encoder is set, the command in cmd will be encoded before stored in ``variable``.
-   Please note that if encoding fails, this command will fallback to plain cmd and will
-   print out a warning.
+   Encode or decode the value of ``cmd`` before storing it in ``variable``.
+
+   Supported values:
+
+   * ``base64-encoder`` — encode to Base64
+   * ``base64-decoder`` — decode from Base64
+   * ``rot13`` — apply ROT13
+   * ``urlencoder`` — percent-encode for use in URLs
+   * ``urldecoder`` — decode percent-encoded strings
+
+   :type: str['base64-encoder', 'base64-decoder', 'rot13', 'urlencoder', 'urldecoder']
+
+   .. note::
+
+      Note that if encoding fails, the plain value is stored and a warning is printed.
+
+   Example:
 
    .. code-block:: yaml
 
@@ -96,5 +112,3 @@ This command does not modify the Builtin Variable ``RESULT_STDOUT``.
 
         - type: debug
           cmd: $TEST
-
-   :type: str['base64-encoder', 'base64-decoder', 'rot13', 'urlencoder', 'urldecoder']

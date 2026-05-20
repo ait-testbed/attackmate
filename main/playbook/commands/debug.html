@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>debug &mdash; AttackMate 0.6.0 documentation</title>
+  <title>debug &mdash; AttackMate 1.0.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css" />
 
@@ -76,12 +76,12 @@
             v0.6.0
         </option>
         
-        <option value="../../../development/playbook/commands/debug.html" >
-            development
-        </option>
-        
         <option value="debug.html" selected>
             main
+        </option>
+        
+        <option value="../../../development/playbook/commands/debug.html" >
+            development
         </option>
         
     </select>
@@ -91,7 +91,16 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">General:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html">AttackMate <img alt="Logo" src="/images/AttackMate_logo_no_logo.png" align="right" height="90"></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#installation">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#execute">Execute</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#documentation">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#publications">Publications</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#contribution">Contribution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#disclaimer">Disclaimer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#security">Security</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#license">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#financial-support">Financial Support</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Getting Started:</span></p>
 <ul>
@@ -107,6 +116,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../structure.html">Structure</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../vars.html">Variables</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Commands</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="bettercap.html">bettercap</a></li>
 <li class="toctree-l2"><a class="reference internal" href="browser.html">browser</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">debug</a></li>
 <li class="toctree-l2"><a class="reference internal" href="father.html">father</a></li>
@@ -119,6 +129,7 @@
 <li class="toctree-l2"><a class="reference internal" href="msf-session.html">msf-session</a></li>
 <li class="toctree-l2"><a class="reference internal" href="payload.html">msf-payload</a></li>
 <li class="toctree-l2"><a class="reference internal" href="regex.html">regex</a></li>
+<li class="toctree-l2"><a class="reference internal" href="remote.html">remote</a></li>
 <li class="toctree-l2"><a class="reference internal" href="setvar.html">setvar</a></li>
 <li class="toctree-l2"><a class="reference internal" href="shell.html">shell</a></li>
 <li class="toctree-l2"><a class="reference internal" href="sftp.html">sftp</a></li>
@@ -132,9 +143,13 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../session/index.html">Sessions, Interactive</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../troubleshooting.html">Troubleshooting</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Developing:</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../developing/contribution.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../developing/development.html">Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../developing/architecture.html">System Architecture (C4)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../developing/command.html">Adding a New Command</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../developing/baseexecutor.html">Adding a New Executor</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../developing/integration.html">Using AttackMate in a Python Script</a></li>
@@ -171,11 +186,10 @@
              
   <section id="debug">
 <h1>debug<a class="headerlink" href="#debug" title="Permalink to this heading"></a></h1>
-<p>This command prints out strings and variables and is for debugging
-purposes/printing to the console only. This command does not modify the Builtin Variable <code class="docutils literal notranslate"><span class="pre">RESULT_STDOUT</span></code>.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">debug</span></code> command prints messages and variables to the console. It is intended for
+troubleshooting playbooks and does not modify <code class="docutils literal notranslate"><span class="pre">RESULT_STDOUT</span></code> (<a class="reference internal" href="../vars.html#builtin-variables"><span class="std std-ref">builtin variables</span></a>).</p>
 <blockquote>
-<div><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1">###</span>
-<span class="nt">vars</span><span class="p">:</span>
+<div><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">vars</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">$SERVER_ADDRESS</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.42.0.254</span>
 <span class="w">  </span><span class="nt">$NMAP</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/usr/bin/nmap</span>
 
@@ -189,7 +203,7 @@ purposes/printing to the console only. This command does not modify the Builtin 
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-cmd">
 <span class="sig-name descname"><span class="pre">cmd</span></span><a class="headerlink" href="#confval-cmd" title="Permalink to this definition"></a></dt>
-<dd><p>A message to print on the screen.</p>
+<dd><p>A message to print to the console. Supports variable substitution.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str</p>
@@ -197,19 +211,25 @@ purposes/printing to the console only. This command does not modify the Builtin 
 <dt class="field-even">Default<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">empty_string</span></code></p>
 </dd>
+<dt class="field-odd">Required<span class="colon">:</span></dt>
+<dd class="field-odd"><p>False</p>
+</dd>
 </dl>
 </dd></dl>
 
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-varstore">
 <span class="sig-name descname"><span class="pre">varstore</span></span><a class="headerlink" href="#confval-varstore" title="Permalink to this definition"></a></dt>
-<dd><p>Print out all variables that are stored in the VariableStore.</p>
+<dd><p>Print out all variables currently stored in the VariableStore.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>bool</p>
 </dd>
 <dt class="field-even">Default<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">False</span></code></p>
+</dd>
+<dt class="field-odd">Required<span class="colon">:</span></dt>
+<dd class="field-odd"><p>False</p>
 </dd>
 </dl>
 </dd></dl>
@@ -219,13 +239,16 @@ purposes/printing to the console only. This command does not modify the Builtin 
 <span class="sig-name descname"><span class="pre">exit</span></span><a class="headerlink" href="#confval-exit" title="Permalink to this definition"></a></dt>
 <dd><p>This setting causes the programm to exit when the command was
 executed. It will exit with an error in order to indicate
-that this is an exceptional break.</p>
+that this is an intentional early termination.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>bool</p>
 </dd>
 <dt class="field-even">Default<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">False</span></code></p>
+</dd>
+<dt class="field-odd">Required<span class="colon">:</span></dt>
+<dd class="field-odd"><p>False</p>
 </dd>
 </dl>
 </dd></dl>
@@ -233,14 +256,17 @@ that this is an exceptional break.</p>
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-wait_for_key">
 <span class="sig-name descname"><span class="pre">wait_for_key</span></span><a class="headerlink" href="#confval-wait_for_key" title="Permalink to this definition"></a></dt>
-<dd><p>This setting causes the programm to pause until the user
-hits the enter key.</p>
+<dd><p>Pause execution until the user presses Enter. Useful for stepping through a
+playbook manually.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>bool</p>
 </dd>
 <dt class="field-even">Default<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">False</span></code></p>
+</dd>
+<dt class="field-odd">Required<span class="colon">:</span></dt>
+<dd class="field-odd"><p>False</p>
 </dd>
 </dl>
 </dd></dl>
@@ -311,11 +337,11 @@ hits the enter key.</p>
             </dd>
             
             <dd>
-                <a href="../../../development/playbook/commands/debug.html">development</a>
+                <a href="debug.html">main</a>
             </dd>
             
             <dd>
-                <a href="debug.html">main</a>
+                <a href="../../../development/playbook/commands/debug.html">development</a>
             </dd>
             
         </dl>

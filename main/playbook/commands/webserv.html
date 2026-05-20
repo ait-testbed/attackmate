@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>webserv &mdash; AttackMate 0.6.0 documentation</title>
+  <title>webserv &mdash; AttackMate 1.0.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css" />
 
@@ -76,12 +76,12 @@
             v0.6.0
         </option>
         
-        <option value="../../../development/playbook/commands/webserv.html" >
-            development
-        </option>
-        
         <option value="webserv.html" selected>
             main
+        </option>
+        
+        <option value="../../../development/playbook/commands/webserv.html" >
+            development
         </option>
         
     </select>
@@ -91,7 +91,16 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">General:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html">AttackMate <img alt="Logo" src="/images/AttackMate_logo_no_logo.png" align="right" height="90"></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#installation">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#execute">Execute</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#documentation">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#publications">Publications</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#contribution">Contribution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#disclaimer">Disclaimer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#security">Security</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#license">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#financial-support">Financial Support</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Getting Started:</span></p>
 <ul>
@@ -107,6 +116,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../structure.html">Structure</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../vars.html">Variables</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Commands</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="bettercap.html">bettercap</a></li>
 <li class="toctree-l2"><a class="reference internal" href="browser.html">browser</a></li>
 <li class="toctree-l2"><a class="reference internal" href="debug.html">debug</a></li>
 <li class="toctree-l2"><a class="reference internal" href="father.html">father</a></li>
@@ -119,6 +129,7 @@
 <li class="toctree-l2"><a class="reference internal" href="msf-session.html">msf-session</a></li>
 <li class="toctree-l2"><a class="reference internal" href="payload.html">msf-payload</a></li>
 <li class="toctree-l2"><a class="reference internal" href="regex.html">regex</a></li>
+<li class="toctree-l2"><a class="reference internal" href="remote.html">remote</a></li>
 <li class="toctree-l2"><a class="reference internal" href="setvar.html">setvar</a></li>
 <li class="toctree-l2"><a class="reference internal" href="shell.html">shell</a></li>
 <li class="toctree-l2"><a class="reference internal" href="sftp.html">sftp</a></li>
@@ -132,9 +143,13 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../session/index.html">Sessions, Interactive</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../troubleshooting.html">Troubleshooting</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Developing:</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../developing/contribution.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../developing/development.html">Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../developing/architecture.html">System Architecture (C4)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../developing/command.html">Adding a New Command</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../developing/baseexecutor.html">Adding a New Executor</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../developing/integration.html">Using AttackMate in a Python Script</a></li>
@@ -170,32 +185,31 @@
            <div itemprop="articleBody">
              
   <section id="webserv">
-<h1>webserv<a class="headerlink" href="#webserv" title="Permalink to this heading"></a></h1>
-<p>Start a http-server and share a file. This command
-will return after the first HTTP-request. To keep serving the file instead set keep_serving to True.
-The webserv command has to be run in background mode, otherwise the playbook execution will halt until a request is received.
-.. code-block:: yaml</p>
-<blockquote>
-<div><p>###
-commands:</p>
-<blockquote>
-<div><ul class="simple">
-<li><p>type: webserv
-local_path: “/tmp/webshell.php”
-port: 8000</p></li>
-</ul>
-</div></blockquote>
-</div></blockquote>
+<span id="id1"></span><h1>webserv<a class="headerlink" href="#webserv" title="Permalink to this heading"></a></h1>
+<p>Start a simple HTTP server to serve a single file. By default, the server stops after
+handling the first request. Set <a class="reference internal" href="#confval-keep_serving"><code class="xref std std-confval docutils literal notranslate"><span class="pre">keep_serving</span></code></a> to <code class="docutils literal notranslate"><span class="pre">True</span></code> to continue serving.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This command blocks until a request is received. Always run it in
+<a class="reference internal" href="index.html#confval-background"><code class="xref std std-confval docutils literal notranslate"><span class="pre">background</span></code></a> mode to avoid halting playbook execution.</p>
+</div>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">commands</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">webserv</span>
+<span class="w">    </span><span class="nt">local_path</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/tmp/webshell.php&quot;</span>
+<span class="w">    </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8000</span>
+<span class="w">    </span><span class="nt">background</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+</pre></div>
+</div>
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-local_path">
 <span class="sig-name descname"><span class="pre">local_path</span></span><a class="headerlink" href="#confval-local_path" title="Permalink to this definition"></a></dt>
-<dd><p>Path to the file to share</p>
+<dd><p>Path to the file to serve.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str</p>
 </dd>
 <dt class="field-even">Required<span class="colon">:</span></dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code></p>
+<dd class="field-even"><p>True</p>
 </dd>
 </dl>
 </dd></dl>
@@ -203,7 +217,7 @@ port: 8000</p></li>
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-port">
 <span class="sig-name descname"><span class="pre">port</span></span><a class="headerlink" href="#confval-port" title="Permalink to this definition"></a></dt>
-<dd><p>Port to listen</p>
+<dd><p>Port to listen on.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>int</p>
@@ -211,13 +225,16 @@ port: 8000</p></li>
 <dt class="field-even">Default<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">8000</span></code></p>
 </dd>
+<dt class="field-odd">Required<span class="colon">:</span></dt>
+<dd class="field-odd"><p>False</p>
+</dd>
 </dl>
 </dd></dl>
 
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-address">
 <span class="sig-name descname"><span class="pre">address</span></span><a class="headerlink" href="#confval-address" title="Permalink to this definition"></a></dt>
-<dd><p>Address to listen</p>
+<dd><p>Address to listen on.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str</p>
@@ -225,19 +242,25 @@ port: 8000</p></li>
 <dt class="field-even">Default<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">0.0.0.0</span></code></p>
 </dd>
+<dt class="field-odd">Required<span class="colon">:</span></dt>
+<dd class="field-odd"><p>False</p>
+</dd>
 </dl>
 </dd></dl>
 
 <dl class="std confval">
-<dt class="sig sig-object std" id="confval-keep_servng">
-<span class="sig-name descname"><span class="pre">keep_servng</span></span><a class="headerlink" href="#confval-keep_servng" title="Permalink to this definition"></a></dt>
-<dd><p>Keep serving even after a request has been processed</p>
+<dt class="sig sig-object std" id="confval-keep_serving">
+<span class="sig-name descname"><span class="pre">keep_serving</span></span><a class="headerlink" href="#confval-keep_serving" title="Permalink to this definition"></a></dt>
+<dd><p>Continue serving the file after the first request has been handled.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>bool</p>
 </dd>
 <dt class="field-even">Default<span class="colon">:</span></dt>
-<dd class="field-even"><p>False</p>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">False</span></code></p>
+</dd>
+<dt class="field-odd">Required<span class="colon">:</span></dt>
+<dd class="field-odd"><p>False</p>
 </dd>
 </dl>
 </dd></dl>
@@ -308,11 +331,11 @@ port: 8000</p></li>
             </dd>
             
             <dd>
-                <a href="../../../development/playbook/commands/webserv.html">development</a>
+                <a href="webserv.html">main</a>
             </dd>
             
             <dd>
-                <a href="webserv.html">main</a>
+                <a href="../../../development/playbook/commands/webserv.html">development</a>
             </dd>
             
         </dl>

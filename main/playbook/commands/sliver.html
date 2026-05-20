@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>sliver &mdash; AttackMate 0.6.0 documentation</title>
+  <title>sliver &mdash; AttackMate 1.0.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css" />
 
@@ -76,12 +76,12 @@
             v0.6.0
         </option>
         
-        <option value="../../../development/playbook/commands/sliver.html" >
-            development
-        </option>
-        
         <option value="sliver.html" selected>
             main
+        </option>
+        
+        <option value="../../../development/playbook/commands/sliver.html" >
+            development
         </option>
         
     </select>
@@ -91,7 +91,16 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">General:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html">AttackMate <img alt="Logo" src="/images/AttackMate_logo_no_logo.png" align="right" height="90"></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#installation">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#execute">Execute</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#documentation">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#publications">Publications</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#contribution">Contribution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#disclaimer">Disclaimer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#security">Security</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#license">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#financial-support">Financial Support</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Getting Started:</span></p>
 <ul>
@@ -107,6 +116,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../structure.html">Structure</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../vars.html">Variables</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Commands</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="bettercap.html">bettercap</a></li>
 <li class="toctree-l2"><a class="reference internal" href="browser.html">browser</a></li>
 <li class="toctree-l2"><a class="reference internal" href="debug.html">debug</a></li>
 <li class="toctree-l2"><a class="reference internal" href="father.html">father</a></li>
@@ -119,6 +129,7 @@
 <li class="toctree-l2"><a class="reference internal" href="msf-session.html">msf-session</a></li>
 <li class="toctree-l2"><a class="reference internal" href="payload.html">msf-payload</a></li>
 <li class="toctree-l2"><a class="reference internal" href="regex.html">regex</a></li>
+<li class="toctree-l2"><a class="reference internal" href="remote.html">remote</a></li>
 <li class="toctree-l2"><a class="reference internal" href="setvar.html">setvar</a></li>
 <li class="toctree-l2"><a class="reference internal" href="shell.html">shell</a></li>
 <li class="toctree-l2"><a class="reference internal" href="sftp.html">sftp</a></li>
@@ -132,9 +143,13 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../session/index.html">Sessions, Interactive</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../troubleshooting.html">Troubleshooting</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Developing:</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../developing/contribution.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../developing/development.html">Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../developing/architecture.html">System Architecture (C4)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../developing/command.html">Adding a New Command</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../developing/baseexecutor.html">Adding a New Executor</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../developing/integration.html">Using AttackMate in a Python Script</a></li>
@@ -171,12 +186,18 @@
              
   <section id="sliver">
 <span id="id1"></span><h1>sliver<a class="headerlink" href="#sliver" title="Permalink to this heading"></a></h1>
-<p>There are multiple commands from type ‘sliver’ to controll the sliver-server via API.</p>
+<p>Control the Sliver C2 server via its API. All commands use <code class="docutils literal notranslate"><span class="pre">type:</span> <span class="pre">sliver</span></code>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><strong>For developers:</strong> The <code class="docutils literal notranslate"><span class="pre">sliver</span></code> and <code class="docutils literal notranslate"><span class="pre">sliver-session</span></code> command families use a legacy
+<code class="docutils literal notranslate"><span class="pre">type</span></code> + <code class="docutils literal notranslate"><span class="pre">cmd</span></code> discrimination pattern and should not be replicated. New commands
+must define a unique <code class="docutils literal notranslate"><span class="pre">type</span></code> literal and handle sub-behavior branching via <code class="docutils literal notranslate"><span class="pre">cmd</span></code>
+in the executor. See <a class="reference internal" href="../../developing/command.html#command"><span class="std std-ref">Adding a New Command</span></a> for details.</p>
+</div>
 <section id="start-https-listener">
 <h2>start_https_listener<a class="headerlink" href="#start-https-listener" title="Permalink to this heading"></a></h2>
-<p>Start an HTTPS-Listener</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1">###</span>
-<span class="nt">commands</span><span class="p">:</span>
+<p>Start an HTTPS listener on the Sliver server.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">commands</span><span class="p">:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sliver</span>
 <span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">start_https_listener</span>
 <span class="w">    </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.0.0.0</span>
@@ -186,7 +207,7 @@
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-host">
 <span class="sig-name descname"><span class="pre">host</span></span><a class="headerlink" href="#confval-host" title="Permalink to this definition"></a></dt>
-<dd><p>Interface to bind server to.</p>
+<dd><p>Network interface to bind the listener to.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str</p>
@@ -200,7 +221,7 @@
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-port">
 <span class="sig-name descname"><span class="pre">port</span></span><a class="headerlink" href="#confval-port" title="Permalink to this definition"></a></dt>
-<dd><p>TCP-Listen port</p>
+<dd><p>TCP port to listen on.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>int</p>
@@ -214,7 +235,7 @@
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-domain">
 <span class="sig-name descname"><span class="pre">domain</span></span><a class="headerlink" href="#confval-domain" title="Permalink to this definition"></a></dt>
-<dd><p>Limit responses to specific domain</p>
+<dd><p>Limit responses to specific domain.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str</p>
@@ -228,7 +249,7 @@
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-website">
 <span class="sig-name descname"><span class="pre">website</span></span><a class="headerlink" href="#confval-website" title="Permalink to this definition"></a></dt>
-<dd><p>Website name</p>
+<dd><p>Website name to associate with this listener.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str</p>
@@ -242,7 +263,7 @@
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-acme">
 <span class="sig-name descname"><span class="pre">acme</span></span><a class="headerlink" href="#confval-acme" title="Permalink to this definition"></a></dt>
-<dd><p>Attempt to provision a let’s encrypt certificate</p>
+<dd><p>Attempt to provision a let’s encrypt certificate.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>bool</p>
@@ -256,7 +277,7 @@
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-persistent">
 <span class="sig-name descname"><span class="pre">persistent</span></span><a class="headerlink" href="#confval-persistent" title="Permalink to this definition"></a></dt>
-<dd><p>Make persistent across restarts.</p>
+<dd><p>Keep the listener running across Sliver server restarts.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>bool</p>
@@ -270,7 +291,7 @@
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-enforce_otp">
 <span class="sig-name descname"><span class="pre">enforce_otp</span></span><a class="headerlink" href="#confval-enforce_otp" title="Permalink to this definition"></a></dt>
-<dd><p>Enable or disable OTP authentication</p>
+<dd><p>Require OTP authentication for connecting implants.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>bool</p>
@@ -284,7 +305,7 @@
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-randomize_jarm">
 <span class="sig-name descname"><span class="pre">randomize_jarm</span></span><a class="headerlink" href="#confval-randomize_jarm" title="Permalink to this definition"></a></dt>
-<dd><p>Enable randomized Jarm fingerprints</p>
+<dd><p>Enable randomized JARM fingerprints.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>bool</p>
@@ -298,7 +319,7 @@
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-long_poll_timeout">
 <span class="sig-name descname"><span class="pre">long_poll_timeout</span></span><a class="headerlink" href="#confval-long_poll_timeout" title="Permalink to this definition"></a></dt>
-<dd><p>Server-Side long poll timeout(in seconds)</p>
+<dd><p>Server-side long poll timeout(in seconds).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>int</p>
@@ -312,7 +333,7 @@
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-long_poll_jitter">
 <span class="sig-name descname"><span class="pre">long_poll_jitter</span></span><a class="headerlink" href="#confval-long_poll_jitter" title="Permalink to this definition"></a></dt>
-<dd><p>Server-Side long poll jitter(in seconds)</p>
+<dd><p>Server-side long poll jitter(in seconds)</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>int</p>
@@ -341,9 +362,8 @@
 <section id="generate-implant">
 <h2>generate_implant<a class="headerlink" href="#generate-implant" title="Permalink to this heading"></a></h2>
 <p>Generates a new sliver binary and saves the implant to a given path or to /tmp/&lt;name&gt;.
-The path to the implant is saved and can be retrieved from the variable store as $LAST_SLIVER_IMPLANT.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1">###</span>
-<span class="nt">commands</span><span class="p">:</span>
+The path to the implant is saved and can be retrieved from the <a class="reference internal" href="../vars.html#builtin-variables"><span class="std std-ref">builtin variable</span></a> <code class="docutils literal notranslate"><span class="pre">$LAST_SLIVER_IMPLANT</span></code>.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">commands</span><span class="p">:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sliver</span>
 <span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">generate_implant</span>
 <span class="w">    </span><span class="nt">c2url</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;https://myC2url.com&quot;</span>
@@ -355,8 +375,7 @@ The path to the implant is saved and can be retrieved from the variable store as
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-target">
 <span class="sig-name descname"><span class="pre">target</span></span><a class="headerlink" href="#confval-target" title="Permalink to this definition"></a></dt>
-<dd><p>Compile the binary for the given operatingsystem to the given architecture. The
-following targets are supported:</p>
+<dd><p>Target operating system and architecture. Supported values:</p>
 <ul class="simple">
 <li><p>darwin/amd64</p></li>
 <li><p>darwin/arm64</p></li>
@@ -378,7 +397,7 @@ following targets are supported:</p>
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-c2url">
 <span class="sig-name descname"><span class="pre">c2url</span></span><a class="headerlink" href="#confval-c2url" title="Permalink to this definition"></a></dt>
-<dd><p>Url which is used by the implant to find the C2 server.</p>
+<dd><p>URL which is used by the implant to reach the C2 server.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str</p>
@@ -392,7 +411,7 @@ following targets are supported:</p>
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-format">
 <span class="sig-name descname"><span class="pre">format</span></span><a class="headerlink" href="#confval-format" title="Permalink to this definition"></a></dt>
-<dd><p>Specifies the output format for the implant. Valid formats are:</p>
+<dd><p>Output format for the implant binary. One of:</p>
 <ul class="simple">
 <li><p>EXECUTABLE</p></li>
 <li><p>SERVICE</p></li>
@@ -413,7 +432,7 @@ following targets are supported:</p>
 <dt class="sig sig-object std" id="confval-name">
 <span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#confval-name" title="Permalink to this definition"></a></dt>
 <dd><p>Name of the implant.
-This name is the session used by the attackmate command ‘sliver-session’.</p>
+This name is the session identifier used by <a class="reference internal" href="sliver-session.html#sliver-session"><span class="std std-ref">sliver-session</span></a> commands.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str</p>
@@ -427,8 +446,8 @@ This name is the session used by the attackmate command ‘sliver-session’.</p
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-filepath">
 <span class="sig-name descname"><span class="pre">filepath</span></span><a class="headerlink" href="#confval-filepath" title="Permalink to this definition"></a></dt>
-<dd><p>The local filepath to save the implant to. If none is given the implant is saved in /tmp.
-The &lt;name&gt; will be random and have the format ^tmp[a-z0-9]{8}$.</p>
+<dd><p>The local filepath to save the implant to. If omitted, the implant is saved to <code class="docutils literal notranslate"><span class="pre">/tmp</span></code>.
+The filename will be randomly genrated and have the format ^tmp[a-z0-9]{8}$.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str</p>
@@ -442,13 +461,13 @@ The &lt;name&gt; will be random and have the format ^tmp[a-z0-9]{8}$.</p>
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-IsBeacon">
 <span class="sig-name descname"><span class="pre">IsBeacon</span></span><a class="headerlink" href="#confval-IsBeacon" title="Permalink to this definition"></a></dt>
-<dd><p>Generate a beacon binary</p>
+<dd><p>Generate a beacon-mode implant instead of a session-mode implant.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>bool</p>
 </dd>
 <dt class="field-even">Default<span class="colon">:</span></dt>
-<dd class="field-even"><p>False</p>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">False</span></code></p>
 </dd>
 </dl>
 </dd></dl>
@@ -456,7 +475,7 @@ The &lt;name&gt; will be random and have the format ^tmp[a-z0-9]{8}$.</p>
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-RunAtLoad">
 <span class="sig-name descname"><span class="pre">RunAtLoad</span></span><a class="headerlink" href="#confval-RunAtLoad" title="Permalink to this definition"></a></dt>
-<dd><p>Run the implant entrypoint from DllMain/Constructor(shared library only)</p>
+<dd><p>Run the implant entrypoint from DllMain/Constructor (shared library only).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>bool</p>
@@ -470,19 +489,13 @@ The &lt;name&gt; will be random and have the format ^tmp[a-z0-9]{8}$.</p>
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-Evasion">
 <span class="sig-name descname"><span class="pre">Evasion</span></span><a class="headerlink" href="#confval-Evasion" title="Permalink to this definition"></a></dt>
-<dd><p>Enable evasion features (e.g. overwrite user space hooks)</p>
+<dd><p>Enable evasion features such as overwriting user space hooks.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>bool</p>
 </dd>
 <dt class="field-even">Default<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">False</span></code></p>
-</dd>
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>bool</p>
-</dd>
-<dt class="field-even">Default<span class="colon">:</span></dt>
-<dd class="field-even"><p>False</p>
 </dd>
 </dl>
 </dd></dl>
@@ -554,11 +567,11 @@ The &lt;name&gt; will be random and have the format ^tmp[a-z0-9]{8}$.</p>
             </dd>
             
             <dd>
-                <a href="../../../development/playbook/commands/sliver.html">development</a>
+                <a href="sliver.html">main</a>
             </dd>
             
             <dd>
-                <a href="sliver.html">main</a>
+                <a href="../../../development/playbook/commands/sliver.html">development</a>
             </dd>
             
         </dl>

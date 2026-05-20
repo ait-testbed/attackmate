@@ -4,7 +4,7 @@
    contain the root `toctree` directive.
 
 Welcome to AttackMate's documentation!
-==================================
+======================================
 
 .. toctree::
    :maxdepth: 1
@@ -32,11 +32,15 @@ Welcome to AttackMate's documentation!
    playbook/commands/index
    playbook/session/index
    playbook/examples
+   playbook/troubleshooting
 
 .. toctree::
    :maxdepth: 1
    :caption: Developing:
 
+   developing/contribution
+   developing/development
+   developing/architecture
    developing/command
    developing/baseexecutor
    developing/integration

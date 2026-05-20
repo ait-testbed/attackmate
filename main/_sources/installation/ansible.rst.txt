@@ -5,11 +5,11 @@ Installation with Ansible
 =========================
 
 It is possible to automatically install AttackMate using
-Ansible. The `ansible-role <https://github.com/ait-aecid/attackmate-ansible>`_ also deploys the sliver-fix.
+Ansible. The `ansible-role <https://github.com/ait-aecid/attackmate-ansible>`_ also deploys the :ref:`sliver-fix`.
 
 .. note::
 
-   Currently the ansible role only works with Debian and Ubuntu distributions.
+   Currently the ansible role supports Kali, Debian and Ubuntu distributions.
 
 
 Installation Steps
@@ -22,7 +22,7 @@ Installation Steps
   $ sudo apt update
   $ sudo apt install ansible -y
 
-2. Set Up the Playbook
+2. Set Up the Playbook:
 
    Create a new directory for your AttackMate setup, navigate into it, and create your playbook file:
 
@@ -32,10 +32,10 @@ Installation Steps
      $ cd my-attackmate
      $ touch install_attackmate.yml
 
-Open the `install_attackmate.yml` file and fill it with this sample playbook (it also can be found on the README-page
-of the `github-repository <https://github.com/ait-aecid/attackmate-ansible>`_), which installs AttackMate on localhost:
+Open the `install_attackmate.yml` file and fill it with this sample playbook to install AttackMate on localhost. The playbook can also can be found on the README page
+of the `github-repository <https://github.com/ait-aecid/attackmate-ansible>`_, have a look at the role variables there for further configuration options.
 
-::
+.. code-block:: yaml
 
     - name: Install attackmate
       become: true
@@ -64,16 +64,16 @@ of the `github-repository <https://github.com/ait-aecid/attackmate-ansible>`_), 
   localhost ansible_connection=local
 
 
-3. Clone the Ansible Role
+4. Clone the Ansible Role:
 
-   Ansible expects all roles to be in the **roles** directory. Create this directory and clone the repository:
+   Ansible expects all roles to be in the **roles** directory. Create this directory and clone the ansible role repository:
 
 ::
 
   $ mkdir -p roles/attackmate
   $ git clone https://github.com/ait-testbed/attackmate-ansible roles/attackmate
 
-4. Run the playbook
+5. Run the playbook:
 
 ::
 

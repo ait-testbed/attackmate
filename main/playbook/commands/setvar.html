@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>setvar &mdash; AttackMate 0.6.0 documentation</title>
+  <title>setvar &mdash; AttackMate 1.0.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css" />
 
@@ -21,7 +21,7 @@
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="shell" href="shell.html" />
-    <link rel="prev" title="regex" href="regex.html" /> 
+    <link rel="prev" title="remote" href="remote.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -76,12 +76,12 @@
             v0.6.0
         </option>
         
-        <option value="../../../development/playbook/commands/setvar.html" >
-            development
-        </option>
-        
         <option value="setvar.html" selected>
             main
+        </option>
+        
+        <option value="../../../development/playbook/commands/setvar.html" >
+            development
         </option>
         
     </select>
@@ -91,7 +91,16 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">General:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html">AttackMate <img alt="Logo" src="/images/AttackMate_logo_no_logo.png" align="right" height="90"></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#installation">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#execute">Execute</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#documentation">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#publications">Publications</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#contribution">Contribution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#disclaimer">Disclaimer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#security">Security</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#license">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#financial-support">Financial Support</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Getting Started:</span></p>
 <ul>
@@ -107,6 +116,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../structure.html">Structure</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../vars.html">Variables</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Commands</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="bettercap.html">bettercap</a></li>
 <li class="toctree-l2"><a class="reference internal" href="browser.html">browser</a></li>
 <li class="toctree-l2"><a class="reference internal" href="debug.html">debug</a></li>
 <li class="toctree-l2"><a class="reference internal" href="father.html">father</a></li>
@@ -119,6 +129,7 @@
 <li class="toctree-l2"><a class="reference internal" href="msf-session.html">msf-session</a></li>
 <li class="toctree-l2"><a class="reference internal" href="payload.html">msf-payload</a></li>
 <li class="toctree-l2"><a class="reference internal" href="regex.html">regex</a></li>
+<li class="toctree-l2"><a class="reference internal" href="remote.html">remote</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">setvar</a></li>
 <li class="toctree-l2"><a class="reference internal" href="shell.html">shell</a></li>
 <li class="toctree-l2"><a class="reference internal" href="sftp.html">sftp</a></li>
@@ -132,9 +143,13 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../session/index.html">Sessions, Interactive</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../troubleshooting.html">Troubleshooting</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Developing:</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../developing/contribution.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../developing/development.html">Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../developing/architecture.html">System Architecture (C4)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../developing/command.html">Adding a New Command</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../developing/baseexecutor.html">Adding a New Executor</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../developing/integration.html">Using AttackMate in a Python Script</a></li>
@@ -171,11 +186,13 @@
              
   <section id="setvar">
 <h1>setvar<a class="headerlink" href="#setvar" title="Permalink to this heading"></a></h1>
-<p>Set a variable. This could be used for string interpolation or for
-copying variables.
-This command does not modify the Builtin Variable <code class="docutils literal notranslate"><span class="pre">RESULT_STDOUT</span></code>.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1">###</span>
-<span class="nt">vars</span><span class="p">:</span>
+<p>Set a variable to a string value. Useful for string interpolation and copying or
+transforming existing variables.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This command does not modify <code class="docutils literal notranslate"><span class="pre">RESULT_STDOUT</span></code>.</p>
+</div>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">vars</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">FOO</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;WORLD&quot;</span>
 
 <span class="nt">commands</span><span class="p">:</span>
@@ -187,13 +204,13 @@ This command does not modify the Builtin Variable <code class="docutils literal 
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-variable">
 <span class="sig-name descname"><span class="pre">variable</span></span><a class="headerlink" href="#confval-variable" title="Permalink to this definition"></a></dt>
-<dd><p>The variable-name that stores the value of <em>cmd</em></p>
+<dd><p>Name of the variable to set (without the leading <code class="docutils literal notranslate"><span class="pre">$</span></code>).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str</p>
 </dd>
 <dt class="field-even">Required<span class="colon">:</span></dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code></p>
+<dd class="field-even"><p>True</p>
 </dd>
 </dl>
 </dd></dl>
@@ -201,13 +218,13 @@ This command does not modify the Builtin Variable <code class="docutils literal 
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-cmd">
 <span class="sig-name descname"><span class="pre">cmd</span></span><a class="headerlink" href="#confval-cmd" title="Permalink to this definition"></a></dt>
-<dd><p>The value of the variable</p>
+<dd><p>The value to assign to the variable. Supports variable substitution.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str</p>
 </dd>
 <dt class="field-even">Required<span class="colon">:</span></dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code></p>
+<dd class="field-even"><p>True</p>
 </dd>
 </dl>
 </dd></dl>
@@ -215,9 +232,25 @@ This command does not modify the Builtin Variable <code class="docutils literal 
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-encoder">
 <span class="sig-name descname"><span class="pre">encoder</span></span><a class="headerlink" href="#confval-encoder" title="Permalink to this definition"></a></dt>
-<dd><p>If encoder is set, the command in cmd will be encoded before stored in <code class="docutils literal notranslate"><span class="pre">variable</span></code>.
-Please note that if encoding fails, this command will fallback to plain cmd and will
-print out a warning.</p>
+<dd><p>Encode or decode the value of <code class="docutils literal notranslate"><span class="pre">cmd</span></code> before storing it in <code class="docutils literal notranslate"><span class="pre">variable</span></code>.</p>
+<p>Supported values:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">base64-encoder</span></code> — encode to Base64</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">base64-decoder</span></code> — decode from Base64</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">rot13</span></code> — apply ROT13</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">urlencoder</span></code> — percent-encode for use in URLs</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">urldecoder</span></code> — decode percent-encoded strings</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str[‘base64-encoder’, ‘base64-decoder’, ‘rot13’, ‘urlencoder’, ‘urldecoder’]</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Note that if encoding fails, the plain value is stored and a warning is printed.</p>
+</div>
+<p>Example:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">commands</span><span class="p">:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">setvar</span>
 <span class="w">    </span><span class="nt">variable</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">TEST</span>
@@ -276,11 +309,6 @@ print out a warning.</p>
 <span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">$TEST</span>
 </pre></div>
 </div>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>str[‘base64-encoder’, ‘base64-decoder’, ‘rot13’, ‘urlencoder’, ‘urldecoder’]</p>
-</dd>
-</dl>
 </dd></dl>
 
 </section>
@@ -289,7 +317,7 @@ print out a warning.</p>
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="regex.html" class="btn btn-neutral float-left" title="regex" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="remote.html" class="btn btn-neutral float-left" title="remote" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="shell.html" class="btn btn-neutral float-right" title="shell" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
@@ -349,11 +377,11 @@ print out a warning.</p>
             </dd>
             
             <dd>
-                <a href="../../../development/playbook/commands/setvar.html">development</a>
+                <a href="setvar.html">main</a>
             </dd>
             
             <dd>
-                <a href="setvar.html">main</a>
+                <a href="../../../development/playbook/commands/setvar.html">development</a>
             </dd>
             
         </dl>

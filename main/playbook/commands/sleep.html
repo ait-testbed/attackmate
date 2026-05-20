@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>sleep &mdash; AttackMate 0.6.0 documentation</title>
+  <title>sleep &mdash; AttackMate 1.0.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css" />
 
@@ -76,12 +76,12 @@
             v0.6.0
         </option>
         
-        <option value="../../../development/playbook/commands/sleep.html" >
-            development
-        </option>
-        
         <option value="sleep.html" selected>
             main
+        </option>
+        
+        <option value="../../../development/playbook/commands/sleep.html" >
+            development
         </option>
         
     </select>
@@ -91,7 +91,16 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">General:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html">AttackMate <img alt="Logo" src="/images/AttackMate_logo_no_logo.png" align="right" height="90"></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#installation">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#execute">Execute</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#documentation">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#publications">Publications</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#contribution">Contribution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#disclaimer">Disclaimer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#security">Security</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#license">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html#financial-support">Financial Support</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Getting Started:</span></p>
 <ul>
@@ -107,6 +116,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../structure.html">Structure</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../vars.html">Variables</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Commands</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="bettercap.html">bettercap</a></li>
 <li class="toctree-l2"><a class="reference internal" href="browser.html">browser</a></li>
 <li class="toctree-l2"><a class="reference internal" href="debug.html">debug</a></li>
 <li class="toctree-l2"><a class="reference internal" href="father.html">father</a></li>
@@ -119,6 +129,7 @@
 <li class="toctree-l2"><a class="reference internal" href="msf-session.html">msf-session</a></li>
 <li class="toctree-l2"><a class="reference internal" href="payload.html">msf-payload</a></li>
 <li class="toctree-l2"><a class="reference internal" href="regex.html">regex</a></li>
+<li class="toctree-l2"><a class="reference internal" href="remote.html">remote</a></li>
 <li class="toctree-l2"><a class="reference internal" href="setvar.html">setvar</a></li>
 <li class="toctree-l2"><a class="reference internal" href="shell.html">shell</a></li>
 <li class="toctree-l2"><a class="reference internal" href="sftp.html">sftp</a></li>
@@ -132,9 +143,13 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../session/index.html">Sessions, Interactive</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../troubleshooting.html">Troubleshooting</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Developing:</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../developing/contribution.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../developing/development.html">Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../developing/architecture.html">System Architecture (C4)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../developing/command.html">Adding a New Command</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../developing/baseexecutor.html">Adding a New Executor</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../developing/integration.html">Using AttackMate in a Python Script</a></li>
@@ -171,34 +186,18 @@
              
   <section id="sleep">
 <h1>sleep<a class="headerlink" href="#sleep" title="Permalink to this heading"></a></h1>
-<p>Sleep a certain amount of seconds.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1">###</span>
-<span class="nt">commands</span><span class="p">:</span>
+<p>Pause execution for a fixed or randomised number of seconds.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">commands</span><span class="p">:</span>
+<span class="c1"># Sleep for 60 seconds</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sleep</span>
 <span class="w">    </span><span class="nt">seconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">60</span>
 </pre></div>
 </div>
 <dl class="std confval">
-<dt class="sig sig-object std" id="confval-min_sec">
-<span class="sig-name descname"><span class="pre">min_sec</span></span><a class="headerlink" href="#confval-min_sec" title="Permalink to this definition"></a></dt>
-<dd><p>This option defines the minimum seconds to sleep. This
-is only relevant if option <strong>random</strong> is set to True</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>int</p>
-</dd>
-<dt class="field-even">Default<span class="colon">:</span></dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">0</span></code></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="std confval">
 <dt class="sig sig-object std" id="confval-seconds">
 <span class="sig-name descname"><span class="pre">seconds</span></span><a class="headerlink" href="#confval-seconds" title="Permalink to this definition"></a></dt>
-<dd><p>This options sets the seconds to sleep. If the option
-<strong>random</strong> is set to True, this option is the maximum time
-to sleep.</p>
+<dd><p>Number of seconds to sleep. When <a class="reference internal" href="#confval-random"><code class="xref std std-confval docutils literal notranslate"><span class="pre">random</span></code></a> is <code class="docutils literal notranslate"><span class="pre">True</span></code>, this serves as
+the upper bound of the random range.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>int</p>
@@ -215,9 +214,8 @@ to sleep.</p>
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-random">
 <span class="sig-name descname"><span class="pre">random</span></span><a class="headerlink" href="#confval-random" title="Permalink to this definition"></a></dt>
-<dd><p>This option allows to randomize the seconds to wait. The minimum
-and maximum seconds for the range can be set by <strong>min_sec</strong> and
-<strong>seconds</strong>.</p>
+<dd><p>Sleep for a random duration between <a class="reference internal" href="#confval-min_sec"><code class="xref std std-confval docutils literal notranslate"><span class="pre">min_sec</span></code></a> and <a class="reference internal" href="#confval-seconds"><code class="xref std std-confval docutils literal notranslate"><span class="pre">seconds</span></code></a>
+instead of a fixed duration.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>bool</p>
@@ -225,11 +223,17 @@ and maximum seconds for the range can be set by <strong>min_sec</strong> and
 <dt class="field-even">Default<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">False</span></code></p>
 </dd>
+<dt class="field-odd">Required<span class="colon">:</span></dt>
+<dd class="field-odd"><p>False</p>
+</dd>
 </dl>
-<p>The following example will take a random amount of seconds between 30 seconds
-and 60 seconds:</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1">###</span>
-<span class="nt">commands</span><span class="p">:</span>
+</dd></dl>
+
+<dl class="std confval">
+<dt class="sig sig-object std" id="confval-min_sec">
+<span class="sig-name descname"><span class="pre">min_sec</span></span><a class="headerlink" href="#confval-min_sec" title="Permalink to this definition"></a></dt>
+<dd><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">commands</span><span class="p">:</span>
+<span class="c1"># Sleep for a random duration between 30 and 60 seconds</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sleep</span>
 <span class="w">    </span><span class="nt">seconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">60</span>
 <span class="w">    </span><span class="nt">min_sec</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">30</span>
@@ -241,7 +245,7 @@ and 60 seconds:</p>
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-cmd">
 <span class="sig-name descname"><span class="pre">cmd</span></span><a class="headerlink" href="#confval-cmd" title="Permalink to this definition"></a></dt>
-<dd><p>This option is ignored</p>
+<dd><p>This option is ignored. It is only present to allow the use of the generic command syntax and does not have any effect on the behavior of the command.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str</p>
@@ -318,11 +322,11 @@ and 60 seconds:</p>
             </dd>
             
             <dd>
-                <a href="../../../development/playbook/commands/sleep.html">development</a>
+                <a href="sleep.html">main</a>
             </dd>
             
             <dd>
-                <a href="sleep.html">main</a>
+                <a href="../../../development/playbook/commands/sleep.html">development</a>
             </dd>
             
         </dl>

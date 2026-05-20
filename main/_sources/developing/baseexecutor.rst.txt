@@ -6,7 +6,7 @@ Adding a New Executor
 Base Executor
 ================
 
-The ``BaseExecutor`` is the core class from which all executors in AttackMate inherit.  
+The ``BaseExecutor`` is the core class from which all executors in AttackMate inherit.
 It provides a structured approach to implementing custom executors.
 
 Key Features
@@ -31,6 +31,7 @@ Implementing a Custom Executor
 -------------------------------
 
 To create a custom executor, inherit from ``BaseExecutor`` and implement the ``_exec_cmd()`` method. Other methods can be overriden as needed.
+New executors must be registered using the @executor_factory.register_executor('<command_type>') decorator.
 
 Example:
 
@@ -39,8 +40,9 @@ Example:
     from attackmate.executors.base_executor import BaseExecutor
     from attackmate.result import Result
 
+    @executor_factory.register_executor('custom')
     class CustomExecutor(BaseExecutor):
-        def _exec_cmd(self, command) -> Result:
+        async def _exec_cmd(self, command) -> Result:
             self.logger.info(f"Executing custom command: {command.cmd}")
             return Result(stdout="Execution complete", returncode=0)
 
@@ -64,34 +66,54 @@ Overridable Methods
 
 The following methods can be overridden in custom executors to modify behavior:
 
-**Command Execution**  
-   
+**Command Execution**
+
 .. code-block:: python
 
-    def _exec_cmd(self, command: BaseCommand) -> Result:
+    async def _exec_cmd(self, command: BaseCommand) -> Result:
         return Result(None, None)
 
 This is the core execution function and must be implemented in subclasses.
 It should return a ``Result`` object containing the execution outcome.
 
-.. note:: 
+.. note::
 
-    The ``_exec_cmd()`` method **must** be implemented in any subclass of ``BaseExecutor``.  
-    This method defines the core execution logic for the command and is responsible for returning a ``Result`` object.  
+    The ``_exec_cmd()`` method **must** be implemented in any subclass of ``BaseExecutor``.
+    This method defines the core execution logic for the command and is responsible for returning a ``Result`` object.
 
 
-**Logging Functions**  
+**Logging Functions**
 
 The methods ``log_command``, ``log_matadata`` and ``log_json`` log command execution details and can be overridden for custom logging formats.
 
-**Command Execution Flow**  
+**Command Execution Flow**
 
 The ``run()`` method defines the high-level execution flow of a command.
 It includes condition checking, logging, and calling the actual execution logic.
 
-**Output Handling**  
+**Output Handling**
 
 The ``save_output()`` function manages saving output to a file. It can be overridden to implement alternative storage methods.
 
 
+executor __init__.py
+--------------------
+.. note::
 
+    Add the new executor to the ``__all__`` list in the ``__init__.py`` file of the ``attackmate.executors`` module so it can be imported elsewhere.
+
+.. code-block:: python
+
+    # src/attackmate/executors/__init__.py
+    # other imports
+    from .shell.shellexecutor import ShellExecutor
+    from .metasploit.msfsessionexecutor import CustomExecutor # new executor
+    # other imports
+
+    __all__ = [
+        'RemoteExecutor',
+        'BrowserExecutor',
+        'ShellExecutor',
+        'CustomExecutor', # new executor
+        # other executors
+    ]

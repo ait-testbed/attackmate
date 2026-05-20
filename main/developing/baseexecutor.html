@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Adding a New Executor &mdash; AttackMate 0.6.0 documentation</title>
+  <title>Adding a New Executor &mdash; AttackMate 1.0.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css" />
 
@@ -76,12 +76,12 @@
             v0.6.0
         </option>
         
-        <option value="../../development/developing/baseexecutor.html" >
-            development
-        </option>
-        
         <option value="baseexecutor.html" selected>
             main
+        </option>
+        
+        <option value="../../development/developing/baseexecutor.html" >
+            development
         </option>
         
     </select>
@@ -91,7 +91,16 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">General:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../readme_link.html">AttackMate <img alt="Logo" src="/images/AttackMate_logo_no_logo.png" align="right" height="90"></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#installation">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#execute">Execute</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#documentation">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#publications">Publications</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#contribution">Contribution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#disclaimer">Disclaimer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#security">Security</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#license">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme_link.html#financial-support">Financial Support</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Getting Started:</span></p>
 <ul>
@@ -109,9 +118,13 @@
 <li class="toctree-l1"><a class="reference internal" href="../playbook/commands/index.html">Commands</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../playbook/session/index.html">Sessions, Interactive</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../playbook/examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../playbook/troubleshooting.html">Troubleshooting</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Developing:</span></p>
 <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="contribution.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">System Architecture (C4)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="command.html">Adding a New Command</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Adding a New Executor</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#base-executor">Base Executor</a></li>
@@ -176,13 +189,15 @@ It provides a structured approach to implementing custom executors.</p>
 </section>
 <section id="implementing-a-custom-executor">
 <h3>Implementing a Custom Executor<a class="headerlink" href="#implementing-a-custom-executor" title="Permalink to this heading"></a></h3>
-<p>To create a custom executor, inherit from <code class="docutils literal notranslate"><span class="pre">BaseExecutor</span></code> and implement the <code class="docutils literal notranslate"><span class="pre">_exec_cmd()</span></code> method. Other methods can be overriden as needed.</p>
+<p>To create a custom executor, inherit from <code class="docutils literal notranslate"><span class="pre">BaseExecutor</span></code> and implement the <code class="docutils literal notranslate"><span class="pre">_exec_cmd()</span></code> method. Other methods can be overriden as needed.
+New executors must be registered using the &#64;executor_factory.register_executor(‘&lt;command_type&gt;’) decorator.</p>
 <p>Example:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">attackmate.executors.base_executor</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseExecutor</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">attackmate.result</span><span class="w"> </span><span class="kn">import</span> <span class="n">Result</span>
 
+<span class="nd">@executor_factory</span><span class="o">.</span><span class="n">register_executor</span><span class="p">(</span><span class="s1">&#39;custom&#39;</span><span class="p">)</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">CustomExecutor</span><span class="p">(</span><span class="n">BaseExecutor</span><span class="p">):</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">_exec_cmd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">command</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Result</span><span class="p">:</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">_exec_cmd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">command</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Result</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Executing custom command: </span><span class="si">{</span><span class="n">command</span><span class="o">.</span><span class="n">cmd</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">Result</span><span class="p">(</span><span class="n">stdout</span><span class="o">=</span><span class="s2">&quot;Execution complete&quot;</span><span class="p">,</span> <span class="n">returncode</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 </pre></div>
@@ -206,7 +221,7 @@ It provides a structured approach to implementing custom executors.</p>
 <h3>Overridable Methods<a class="headerlink" href="#overridable-methods" title="Permalink to this heading"></a></h3>
 <p>The following methods can be overridden in custom executors to modify behavior:</p>
 <p><strong>Command Execution</strong></p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">_exec_cmd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">command</span><span class="p">:</span> <span class="n">BaseCommand</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Result</span><span class="p">:</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">_exec_cmd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">command</span><span class="p">:</span> <span class="n">BaseCommand</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Result</span><span class="p">:</span>
     <span class="k">return</span> <span class="n">Result</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -224,6 +239,28 @@ This method defines the core execution logic for the command and is responsible 
 It includes condition checking, logging, and calling the actual execution logic.</p>
 <p><strong>Output Handling</strong></p>
 <p>The <code class="docutils literal notranslate"><span class="pre">save_output()</span></code> function manages saving output to a file. It can be overridden to implement alternative storage methods.</p>
+</section>
+<section id="executor-init-py">
+<h3>executor __init__.py<a class="headerlink" href="#executor-init-py" title="Permalink to this heading"></a></h3>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Add the new executor to the <code class="docutils literal notranslate"><span class="pre">__all__</span></code> list in the <code class="docutils literal notranslate"><span class="pre">__init__.py</span></code> file of the <code class="docutils literal notranslate"><span class="pre">attackmate.executors</span></code> module so it can be imported elsewhere.</p>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># src/attackmate/executors/__init__.py</span>
+<span class="c1"># other imports</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.shell.shellexecutor</span><span class="w"> </span><span class="kn">import</span> <span class="n">ShellExecutor</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.metasploit.msfsessionexecutor</span><span class="w"> </span><span class="kn">import</span> <span class="n">CustomExecutor</span> <span class="c1"># new executor</span>
+<span class="c1"># other imports</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s1">&#39;RemoteExecutor&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;BrowserExecutor&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;ShellExecutor&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;CustomExecutor&#39;</span><span class="p">,</span> <span class="c1"># new executor</span>
+    <span class="c1"># other executors</span>
+<span class="p">]</span>
+</pre></div>
+</div>
 </section>
 </section>
 </section>
@@ -292,11 +329,11 @@ It includes condition checking, logging, and calling the actual execution logic.
             </dd>
             
             <dd>
-                <a href="../../development/developing/baseexecutor.html">development</a>
+                <a href="baseexecutor.html">main</a>
             </dd>
             
             <dd>
-                <a href="baseexecutor.html">main</a>
+                <a href="../../development/developing/baseexecutor.html">development</a>
             </dd>
             
         </dl>
