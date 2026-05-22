@@ -22,6 +22,7 @@ Welcome to AttackMate's documentation!
    preparation/index
    configuration/index
    basic
+   remote_api_intro
 
 .. toctree::
    :maxdepth: 4
