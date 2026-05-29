@@ -35,11 +35,13 @@ sliver, metasploit and remote attackmate server:
        password: password
 
    msf_config:
-     password: securepassword
-     server: 127.0.0.1
+     default:
+       password: securepassword
+       server: 127.0.0.1
 
    sliver_config:
-     config_file: /home/attacker/.sliver-client/configs/attacker_localhost.cfg
+     default:
+       config_file: /home/attacker/.sliver-client/configs/attacker_localhost.cfg
 
    remote_config:
      remote_server_name:

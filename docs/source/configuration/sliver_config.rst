@@ -4,12 +4,37 @@
 sliver_config
 =============
 
-``sliver_config`` stores all settings to control the connection to the Sliver API.
+``sliver_config`` stores connection settings for one or more Sliver C2 servers.
+Each connection is identified by a name. The first defined connection is used by
+default when a command does not specify one explicitly.
 
 .. code-block:: yaml
 
    sliver_config:
-     config_file: /home/attacker/.sliver-client/configs/attacker_localhost.cfg
+     primary:
+       config_file: /home/attacker/.sliver-client/configs/attacker_localhost.cfg
+
+Multiple servers can be defined and selected per command via the :confval:`connection` field:
+
+.. code-block:: yaml
+
+   sliver_config:
+     sliver_server1:
+       config_file: /home/attacker/.sliver-client/configs/attacker_localhost.cfg
+     sliver_server2:
+       config_file: /home/attacker/.sliver-client/configs/attacker2_localhost.cfg
+
+.. note::
+
+   **Backwards compatibility:** The legacy single-server format is still accepted and is
+   automatically migrated to a named entry called ``default``:
+
+   .. code-block:: yaml
+
+      # Legacy format (still supported)
+      sliver_config:
+        config_file: /home/attacker/.sliver-client/configs/attacker_localhost.cfg
+
 
 .. confval:: config_file
 
