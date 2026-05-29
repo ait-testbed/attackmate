@@ -8,10 +8,19 @@ Control the Sliver C2 server via its API. All commands use ``type: sliver``.
 
 .. note::
 
+   To configure the connection to the Sliver server, see :ref:`sliver_config`.
+
    **For developers:** The ``sliver`` and ``sliver-session`` command families use a legacy
    ``type`` + ``cmd`` discrimination pattern and should not be replicated. New commands
    must define a unique ``type`` literal and handle sub-behavior branching via ``cmd``
    in the executor. See :ref:`command` for details.
+
+.. confval:: connection
+
+   Name of the Sliver server connection to use, as defined in :ref:`sliver_config`.
+   If omitted, the first configured connection is used.
+
+   :type: str
 
 start_https_listener
 --------------------

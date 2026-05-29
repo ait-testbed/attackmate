@@ -89,7 +89,14 @@ Most exploit modules do not produce direct output but instead open a session
 
    :type: str
 
-   The following example illustrates the use of sessions and payloads:
+.. confval:: connection
+
+   Name of the MSF server connection to use, as defined in :ref:`msf_config`.
+   If omitted, the first configured connection is used.
+
+   :type: str
+
+The following example illustrates the use of sessions and payloads:
 
 .. code-block:: yaml
 

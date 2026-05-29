@@ -19,7 +19,7 @@ from typing import Dict, Optional
 import logging
 from attackmate.result import Result
 import attackmate.executors as executors
-from attackmate.schemas.config import CommandConfig, Config, MsfConfig, SliverConfig
+from attackmate.schemas.config import CommandConfig, Config
 from attackmate.schemas.playbook import Playbook
 from attackmate.schemas.command_types import Commands, Command
 from attackmate.variablestore import VariableStore
@@ -87,8 +87,8 @@ class AttackMate:
     def _default_config(self) -> Config:
         return Config(
             cmd_config=CommandConfig(),
-            msf_config=MsfConfig(),
-            sliver_config=SliverConfig(),
+            msf_config={},
+            sliver_config={},
             bettercap_config={},
             remote_config={}
         )
@@ -109,7 +109,7 @@ class AttackMate:
             'pm': self.pm,
             'varstore': self.varstore,
             'cmdconfig': self.pyconfig.cmd_config,
-            'msfconfig': self.pyconfig.msf_config,
+            'msf_config': self.pyconfig.msf_config,
             'bettercap_config': self.pyconfig.bettercap_config,
             'remote_config': self.pyconfig.remote_config,
             'msfsessionstore': self.msfsessionstore,
