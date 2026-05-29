@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, field_validator
 from typing import Optional, Dict
 
 
@@ -34,8 +34,30 @@ class RemoteConfig(BaseModel):
 
 
 class Config(BaseModel):
-    sliver_config: SliverConfig = SliverConfig(config_file=None)
-    msf_config: MsfConfig = MsfConfig(password=None)
+    sliver_config: Dict[str, SliverConfig] = {}
+    msf_config: Dict[str, MsfConfig] = {}
     cmd_config: CommandConfig = CommandConfig(loop_sleep=5, command_delay=0)
     bettercap_config: Dict[str, BettercapConfig] = {}
     remote_config: Dict[str, RemoteConfig] = {}
+
+    @field_validator('msf_config', mode='before')
+    @classmethod
+    def migrate_msf_config(cls, v):
+        # Old configs had a single flat MsfConfig dict (keys: password, ssl, port, server, uri).
+        # New configs are Dict[str, MsfConfig] with named connections.
+        # Detect the old format by checking for known MsfConfig field names at the top level.
+        # .intersection() only requires one match, unspecified fields fall back to their Pydantic defaults.
+        # Wrapping it under 'default'
+        # !! Note !! : connection names that coincide with MsfConfig field names (e.g. 'server')
+        # would be misdetected as old format and should be avoided.
+        if isinstance(v, dict) and {'password', 'ssl', 'port', 'server', 'uri'}.intersection(v.keys()):
+            return {'default': v}
+        return v
+
+    @field_validator('sliver_config', mode='before')
+    @classmethod
+    def migrate_sliver_config(cls, v):
+        # Same backwards-compatibility migration as migrate_msf_config above.
+        if isinstance(v, dict) and {'config_file'}.intersection(v.keys()):
+            return {'default': v}
+        return v
