@@ -96,7 +96,7 @@ Most exploit modules do not produce direct output but instead open a session
 
    :type: str
 
-   The following example illustrates the use of sessions and payloads:
+The following example illustrates the use of sessions and payloads:
 
 .. code-block:: yaml
 
