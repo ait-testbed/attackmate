@@ -61,7 +61,7 @@ class MsfModuleExecutor(MsfClientMixin, BaseExecutor):
         self.logger.debug(payload.options)
         return payload
 
-    def prepare_exploit(self, command: MsfModuleCommand, msf: MsfRpcClient):
+    def prepare_exploit(self, command: MsfModuleCommand, msf: MsfRpcClient, conn_name: str):
         exploit = None
         option: str = ''
         try:
@@ -78,7 +78,7 @@ class MsfModuleExecutor(MsfClientMixin, BaseExecutor):
                 else:
                     exploit[option] = setting
             if command.session:
-                session_id = self.sessionstore.get_session_by_name(command.session, msf.sessions)
+                session_id = self.sessionstore.get_session_by_name(conn_name, command.session, msf.sessions)
                 self.logger.debug(f'Using session-id: {session_id}')
                 exploit['SESSION'] = int(session_id)
         except KeyError:
@@ -94,7 +94,7 @@ class MsfModuleExecutor(MsfClientMixin, BaseExecutor):
         conn_name = self._resolve_connection(command)
         msf = self._get_client(conn_name)
 
-        exploit = self.prepare_exploit(command, msf)
+        exploit = self.prepare_exploit(command, msf, conn_name)
         payload = self.prepare_payload(command, msf)
 
         if command.creates_session is not None:
@@ -105,11 +105,11 @@ class MsfModuleExecutor(MsfClientMixin, BaseExecutor):
             if command.module_path() == 'multi/manage/shell_to_meterpreter':
                 self.logger.debug('Waiting for increased session..')
                 self.sessionstore.wait_for_increased_session(
-                    command.creates_session, result['uuid'], msf.sessions, self.child_queue
+                    conn_name, command.creates_session, result['uuid'], msf.sessions, self.child_queue
                 )
             else:
                 self.sessionstore.wait_for_session(
-                    command.creates_session, result['uuid'], msf.sessions, self.child_queue
+                    conn_name, command.creates_session, result['uuid'], msf.sessions, self.child_queue
                 )
             return Result('', 0)
         cid = msf.consoles.console().cid

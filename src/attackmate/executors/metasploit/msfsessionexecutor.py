@@ -39,7 +39,7 @@ class MsfSessionExecutor(MsfClientMixin, BaseExecutor):
         conn_name = self._resolve_connection(command)
         msf = self._get_client(conn_name)
 
-        session_id = self.sessionstore.get_session_by_name(command.session, msf.sessions)
+        session_id = self.sessionstore.get_session_by_name(conn_name, command.session, msf.sessions)
         self.logger.debug(f'Using session-id: {session_id}')
         return_empty = False
 
