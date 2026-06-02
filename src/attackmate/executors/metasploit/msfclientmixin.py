@@ -26,7 +26,9 @@ class MsfClientMixin:
             if conn_name not in self.msf_config:
                 raise ExecException(f"MSF connection '{conn_name}' not found in config")
             config = self.msf_config[conn_name]
-            self.logger.debug(f'Connecting to MSF server: {conn_name}')
+            self.logger.debug(
+                f"Connecting to MSF server '{conn_name}' at {config.server}:{config.port} (ssl={config.ssl})"
+            )
             try:
                 self._msf_clients[conn_name] = MsfRpcClient(**config.model_dump())
             except IOError as e:
