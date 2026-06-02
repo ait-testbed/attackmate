@@ -34,6 +34,7 @@ dynamic = ["version"]
 
 [project.scripts]
 attackmate = "attackmate.__main__:main"
+attackm8 = "attackmate.__main__:main"
 
 [build-system]
 requires = ["setuptools>=61.0.0", "wheel"]
