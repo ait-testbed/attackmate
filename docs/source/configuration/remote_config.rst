@@ -20,13 +20,13 @@ the configuration is used as the default.
 .. code-block:: yaml
 
   remote_config:
-    remote_server:
-      url: "https://10.0.0.5:5000"
+    attackmate-server:
+      url: "https://10.0.0.5:8445"
       username: admin
       password: securepassword
       cafile: "/path/to/cert.pem"
-    another_server:
-      url: "https://10.0.0.6:5000"
+    another-server:
+      url: "https://10.0.0.6:8445"
       username: user
       password: anotherpassword
       cafile: "/path/to/another_cert.pem"
@@ -38,15 +38,15 @@ default connection is used when none is specified:
 .. code-block:: yaml
 
   commands:
-    # Executed on 'another_server'
+    # Executed on 'another-server'
     - type: remote
-      connection: another_server
+      connection: another-server
       cmd: execute_command
       remote_command:
         type: shell
         cmd: "whoami"
 
-    # Executed on 'remote_server' (defaults to first remote_config entry))
+    # Executed on 'attackmate-server' (defaults to first remote_config entry))
     - type: remote
       cmd: execute_playbook
       playbook_path: path/to/playbook.yml
