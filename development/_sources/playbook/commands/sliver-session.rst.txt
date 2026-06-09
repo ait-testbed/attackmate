@@ -9,6 +9,8 @@ Execute commands within an active Sliver implant session. All commands require a
 
 .. note::
 
+   To configure the connection to the Sliver server, see :ref:`sliver_config`.
+
    **For developers:** The ``sliver`` and ``sliver-session`` command families use a legacy
    ``type`` + ``cmd`` discrimination pattern and should not be replicated. New commands
    must define a unique ``type`` literal and handle sub-behavior branching via ``cmd``
@@ -21,6 +23,13 @@ Execute commands within an active Sliver implant session. All commands require a
 
    :type: str
    :required: True
+
+.. confval:: connection
+
+   Name of the Sliver server connection to use, as defined in :ref:`sliver_config`.
+   If omitted, the first configured connection is used.
+
+   :type: str
 
 File System
 -----------

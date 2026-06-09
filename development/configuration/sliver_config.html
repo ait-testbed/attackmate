@@ -176,10 +176,31 @@
              
   <section id="sliver-config">
 <span id="id1"></span><h1>sliver_config<a class="headerlink" href="#sliver-config" title="Permalink to this heading"></a></h1>
-<p><code class="docutils literal notranslate"><span class="pre">sliver_config</span></code> stores all settings to control the connection to the Sliver API.</p>
+<p><code class="docutils literal notranslate"><span class="pre">sliver_config</span></code> stores connection settings for one or more Sliver C2 servers.
+Each connection is identified by a name. The first defined connection is used by
+default when a command does not specify one explicitly.</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">sliver_config</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">primary</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">config_file</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/home/attacker/.sliver-client/configs/attacker_localhost.cfg</span>
+</pre></div>
+</div>
+<p>Multiple servers can be defined and selected per command via the <a class="reference internal" href="../playbook/commands/sliver-session.html#confval-connection"><code class="xref std std-confval docutils literal notranslate"><span class="pre">connection</span></code></a> field:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">sliver_config</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">sliver_server1</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">config_file</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/home/attacker/.sliver-client/configs/attacker_localhost.cfg</span>
+<span class="w">  </span><span class="nt">sliver_server2</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">config_file</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/home/attacker/.sliver-client/configs/attacker2_localhost.cfg</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><strong>Backwards compatibility:</strong> The legacy single-server format is still accepted and is
+automatically migrated to a named entry called <code class="docutils literal notranslate"><span class="pre">default</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># Legacy format (still supported)</span>
+<span class="nt">sliver_config</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">config_file</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/home/attacker/.sliver-client/configs/attacker_localhost.cfg</span>
 </pre></div>
+</div>
 </div>
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-config_file">

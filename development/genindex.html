@@ -982,15 +982,9 @@
         <li><a href="configuration/sliver_config.html#confval-config_file">(configuration value)</a>
 </li>
       </ul></li>
-      <li><a href="attackmate/attackmate.html#attackmate.executors.metasploit.msfexecutor.MsfModuleExecutor.connect">connect() (attackmate.executors.metasploit.msfexecutor.MsfModuleExecutor method)</a>
+      <li><a href="attackmate/attackmate.html#attackmate.executors.sliver.sliverexecutor.SliverExecutor.connect">connect() (attackmate.executors.sliver.sliverexecutor.SliverExecutor method)</a>
 
       <ul>
-        <li><a href="attackmate/attackmate.html#attackmate.executors.metasploit.msfpayloadexecutor.MsfPayloadExecutor.connect">(attackmate.executors.metasploit.msfpayloadexecutor.MsfPayloadExecutor method)</a>
-</li>
-        <li><a href="attackmate/attackmate.html#attackmate.executors.metasploit.msfsessionexecutor.MsfSessionExecutor.connect">(attackmate.executors.metasploit.msfsessionexecutor.MsfSessionExecutor method)</a>
-</li>
-        <li><a href="attackmate/attackmate.html#attackmate.executors.sliver.sliverexecutor.SliverExecutor.connect">(attackmate.executors.sliver.sliverexecutor.SliverExecutor method)</a>
-</li>
         <li><a href="attackmate/attackmate.html#attackmate.executors.sliver.sliversessionexecutor.SliverSessionExecutor.connect">(attackmate.executors.sliver.sliversessionexecutor.SliverSessionExecutor method)</a>
 </li>
         <li><a href="attackmate/attackmate.html#attackmate.executors.vnc.vncexecutor.VncExecutor.connect">(attackmate.executors.vnc.vncexecutor.VncExecutor method)</a>
@@ -1007,9 +1001,21 @@
       <li><a href="attackmate/attackmate.html#attackmate.schemas.bettercap.BettercapCommand.connection">connection (attackmate.schemas.bettercap.BettercapCommand attribute)</a>
 
       <ul>
+        <li><a href="attackmate/attackmate.html#attackmate.schemas.metasploit.MsfModuleCommand.connection">(attackmate.schemas.metasploit.MsfModuleCommand attribute)</a>
+</li>
+        <li><a href="attackmate/attackmate.html#attackmate.schemas.metasploit.MsfPayloadCommand.connection">(attackmate.schemas.metasploit.MsfPayloadCommand attribute)</a>
+</li>
+        <li><a href="attackmate/attackmate.html#attackmate.schemas.metasploit.MsfSessionCommand.connection">(attackmate.schemas.metasploit.MsfSessionCommand attribute)</a>
+</li>
         <li><a href="attackmate/attackmate.html#attackmate.schemas.remote.AttackMateRemoteCommand.connection">(attackmate.schemas.remote.AttackMateRemoteCommand attribute)</a>
 </li>
-        <li><a href="playbook/commands/remote.html#confval-connection">(configuration value)</a>
+        <li><a href="attackmate/attackmate.html#attackmate.schemas.sliver.SliverGenerateCommand.connection">(attackmate.schemas.sliver.SliverGenerateCommand attribute)</a>
+</li>
+        <li><a href="attackmate/attackmate.html#attackmate.schemas.sliver.SliverHttpsListenerCommand.connection">(attackmate.schemas.sliver.SliverHttpsListenerCommand attribute)</a>
+</li>
+        <li><a href="attackmate/attackmate.html#attackmate.schemas.sliver.SliverSessionCommand.connection">(attackmate.schemas.sliver.SliverSessionCommand attribute)</a>
+</li>
+        <li><a href="playbook/commands/msf-module.html#confval-connection">(configuration value)</a>, <a href="playbook/commands/msf-session.html#confval-connection">[1]</a>, <a href="playbook/commands/payload.html#confval-connection">[2]</a>, <a href="playbook/commands/remote.html#confval-connection">[3]</a>, <a href="playbook/commands/sliver-session.html#confval-connection">[4]</a>, <a href="playbook/commands/sliver.html#confval-connection">[5]</a>
 </li>
       </ul></li>
       <li><a href="attackmate/attackmate.html#attackmate.schemas.vnc.VncCommand.connection_timeout">connection_timeout (attackmate.schemas.vnc.VncCommand attribute)</a>
@@ -1754,6 +1760,10 @@
         <li><a href="playbook/commands/index.html#confval-metadata">(configuration value)</a>
 </li>
       </ul></li>
+      <li><a href="attackmate/attackmate.html#attackmate.schemas.config.Config.migrate_msf_config">migrate_msf_config() (attackmate.schemas.config.Config class method)</a>
+</li>
+      <li><a href="attackmate/attackmate.html#attackmate.schemas.config.Config.migrate_sliver_config">migrate_sliver_config() (attackmate.schemas.config.Config class method)</a>
+</li>
       <li><a href="attackmate/attackmate.html#attackmate.schemas.sleep.SleepCommand.min_sec">min_sec (attackmate.schemas.sleep.SleepCommand attribute)</a>
 
       <ul>

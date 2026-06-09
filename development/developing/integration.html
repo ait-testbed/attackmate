@@ -473,12 +473,12 @@ selects the sub-command class.</p>
 <td><p>Global command execution settings. See below.</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">msf_config</span></code></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">MsfConfig</span></code></p></td>
-<td><p>Metasploit RPC connection settings. See below.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">dict[str,</span> <span class="pre">MsfConfig]</span></code></p></td>
+<td><p>Named Metasploit RPC connections. See below.</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">sliver_config</span></code></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">SliverConfig</span></code></p></td>
-<td><p>Sliver C2 connection settings. See below.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">dict[str,</span> <span class="pre">SliverConfig]</span></code></p></td>
+<td><p>Named Sliver C2 connections. See below.</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">bettercap_config</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">dict[str,</span> <span class="pre">BettercapConfig]</span></code></p></td>
@@ -713,7 +713,7 @@ from a YAML file (see <a class="reference internal" href="#loading-from-yaml"><s
     <span class="n">initialize_logger</span><span class="p">(</span><span class="n">debug</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">append_logs</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
     <span class="n">config</span> <span class="o">=</span> <span class="n">Config</span><span class="p">(</span>
-        <span class="n">msf_config</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;password&quot;</span><span class="p">:</span> <span class="s2">&quot;your_password&quot;</span><span class="p">,</span> <span class="s2">&quot;ssl&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;port&quot;</span><span class="p">:</span> <span class="mi">55553</span><span class="p">},</span>
+        <span class="n">msf_config</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;password&quot;</span><span class="p">:</span> <span class="s2">&quot;your_password&quot;</span><span class="p">,</span> <span class="s2">&quot;ssl&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;port&quot;</span><span class="p">:</span> <span class="mi">55553</span><span class="p">}},</span>
         <span class="n">cmd_config</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;loop_sleep&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">},</span>
     <span class="p">)</span>
     <span class="n">varstore</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;HOST&quot;</span><span class="p">:</span> <span class="s2">&quot;10.0.0.1&quot;</span><span class="p">}</span>
