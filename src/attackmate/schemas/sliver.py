@@ -18,6 +18,7 @@ class SliverHttpsListenerCommand(BaseCommand):
     long_poll_timeout: StringNumber = '1'
     long_poll_jitter: StringNumber = '3'
     timeout: StringNumber = '60'
+    connection: Optional[str] = None
 
 
 @CommandRegistry.register('sliver', 'generate_implant')
@@ -35,6 +36,7 @@ class SliverGenerateCommand(BaseCommand):
     BeaconInterval: StringNumber = '120'
     RunAtLoad: bool = False
     Evasion: bool = False
+    connection: Optional[str] = None
 
 
 @CommandRegistry.register('sliver-session')
@@ -42,6 +44,7 @@ class SliverSessionCommand(BaseCommand):
     type: Literal['sliver-session']
     session: str
     beacon: bool = False
+    connection: Optional[str] = None
 
 
 @CommandRegistry.register('sliver-session', 'cd')
