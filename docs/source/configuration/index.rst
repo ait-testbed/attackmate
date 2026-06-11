@@ -26,7 +26,10 @@ sliver, metasploit and remote attackmate server:
 
    cmd_config:
      loop_sleep: 5
-     command_delay: 0
+     command_delay: 1
+     command_delay_jitter: true
+     command_delay_jitter_min: 0.5
+     command_delay_jitter_max: 2.0
 
    bettercap_config:
      default:
