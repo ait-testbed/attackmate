@@ -151,6 +151,12 @@ class AttackMate:
         .. note::
             The delay between commands is controlled by ``cmd_config.command_delay``
             in the :class:`Config`. Defaults to ``0`` if not set.
+
+            When ``cmd_config.command_delay_jitter`` is ``True``, each delay is
+            randomized as ``command_delay ± random(jitter_min, jitter_max)``,
+            clamped to a minimum of ``0``. The jitter bounds are set via
+            ``command_delay_jitter_min`` (default ``0.5``) and
+            ``command_delay_jitter_max`` (default ``2.0``).
         """
         cfg = self.pyconfig.cmd_config
         base_delay = cfg.command_delay or 0
