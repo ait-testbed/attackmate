@@ -14,6 +14,7 @@ using :meth:`~AttackMate.run_command` for single-command execution.
     :ref:`integration` for documentation on scripted usage.
 """
 
+import random
 import time
 from typing import Dict, Optional
 import logging
@@ -150,14 +151,27 @@ class AttackMate:
         .. note::
             The delay between commands is controlled by ``cmd_config.command_delay``
             in the :class:`Config`. Defaults to ``0`` if not set.
+
+            When ``cmd_config.command_delay_jitter`` is ``True``, each delay is
+            randomized as ``command_delay ± random(jitter_min, jitter_max)``,
+            clamped to a minimum of ``0``. The jitter bounds are set via
+            ``command_delay_jitter_min`` (default ``0.5``) and
+            ``command_delay_jitter_max`` (default ``2.0``).
         """
-        delay = self.pyconfig.cmd_config.command_delay or 0
-        self.logger.info(f'Delay before commands: {delay} seconds')
+        cfg = self.pyconfig.cmd_config
+        base_delay = cfg.command_delay or 0
         for command in commands:
             command_type = 'ssh' if command.type == 'sftp' else command.type
             executor = self._get_executor(command_type)
             if executor:
                 if command.type not in ('sleep', 'debug', 'setvar'):
+                    if cfg.command_delay_jitter:
+                        offset = random.uniform(cfg.command_delay_jitter_min, cfg.command_delay_jitter_max)
+                        sign = random.choice([-1, 1])
+                        delay = max(0.0, base_delay + sign * offset)
+                    else:
+                        delay = base_delay
+                    self.logger.info(f'Delay before command: {delay:.3f} seconds')
                     time.sleep(delay)
                 await executor.run(command, is_api_instance=self.is_api_instance)
 

@@ -17,6 +17,9 @@ class MsfConfig(BaseModel):
 class CommandConfig(BaseModel):
     loop_sleep: int = 5
     command_delay: float = 0
+    command_delay_jitter: bool = False
+    command_delay_jitter_min: float = 0.5
+    command_delay_jitter_max: float = 2.0
 
 
 class BettercapConfig(BaseModel):
