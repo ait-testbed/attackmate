@@ -22,6 +22,13 @@ Provide a minimal playbook that reproduces the issue (remove sensitive data):
 
 ```
 
+### Config
+Provide the config you used.
+
+```yaml
+
+```
+
 ### Expected behaviour
 Tell us what should happen
 
