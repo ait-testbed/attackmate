@@ -10,7 +10,9 @@ class MsfSessionCommand(BaseCommand):
     @field_validator('background')
     @classmethod
     def bg_not_implemented_yet(cls, v):
-        raise ValueError('background mode is unsupported for this command')
+        if v:
+            raise ValueError('background mode is unsupported for this command')
+        return v
 
     type: Literal['msf-session']
     cmd: str
