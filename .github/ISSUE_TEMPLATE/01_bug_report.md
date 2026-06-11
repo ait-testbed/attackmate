@@ -9,7 +9,7 @@ Describe your issue here.
 ### Your environment
 * Version of AttackMate (`attackmate --version`)
 * Python version (`python --version`)
-* Docker, pip, or uv installation?
+* Ansible, Docker, pip, or uv installation?
 * OS and version
 
 ### Steps to reproduce
