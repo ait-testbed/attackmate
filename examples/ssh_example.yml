@@ -17,7 +17,7 @@
 #
 vars:
   METASPLOITABLE: 192.168.0.146
-  PASSWDLIST: /snap/seclists/current/Passwords/Common-Credentials/darkweb2017_top-1000.txt
+  PASSWDLIST: /usr/share/SecLists/Passwords/darkweb2017_top-1000.txt
 
 commands:
   - type: shell
