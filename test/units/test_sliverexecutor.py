@@ -8,12 +8,9 @@ from sliver.protobuf import client_pb2
 
 @pytest.fixture
 def setup_executor():
-    # Mock dependencies and create a SliverExecutor instance
     pm = MagicMock()  # Mock ProcessManager
     varstore = MagicMock()  # Mock VariableStore
-    sliver_config = MagicMock()  # Mock SliverConfig
-    sliver_config.config_file = None
-    executor = SliverExecutor(pm, varstore=varstore, sliver_config=sliver_config)
+    executor = SliverExecutor(pm, varstore=varstore, sliver_config={})
     return executor
 
 

@@ -100,3 +100,10 @@ Generate a Metasploit payload and save it to a file.
 
    :type: int
    :default: ``0``
+
+.. confval:: connection
+
+   Name of the MSF server connection to use, as defined in :ref:`msf_config`.
+   If omitted, the first configured connection is used.
+
+   :type: str

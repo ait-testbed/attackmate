@@ -26,7 +26,10 @@ sliver, metasploit and remote attackmate server:
 
    cmd_config:
      loop_sleep: 5
-     command_delay: 0
+     command_delay: 1
+     command_delay_jitter: true
+     command_delay_jitter_min: 0.5
+     command_delay_jitter_max: 2.0
 
    bettercap_config:
      default:
@@ -35,11 +38,13 @@ sliver, metasploit and remote attackmate server:
        password: password
 
    msf_config:
-     password: securepassword
-     server: 127.0.0.1
+     default:
+       password: securepassword
+       server: 127.0.0.1
 
    sliver_config:
-     config_file: /home/attacker/.sliver-client/configs/attacker_localhost.cfg
+     default:
+       config_file: /home/attacker/.sliver-client/configs/attacker_localhost.cfg
 
    remote_config:
      remote_server_name:

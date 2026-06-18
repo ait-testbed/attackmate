@@ -14,12 +14,13 @@ using :meth:`~AttackMate.run_command` for single-command execution.
     :ref:`integration` for documentation on scripted usage.
 """
 
+import random
 import time
 from typing import Dict, Optional
 import logging
 from attackmate.result import Result
 import attackmate.executors as executors
-from attackmate.schemas.config import CommandConfig, Config, MsfConfig, SliverConfig
+from attackmate.schemas.config import CommandConfig, Config
 from attackmate.schemas.playbook import Playbook
 from attackmate.schemas.command_types import Commands, Command
 from attackmate.variablestore import VariableStore
@@ -87,8 +88,8 @@ class AttackMate:
     def _default_config(self) -> Config:
         return Config(
             cmd_config=CommandConfig(),
-            msf_config=MsfConfig(),
-            sliver_config=SliverConfig(),
+            msf_config={},
+            sliver_config={},
             bettercap_config={},
             remote_config={}
         )
@@ -109,7 +110,7 @@ class AttackMate:
             'pm': self.pm,
             'varstore': self.varstore,
             'cmdconfig': self.pyconfig.cmd_config,
-            'msfconfig': self.pyconfig.msf_config,
+            'msf_config': self.pyconfig.msf_config,
             'bettercap_config': self.pyconfig.bettercap_config,
             'remote_config': self.pyconfig.remote_config,
             'msfsessionstore': self.msfsessionstore,
@@ -150,14 +151,27 @@ class AttackMate:
         .. note::
             The delay between commands is controlled by ``cmd_config.command_delay``
             in the :class:`Config`. Defaults to ``0`` if not set.
+
+            When ``cmd_config.command_delay_jitter`` is ``True``, each delay is
+            randomized as ``command_delay ± random(jitter_min, jitter_max)``,
+            clamped to a minimum of ``0``. The jitter bounds are set via
+            ``command_delay_jitter_min`` (default ``0.5``) and
+            ``command_delay_jitter_max`` (default ``2.0``).
         """
-        delay = self.pyconfig.cmd_config.command_delay or 0
-        self.logger.info(f'Delay before commands: {delay} seconds')
+        cfg = self.pyconfig.cmd_config
+        base_delay = cfg.command_delay or 0
         for command in commands:
             command_type = 'ssh' if command.type == 'sftp' else command.type
             executor = self._get_executor(command_type)
             if executor:
                 if command.type not in ('sleep', 'debug', 'setvar'):
+                    if cfg.command_delay_jitter:
+                        offset = random.uniform(cfg.command_delay_jitter_min, cfg.command_delay_jitter_max)
+                        sign = random.choice([-1, 1])
+                        delay = max(0.0, base_delay + sign * offset)
+                    else:
+                        delay = base_delay
+                    self.logger.info(f'Delay before command: {delay:.3f} seconds')
                     time.sleep(delay)
                 await executor.run(command, is_api_instance=self.is_api_instance)
 

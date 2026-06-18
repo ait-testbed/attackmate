@@ -23,7 +23,7 @@ from .remote.remoteexecutor import RemoteExecutor
 from .browser.browserexecutor import BrowserExecutor
 
 __all__ = [
-    'RemoteExecutor'
+    'RemoteExecutor',
     'BrowserExecutor',
     'ShellExecutor',
     'SSHExecutor',

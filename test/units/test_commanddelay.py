@@ -1,4 +1,5 @@
 import time
+from unittest.mock import patch
 import pytest
 from attackmate.attackmate import AttackMate
 from attackmate.schemas.config import Config, CommandConfig
@@ -93,3 +94,65 @@ async def test_delay_is_not_applied_for_exempt_commands():
     assert elapsed_time < 0.1, (
         f'Execution with exempt commands took too long: {elapsed_time:.4f}s.'
     )
+
+
+@pytest.mark.asyncio
+async def test_jitter_off_behavior_unchanged():
+    """
+    With jitter disabled (default), behavior is identical to fixed command_delay.
+    """
+    delay = 0.1
+    playbook = Playbook(commands=[ShellCommand(type='shell', cmd='echo 1')])
+    config = Config(cmd_config=CommandConfig(command_delay=delay, command_delay_jitter=False))
+    attackmate_instance = AttackMate(playbook=playbook, config=config)
+
+    with patch('attackmate.attackmate.time.sleep') as mock_sleep:
+        await attackmate_instance._run_commands(attackmate_instance.playbook.commands)
+        mock_sleep.assert_called_once_with(delay)
+
+
+@pytest.mark.asyncio
+async def test_jitter_on_computes_correct_delay():
+    """
+    With jitter enabled, actual delay = command_delay + sign * uniform(jitter_min, jitter_max),
+    clamped to >= 0.
+    """
+    playbook = Playbook(commands=[ShellCommand(type='shell', cmd='echo 1')])
+    config = Config(cmd_config=CommandConfig(
+        command_delay=1.0,
+        command_delay_jitter=True,
+        command_delay_jitter_min=0.5,
+        command_delay_jitter_max=2.0,
+    ))
+    attackmate_instance = AttackMate(playbook=playbook, config=config)
+
+    with patch('attackmate.attackmate.random.uniform', return_value=0.8) as mock_uniform, \
+            patch('attackmate.attackmate.random.choice', return_value=1) as mock_choice, \
+            patch('attackmate.attackmate.time.sleep') as mock_sleep:
+        await attackmate_instance._run_commands(attackmate_instance.playbook.commands)
+        mock_uniform.assert_called_once_with(0.5, 2.0)
+        mock_choice.assert_called_once_with([-1, 1])
+        # 1.0 + 1 * 0.8 = 1.8, clamped to >= 0 → 1.8
+        mock_sleep.assert_called_once_with(1.8)
+
+
+@pytest.mark.asyncio
+async def test_jitter_clamped_to_zero():
+    """
+    When jitter produces a negative effective delay, it is clamped to 0.
+    """
+    playbook = Playbook(commands=[ShellCommand(type='shell', cmd='echo 1')])
+    config = Config(cmd_config=CommandConfig(
+        command_delay=0.0,
+        command_delay_jitter=True,
+        command_delay_jitter_min=0.5,
+        command_delay_jitter_max=2.0,
+    ))
+    attackmate_instance = AttackMate(playbook=playbook, config=config)
+
+    with patch('attackmate.attackmate.random.uniform', return_value=1.5), \
+            patch('attackmate.attackmate.random.choice', return_value=-1), \
+            patch('attackmate.attackmate.time.sleep') as mock_sleep:
+        await attackmate_instance._run_commands(attackmate_instance.playbook.commands)
+        # 0.0 + (-1) * 1.5 = -1.5, clamped → 0.0
+        mock_sleep.assert_called_once_with(0.0)

@@ -247,11 +247,11 @@ Top-level configuration object. All fields have safe defaults, so an empty
      - ``CommandConfig``
      - Global command execution settings. See below.
    * - ``msf_config``
-     - ``MsfConfig``
-     - Metasploit RPC connection settings. See below.
+     - ``dict[str, MsfConfig]``
+     - Named Metasploit RPC connections. See below.
    * - ``sliver_config``
-     - ``SliverConfig``
-     - Sliver C2 connection settings. See below.
+     - ``dict[str, SliverConfig]``
+     - Named Sliver C2 connections. See below.
    * - ``bettercap_config``
      - ``dict[str, BettercapConfig]``
      - Named Bettercap instances. Keys are referenced by ``webserv`` commands.
@@ -440,7 +440,7 @@ Running a Single Command
         initialize_logger(debug=False, append_logs=False)
 
         config = Config(
-            msf_config={"password": "your_password", "ssl": True, "port": 55553},
+            msf_config={"default": {"password": "your_password", "ssl": True, "port": 55553}},
             cmd_config={"loop_sleep": 10},
         )
         varstore = {"HOST": "10.0.0.1"}
