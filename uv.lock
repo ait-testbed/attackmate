@@ -120,7 +120,7 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "argon2-cffi" },
-    { name = "attackmate-client", git = "https://github.com/ait-testbed/attackmate-client.git" },
+    { name = "attackmate-client", specifier = ">=0.1.2" },
     { name = "colorlog" },
     { name = "fastapi" },
     { name = "httpx" },
@@ -150,11 +150,15 @@ dev = [
 [[package]]
 name = "attackmate-client"
 version = "0.1.2"
-source = { git = "https://github.com/ait-testbed/attackmate-client.git#4dd9940370048f593b1d4f2145a66859c505d88c" }
+source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "httpx" },
     { name = "pydantic" },
     { name = "pyyaml" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/fd/26/6a97b8ab9ef7ee32ed5e93255b8dbc3887de2e9f675c331ae5d554ee5dc7/attackmate_client-0.1.2.tar.gz", hash = "sha256:a259d64f9041e89e6734ea65ac0a1b4568b256dfc08e95fa70adbb83211644f3", size = 16106, upload-time = "2026-05-21T11:27:16.735Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/c0/89/c9ae9e9c7484011d94491c7fad6d92637a35ffa381aa7ac35e2ba60a1e14/attackmate_client-0.1.2-py3-none-any.whl", hash = "sha256:6606d45b0510aeaa8058733b6f84ef19bd8d9346f63be498b12754fe033b834c", size = 14692, upload-time = "2026-05-21T11:27:15.135Z" },
 ]
 
 [[package]]
