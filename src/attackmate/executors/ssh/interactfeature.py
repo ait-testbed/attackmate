@@ -19,8 +19,7 @@ class Interactive:
                     self.logger.debug('found prompt!')
                     self.timer = None
                     return True
-        else:
-            self.set_timer()
+        self.set_timer()
         return False
 
     def check_timer(self, seconds: int) -> bool:
