@@ -13,12 +13,19 @@ class Interactive:
         self.logger = logging.getLogger('playbook')
 
     def check_prompt(self, output: str, prompts: list[str]) -> bool:
-        if output and prompts:
-            for p in prompts:
-                if output.endswith(p):
-                    self.logger.debug('found prompt!')
-                    self.timer = None
-                    return True
+        if not output:
+            return False
+
+        if not prompts:
+            self.set_timer()
+            return False
+
+        for p in prompts:
+            if output.endswith(p):
+                self.logger.debug('found prompt!')
+                self.timer = None
+                return True
+
         self.set_timer()
         return False
 
