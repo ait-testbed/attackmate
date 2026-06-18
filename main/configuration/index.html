@@ -88,12 +88,12 @@
             v1.0.2
         </option>
         
-        <option value="../../development/configuration/index.html" >
-            development
-        </option>
-        
         <option value="index.html" selected>
             main
+        </option>
+        
+        <option value="../../development/configuration/index.html" >
+            development
         </option>
         
     </select>
@@ -199,7 +199,10 @@ is not used, attackmate will search at the following locations for the config-fi
 sliver, metasploit and remote attackmate server:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">cmd_config</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">loop_sleep</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5</span>
-<span class="w">  </span><span class="nt">command_delay</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span>
+<span class="w">  </span><span class="nt">command_delay</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="w">  </span><span class="nt">command_delay_jitter</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">  </span><span class="nt">command_delay_jitter_min</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.5</span>
+<span class="w">  </span><span class="nt">command_delay_jitter_max</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2.0</span>
 
 <span class="nt">bettercap_config</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">default</span><span class="p">:</span>
@@ -208,11 +211,13 @@ sliver, metasploit and remote attackmate server:</p>
 <span class="w">    </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">password</span>
 
 <span class="nt">msf_config</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">securepassword</span>
-<span class="w">  </span><span class="nt">server</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">127.0.0.1</span>
+<span class="w">  </span><span class="nt">default</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">securepassword</span>
+<span class="w">    </span><span class="nt">server</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">127.0.0.1</span>
 
 <span class="nt">sliver_config</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">config_file</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/home/attacker/.sliver-client/configs/attacker_localhost.cfg</span>
+<span class="w">  </span><span class="nt">default</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">config_file</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/home/attacker/.sliver-client/configs/attacker_localhost.cfg</span>
 
 <span class="nt">remote_config</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">remote_server_name</span><span class="p">:</span>
@@ -310,11 +315,11 @@ sliver, metasploit and remote attackmate server:</p>
             </dd>
             
             <dd>
-                <a href="../../development/configuration/index.html">development</a>
+                <a href="index.html">main</a>
             </dd>
             
             <dd>
-                <a href="index.html">main</a>
+                <a href="../../development/configuration/index.html">development</a>
             </dd>
             
         </dl>

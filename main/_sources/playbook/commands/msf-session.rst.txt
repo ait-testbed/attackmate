@@ -78,3 +78,10 @@ Execute commands in an active Meterpreter session previously opened by an
    String indicating the end of a read-operation.
 
    :type: str
+
+.. confval:: connection
+
+   Name of the MSF server connection to use, as defined in :ref:`msf_config`.
+   If omitted, the first configured connection is used.
+
+   :type: str

@@ -88,12 +88,12 @@
             v1.0.2
         </option>
         
-        <option value="../../development/configuration/command_config.html" >
-            development
-        </option>
-        
         <option value="command_config.html" selected>
             main
+        </option>
+        
+        <option value="../../development/configuration/command_config.html" >
+            development
         </option>
         
     </select>
@@ -186,6 +186,9 @@ These are settings for <strong>all</strong> commands.</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">cmd_config</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">loop_sleep</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5</span>
 <span class="w">  </span><span class="nt">command_delay</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span>
+<span class="w">  </span><span class="nt">command_delay_jitter</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<span class="w">  </span><span class="nt">command_delay_jitter_min</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.5</span>
+<span class="w">  </span><span class="nt">command_delay_jitter_max</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2.0</span>
 </pre></div>
 </div>
 <dl class="std confval">
@@ -215,6 +218,53 @@ Does not apply to <code class="docutils literal notranslate"><span class="pre">d
 </dd>
 <dt class="field-even">Default<span class="colon">:</span></dt>
 <dd class="field-even"><p>0</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="std confval">
+<dt class="sig sig-object std" id="confval-command_delay_jitter">
+<span class="sig-name descname"><span class="pre">command_delay_jitter</span></span><a class="headerlink" href="#confval-command_delay_jitter" title="Permalink to this definition"></a></dt>
+<dd><p>When <code class="docutils literal notranslate"><span class="pre">true</span></code>, randomizes the per-command delay. The effective delay is calculated as
+<code class="docutils literal notranslate"><span class="pre">command_delay</span> <span class="pre">±</span> <span class="pre">random(command_delay_jitter_min,</span> <span class="pre">command_delay_jitter_max)</span></code>,
+clamped to a minimum of <code class="docutils literal notranslate"><span class="pre">0</span></code>. Has no effect when <code class="docutils literal notranslate"><span class="pre">command_delay_jitter</span></code>
+is <code class="docutils literal notranslate"><span class="pre">false</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+<dt class="field-even">Default<span class="colon">:</span></dt>
+<dd class="field-even"><p>false</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="std confval">
+<dt class="sig sig-object std" id="confval-command_delay_jitter_min">
+<span class="sig-name descname"><span class="pre">command_delay_jitter_min</span></span><a class="headerlink" href="#confval-command_delay_jitter_min" title="Permalink to this definition"></a></dt>
+<dd><p>Lower bound of the jitter offset in seconds. Only used when
+<a class="reference internal" href="#confval-command_delay_jitter"><code class="xref std std-confval docutils literal notranslate"><span class="pre">command_delay_jitter</span></code></a> is <code class="docutils literal notranslate"><span class="pre">true</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+<dt class="field-even">Default<span class="colon">:</span></dt>
+<dd class="field-even"><p>0.5</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="std confval">
+<dt class="sig sig-object std" id="confval-command_delay_jitter_max">
+<span class="sig-name descname"><span class="pre">command_delay_jitter_max</span></span><a class="headerlink" href="#confval-command_delay_jitter_max" title="Permalink to this definition"></a></dt>
+<dd><p>Upper bound of the jitter offset in seconds. Only used when
+<a class="reference internal" href="#confval-command_delay_jitter"><code class="xref std std-confval docutils literal notranslate"><span class="pre">command_delay_jitter</span></code></a> is <code class="docutils literal notranslate"><span class="pre">true</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+<dt class="field-even">Default<span class="colon">:</span></dt>
+<dd class="field-even"><p>2.0</p>
 </dd>
 </dl>
 </dd></dl>
@@ -297,11 +347,11 @@ Does not apply to <code class="docutils literal notranslate"><span class="pre">d
             </dd>
             
             <dd>
-                <a href="../../development/configuration/command_config.html">development</a>
+                <a href="command_config.html">main</a>
             </dd>
             
             <dd>
-                <a href="command_config.html">main</a>
+                <a href="../../development/configuration/command_config.html">development</a>
             </dd>
             
         </dl>

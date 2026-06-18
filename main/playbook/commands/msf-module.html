@@ -88,12 +88,12 @@
             v1.0.2
         </option>
         
-        <option value="../../../development/playbook/commands/msf-module.html" >
-            development
-        </option>
-        
         <option value="msf-module.html" selected>
             main
+        </option>
+        
+        <option value="../../../development/playbook/commands/msf-module.html" >
+            development
         </option>
         
     </select>
@@ -313,9 +313,21 @@ modules that operate within an active session.</p>
 <dd class="field-odd"><p>str</p>
 </dd>
 </dl>
-<p>The following example illustrates the use of sessions and payloads:</p>
 </dd></dl>
 
+<dl class="std confval">
+<dt class="sig sig-object std" id="confval-connection">
+<span class="sig-name descname"><span class="pre">connection</span></span><a class="headerlink" href="#confval-connection" title="Permalink to this definition"></a></dt>
+<dd><p>Name of the MSF server connection to use, as defined in <a class="reference internal" href="../../configuration/msf_config.html#msf-config"><span class="std std-ref">msf_config</span></a>.
+If omitted, the first configured connection is used.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<p>The following example illustrates the use of sessions and payloads:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">commands</span><span class="p">:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">msf-module</span>
 <span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">exploit/unix/webapp/zoneminder_snapshots</span>
@@ -416,11 +428,11 @@ modules that operate within an active session.</p>
             </dd>
             
             <dd>
-                <a href="../../../development/playbook/commands/msf-module.html">development</a>
+                <a href="msf-module.html">main</a>
             </dd>
             
             <dd>
-                <a href="msf-module.html">main</a>
+                <a href="../../../development/playbook/commands/msf-module.html">development</a>
             </dd>
             
         </dl>

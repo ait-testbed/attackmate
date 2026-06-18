@@ -110,7 +110,7 @@ The factory filters the provided configurations based on the class constructor s
             'pm': self.pm,
             'varstore': self.varstore,
             'cmdconfig': self.pyconfig.cmd_config,
-            'msfconfig': self.pyconfig.msf_config,
+            'msf_config': self.pyconfig.msf_config,
             'msfsessionstore': self.msfsessionstore,
             'sliver_config': self.pyconfig.sliver_config,
             'runfunc': self._run_commands,

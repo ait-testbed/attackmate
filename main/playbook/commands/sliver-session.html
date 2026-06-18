@@ -88,12 +88,12 @@
             v1.0.2
         </option>
         
-        <option value="../../../development/playbook/commands/sliver-session.html" >
-            development
-        </option>
-        
         <option value="sliver-session.html" selected>
             main
+        </option>
+        
+        <option value="../../../development/playbook/commands/sliver-session.html" >
+            development
         </option>
         
     </select>
@@ -203,6 +203,7 @@
 <a class="reference internal" href="vnc.html#confval-session"><code class="xref std std-confval docutils literal notranslate"><span class="pre">session</span></code></a> field identifying the target implant.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
+<p>To configure the connection to the Sliver server, see <a class="reference internal" href="../../configuration/sliver_config.html#sliver-config"><span class="std std-ref">sliver_config</span></a>.</p>
 <p><strong>For developers:</strong> The <code class="docutils literal notranslate"><span class="pre">sliver</span></code> and <code class="docutils literal notranslate"><span class="pre">sliver-session</span></code> command families use a legacy
 <code class="docutils literal notranslate"><span class="pre">type</span></code> + <code class="docutils literal notranslate"><span class="pre">cmd</span></code> discrimination pattern and should not be replicated. New commands
 must define a unique <code class="docutils literal notranslate"><span class="pre">type</span></code> literal and handle sub-behavior branching via <code class="docutils literal notranslate"><span class="pre">cmd</span></code>
@@ -219,6 +220,18 @@ generated and deployed previously via the sliver <a class="reference internal" h
 </dd>
 <dt class="field-even">Required<span class="colon">:</span></dt>
 <dd class="field-even"><p>True</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="std confval">
+<dt class="sig sig-object std" id="confval-connection">
+<span class="sig-name descname"><span class="pre">connection</span></span><a class="headerlink" href="#confval-connection" title="Permalink to this definition"></a></dt>
+<dd><p>Name of the Sliver server connection to use, as defined in <a class="reference internal" href="../../configuration/sliver_config.html#sliver-config"><span class="std std-ref">sliver_config</span></a>.
+If omitted, the first configured connection is used.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
 </dd>
 </dl>
 </dd></dl>
@@ -797,11 +810,11 @@ generated and deployed previously via the sliver <a class="reference internal" h
             </dd>
             
             <dd>
-                <a href="../../../development/playbook/commands/sliver-session.html">development</a>
+                <a href="sliver-session.html">main</a>
             </dd>
             
             <dd>
-                <a href="sliver-session.html">main</a>
+                <a href="../../../development/playbook/commands/sliver-session.html">development</a>
             </dd>
             
         </dl>
