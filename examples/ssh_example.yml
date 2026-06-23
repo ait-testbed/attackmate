@@ -17,7 +17,7 @@
 #
 vars:
   METASPLOITABLE: 192.168.0.146
-  PASSWDLIST: /snap/seclists/current/Passwords/Common-Credentials/darkweb2017_top-1000.txt
+  PASSWDLIST: /usr/share/SecLists/Passwords/darkweb2017_top-1000.txt
 
 commands:
   - type: shell
@@ -81,6 +81,10 @@ commands:
     remote_path: /tmp/linpeas.sh
     session: "foothold"
     mode: "777"
+    metadata:
+      description: "Upload linpeas.sh to target via SFTP for privilege escalation enumeration"
+      techniques: "T1105"
+      tactics: "Execution"
 
   - type: debug
     cmd: "Executing LinPeas. This will take a while. Please be patient"
