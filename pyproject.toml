@@ -25,9 +25,9 @@ dependencies = [
     "playwright",
     "argon2-cffi",
     "uvicorn",
-    "dotenv",
+    "python-dotenv>=1.1.0",
     "passlib",
-    "python-multipart",
+    "python-multipart>=0.0.32",
     "attackmate-client>=0.1.2",
 ]
 dynamic = ["version"]
