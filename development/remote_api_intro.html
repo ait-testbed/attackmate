@@ -1,0 +1,404 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Remote API &mdash; AttackMate 1.0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css" />
+
+  
+      <script src="_static/jquery.js"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+      <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+      <script src="_static/doctools.js"></script>
+      <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Structure" href="playbook/structure.html" />
+    <link rel="prev" title="Basic Usage" href="basic.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            AttackMate
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+
+<div class="version-switcher" style="margin: 0.5em 0;">
+    <select onchange="if (this.value) window.location.href=this.value;" style="width: 100%; padding: 0.2em;">
+        
+        <option value="../v0.1.0/index.html" >
+            v0.1.0
+        </option>
+        
+        <option value="../v0.2.0/index.html" >
+            v0.2.0
+        </option>
+        
+        <option value="../v0.3.0/index.html" >
+            v0.3.0
+        </option>
+        
+        <option value="../v0.3.1/index.html" >
+            v0.3.1
+        </option>
+        
+        <option value="../v0.4.0/index.html" >
+            v0.4.0
+        </option>
+        
+        <option value="../v0.5.0/index.html" >
+            v0.5.0
+        </option>
+        
+        <option value="../v0.6.0/index.html" >
+            v0.6.0
+        </option>
+        
+        <option value="../v1.0.0/index.html" >
+            v1.0.0
+        </option>
+        
+        <option value="../v1.0.1/index.html" >
+            v1.0.1
+        </option>
+        
+        <option value="../v1.0.2/remote_api_intro.html" >
+            v1.0.2
+        </option>
+        
+        <option value="remote_api_intro.html" selected>
+            development
+        </option>
+        
+        <option value="../main/remote_api_intro.html" >
+            main
+        </option>
+        
+    </select>
+</div>
+
+
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">General:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="readme_link.html">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="readme_link.html#installation">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="readme_link.html#execute">Execute</a></li>
+<li class="toctree-l1"><a class="reference internal" href="readme_link.html#documentation">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="readme_link.html#publications">Publications</a></li>
+<li class="toctree-l1"><a class="reference internal" href="readme_link.html#contribution">Contribution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="readme_link.html#disclaimer">Disclaimer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="readme_link.html#security">Security</a></li>
+<li class="toctree-l1"><a class="reference internal" href="readme_link.html#license">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="readme_link.html#financial-support">Financial Support</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Getting Started:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="about.html">About</a></li>
+<li class="toctree-l1"><a class="reference internal" href="how.html">How it works</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation/index.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="preparation/index.html">Preparation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration/index.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="basic.html">Basic Usage</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Remote API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#requirements">Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#architecture">Architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#sample-config">Sample Config</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#first-run">First Run</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#testing-the-api-server">Testing The API Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#metasploit">Metasploit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#troubleshooting">Troubleshooting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#server-logs">Server Logs</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Playbook:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="playbook/structure.html">Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="playbook/vars.html">Variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="playbook/commands/index.html">Commands</a></li>
+<li class="toctree-l1"><a class="reference internal" href="playbook/session/index.html">Sessions, Interactive</a></li>
+<li class="toctree-l1"><a class="reference internal" href="playbook/examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="playbook/troubleshooting.html">Troubleshooting</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developing:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="developing/contribution.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developing/development.html">Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developing/architecture.html">System Architecture (C4)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developing/command.html">Adding a New Command</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developing/baseexecutor.html">Adding a New Executor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developing/integration.html">Using AttackMate in a Python Script</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Package:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="attackmate/attackmate.html">attackmate package</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">AttackMate</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Remote API</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/remote_api_intro.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="remote-api">
+<span id="remote-api-intro"></span><h1>Remote API<a class="headerlink" href="#remote-api" title="Permalink to this heading"></a></h1>
+<p>AttackMate can execute commands and playbooks on a remote AttackMate
+instance. This is useful when the tools required by a playbook, such as
+Metasploit, Sliver, browsers, or network access to a target environment, are
+available on another host.</p>
+<p>The remote setup uses two components:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://github.com/ait-testbed/attackmate-api-server">attackmate-api-server</a>:
+runs on the remote AttackMate host and exposes an HTTPS API.</p></li>
+<li><p><a class="reference external" href="https://github.com/ait-testbed/attackmate-client">attackmate-client</a>:
+runs on the local/client host and sends commands or playbooks to the API
+server.</p></li>
+</ul>
+<p><cite>attackmate-client</cite> offers a CLI and a python library to execute commands and playbooks on a
+remote AttackMate server. It is only required on the client when you want to use the Remote API
+on an attackmate-api-server.</p>
+<p>The <a class="reference external" href="https://github.com/ait-testbed/attackmate-ansible">attackmate-ansible</a>
+role can install and configure both sides.</p>
+<section id="requirements">
+<h2>Requirements<a class="headerlink" href="#requirements" title="Permalink to this heading"></a></h2>
+<p>A working remote setup needs at least:</p>
+<ul class="simple">
+<li><p>AttackMate installed on the server.</p></li>
+<li><p>attackmate-api-server installed and running on the server.</p></li>
+<li><p>attackmate-client installed on the client, to access the remote API.</p></li>
+<li><p>The server TLS certificate copied to the client.</p></li>
+<li><p>A valid <code class="docutils literal notranslate"><span class="pre">remote_config</span></code> entry on the client, or provided as cli argument to <code class="docutils literal notranslate"><span class="pre">attackmate-client</span></code>.</p></li>
+<li><p>Any tools used by the remote playbook installed on the server, for example
+<code class="docutils literal notranslate"><span class="pre">msfrpcd</span></code> for Metasploit commands.</p></li>
+</ul>
+<p>If you installed <code class="docutils literal notranslate"><span class="pre">Attackmate</span></code> on the client, it is not recommended to install <code class="docutils literal notranslate"><span class="pre">attackmate-client</span></code>, as it will
+already have pulled that in as a dependency.</p>
+<p>You can install just the <code class="docutils literal notranslate"><span class="pre">attackmate-client</span></code>, if all you want to do on the client is to send remote commands
+and playbooks to the attackmate-api-server via CLI or the python library.</p>
+</section>
+<section id="architecture">
+<h2>Architecture<a class="headerlink" href="#architecture" title="Permalink to this heading"></a></h2>
+<p>When a remote playbook uses <code class="docutils literal notranslate"><span class="pre">cmd:</span> <span class="pre">execute_playbook</span></code>, the referenced
+<code class="docutils literal notranslate"><span class="pre">playbook_path</span></code> is read on the client machine. The client then sends the
+playbook YAML content to the API server.</p>
+<p>The commands inside that submitted playbook run on the server. Therefore paths
+inside the submitted playbook, such as payload paths, temporary files, local
+uploads, or tool configuration, are resolved on the server.</p>
+</section>
+<section id="sample-config">
+<h2>Sample Config<a class="headerlink" href="#sample-config" title="Permalink to this heading"></a></h2>
+<p>Save this as <code class="docutils literal notranslate"><span class="pre">/etc/attackmate.yml</span></code> on the client:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">msf_config</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">server</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">localhost</span>
+<span class="w">  </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hackerman</span>
+
+<span class="nt">cmd_config</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">command_delay</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
+
+<span class="nt">remote_config</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">attackmate-server</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;https://10.0.0.5:8445&quot;</span>
+<span class="w">    </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">admin</span>
+<span class="w">    </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">securepassword</span>
+<span class="w">    </span><span class="nt">cafile</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/etc/ssl/certs/attackmate.pem&quot;</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">cafile</span></code> must point to the certificate used by the API server. If the
+certificate is missing or does not match the server, HTTPS verification will
+fail.</p>
+</section>
+<section id="first-run">
+<h2>First Run<a class="headerlink" href="#first-run" title="Permalink to this heading"></a></h2>
+<p>Create a small local wrapper playbook on the client:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">commands</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">remote</span>
+<span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">execute_playbook</span>
+<span class="w">    </span><span class="nt">connection</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">attackmate-server</span>
+<span class="w">    </span><span class="nt">playbook_path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">examples/remote_put.yml</span>
+</pre></div>
+</div>
+<p>Run it with:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">uv run attackm8 --debug remote_wrapper.yml</span>
+</pre></div>
+</div>
+<p>The local attackmate should log in to the remote API server, send the referenced playbook, and
+print the remote execution result.</p>
+</section>
+<section id="testing-the-api-server">
+<h2>Testing The API Server<a class="headerlink" href="#testing-the-api-server" title="Permalink to this heading"></a></h2>
+<p>Check that the API service is reachable:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">curl -k https://10.0.0.5:8445/</span>
+</pre></div>
+</div>
+</section>
+<section id="metasploit">
+<h2>Metasploit<a class="headerlink" href="#metasploit" title="Permalink to this heading"></a></h2>
+<p>If a playbook uses Metasploit commands, <code class="docutils literal notranslate"><span class="pre">msfrpcd</span></code> must be running on the
+server and the AttackMate server configuration must match it.</p>
+<p>Example:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">msf_config</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">server</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">localhost</span>
+<span class="w">  </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">55553</span>
+<span class="w">  </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hackerman</span>
+<span class="w">  </span><span class="nt">ssl</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+</pre></div>
+</div>
+<p>A common symptom of a wrong Metasploit configuration, or msfrpcd not running, is:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>2026-05-20 11:01:37 INFO     | Login successful for &#39;admin&#39; at https://192.168.0.30:8445. Token stored.
+2026-05-20 11:02:37 ERROR    | Request Error (POST https://192.168.0.30:8445/playbooks/execute/yaml): The read operation timed out
+</pre></div>
+</div>
+</section>
+<section id="troubleshooting">
+<h2>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permalink to this heading"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">The</span> <span class="pre">read</span> <span class="pre">operation</span> <span class="pre">timed</span> <span class="pre">out</span></code></p>
+<p>The client waited longer than its configured HTTP timeout. This can happen when
+the remote playbook is still running, waiting for a session, or stuck in a tool
+such as Metasploit. Check the server logs and any AttackMate playbook logs.</p>
+<p>You can also increase the timeout period of attackmate-client by changing DEFAULT_TIMEOUT in <code class="docutils literal notranslate"><span class="pre">/usr/local/share/attackmate/.venv/lib/python3.12/site-packages/attackmate_client/attackmate_client.py</span></code></p>
+</section>
+<section id="server-logs">
+<h2>Server Logs<a class="headerlink" href="#server-logs" title="Permalink to this heading"></a></h2>
+<p>If file logging is enabled for API playbook runs, inspect the configured log
+directory, for example:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">tail -f /var/log/attackmate-api/*_output.log</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="basic.html" class="btn btn-neutral float-left" title="Basic Usage" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="playbook/structure.html" class="btn btn-neutral float-right" title="Structure" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Wolfgang Hotwagner.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  
+<div class="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version">
+        <span class="fa fa-book"> Version</span>
+        development
+    </span>
+
+    <div class="rst-other-versions">
+        <dl>
+            <dt>Versions</dt>
+            
+            <dd>
+                <a href="../v0.1.0/index.html">v0.1.0</a>
+            </dd>
+            
+            <dd>
+                <a href="../v0.2.0/index.html">v0.2.0</a>
+            </dd>
+            
+            <dd>
+                <a href="../v0.3.0/index.html">v0.3.0</a>
+            </dd>
+            
+            <dd>
+                <a href="../v0.3.1/index.html">v0.3.1</a>
+            </dd>
+            
+            <dd>
+                <a href="../v0.4.0/index.html">v0.4.0</a>
+            </dd>
+            
+            <dd>
+                <a href="../v0.5.0/index.html">v0.5.0</a>
+            </dd>
+            
+            <dd>
+                <a href="../v0.6.0/index.html">v0.6.0</a>
+            </dd>
+            
+            <dd>
+                <a href="../v1.0.0/index.html">v1.0.0</a>
+            </dd>
+            
+            <dd>
+                <a href="../v1.0.1/index.html">v1.0.1</a>
+            </dd>
+            
+            <dd>
+                <a href="../v1.0.2/remote_api_intro.html">v1.0.2</a>
+            </dd>
+            
+            <dd>
+                <a href="remote_api_intro.html">development</a>
+            </dd>
+            
+            <dd>
+                <a href="../main/remote_api_intro.html">main</a>
+            </dd>
+            
+        </dl>
+    </div>
+</div>
+<script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -129,6 +129,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../basic.html">Basic Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../remote_api_intro.html">Remote API</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Playbook:</span></p>
 <ul>
@@ -192,13 +193,13 @@ deploying AttackMate as an API server via a role variable.</p>
 commands via the <code class="docutils literal notranslate"><span class="pre">connection</span></code> field. If no connection is specified, the first entry in
 the configuration is used as the default.</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">remote_config</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">remote_server</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;https://10.0.0.5:5000&quot;</span>
+<span class="w">  </span><span class="nt">attackmate-server</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;https://10.0.0.5:8445&quot;</span>
 <span class="w">    </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">admin</span>
 <span class="w">    </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">securepassword</span>
 <span class="w">    </span><span class="nt">cafile</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/path/to/cert.pem&quot;</span>
-<span class="w">  </span><span class="nt">another_server</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;https://10.0.0.6:5000&quot;</span>
+<span class="w">  </span><span class="nt">another-server</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;https://10.0.0.6:8445&quot;</span>
 <span class="w">    </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">user</span>
 <span class="w">    </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">anotherpassword</span>
 <span class="w">    </span><span class="nt">cafile</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/path/to/another_cert.pem&quot;</span>
@@ -207,15 +208,15 @@ the configuration is used as the default.</p>
 <p>The following example shows how to target a specific remote instance, and how the
 default connection is used when none is specified:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">commands</span><span class="p">:</span>
-<span class="w">  </span><span class="c1"># Executed on &#39;another_server&#39;</span>
+<span class="w">  </span><span class="c1"># Executed on &#39;another-server&#39;</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">remote</span>
-<span class="w">    </span><span class="nt">connection</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">another_server</span>
+<span class="w">    </span><span class="nt">connection</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">another-server</span>
 <span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">execute_command</span>
 <span class="w">    </span><span class="nt">remote_command</span><span class="p">:</span>
 <span class="w">      </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">shell</span>
 <span class="w">      </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;whoami&quot;</span>
 
-<span class="w">  </span><span class="c1"># Executed on &#39;remote_server&#39; (defaults to first remote_config entry))</span>
+<span class="w">  </span><span class="c1"># Executed on &#39;attackmate-server&#39; (defaults to first remote_config entry))</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">remote</span>
 <span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">execute_playbook</span>
 <span class="w">    </span><span class="nt">playbook_path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">path/to/playbook.yml</span>
