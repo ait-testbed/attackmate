@@ -1,0 +1,328 @@
+<mxfile host="app.diagrams.net" modified="2025-05-20T00:00:00.000Z" agent="Mozilla/5.0" version="24.0.5" type="device">
+  <diagram name="execute_playbook" id="page_execute_playbook">
+    <mxGraphModel dx="1800" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1200" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Title -->
+        <mxCell id="p1_title" value="execute_playbook: each call starts a fresh execution with an empty variable store"
+          style="text;strokeColor=none;align=center;fillColor=none;html=1;fontSize=13;fontStyle=1;"
+          parent="1" vertex="1">
+          <mxGeometry x="60" y="90" width="1050" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- Local AttackMate lifeline -->
+        <mxCell id="p1_am" value="Local AttackMate"
+          style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;fillColor=#dae8fc;strokeColor=#6c8ebf;"
+          parent="1" vertex="1">
+          <mxGeometry x="80" y="185" width="130" height="720" as="geometry" />
+        </mxCell>
+        <mxCell id="p1_am_act" value=""
+          style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;"
+          parent="p1_am" vertex="1">
+          <mxGeometry x="57.5" y="90" width="15" height="590" as="geometry" />
+        </mxCell>
+
+        <!-- Remote API Server lifeline -->
+        <mxCell id="p1_api" value="Remote API Server"
+          style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;fillColor=#dae8fc;strokeColor=#6c8ebf;"
+          parent="1" vertex="1">
+          <mxGeometry x="320" y="185" width="150" height="720" as="geometry" />
+        </mxCell>
+        <mxCell id="p1_api_act" value=""
+          style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;"
+          parent="p1_api" vertex="1">
+          <mxGeometry x="67.5" y="90" width="15" height="590" as="geometry" />
+        </mxCell>
+
+        <!-- PlaybookExec Run 1 (green, gets destroyed) -->
+        <mxCell id="p1_run1" value="&lt;div&gt;PlaybookExec (Run 1)&lt;/div&gt;&lt;div&gt;VarStore = {}&lt;/div&gt;"
+          style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;fillColor=#d5e8d4;strokeColor=#82b366;"
+          parent="1" vertex="1">
+          <mxGeometry x="580" y="185" width="160" height="410" as="geometry" />
+        </mxCell>
+        <mxCell id="p1_run1_act" value="cmds 1..n run&lt;br&gt;(VarStore grows)"
+          style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;fillColor=#fff2cc;strokeColor=#d6b656;verticalAlign=middle;fontSize=9;"
+          parent="p1_run1" vertex="1">
+          <mxGeometry x="72.5" y="175" width="15" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="p1_run1_destroy" value=""
+          style="shape=umlDestroy;whiteSpace=wrap;html=1;strokeWidth=3;"
+          parent="p1_run1" vertex="1">
+          <mxGeometry x="65" y="375" width="30" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- PlaybookExec Run 2 (green, also gets destroyed) -->
+        <mxCell id="p1_run2" value="&lt;div&gt;PlaybookExec (Run 2)&lt;/div&gt;&lt;div&gt;VarStore = {}&lt;/div&gt;"
+          style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;fillColor=#d5e8d4;strokeColor=#82b366;"
+          parent="1" vertex="1">
+          <mxGeometry x="820" y="185" width="160" height="720" as="geometry" />
+        </mxCell>
+        <mxCell id="p1_run2_act" value="cmds 1..n run"
+          style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;fillColor=#fff2cc;strokeColor=#d6b656;verticalAlign=middle;fontSize=9;"
+          parent="p1_run2" vertex="1">
+          <mxGeometry x="72.5" y="445" width="15" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="p1_run2_destroy" value=""
+          style="shape=umlDestroy;whiteSpace=wrap;html=1;strokeWidth=3;"
+          parent="p1_run2" vertex="1">
+          <mxGeometry x="65" y="685" width="30" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- ── FIRST CALL ── -->
+
+        <!-- Local AM → execute_playbook (YAML) → Remote API -->
+        <mxCell id="p1_msg1" value="execute_playbook (YAML)"
+          style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;"
+          parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="152.5" y="320" as="sourcePoint" />
+            <mxPoint x="387.5" y="320" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Remote API → new PlaybookExec (spawn) → Run1 -->
+        <mxCell id="p1_msg2" value="new PlaybookExec (VarStore = {})"
+          style="html=1;verticalAlign=bottom;endArrow=open;endFill=1;dashed=1;curved=0;rounded=0;"
+          parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="402.5" y="360" as="sourcePoint" />
+            <mxPoint x="652.5" y="360" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Run1 → result → Remote API -->
+        <mxCell id="p1_msg3" value="result"
+          style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;"
+          parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="652.5" y="510" as="sourcePoint" />
+            <mxPoint x="402.5" y="510" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Remote API → result → Local AM -->
+        <mxCell id="p1_msg4" value="result"
+          style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;"
+          parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="387.5" y="530" as="sourcePoint" />
+            <mxPoint x="152.5" y="530" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Note: VarStore discarded after Run 1 -->
+        <mxCell id="p1_note1" value="VarStore discarded"
+          style="shape=callout;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d6b656;fontSize=10;perimeter=calloutPerimeter;"
+          parent="1" vertex="1">
+          <mxGeometry x="750" y="535" width="140" height="35" as="geometry" />
+        </mxCell>
+
+        <!-- Dashed separator between the two calls -->
+        <mxCell id="p1_sep" value=""
+          style="endArrow=none;html=1;dashed=1;strokeColor=#999999;"
+          parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="80" y="580" as="sourcePoint" />
+            <mxPoint x="1010" y="580" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- ── SECOND CALL ── -->
+
+        <!-- Local AM → execute_playbook (second call) → Remote API -->
+        <mxCell id="p1_msg5" value="execute_playbook (YAML)"
+          style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;"
+          parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="152.5" y="620" as="sourcePoint" />
+            <mxPoint x="387.5" y="620" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Remote API → new PlaybookExec (Run 2, fresh) → Run2 -->
+        <mxCell id="p1_msg6" value="new PlaybookExec (VarStore = {})"
+          style="html=1;verticalAlign=bottom;endArrow=open;endFill=1;dashed=1;curved=0;rounded=0;"
+          parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="402.5" y="660" as="sourcePoint" />
+            <mxPoint x="892.5" y="660" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Note: no state from Run 1 -->
+        <mxCell id="p1_note2" value="variables from Run 1 not available"
+          style="shape=callout;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=10;perimeter=calloutPerimeter;"
+          parent="1" vertex="1">
+          <mxGeometry x="990" y="655" width="185" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- Run2 → result → Remote API -->
+        <mxCell id="p1_msg7" value="result"
+          style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;"
+          parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="892.5" y="800" as="sourcePoint" />
+            <mxPoint x="402.5" y="800" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Remote API → result → Local AM -->
+        <mxCell id="p1_msg8" value="result"
+          style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;"
+          parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="387.5" y="820" as="sourcePoint" />
+            <mxPoint x="152.5" y="820" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+
+  <diagram name="execute_command" id="page_execute_command">
+    <mxGraphModel dx="1800" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1200" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Title -->
+        <mxCell id="p2_title" value="execute_command: commands share a persistent variable store on the remote"
+          style="text;strokeColor=none;align=center;fillColor=none;html=1;fontSize=13;fontStyle=1;"
+          parent="1" vertex="1">
+          <mxGeometry x="60" y="90" width="1000" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- Local AttackMate lifeline -->
+        <mxCell id="p2_am" value="Local AttackMate"
+          style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;fillColor=#dae8fc;strokeColor=#6c8ebf;"
+          parent="1" vertex="1">
+          <mxGeometry x="80" y="185" width="130" height="600" as="geometry" />
+        </mxCell>
+        <mxCell id="p2_am_act" value=""
+          style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;"
+          parent="p2_am" vertex="1">
+          <mxGeometry x="57.5" y="90" width="15" height="480" as="geometry" />
+        </mxCell>
+
+        <!-- Remote API Server lifeline -->
+        <mxCell id="p2_api" value="Remote API Server"
+          style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;fillColor=#dae8fc;strokeColor=#6c8ebf;"
+          parent="1" vertex="1">
+          <mxGeometry x="320" y="185" width="150" height="600" as="geometry" />
+        </mxCell>
+        <mxCell id="p2_api_act" value=""
+          style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;"
+          parent="p2_api" vertex="1">
+          <mxGeometry x="67.5" y="90" width="15" height="480" as="geometry" />
+        </mxCell>
+
+        <!-- Remote AttackMate Context (persistent VarStore) — green, NO destroy marker -->
+        <mxCell id="p2_ctx" value="&lt;div&gt;Remote AttackMate&lt;/div&gt;&lt;div&gt;(persistent VarStore)&lt;/div&gt;"
+          style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;fillColor=#d5e8d4;strokeColor=#82b366;"
+          parent="1" vertex="1">
+          <mxGeometry x="570" y="185" width="170" height="600" as="geometry" />
+        </mxCell>
+        <mxCell id="p2_ctx_act" value=""
+          style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;fillColor=#fff2cc;strokeColor=#d6b656;"
+          parent="p2_ctx" vertex="1">
+          <mxGeometry x="77.5" y="90" width="15" height="480" as="geometry" />
+        </mxCell>
+
+        <!-- ── FIRST CALL ── -->
+
+        <!-- Local AM → execute_command (cmd1) → Remote API -->
+        <mxCell id="p2_msg1" value="execute_command (cmd1: shell whoami)"
+          style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;"
+          parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="152.5" y="320" as="sourcePoint" />
+            <mxPoint x="387.5" y="320" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Remote API → cmd1 → Remote Context -->
+        <mxCell id="p2_msg2" value="cmd1 (VarStore: {} → {RESULT: root})"
+          style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;"
+          parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="402.5" y="360" as="sourcePoint" />
+            <mxPoint x="647.5" y="360" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Remote Context → result → Remote API -->
+        <mxCell id="p2_msg3" value="result"
+          style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;"
+          parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="647.5" y="400" as="sourcePoint" />
+            <mxPoint x="402.5" y="400" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Remote API → result → Local AM -->
+        <mxCell id="p2_msg4" value="result"
+          style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;"
+          parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="387.5" y="430" as="sourcePoint" />
+            <mxPoint x="152.5" y="430" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Note: VarStore persists between calls -->
+        <mxCell id="p2_note1" value="VarStore = {RESULT: root}&lt;br&gt;persists between calls"
+          style="shape=callout;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=10;perimeter=calloutPerimeter;"
+          parent="1" vertex="1">
+          <mxGeometry x="760" y="405" width="185" height="45" as="geometry" />
+        </mxCell>
+
+        <!-- ── SECOND CALL ── -->
+
+        <!-- Local AM → execute_command (cmd2, uses $RESULT) → Remote API -->
+        <mxCell id="p2_msg5" value="execute_command (cmd2: uses $RESULT)"
+          style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;"
+          parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="152.5" y="510" as="sourcePoint" />
+            <mxPoint x="387.5" y="510" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Remote API → cmd2 → Remote Context ($RESULT available!) -->
+        <mxCell id="p2_msg6" value="cmd2 ($RESULT = root available)"
+          style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;"
+          parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="402.5" y="550" as="sourcePoint" />
+            <mxPoint x="647.5" y="550" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Remote Context → result → Remote API -->
+        <mxCell id="p2_msg7" value="result"
+          style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;"
+          parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="647.5" y="590" as="sourcePoint" />
+            <mxPoint x="402.5" y="590" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Remote API → result → Local AM -->
+        <mxCell id="p2_msg8" value="result"
+          style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;"
+          parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="387.5" y="620" as="sourcePoint" />
+            <mxPoint x="152.5" y="620" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

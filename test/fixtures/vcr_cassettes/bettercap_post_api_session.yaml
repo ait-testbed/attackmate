@@ -1,0 +1,76 @@
+interactions:
+- request:
+    body: '{"cmd":"help"}'
+    headers:
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      authorization:
+      - Basic dXNlcjpwYXNz
+      connection:
+      - keep-alive
+      content-length:
+      - '14'
+      content-type:
+      - application/json
+      host:
+      - 127.0.0.1:8081
+      user-agent:
+      - AttackMate
+    method: POST
+    uri: http://127.0.0.1:8081/api/session
+  response:
+    body:
+      string: '{"success":true,"msg":"\n           help MODULE : List available commands
+        or show module specific help if no module name is provided.\n                active
+        : Show information about active modules.\n                  quit : Close the
+        session and exit.\n         sleep SECONDS : Sleep for the given amount of
+        seconds.\n              get NAME : Get the value of variable NAME, use * alone
+        for all, or NAME* as a wildcard.\n        set NAME VALUE : Set the VALUE of
+        variable NAME.\n  read VARIABLE PROMPT : Show a PROMPT to ask the user for
+        input that will be saved inside VARIABLE.\n                 clear : Clear
+        the screen.\n        include CAPLET : Load and run this caplet in the current
+        session.\n             ! COMMAND : Execute a shell command and print its output.\n        alias
+        MAC NAME : Assign an alias to a given endpoint given its MAC address.\n\nModules\n\n      any.proxy
+        \u003e not running\n       api.rest \u003e running\n      arp.spoof \u003e
+        not running\n      ble.recon \u003e not running\n             c2 \u003e not
+        running\n            can \u003e not running\n        caplets \u003e not running\n    dhcp6.spoof
+        \u003e not running\n      dns.proxy \u003e not running\n      dns.spoof \u003e
+        not running\n  events.stream \u003e running\n            gps \u003e not running\n          graph
+        \u003e not running\n            hid \u003e not running\n     http.proxy \u003e
+        not running\n    http.server \u003e not running\n    https.proxy \u003e not
+        running\n   https.server \u003e not running\n    mac.changer \u003e not running\n   mysql.server
+        \u003e not running\n      ndp.spoof \u003e not running\n      net.probe \u003e
+        not running\n      net.recon \u003e not running\n      net.sniff \u003e not
+        running\n   packet.proxy \u003e not running\n       syn.scan \u003e not running\n      tcp.proxy
+        \u003e not running\n         ticker \u003e not running\n             ui \u003e
+        not running\n         update \u003e not running\n           wifi \u003e not
+        running\n            wol \u003e not running\n        zerogod \u003e not running\n\n"}
+
+        '
+    headers:
+      Access-Control-Allow-Headers:
+      - Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization
+      Access-Control-Allow-Methods:
+      - POST, GET, OPTIONS, PUT, DELETE
+      Access-Control-Allow-Origin:
+      - '*'
+      Content-Type:
+      - application/json
+      Date:
+      - Mon, 25 Aug 2025 16:34:41 GMT
+      Referrer-Policy:
+      - same-origin
+      Transfer-Encoding:
+      - chunked
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - DENY
+      X-Xss-Protection:
+      - 1; mode=block
+    status:
+      code: 200
+      message: OK
+version: 1

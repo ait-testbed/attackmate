@@ -7,4 +7,3 @@ class ExecException(Exception):
     gracefully.
 
     """
-    pass

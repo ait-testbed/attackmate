@@ -28,7 +28,8 @@ class TestJsonExecutor:
         self.process_manager = ProcessManager()
         self.json_executor = JsonExecutor(self.process_manager, varstore=self.varstore)
 
-    def test_successful_json_load_from_file(self, mock_json_file, mock_logger):
+    @pytest.mark.asyncio
+    async def test_successful_json_load_from_file(self, mock_json_file, mock_logger):
         """
         Test successful loading and parsing of a JSON file.
         """
@@ -38,7 +39,7 @@ class TestJsonExecutor:
 
             command = JsonCommand(type='json', local_path='mockfile.json', varstore=True)
 
-            result = self.json_executor._exec_cmd(command)
+            result = await self.json_executor._exec_cmd(command)
 
             assert result.returncode == 0
             assert result.stdout == {'foo': 'bar', 'hello': 'world', 'my_list': ['cthulu', 'azatoth']}
@@ -47,7 +48,8 @@ class TestJsonExecutor:
             assert self.varstore.get_variable('MY_LIST') == ['cthulu', 'azatoth']
             mock_logger.info.assert_any_call("Successfully loaded JSON file: 'mockfile.json'")
 
-    def test_file_not_found(self, mock_logger):
+    @pytest.mark.asyncio
+    async def test_file_not_found(self, mock_logger):
         """
         Test behavior when the specified JSON file is not found.
         """
@@ -57,13 +59,14 @@ class TestJsonExecutor:
 
             command = JsonCommand(type='json', local_path='nonexistent.json', varstore=False)
 
-            result = self.json_executor._exec_cmd(command)
+            result = await self.json_executor._exec_cmd(command)
 
             assert result.returncode == 1
             assert "File 'nonexistent.json' not found" in result.stdout
             mock_logger.error.assert_called_with("File 'nonexistent.json' not found")
 
-    def test_invalid_json(self, mock_logger):
+    @pytest.mark.asyncio
+    async def test_invalid_json(self, mock_logger):
         """
         Test behavior when the JSON file contains invalid syntax.
         """
@@ -73,12 +76,13 @@ class TestJsonExecutor:
 
             command = JsonCommand(type='json', local_path='invalid.json', varstore=False)
 
-            result = self.json_executor._exec_cmd(command)
+            result = await self.json_executor._exec_cmd(command)
 
             assert result.returncode == 1
             assert "Error parsing JSON file 'invalid.json'" in result.stdout
 
-    def test_unexpected_error(self, mock_logger):
+    @pytest.mark.asyncio
+    async def test_unexpected_error(self, mock_logger):
         """
         Test behavior when an unexpected exception occurs during file processing.
         """
@@ -88,13 +92,14 @@ class TestJsonExecutor:
 
             command = JsonCommand(type='json', local_path='unexpected.json', varstore=False)
 
-            result = self.json_executor._exec_cmd(command)
+            result = await self.json_executor._exec_cmd(command)
 
             assert result.returncode == 1
             assert 'Unexpected error: Unexpected error' in result.stdout
             mock_logger.error.assert_called_with
 
-    def test_successful_json_load_from_varstore(self, mock_logger):
+    @pytest.mark.asyncio
+    async def test_successful_json_load_from_varstore(self, mock_logger):
         """
         Test successful parsing of JSON stored in the VariableStore (RESULT_STDOUT).
         """
@@ -105,7 +110,7 @@ class TestJsonExecutor:
 
         command = JsonCommand(type='json', cmd='RESULT_STDOUT', varstore=True)
 
-        result = self.json_executor._exec_cmd(command)
+        result = await self.json_executor._exec_cmd(command)
 
         assert result.returncode == 0
         assert result.stdout == json_data
@@ -114,7 +119,8 @@ class TestJsonExecutor:
         assert self.varstore.get_variable('MY_LIST') == ['cthulu', 'azatoth']
         mock_logger.info.assert_any_call('Successfully parsed JSON from RESULT_STDOUT')
 
-    def test_invalid_json_in_varstore(self, mock_logger):
+    @pytest.mark.asyncio
+    async def test_invalid_json_in_varstore(self, mock_logger):
         """
         Test behavior when the JSON in the VariableStore is invalid.
         """
@@ -125,12 +131,13 @@ class TestJsonExecutor:
 
         command = JsonCommand(type='json', cmd='RESULT_STDOUT', varstore=False)
 
-        result = self.json_executor._exec_cmd(command)
+        result = await self.json_executor._exec_cmd(command)
 
         assert result.returncode == 1
         assert 'Error parsing JSON' in result.stdout
 
-    def test_missing_result_stdout_variable(self, mock_logger):
+    @pytest.mark.asyncio
+    async def test_missing_result_stdout_variable(self, mock_logger):
         """
         Test behavior when RESULT_STDOUT is not set in the VariableStore.
         """
@@ -138,7 +145,7 @@ class TestJsonExecutor:
 
         command = JsonCommand(type='json', cmd='RESULT_STDOUT', varstore=False)
 
-        result = self.json_executor._exec_cmd(command)
+        result = await self.json_executor._exec_cmd(command)
 
         assert result.returncode == 1
         assert 'Unexpected error' in result.stdout

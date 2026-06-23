@@ -26,7 +26,7 @@ class TempfileExecutor(BaseExecutor):
         else:
             self.logger.warning('Creating temporary file..')
 
-    def _exec_cmd(self, command: TempfileCommand) -> Result:
+    async def _exec_cmd(self, command: TempfileCommand) -> Result:
         ret = 0
         fullpath = ''
         if command.cmd == 'dir':

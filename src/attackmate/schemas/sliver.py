@@ -18,6 +18,7 @@ class SliverHttpsListenerCommand(BaseCommand):
     long_poll_timeout: StringNumber = '1'
     long_poll_jitter: StringNumber = '3'
     timeout: StringNumber = '60'
+    connection: Optional[str] = None
 
 
 @CommandRegistry.register('sliver', 'generate_implant')
@@ -35,6 +36,7 @@ class SliverGenerateCommand(BaseCommand):
     BeaconInterval: StringNumber = '120'
     RunAtLoad: bool = False
     Evasion: bool = False
+    connection: Optional[str] = None
 
 
 @CommandRegistry.register('sliver-session')
@@ -42,6 +44,7 @@ class SliverSessionCommand(BaseCommand):
     type: Literal['sliver-session']
     session: str
     beacon: bool = False
+    connection: Optional[str] = None
 
 
 @CommandRegistry.register('sliver-session', 'cd')
@@ -56,6 +59,7 @@ class SliverSessionMKDIRCommand(SliverSessionCommand):
     remote_path: str
 
 
+@CommandRegistry.register('sliver-session', 'download')
 class SliverSessionDOWNLOADCommand(SliverSessionCommand):
     cmd: Literal['download']
     remote_path: str
@@ -63,6 +67,7 @@ class SliverSessionDOWNLOADCommand(SliverSessionCommand):
     recurse: bool = False
 
 
+@CommandRegistry.register('sliver-session', 'upload')
 class SliverSessionUPLOADCommand(SliverSessionCommand):
     cmd: Literal['upload']
     remote_path: str
@@ -71,6 +76,7 @@ class SliverSessionUPLOADCommand(SliverSessionCommand):
     is_ioc: bool = False
 
 
+@CommandRegistry.register('sliver-session', 'netstat')
 class SliverSessionNETSTATCommand(SliverSessionCommand):
     cmd: Literal['netstat']
     tcp: bool = True
@@ -80,6 +86,7 @@ class SliverSessionNETSTATCommand(SliverSessionCommand):
     listening: bool = True
 
 
+@CommandRegistry.register('sliver-session', 'execute')
 class SliverSessionEXECCommand(SliverSessionCommand):
     cmd: Literal['execute']
     exe: str
@@ -87,21 +94,27 @@ class SliverSessionEXECCommand(SliverSessionCommand):
     output: bool = True
 
 
+@CommandRegistry.register('sliver-session', 'ifconfig')
+@CommandRegistry.register('sliver-session', 'ps')
+@CommandRegistry.register('sliver-session', 'pwd')
 class SliverSessionSimpleCommand(SliverSessionCommand):
     cmd: Literal['ifconfig', 'ps', 'pwd']
 
 
+@CommandRegistry.register('sliver-session', 'ls')
 class SliverSessionLSCommand(SliverSessionCommand):
     cmd: Literal['ls']
     remote_path: str
 
 
+@CommandRegistry.register('sliver-session', 'process_dump')
 class SliverSessionPROCDUMPCommand(SliverSessionCommand):
     cmd: Literal['process_dump']
     local_path: str
     pid: StringNumber
 
 
+@CommandRegistry.register('sliver-session', 'rm')
 class SliverSessionRMCommand(SliverSessionCommand):
     cmd: Literal['rm']
     remote_path: str
@@ -109,6 +122,7 @@ class SliverSessionRMCommand(SliverSessionCommand):
     force: bool = False
 
 
+@CommandRegistry.register('sliver-session', 'terminate')
 class SliverSessionTERMINATECommand(SliverSessionCommand):
     cmd: Literal['terminate']
     pid: StringNumber

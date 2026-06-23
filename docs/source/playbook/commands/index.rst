@@ -4,14 +4,14 @@
 Commands
 ========
 
-The *'commands-section'* holds a list of AttackMate-commands that are executed sequentially from
+The ``commands:`` section of a playbook holds a list of AttackMate commands that are executed sequentially from
 top to bottom.
 
-Every command, regardless of the type has the following general options:
+Every command, regardless of its type supports the following general options:
 
 .. confval:: cmd
 
-   *cmd* defines the command that should be executed. The purpose of this option varies depending on the type of command.
+   The command that should be executed. The meaning of this option varies depending on the type of command.
 
    :type: str
 
@@ -28,42 +28,57 @@ Every command, regardless of the type has the following general options:
           cmd: nmap localhost
           save: /tmp/nmap_localhost.txt
 
+.. confval:: metadata
+
+   An optional dictionary of key-value pairs that are logged alongside the command
+   but have no effect on execution.
+
+   :type: Dict
+   :default: None
+
+   .. code-block:: yaml
+
+      commands:
+        - type: debug
+          cmd: Come on, Cat
+          metadata:
+            version: 1
+            author: Ellen Ripley
+
+
 .. confval:: exit_on_error
 
-   If this option is true, attackmate will exit with an error if the command returns with a return code
-   that is not zero.
+   Attackmate will exit with an error if the command returns a non-zero exit code.
 
    :type: bool
    :default: ``True``
 
 .. confval:: error_if
 
-   If this option is set, an error will be raised if the string was found in the **output**
-   of the command.
+   Raise an error if the given pattern is found in the command output.
 
    :type: str(regex)
 
    .. code-block:: yaml
 
       commands:
-        # throw an error
+        # throws an error
         - type: http-client
           cmd: get
-          url: https://www.google.com
+          url: https://www.bing.com
           error_if: ".*bing.*"
 
 
 .. confval:: error_if_not
 
-   If this option is set, an error will be raised if the string was not found in the **output**
-   of the command.
+   Raise an error if the given pattern is **not** found in the command output.
 
    :type: str(regex)
 
    .. code-block:: yaml
 
       commands:
-        # throw an error
+        # throws an error
         - type: http-client
           cmd: get
           url: https://www.google.com
@@ -72,8 +87,8 @@ Every command, regardless of the type has the following general options:
 
 .. confval:: loop_if
 
-   If this option is set, the command will be executed again if the string was found in the
-   **output** of the command.
+   Re-execute the command if the given pattern is found in the output. Repeats
+   until the pattern no longer matches or ``loop_count`` is reached.
 
    :type: str(regex)
 
@@ -89,8 +104,8 @@ Every command, regardless of the type has the following general options:
 
 .. confval:: loop_if_not
 
-   If this option is set, the command will be executed again if the string was not found in the
-   **output** of the command.
+   Re-execute the command if the given pattern is **not** found in the output. Repeats
+   until the pattern matches or ``loop_count`` is reached.
 
    :type: str(regex)
 
@@ -105,115 +120,141 @@ Every command, regardless of the type has the following general options:
 
 .. confval:: loop_count
 
-   Number of Repetitions if *loop_if* or *loop_if_not* matches.
+      Maximum number of repetitions when ``loop_if* or ``loop_if_not`` is set.
 
-   :type: ini
+   :type: int
    :default: ``3``
+
+.. _conditionals:
 
 .. confval:: only_if
 
-   Execute this command only if the condition is true. The following operators are supported:
+   Execute this command only if the condition evaluates to ``True``. Supported operators:
 
-   * var1 == var2
-   * var1 != var2
-   * var1 is var2
-   * var1 is not var2
-   * var1 < var2
-   * var1 <= var2
-   * var1 > var2
-   * var1 >= var2
-   * string !~ pattern
-   * string =~ pattern
-   * not var
-   * var
-   * None
+   * ``var1 == var2``, ``var1 != var2``
+   * ``var1 is var2``, ``var1 is not var2``
+   * ``var1 < var2``, ``var1 <= var2``, ``var1 > var2``, ``var1 >= var2``
+   * ``string =~ pattern`` — matches if string satisfies the regex pattern
+   * ``string !~ pattern`` — matches if string does not satisfy the regex pattern
+   * ``not var``, ``var``, ``None``
 
    :type: str(condition)
 
-   The =~ operator is used to check if a string matches a regular expression pattern.
-   The !~ operator is used to check if a string does not match a regular expression pattern.
+   .. note::
+
+      The ``=~`` operator is used to check if a string matches a regular expression pattern.
+      The ``!~`` operator is used to check if a string does **not** match a regular expression pattern.
 
    .. code-block:: yaml
 
       commands:
+        # Get the PID of the running mysqld process:
         - type: shell
           cmd: pgrep mysqld
 
+        # Extract the first captured group from the output, splitting on newlines.
+        # Stores the result in $KILLPID via the MATCH_0 capture variable:
         - type: regex
           mode: split
           cmd: "\n"
           output:
             KILLPID: $MATCH_0
 
-        # Execute this command only
-        # if it is not the init-process
+        # Only kill if it is not the init process with PID 1:
         - type: shell
           cmd: kill $KILLPID
           only_if: $KILLPID > 1
 
-        # Execute this command only if the regex pattern is found
+        # Only execute if the regex pattern matches:
         - type: shell
           cmd: echo "regex match found"
           only_if: some_string =~ some[_]?string
 
+   .. warning::
+
+        When comparing strings with integers, standard Python conventions apply:
+        see `Python reference — Comparisons
+        <https://docs.python.org/3/reference/expressions.html#comparisons>`_
+
+        **Equality / Inequality** (``==``, ``!=``):
+        A string and an integer are never equal, so ``"1" == 1`` is ``False``
+        and ``"1" != 1`` is ``True``.
+
+        **Identity** (``is``, ``is not``):
+        Compares object identity, not value. ``"1" is 1`` is always ``False``
+        because a string and an integer are distinct objects, regardless of
+        their apparent values.  see `Python reference — Value vs. identity
+        <https://docs.python.org/3/reference/expressions.html#is>`_
+
+        **Ordering** (``<``, ``<=``, ``>``, ``>=``):
+        Comparing a string with an integer raises a ``TypeError`` in Python 3
+        since the two types have no defined ordering. These operators should
+        only be used when both operands share the same type.
+
+        **Integers and Booleans** (``==``, ``!=``):
+        In Python, ``bool`` is a subclass of ``int``, so ``1 == True`` and
+        ``0 == False`` are both ``True``, while any other integer (e.g.
+        ``2 == True``) is ``False``.  This also means that if a
+        ``$variable`` has been set to the string ``"True"`` or ``"False"``,
+        comparing it against a boolean literal (``$var == True``) will
+        always yield ``False`` — because the resolved value is a ``str``
+        while the literal is parsed as a ``bool`` by ``ast``.  Use string
+        literals for boolean-like flags stored in the ``VariableStore``:
+        ``$flag == "True"``.
+        see `Python built-in — bool (subclass of int)
+        <https://docs.python.org/3/library/functions.html#bool>`_
+
+        Importantly, before a condition is evaluated, all ``$variable`` references are
+        resolved by the ``VariableStore``.  **The store holds every value as a
+        plain Python** ``str``, even values that were originally integers
+        are coerced to ``str`` on ingress.
+
+
+.. _background:
+
 
 .. confval:: background
 
-   Execute the command as a subprocess in background. If set to *True*,
-   the functionality for *error_if* and *error_if_not* as well as printing
-   the output is disabled.
-
-   Background-Mode is currently not implemented for the following commands:
-
-   * MsfModuleCommand
-   * IncludeCommand
-
-   Background-Mode together with a session is currently not implemented for the following commands:
-
-   * SSHCommand
-   * SFTPCommand
+   Execute the command as a background subprocess. When enabled, output is not printed
+   and ``error_if`` / ``error_if_not`` have no effect.
 
    :type: bool
    :default: ``False``
 
    .. note::
 
-      The command in background-mode will not change global variables like
-      RESULT_STDOUT or RESULT_CODE.
+      The command in background mode will change the :ref:`builtin variables <builtin-variables>`
+      ``RESULT_STDOUT`` to "Command started in Background" and ``RESULT_CODE`` to 0.
+
+   Background mode is not supported for
+
+   * :ref:`MsfModuleCommand <msf-module>`
+   * :ref:`IncludeCommand <include>`
+   * :ref:`VncCommand <vnc>`
+   * :ref:`BrowserCommand <browser>`
+
+   Background mode together with a session is not supported for the following commands:
+
+   * :ref:`SSHCommand <ssh>`
+   * :ref:`SFTPCommand <sftp>`
+
 
 .. confval:: kill_on_exit
 
-   If this command runs in background-mode, the option *kill_on_exit* controls
-   if the main process will wait for this subprocess before exitting or if the
-   main process will simply kill the subprocess.
+   If this command runs in background mode, the option ``kill_on_exit`` controls
+   whether the main process kills the subprocess on exit (``True``) or waits for it to finish (``False``).
 
    :type: bool
    :default: ``True``
 
-.. confval:: metadata
 
-   The option *metadata* can be used to pass a dictionary of key value pairs.
-   These are not used in command execution but are logged together with the command.
-
-   :type: Dict
-   :default: None
-
-   .. code-block:: yaml
-
-      commands:
-        - type: debug
-          cmd: Come on, Cat
-          metadata:
-            version: 1
-            author: Ellen Ripley
-
-
-The next pages will describe all possible commands in detail.
+The next pages will describe each command type in detail.
 
 .. toctree::
    :maxdepth: 4
    :hidden:
 
+   bettercap
    browser
    debug
    father
@@ -226,6 +267,7 @@ The next pages will describe all possible commands in detail.
    msf-session
    payload
    regex
+   remote
    setvar
    shell
    sftp

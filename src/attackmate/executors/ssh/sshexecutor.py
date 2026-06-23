@@ -36,6 +36,7 @@ class SSHExecutor(BaseExecutor, SFTPFeature, Interactive):
         self.passphrase = None
         self.key_filename = None
         self.timeout = 60
+        self.disabled_algorithms = None
         self.jmp_hostname = None
         self.jmp_port = 22
         self.jmp_username = self.username
@@ -55,6 +56,8 @@ class SSHExecutor(BaseExecutor, SFTPFeature, Interactive):
             self.key_filename = command.key_filename
         if command.timeout:
             self.timeout = command.timeout
+        if command.disabled_algorithms is not None:
+            self.disabled_algorithms = command.disabled_algorithms
         if command.jmp_hostname:
             self.jmp_hostname = command.jmp_hostname
         if command.jmp_port:
@@ -79,6 +82,7 @@ class SSHExecutor(BaseExecutor, SFTPFeature, Interactive):
             passphrase=self.passphrase,
             key_filename=self.key_filename,
             timeout=self.timeout,
+            disabled_algorithms=self.disabled_algorithms,
         )
 
         jmp.connect(**kwargs)
@@ -116,16 +120,17 @@ class SSHExecutor(BaseExecutor, SFTPFeature, Interactive):
             key_filename=self.key_filename,
             timeout=self.timeout,
             sock=jmp_sock,
+            disabled_algorithms=self.disabled_algorithms,
         )
         client.connect(**kwargs)
         if command.creates_session is not None:
             self.session_store.set_session(command.creates_session, client)
         return client
-    
+
     def cleanup(self):
         self.session_store.clean_sessions()
 
-    def _exec_cmd(self, command: SFTPCommand | SSHCommand) -> Result:
+    async def _exec_cmd(self, command: SFTPCommand | SSHCommand) -> Result:
         error = None
         output = ''
 

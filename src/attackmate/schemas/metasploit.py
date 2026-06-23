@@ -10,7 +10,9 @@ class MsfSessionCommand(BaseCommand):
     @field_validator('background')
     @classmethod
     def bg_not_implemented_yet(cls, v):
-        raise ValueError('background mode is unsupported for this command')
+        if v:
+            raise ValueError('background mode is unsupported for this command')
+        return v
 
     type: Literal['msf-session']
     cmd: str
@@ -19,6 +21,7 @@ class MsfSessionCommand(BaseCommand):
     read: bool = False
     session: str
     end_str: Optional[str] = None
+    connection: Optional[str] = None
 
 
 @CommandRegistry.register('msf-payload')
@@ -36,6 +39,7 @@ class MsfPayloadCommand(BaseCommand):
     iter: StringNumber = '0'
     payload_options: Dict[str, str] = {}
     local_path: Optional[str] = None
+    connection: Optional[str] = None
 
 
 class MsfModuleCommand(BaseCommand):
@@ -47,6 +51,7 @@ class MsfModuleCommand(BaseCommand):
     payload: Optional[str] = None
     options: Dict[str, str] = {}
     payload_options: Dict[str, str] = {}
+    connection: Optional[str] = None
 
     def is_interactive(self):
         if self.interactive is not None:

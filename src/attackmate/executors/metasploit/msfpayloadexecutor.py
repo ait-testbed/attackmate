@@ -6,8 +6,8 @@ payloads in AttackMate.
 """
 
 import tempfile
-from typing import Any
-from pymetasploit3.msfrpc import MsfRpcClient, MsfAuthError
+from typing import Any, Dict
+from pymetasploit3.msfrpc import MsfRpcClient
 from attackmate.executors.baseexecutor import BaseExecutor
 from attackmate.result import Result
 from attackmate.execexception import ExecException
@@ -15,40 +15,27 @@ from attackmate.processmanager import ProcessManager
 from attackmate.variablestore import VariableStore
 from attackmate.executors.features.cmdvars import CmdVars
 from attackmate.schemas.metasploit import MsfPayloadCommand
-from attackmate.schemas.config import CommandConfig
+from attackmate.schemas.config import CommandConfig, MsfConfig
+from attackmate.executors.metasploit.msfclientmixin import MsfClientMixin
 from attackmate.executors.executor_factory import executor_factory
 
 
 @executor_factory.register_executor('msf-payload')
-class MsfPayloadExecutor(BaseExecutor):
+class MsfPayloadExecutor(MsfClientMixin, BaseExecutor):
     def __init__(
-        self, pm: ProcessManager, varstore: VariableStore, cmdconfig=CommandConfig(), *, msfconfig=None
+        self, pm: ProcessManager, varstore: VariableStore, cmdconfig=CommandConfig(), *,
+        msf_config: Dict[str, MsfConfig] = {}
     ):
-        self.msfconfig = msfconfig
-        self.msf = None
+        self.msf_config = msf_config
+        self._msf_clients: Dict[str, MsfRpcClient] = {}
         self.tempfilestore: list[Any] = []
         super().__init__(pm, varstore, cmdconfig)
 
-    def connect(self, msfconfig=None):
-        try:
-            self.msf = MsfRpcClient(**msfconfig.dict())
-        except IOError as e:
-            self.logger.error(e)
-            self.msf = None
-        except MsfAuthError as e:
-            self.logger.error(e)
-            self.msf = None
-
     def log_command(self, command: MsfPayloadCommand):
-        if self.msf is None:
-            self.logger.debug('Connecting to msf-server...')
-            self.connect(self.msfconfig)
         self.logger.info(f"Generating Msf-Payload: '{command.cmd}'")
 
-    def prepare_payload(self, command: MsfPayloadCommand):
-        if not self.msf:
-            raise ExecException('Please connect to msfrpcd first')
-        payload = self.msf.modules.use('payload', command.cmd)
+    def prepare_payload(self, command: MsfPayloadCommand, msf: MsfRpcClient):
+        payload = msf.modules.use('payload', command.cmd)
         payload.runoptions['BadChars'] = command.badchars
         payload.runoptions['Encoder'] = command.encoder
         payload.runoptions['Format'] = command.format
@@ -78,8 +65,11 @@ class MsfPayloadExecutor(BaseExecutor):
             payload_path = tmpfile.name
         return payload_path
 
-    def _exec_cmd(self, command: MsfPayloadCommand) -> Result:
-        payload = self.prepare_payload(command)
+    async def _exec_cmd(self, command: MsfPayloadCommand) -> Result:
+        conn_name = self._resolve_connection(command)
+        msf = self._get_client(conn_name)
+
+        payload = self.prepare_payload(command, msf)
         try:
             data = payload.payload_generate()
         except Exception:

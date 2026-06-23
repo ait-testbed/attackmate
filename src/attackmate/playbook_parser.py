@@ -118,7 +118,8 @@ def parse_playbook(playbook_file: str, logger: logging.Logger) -> Playbook:
             target_file = default_playbook_location / playbook_file_path
         else:
             logger.error(
-                f"Error: Playbook file not found under '/non/existent/path/playbook.yml' or in the current directory or in /etc/attackmate/playbooks"
+                "Error: Playbook file not found under '/non/existent/path/playbook.yml'"
+                + ' or in the current directory or in /etc/attackmate/playbooks'
             )
             exit(1)
 
@@ -130,13 +131,27 @@ def parse_playbook(playbook_file: str, logger: logging.Logger) -> Playbook:
 
     try:
         with open(target_file) as f:
-            pb_yaml = yaml.safe_load(f)
-            playbook_object = Playbook.model_validate(pb_yaml)
+            playbook_yaml = yaml.safe_load(f)
+            playbook_object = Playbook.model_validate(playbook_yaml)
             return playbook_object
     except OSError:
         logger.error(f'Error: Could not open playbook file {target_file}')
         exit(1)
-    except ValidationError:
+    except ValidationError as e:
         logger.error(f'A Validation error occured when parsing playbook file {playbook_file}')
+        for error in e.errors():
+            if error['type'] == 'missing':
+                logger.error(
+                    f'Missing field in {error["loc"][-2]} command: {error["loc"][-1]} - {error["msg"]}'
+                )
+            elif error['type'] == 'literal_error':
+                logger.error(
+                    f'Invalid value in {error["loc"][-2]} command: {error["loc"][-1]} - {error["msg"]}'
+                )
+            elif error['type'] == 'value_error':
+                logger.error(
+                    f'Value error in command {int(error["loc"][-2]) + 1}: '
+                    f'{error["loc"][-1]} - {error["msg"]}'
+                )
         logger.error(traceback.format_exc())
         exit(1)

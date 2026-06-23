@@ -12,8 +12,6 @@ class ConditionalError(Exception):
 
     """
 
-    pass
-
 
 class Conditional:
     """Evaluates conditional statements
@@ -38,7 +36,7 @@ class Conditional:
         if isinstance(name, ast.Name):
             return name.id
         elif isinstance(name, ast.Constant):
-            return int(name.value)
+            return name.value
         else:
             raise ConditionalError('part is neither a name nor constant')
 

@@ -7,8 +7,8 @@ Execute Commands in a Sliver Session
 import asyncio
 import os
 import gzip
-import time
-from sliver import SliverClientConfig, SliverClient
+from typing import Dict, Optional
+from sliver import SliverClient
 from sliver.session import InteractiveSession
 from sliver.beacon import InteractiveBeacon
 
@@ -17,6 +17,8 @@ from attackmate.variablestore import VariableStore
 from attackmate.executors.baseexecutor import BaseExecutor
 from attackmate.execexception import ExecException
 from attackmate.result import Result
+from attackmate.schemas.config import SliverConfig
+from attackmate.executors.sliver.sliverclientmixin import SliverClientMixin
 from attackmate.schemas.sliver import (
     SliverSessionCDCommand,
     SliverSessionCommand,
@@ -39,17 +41,16 @@ from attackmate.executors.executor_factory import executor_factory
 
 
 @executor_factory.register_executor('sliver-session')
-class SliverSessionExecutor(BaseExecutor):
+class SliverSessionExecutor(SliverClientMixin, BaseExecutor):
 
-    def __init__(self, pm: ProcessManager, cmdconfig=None, *, varstore: VariableStore, sliver_config=None):
+    def __init__(
+        self, pm: ProcessManager, cmdconfig=None, *,
+        varstore: VariableStore, sliver_config: Dict[str, SliverConfig] = {}
+    ):
         self.sliver_config = sliver_config
-        self.client = None
-        self.client_config = None
+        self._sliver_clients: Dict[str, SliverClient] = {}
+        self.client: Optional[SliverClient] = None
         self.result = Result('', 1)
-
-        if self.sliver_config.config_file:
-            self.client_config = SliverClientConfig.parse_config_file(sliver_config.config_file)
-            self.client = SliverClient(self.client_config)
         super().__init__(pm, varstore, cmdconfig)
 
     async def connect(self) -> None:
@@ -227,11 +228,9 @@ class SliverSessionExecutor(BaseExecutor):
         self.logger.debug(term)
         self.result = Result(f'Terminated process {term.Pid}', 0)
 
-    def log_command(self, command: SliverSessionCommand):
+    async def log_command(self, command: SliverSessionCommand):
         self.logger.info(f"Executing Sliver-Session-command: '{command.cmd}'")
-        loop = asyncio.get_event_loop()
-        coro = self.connect()
-        loop.run_until_complete(coro)
+        await self.connect()
 
     async def get_session_or_beacon(self, name, beacon=False) -> InteractiveBeacon | InteractiveSession:
         if beacon:
@@ -260,7 +259,7 @@ class SliverSessionExecutor(BaseExecutor):
                     ret = await self.client.interact_beacon(beacon.ID)
                     return ret
             self.logger.debug(f'Sliver-Session: Beacon not found. Retry in {seconds} sec')
-            time.sleep(seconds)
+            await asyncio.sleep(seconds)
 
     async def get_session_by_name(self, name) -> InteractiveSession:
         # limit polling
@@ -276,55 +275,63 @@ class SliverSessionExecutor(BaseExecutor):
                     ret = await self.client.interact_session(session.ID)
                     return ret
             self.logger.debug(f'Sliver-Session not found. Retry in {seconds} sec')
-            time.sleep(seconds)
+            await asyncio.sleep(seconds)
 
     async def cleanup(self):
-        if self.client:
+        for conn_name, client in self._sliver_clients.items():
             try:
-                sessions = await self.client.sessions()
+                if not client.is_connected:
+                    await client.connect()
+                sessions = await client.sessions()
                 for session in sessions:
                     self.logger.debug(f'Killing sliver session {session.ID}')
-                    await self.client.kill_session(session.ID)
-                beacons = await self.client.beacons()
+                    await client.kill_session(session.ID)
+                beacons = await client.beacons()
                 for beacon in beacons:
-                    self.logger.debug(f'Killing sliver beacon {session.ID}')
-                    await self.client.kill_beacon(beacon.ID)
+                    self.logger.debug(f'Killing sliver beacon {beacon.ID}')
+                    await client.kill_beacon(beacon.ID)
+                jobs = await client.jobs()
+                for job in jobs:
+                    self.logger.debug(f'Killing sliver job {job}')
+                    await client.kill_job(job.ID)
             except Exception as e:
-                self.logger.error(f'Error cleaning up sliver sessions: {e}')
-                
-    def _exec_cmd(self, command: SliverSessionCommand) -> Result:
-        loop = asyncio.get_event_loop()
+                self.logger.error(f'Error cleaning up sliver sessions for {conn_name}: {e}')
 
-        if command.cmd == 'cd' and isinstance(command, SliverSessionCDCommand):
-            coro = self.cd(command)
-        elif command.cmd == 'ls' and isinstance(command, SliverSessionLSCommand):
-            coro = self.ls(command)
-        elif command.cmd == 'ifconfig' and isinstance(command, SliverSessionSimpleCommand):
-            coro = self.ifconfig(command)
-        elif command.cmd == 'ps' and isinstance(command, SliverSessionSimpleCommand):
-            coro = self.ps(command)
-        elif command.cmd == 'pwd' and isinstance(command, SliverSessionSimpleCommand):
-            coro = self.pwd(command)
-        elif command.cmd == 'netstat' and isinstance(command, SliverSessionNETSTATCommand):
-            coro = self.netstat(command)
-        elif command.cmd == 'execute' and isinstance(command, SliverSessionEXECCommand):
-            coro = self.execute(command)
-        elif command.cmd == 'mkdir' and isinstance(command, SliverSessionMKDIRCommand):
-            coro = self.mkdir(command)
-        elif command.cmd == 'download' and isinstance(command, SliverSessionDOWNLOADCommand):
-            coro = self.download(command)
-        elif command.cmd == 'upload' and isinstance(command, SliverSessionUPLOADCommand):
-            coro = self.upload(command)
-        elif command.cmd == 'process_dump' and isinstance(command, SliverSessionPROCDUMPCommand):
-            coro = self.process_dump(command)
-        elif command.cmd == 'rm' and isinstance(command, SliverSessionRMCommand):
-            coro = self.rm(command)
-        elif command.cmd == 'terminate' and isinstance(command, SliverSessionTERMINATECommand):
-            coro = self.terminate(command)
-        else:
-            raise ExecException('Sliver Session Command unknown or faulty Command-config')
+    async def _exec_cmd(self, command: SliverSessionCommand) -> Result:
+        conn_name = self._resolve_connection(command)
+        self.client = self._get_client(conn_name)
+        await self.connect()
         try:
-            loop.run_until_complete(coro)
+            if command.cmd == 'cd' and isinstance(command, SliverSessionCDCommand):
+                await self.cd(command)
+            elif command.cmd == 'ls' and isinstance(command, SliverSessionLSCommand):
+                await self.ls(command)
+            elif command.cmd == 'ifconfig' and isinstance(command, SliverSessionSimpleCommand):
+                await self.ifconfig(command)
+            elif command.cmd == 'ps' and isinstance(command, SliverSessionSimpleCommand):
+                await self.ps(command)
+            elif command.cmd == 'pwd' and isinstance(command, SliverSessionSimpleCommand):
+                await self.pwd(command)
+            elif command.cmd == 'netstat' and isinstance(command, SliverSessionNETSTATCommand):
+                await self.netstat(command)
+            elif command.cmd == 'execute' and isinstance(command, SliverSessionEXECCommand):
+                await self.execute(command)
+            elif command.cmd == 'mkdir' and isinstance(command, SliverSessionMKDIRCommand):
+                await self.mkdir(command)
+            elif command.cmd == 'download' and isinstance(command, SliverSessionDOWNLOADCommand):
+                await self.download(command)
+            elif command.cmd == 'upload' and isinstance(command, SliverSessionUPLOADCommand):
+                await self.upload(command)
+            elif command.cmd == 'process_dump' and isinstance(command, SliverSessionPROCDUMPCommand):
+                await self.process_dump(command)
+            elif command.cmd == 'rm' and isinstance(command, SliverSessionRMCommand):
+                await self.rm(command)
+            elif command.cmd == 'terminate' and isinstance(command, SliverSessionTERMINATECommand):
+                await self.terminate(command)
+            else:
+                raise ExecException('Sliver Session Command unknown or faulty Command-config')
+
         except Exception as e:
-            raise ExecException(e)
+            self.logger.error(f'Sliver session execution failed: {e}')
+            raise ExecException(str(e))
         return self.result

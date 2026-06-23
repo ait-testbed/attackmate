@@ -2,16 +2,17 @@
 http-client
 ===========
 
-Execute HTTP-requests like curl does. This command also supports HTTP/2
+Send HTTP requests with support for common methods, custom headers, cookies, and HTTP/2.
 
 .. code-block:: yaml
 
-   ###
    commands:
+      # Simple HTTP/2 GET request:
      - type: http-client
        url: https://www.google.com
        http2: True
 
+      # POST request with headers, cookies, and form data:
      - type: http-client
        cmd: POST
        url: https://api.myapp.tld
@@ -24,6 +25,7 @@ Execute HTTP-requests like curl does. This command also supports HTTP/2
          view: edit
          id: 10
 
+      # PUT request uploading a local file
      - type: http-client
        cmd: PUT
        url: https://api.myapp.tld/dav
@@ -33,25 +35,19 @@ Execute HTTP-requests like curl does. This command also supports HTTP/2
 
 .. confval:: cmd
 
-   The HTTP-Method to use. Supported methods are:
-
-   * GET
-   * POST
-   * PUT
-   * DELETE
-   * PATCH
-   * HEAD
-   * OPTIONS
+   HTTP method to use. Supported values: ``GET``, ``POST``, ``PUT``, ``DELETE``,
+   ``PATCH``, ``HEAD``, ``OPTIONS``.
 
    :type: str
    :default: ``GET``
+   :required: False
 
 .. confval:: url
 
-   Address of the target website.
+   URL of the target.
 
    :type: str
-   :required: ``True``
+   :required: True
 
 .. confval:: output_headers
 
@@ -59,58 +55,67 @@ Execute HTTP-requests like curl does. This command also supports HTTP/2
 
    :type: str
    :default: ``False``
+   :required: False
 
 .. confval:: headers
 
-   Include these extra headers in the request when sending HTTP to a server.
+   Additional HTTP headers to include in the request.
 
    :type: dict[str,str]
+   :required: False
 
 .. confval:: cookies
 
-   Pass the data to the HTTP server in the Cookie header.
+   Cookies to send in the ``Cookie`` header.
 
    :type: dict[str,str]
+   :required: False
 
 .. confval:: data
 
-   Sends  the specified data in a POST request to the HTTP server, in the same
-   way that a browser does when a user has filled in an HTML form and presses
-   the submit button.
+   Form data to send in the request body. Equivalent to submitting an HTML form.
+   Typically used with ``POST``.
 
    :type: dict[str,str]
+   :required: False
 
 .. confval:: local_path
 
-   Load content from the given file and send it via HTTP. This is useful for
-   dav uploads.
+   Path to a local file whose contents will be sent as the request body. Useful
+   for WebDAV uploads.
 
    :type: str
+   :required: False
 
 .. confval:: useragent
 
-   Change the user-agent string.
+   Override the ``User-Agent`` header.
 
    :type: str
    :default: ``AttackMate``
+   :required: False
 
 .. confval:: follow
 
-   Automatically follow redirects
+   Automatically follow HTTP redirects.
 
    :type: bool
    :default: ``False``
+   :required: False
 
 .. confval:: verify
 
-   This option makes attackmate skip the secure connection verification step and proceed without checking.
+   Verify the server's TLS certificate. Set to ``False`` to skip verification
+   (e.g. for self-signed certificates).
 
    :type: bool
    :default: ``False``
+   :required: False
 
 .. confval:: http2
 
-   Try to use HTTP version 2. AttackMate will negotiate the HTTP version with the server and use HTTP2 if possible.
+   Negotiate HTTP/2 with the server and use it if supported.
 
    :type: bool
    :default: ``False``
+   :required: False

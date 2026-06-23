@@ -1,0 +1,52 @@
+interactions:
+- request:
+    body: '{}'
+    headers:
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      authorization:
+      - Basic dXNlcjpwYXNz
+      connection:
+      - keep-alive
+      content-length:
+      - '2'
+      content-type:
+      - application/json
+      host:
+      - 127.0.0.1:8081
+      user-agent:
+      - AttackMate
+    method: GET
+    uri: http://127.0.0.1:8081/api/session/hid
+  response:
+    body:
+      string: '{"devices":[]}
+
+        '
+    headers:
+      Access-Control-Allow-Headers:
+      - Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization
+      Access-Control-Allow-Methods:
+      - POST, GET, OPTIONS, PUT, DELETE
+      Access-Control-Allow-Origin:
+      - '*'
+      Content-Length:
+      - '15'
+      Content-Type:
+      - application/json
+      Date:
+      - Fri, 22 Aug 2025 15:06:10 GMT
+      Referrer-Policy:
+      - same-origin
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - DENY
+      X-Xss-Protection:
+      - 1; mode=block
+    status:
+      code: 200
+      message: OK
+version: 1

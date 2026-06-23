@@ -1,6 +1,5 @@
 from attackmate.schemas.base import BaseCommand
 from pydantic import field_validator
-from typing import Literal
 from attackmate.command import CommandRegistry
 from typing import Literal, Union, Optional, List
 from .sleep import SleepCommand
@@ -8,6 +7,14 @@ from .shell import ShellCommand
 from .vnc import VncCommand
 from .setvar import SetVarCommand
 from .include import IncludeCommand
+from .ssh import SSHCommand, SFTPCommand
+from .http import WebServCommand, HttpClientCommand
+from .father import FatherCommand
+from .tempfile import TempfileCommand
+from .debug import DebugCommand
+from .regex import RegExCommand
+from .browser import BrowserCommand
+
 from .metasploit import MsfModuleCommand, MsfSessionCommand, MsfPayloadCommand
 
 from .sliver import (
@@ -25,13 +32,6 @@ from .sliver import (
     SliverHttpsListenerCommand,
     SliverGenerateCommand,
 )
-from .ssh import SSHCommand, SFTPCommand
-from .http import WebServCommand, HttpClientCommand
-from .father import FatherCommand
-from .tempfile import TempfileCommand
-from .debug import DebugCommand
-from .regex import RegExCommand
-from .browser import BrowserCommand
 
 
 Commands = List[

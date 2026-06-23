@@ -35,4 +35,3 @@ class SessionStore:
                     self.logger.error(f"Error closing vnc client for session '{session_name}': {e}")
 
         self.store.clear()
-

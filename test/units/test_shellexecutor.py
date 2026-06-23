@@ -31,7 +31,8 @@ def shell_executor(mock_process_manager, mock_variable_store):
     return ShellExecutor(mock_process_manager, mock_variable_store)
 
 
-def test_exec_cmd_hex_to_ascii(mock_popen, shell_executor):
+@pytest.mark.asyncio
+async def test_exec_cmd_hex_to_ascii(mock_popen, shell_executor):
     mock_open_proc, mock_popen_instance = mock_popen
     with patch.object(shell_executor, 'open_proc', mock_open_proc):
 
@@ -40,7 +41,7 @@ def test_exec_cmd_hex_to_ascii(mock_popen, shell_executor):
             cmd='6563686f206964',
             bin=True,
         )
-        shell_executor._exec_cmd(command)
+        await shell_executor._exec_cmd(command)
 
         mock_open_proc.assert_called_once_with(command)
         mock_popen_instance.communicate.assert_called_once()
@@ -49,7 +50,8 @@ def test_exec_cmd_hex_to_ascii(mock_popen, shell_executor):
         assert args[0] == expected_command
 
 
-def test_exec_cmd_ascii(mock_popen, shell_executor):
+@pytest.mark.asyncio
+async def test_exec_cmd_ascii(mock_popen, shell_executor):
     mock_open_proc, mock_popen_instance = mock_popen
     with patch.object(shell_executor, 'open_proc', mock_open_proc):
 
@@ -58,7 +60,7 @@ def test_exec_cmd_ascii(mock_popen, shell_executor):
             cmd='echo id',
             bin=False,
         )
-        shell_executor._exec_cmd(command)
+        await shell_executor._exec_cmd(command)
 
         mock_open_proc.assert_called_once_with(command)
         mock_popen_instance.communicate.assert_called_once()
@@ -67,7 +69,8 @@ def test_exec_cmd_ascii(mock_popen, shell_executor):
         assert args[0] == expected_command
 
 
-def test_exec_cmd_invalid_hex(mock_popen, shell_executor):
+@pytest.mark.asyncio
+async def test_exec_cmd_invalid_hex(mock_popen, shell_executor):
     mock_open_proc, mock_popen_instance = mock_popen
     with patch.object(shell_executor, 'open_proc', mock_open_proc):
 
@@ -80,12 +83,13 @@ def test_exec_cmd_invalid_hex(mock_popen, shell_executor):
         with pytest.raises(
             ExecException, match="only hex characters are allowed in binary mode. Command: 'invalidhex'"
         ):
-            shell_executor._exec_cmd(command)
+            await shell_executor._exec_cmd(command)
             mock_open_proc.assert_called_once_with(command)
             mock_popen_instance.communicate.assert_not_called()
 
 
-def test_execution_of_hex_command(shell_executor):
+@pytest.mark.asyncio
+async def test_execution_of_hex_command(shell_executor):
 
     command = ShellCommand(
         type='shell',
@@ -93,5 +97,5 @@ def test_execution_of_hex_command(shell_executor):
         bin=True,
     )
 
-    result = shell_executor._exec_cmd(command)
+    result = await shell_executor._exec_cmd(command)
     assert result.stdout == 'id\n'

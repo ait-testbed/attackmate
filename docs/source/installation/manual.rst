@@ -1,5 +1,3 @@
-.. _manual:
-
 =========================
 Installation from sources
 =========================
@@ -15,7 +13,7 @@ following tools:
 
 .. note::
 
-   python3-venv must only be installed if AttackMate should be installed in a virtual environment
+   ``python3-venv`` only needs to be installed if AttackMate should be installed in a virtual environment.
 
 Download the sources:
 
@@ -24,20 +22,38 @@ Download the sources:
   $ git clone https://github.com/ait-aecid/attackmate.git
   $ cd attackmate
 
-Optional: Create virtual environment and activate it:
+**Option A: Install with pip**
+
+Optional: Create a virtual environment and activate it:
 
 ::
 
   $ python3 -mvenv venv
   $ source venv/bin/activate
 
-Finally install attackmate and it's dependencies:
+Install AttackMate and its dependencies:
 
 ::
 
   $ pip3 install .
 
+**Option B: Install with uv**
+
+``uv`` manages the virtual environment and dependencies automatically — no manual venv setup needed:
+
+::
+
+  $ pip3 install uv
+  $ uv sync
+
+Run AttackMate via:
+
+::
+
+  $ uv run attackmate playbook.yml
+
 .. warning::
 
-   Please note that you need to :ref:`sliver-fix` if you want
+   Please note that you if you install from source you also need to install :ref:`sliver-fix` if you want
    to use the sliver commands!
+   The Dockerfile and ansible role :ref:`ansible` already include the sliver-fix.

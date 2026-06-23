@@ -22,4 +22,4 @@ Build the image using the following command:
 .. note::
 
    Docker will also compile grpcio from sources in order to make
-   the sliver-api work. This might take a while.
+   the Sliver API work (see :ref:`sliver-fix`). This might take a while.
