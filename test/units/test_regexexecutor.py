@@ -178,8 +178,8 @@ class TestRegExExecutor:
 
     @pytest.mark.asyncio
     async def test_exec_cmd_search_no_match_clears_stale_value(self):
-        # Regression: in a loop a previous iteration may have set the output
-        # variable. A subsequent no-match must clear it, not leave the old value.
+        # Regression: in a loop a previous iteration might set output
+        # variable. A following no-match must clear it, not leave the old value.
         self.varstore.set_variable('PORT_STATUS', 'open')
         self.varstore.set_variable('input_var', 'closed')
         command = RegExCommand(
