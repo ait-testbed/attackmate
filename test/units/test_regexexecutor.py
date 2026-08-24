@@ -129,7 +129,7 @@ class TestRegExExecutor:
             output={'output_var': 'Found: $MATCH_0'},
         )
         await self.executor._exec_cmd(command)
-        assert 'output_var' not in self.varstore.variables
+        assert self.varstore.get_variable('output_var') == ''
         assert self.varstore.get_variable('REGEX_MATCHES_LIST') == []
 
     @pytest.mark.asyncio
@@ -156,7 +156,7 @@ class TestRegExExecutor:
             output={'output_var': 'Found: $MATCH_0'},
         )
         await self.executor._exec_cmd(command)
-        assert 'output_var' not in self.varstore.variables
+        assert self.varstore.get_variable('output_var') == ''
         assert self.varstore.get_variable('REGEX_MATCHES_LIST') == []
 
     @pytest.mark.asyncio
@@ -175,3 +175,20 @@ class TestRegExExecutor:
         await self.executor._exec_cmd(command)
         assert self.varstore.get_variable('output_var') == 'Replaced: no matches here'
         assert self.varstore.get_variable('REGEX_MATCHES_LIST') == ['no matches here']
+
+    @pytest.mark.asyncio
+    async def test_exec_cmd_search_no_match_clears_stale_value(self):
+        # Regression: in a loop a previous iteration may have set the output
+        # variable. A subsequent no-match must clear it, not leave the old value.
+        self.varstore.set_variable('PORT_STATUS', 'open')
+        self.varstore.set_variable('input_var', 'closed')
+        command = RegExCommand(
+            type='regex',
+            cmd='open',
+            mode='search',
+            input='input_var',
+            output={'PORT_STATUS': '$MATCH_0'},
+        )
+        await self.executor._exec_cmd(command)
+        assert self.varstore.get_variable('PORT_STATUS') == ''
+        assert self.varstore.get_variable('REGEX_MATCHES_LIST') == []
