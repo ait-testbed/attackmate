@@ -43,6 +43,11 @@ class RegExExecutor(BaseExecutor):
         if not matches:
             self.logger.debug('no match!')
             self.varstore.set_variable('REGEX_MATCHES_LIST', [])
+            # Clear the output variables so a stale value from a previous
+            # loop iteration doesn't produce a false positive when the
+            # current input has no match.
+            for k in outputvars:
+                self.varstore.set_variable(k, '')
             return
 
         for k, v in outputvars.items():
@@ -73,7 +78,7 @@ class RegExExecutor(BaseExecutor):
             if m3 is not None and isinstance(m3, Match):
                 self.forge_and_register_variables(command.output, m3.group())
             else:
-                self.varstore.set_variable('REGEX_MATCHES_LIST', [])
+                self.forge_and_register_variables(command.output, None)
         if command.mode == 'sub':
             if command.replace:
                 replaced = re.sub(command.cmd, command.replace, self.varstore.get_str(command.input))
