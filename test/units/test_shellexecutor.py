@@ -99,3 +99,51 @@ async def test_execution_of_hex_command(shell_executor):
 
     result = await shell_executor._exec_cmd(command)
     assert result.stdout == 'id\n'
+
+
+@pytest.mark.asyncio
+async def test_non_utf8_output_does_not_raise(mock_popen, shell_executor):
+    """A command emitting a non-UTF-8 byte must not terminate the playbook.
+
+    0xc9 without a continuation byte is not valid UTF-8. A strict decode raises
+    UnicodeDecodeError, which nothing catches between _exec_cmd and main().
+    """
+    mock_open_proc, mock_popen_instance = mock_popen
+    mock_popen_instance.communicate.return_value = (b'ok\xc9done', b'')
+    with patch.object(shell_executor, 'open_proc', mock_open_proc):
+
+        command = ShellCommand(
+            type='shell',
+            cmd="printf 'ok\\311done'",
+            bin=False,
+        )
+        result = await shell_executor._exec_cmd(command)
+
+        assert result.stdout == 'ok�done'
+
+
+def test_popen_interactive_non_utf8_output_does_not_raise(shell_executor):
+    """The interactive read path decodes separately and needs the same treatment."""
+    reads = [b'ok\xc9done']
+
+    def fake_read(_stdout):
+        return reads.pop(0) if reads else b''
+
+    mock_popen_instance = MagicMock()
+    with patch.object(shell_executor, 'non_block_read', side_effect=fake_read):
+        output = shell_executor.popen_interactive(mock_popen_instance, b'cmd\n', timeout=1)
+
+    assert output == 'ok�done'
+
+
+@pytest.mark.asyncio
+async def test_execution_of_command_with_non_utf8_output(shell_executor):
+    """End to end: /bin/sh printf has no \\xHH, so the octal escape is the portable one."""
+    command = ShellCommand(
+        type='shell',
+        cmd="printf 'ok\\311done'",
+        bin=False,
+    )
+
+    result = await shell_executor._exec_cmd(command)
+    assert result.stdout == 'ok�done'
