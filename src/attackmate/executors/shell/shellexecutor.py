@@ -74,7 +74,13 @@ class ShellExecutor(BaseExecutor):
             proc.kill()
             output, error = proc.communicate()
         output += error
-        return output.decode()
+        # Command output is arbitrary bytes, not guaranteed UTF-8. A strict decode
+        # raises UnicodeDecodeError, which nothing between here and main() catches -
+        # so one undecodable byte terminates the whole playbook rather than failing
+        # this step. Replace undecodable bytes instead: output is used for logging,
+        # error_if matching and save-to-file, none of which need a lossless
+        # round-trip.
+        return output.decode(errors='replace')
 
     def popen_interactive(
         self, proc: subprocess.Popen, cmd: bytes, timeout: int = 5, read: bool = True
@@ -96,7 +102,8 @@ class ShellExecutor(BaseExecutor):
                     outline += tmp
                     begin = datetime.now()  # reset timer when data comes
 
-        return outline.decode()
+        # Same reasoning as popen_noninteractive: never let output bytes end the run.
+        return outline.decode(errors='replace')
 
     async def _exec_cmd(self, command: ShellCommand) -> Result:
         try:
