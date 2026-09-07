@@ -1,5 +1,5 @@
-from typing import Literal, Optional
-from pydantic import ValidationInfo, field_validator
+from typing import List, Literal, Optional
+from pydantic import ValidationInfo, field_validator, model_validator
 from attackmate.schemas.base import StringNumber
 from attackmate.schemas.base import BaseCommand
 from attackmate.command import CommandRegistry
@@ -14,6 +14,20 @@ class ShellCommand(BaseCommand):
             raise ValueError('background mode combined with session is unsupported for SSH')
         return v
 
+    @model_validator(mode='after')
+    def default_expand_keys_to_pty(self) -> 'ShellCommand':
+        """Turn key expansion on by default for pty commands only.
+
+        Driving a terminal application means sending keystrokes, so ``<ESC>``
+        and friends are what a pty user wants. Existing non-pty playbooks must
+        keep sending their text verbatim, and anyone who really wants a literal
+        ``<ESC>`` under pty can still say ``expand_keys: False`` - checking
+        ``model_fields_set`` distinguishes an explicit False from the default.
+        """
+        if self.pty and 'expand_keys' not in self.model_fields_set:
+            self.expand_keys = True
+        return self
+
     type: Literal['shell']
     interactive: bool = False
     creates_session: Optional[str] = None
@@ -22,3 +36,10 @@ class ShellCommand(BaseCommand):
     read: bool = True
     command_shell: str = '/bin/sh'
     bin: Optional[bool] = False
+    pty: bool = False
+    screen: bool = False
+    expand_keys: bool = False
+    term: str = 'xterm-256color'
+    pty_rows: StringNumber = '24'
+    pty_cols: StringNumber = '80'
+    prompts: List[str] = []

@@ -6,6 +6,7 @@ commands in AttackMate.
 """
 
 import os
+import platform
 import subprocess
 from subprocess import TimeoutExpired
 from datetime import datetime
@@ -18,6 +19,8 @@ from attackmate.schemas.shell import ShellCommand
 from attackmate.schemas.config import CommandConfig
 from attackmate.variablestore import VariableStore
 from attackmate.processmanager import ProcessManager
+from attackmate.executors.common.terminal import expand_keys, render_output
+from attackmate.executors.shell.ptysession import PtySession
 from attackmate.executors.shell.sessionstore import SessionStore
 from attackmate.executors.features.cmdvars import CmdVars
 from attackmate.executors.executor_factory import executor_factory
@@ -32,6 +35,9 @@ class ShellExecutor(BaseExecutor):
     def log_command(self, command: BaseCommand):
         self.logger.info(f"Executing Shell-Command: '{command.cmd}'")
 
+    def cleanup(self):
+        self.session_store.clean_sessions()
+
     def open_proc(self, command: ShellCommand) -> subprocess.Popen:
         if command.session:
             return self.session_store.get_handle_by_session(command.session)
@@ -44,6 +50,82 @@ class ShellExecutor(BaseExecutor):
             self.session_store.set_session(command.creates_session, proc, command.cmd)
 
         return proc
+
+    def open_pty(self, command: ShellCommand) -> PtySession:
+        """Return the pty session for *command*, creating one if needed.
+
+        Kept separate from :meth:`open_proc` so the pipe-based path is not
+        touched by pty support at all.
+        """
+        if command.session:
+            session = self.session_store.get_pty_by_session(command.session)
+            if not session.is_alive():
+                raise ExecException(f"Shell-Session '{command.session}' has exited")
+            return session
+
+        session = PtySession(
+            command_shell=command.command_shell,
+            rows=CmdVars.variable_to_int('pty_rows', command.pty_rows),
+            cols=CmdVars.variable_to_int('pty_cols', command.pty_cols),
+            term=command.term,
+            screen=command.screen,
+        )
+
+        if command.creates_session:
+            self.session_store.set_pty_session(command.creates_session, session)
+
+        return session
+
+    def encode_cmd(self, command: ShellCommand) -> bytes:
+        """Turn ``command.cmd`` into the bytes to send.
+
+        Key expansion produces a local copy rather than writing back to
+        ``command.cmd``: the JSON audit log serialises the command *after* it
+        ran, and Looper re-executes the same object, so mutating it would both
+        record raw control bytes and expand twice on the second pass.
+        """
+        if command.bin:
+            try:
+                cmd = binascii.unhexlify(command.cmd)
+                self.logger.info(
+                    f"Shell-Command: Hex {command.cmd} to ascii: {bytes.fromhex(command.cmd).decode('ascii')}"
+                )
+                return cmd
+            except binascii.Error:
+                raise ExecException(
+                    f"only hex characters are allowed in binary mode. Command: '{command.cmd}'"
+                )
+
+        text = expand_keys(command.cmd) if command.expand_keys else command.cmd
+        return text.encode('utf-8')
+
+    def exec_pty(self, command: ShellCommand) -> Result:
+        """Run a command through a pseudo-terminal."""
+        try:
+            session = self.open_pty(command)
+        except KeyError as e:
+            raise ExecException(e)
+
+        cmd = self.encode_cmd(command)
+        self.logger.debug('Running command in a pty')
+        session.drain()
+        session.write(cmd)
+
+        output = ''
+        if command.read:
+            raw = session.read(
+                idle_timeout=CmdVars.variable_to_int('timeout', command.command_timeout),
+                prompts=command.prompts,
+            )
+            # session.screen, not command.screen: whether a session emulates a
+            # screen is fixed when it is created, so a later command on the
+            # same session cannot turn it on retroactively.
+            output = render_output(raw, screen=session.screen)
+
+        if not command.session and not command.creates_session:
+            session.close()
+
+        return Result(output, 0)
 
     def popen_close(self, proc):
         self.logger.debug('Closing popen process')
@@ -74,7 +156,13 @@ class ShellExecutor(BaseExecutor):
             proc.kill()
             output, error = proc.communicate()
         output += error
-        return output.decode()
+        # Command output is arbitrary bytes, not guaranteed UTF-8. A strict decode
+        # raises UnicodeDecodeError, which nothing between here and main() catches -
+        # so one undecodable byte terminates the whole playbook rather than failing
+        # this step. Replace undecodable bytes instead: output is used for logging,
+        # error_if matching and save-to-file, none of which need a lossless
+        # round-trip.
+        return output.decode(errors='replace')
 
     def popen_interactive(
         self, proc: subprocess.Popen, cmd: bytes, timeout: int = 5, read: bool = True
@@ -96,26 +184,21 @@ class ShellExecutor(BaseExecutor):
                     outline += tmp
                     begin = datetime.now()  # reset timer when data comes
 
-        return outline.decode()
+        # Same reasoning as popen_noninteractive: never let output bytes end the run.
+        return outline.decode(errors='replace')
 
     async def _exec_cmd(self, command: ShellCommand) -> Result:
+        if command.pty:
+            if platform.system() == 'Windows':
+                return Result('Pseudo-terminals are only available on Unix-like systems!', 1)
+            return self.exec_pty(command)
+
         try:
             proc = self.open_proc(command)
         except KeyError as e:
             raise ExecException(e)
 
-        if command.bin:
-            try:
-                cmd = binascii.unhexlify(command.cmd)
-                self.logger.info(
-                    f"Shell-Command: Hex {command.cmd} to ascii: {bytes.fromhex(command.cmd).decode('ascii')}"
-                )
-            except binascii.Error:
-                raise ExecException(
-                    f"only hex characters are allowed in binary mode. Command: '{command.cmd}'"
-                )
-        else:
-            cmd = command.cmd.encode('utf-8')
+        cmd = self.encode_cmd(command)
 
         timeout = CmdVars.variable_to_int('timeout', command.command_timeout)
         output = ''

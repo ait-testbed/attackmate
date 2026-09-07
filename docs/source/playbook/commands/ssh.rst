@@ -257,6 +257,76 @@ Interactive Mode
           password: password
           creates_session: attacker
 
+Terminal Handling
+-----------------
+
+An interactive ``ssh`` command already runs behind a terminal on the remote host,
+so unlike :ref:`shell` commands it needs no ``pty`` option. What it does
+need is a way to make terminal output readable, and a way to send keystrokes.
+
+These options apply to :confval:`interactive` commands only. Non-interactive
+commands run without a terminal, so there is nothing to translate.
+
+.. confval:: screen
+
+   Render the output as a terminal screen instead of a stream of bytes.
+
+   :type: bool
+   :default: ``False``
+   :required: False
+
+   Full-screen programs draw by moving the cursor, so their raw output is a
+   series of fragments rather than what a user would see. Screen mode emulates a
+   terminal and returns the resulting text. The screen belongs to the session, so
+   it keeps its contents across commands, and the whole visible screen is
+   returned each time.
+
+.. confval:: expand_keys
+
+   Translate key names such as ``<ESC>``, ``<CR>``, ``<TAB>``, ``<UP>``, ``<F1>``
+   and ``<C-x>`` (Ctrl-X) in :confval:`cmd` into the bytes a terminal sends.
+
+   :type: bool
+   :default: ``False``
+   :required: False
+
+   Off by default so that existing playbooks keep sending their text verbatim.
+   Write ``<LT>`` for a literal ``<`` while expansion is on.
+
+   .. code-block:: yaml
+
+      commands:
+        # Leave a stuck full-screen program by sending real keystrokes:
+        - type: ssh
+          cmd: "<ESC>:q!<CR>"
+          interactive: True
+          expand_keys: True
+          session: attacker
+
+.. confval:: term
+
+   Terminal type requested for the remote shell.
+
+   :type: str
+   :default: ``vt100``
+   :required: False
+
+.. confval:: pty_rows
+
+   Height of the terminal requested for the remote shell.
+
+   :type: int
+   :default: ``24``
+   :required: False
+
+.. confval:: pty_cols
+
+   Width of the terminal requested for the remote shell.
+
+   :type: int
+   :default: ``80``
+   :required: False
+
 Binary Mode
 -----------
 

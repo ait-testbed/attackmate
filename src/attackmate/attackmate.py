@@ -202,6 +202,9 @@ class AttackMate:
             msf_module_executor.cleanup()
         if (msf_session_executor := self.executors.get('msf-session')):
             msf_session_executor.cleanup()
+        # shell
+        if (shell_executor := self.executors.get('shell')):
+            shell_executor.cleanup()
         # ssh
         if (ssh_executor := self.executors.get('ssh')):
             ssh_executor.cleanup()

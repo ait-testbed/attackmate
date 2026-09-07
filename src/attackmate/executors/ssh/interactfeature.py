@@ -4,6 +4,8 @@ from datetime import datetime
 from paramiko.client import SSHClient
 from attackmate.schemas.ssh import SSHCommand
 from attackmate.execexception import ExecException
+from attackmate.executors.common.terminal import expand_keys
+from attackmate.executors.features.cmdvars import CmdVars
 from attackmate.executors.ssh.sessionstore import SessionStore
 
 
@@ -46,7 +48,13 @@ class Interactive:
             channel = session_store.get_channel_by_session(command.session)
 
         if not channel:
-            channel = client.invoke_shell()
+            # Terminal type and size decide how full-screen applications draw
+            # themselves, so they must be set when the shell is created.
+            channel = client.invoke_shell(
+                term=command.term,
+                width=CmdVars.variable_to_int('pty_cols', command.pty_cols),
+                height=CmdVars.variable_to_int('pty_rows', command.pty_rows),
+            )
             if command.session:
                 session_store.set_existing_session(command.session, client, channel)
             elif command.creates_session:
@@ -63,7 +71,8 @@ class Interactive:
                 except binascii.Error:
                     raise ExecException(f"only hex characters are allowed in binary mode: \"{command.cmd}\"")
             else:
-                stdin.write(str.encode(command.cmd))
+                cmd = expand_keys(command.cmd) if command.expand_keys else command.cmd
+                stdin.write(str.encode(cmd))
             stdin.flush()
 
         return (None, stdout, stderr)
