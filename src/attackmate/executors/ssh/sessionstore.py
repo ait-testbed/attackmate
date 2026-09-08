@@ -1,13 +1,31 @@
 from paramiko.channel import Channel
 from paramiko.client import SSHClient
-from typing import Optional
+from typing import Any, Optional
 import logging
 
 
 class SessionStore:
     def __init__(self):
         self.store: dict[str, tuple[SSHClient, Optional[Channel]]] = {}
+        # Screen state has to survive between commands: a full-screen program
+        # draws once and then only sends the parts that change, so rendering
+        # each command's output on its own would show fragments.
+        self.screens: dict[str, Any] = {}
         self.logger = logging.getLogger('playbook')
+
+    def get_screen(self, session_name: Optional[str], rows: int, cols: int):
+        """Return the terminal screen for *session_name*, creating it if needed.
+
+        Commands without a session get a throwaway screen, since there is no
+        later command that could observe its state.
+        """
+        from attackmate.executors.common.terminal import TerminalScreen
+
+        if session_name is None:
+            return TerminalScreen(rows, cols)
+        if session_name not in self.screens:
+            self.screens[session_name] = TerminalScreen(rows, cols)
+        return self.screens[session_name]
 
     def __getstate__(self):
         """
@@ -16,6 +34,7 @@ class SessionStore:
         """
         state = self.__dict__.copy()
         state['store'] = None
+        state['screens'] = None
         return state
 
     def has_session(self, session_name: str) -> bool:
@@ -73,3 +92,30 @@ class SessionStore:
                     self.logger.error(f"Error closing client for ssh session '{session_name}': {e}")
 
         self.store.clear()
+        self.screens.clear()
+
+    def session_is_alive(self, session_name: str) -> bool:
+        """True if the stored client still has an active transport."""
+        if session_name not in self.store:
+            return False
+        client, _ = self.store[session_name]
+        transport = client.get_transport() if client else None
+        return bool(transport and transport.is_active())
+
+    def close_session(self, session_name: str) -> bool:
+        """Close one session by name, and forget its terminal screen.
+
+        The screen has to go with it, or a later session reusing the name
+        inherits the old one's contents.
+        """
+        if session_name not in self.store:
+            return False
+        client, channel = self.store.pop(session_name)
+        self.screens.pop(session_name, None)
+        for closeable in (channel, client):
+            try:
+                if closeable is not None:
+                    closeable.close()
+            except Exception as e:
+                self.logger.error(f"Error closing ssh session '{session_name}': {e}")
+        return True

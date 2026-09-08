@@ -496,6 +496,165 @@ by the remote instance rather than locally.
 ----
 
 
+Shell Command Errors
+====================
+
+.. _error-shell-not-a-terminal:
+
+Program Refuses To Run Or Produces Unreadable Output
+----------------------------------------------------
+
+**Symptom**
+
+.. code-block:: text
+
+  INFO     | Executing Shell-Command: 'vim /tmp/notes'
+  OUTPUT   | Vim: Warning: Output is not to a terminal
+  OUTPUT   | Vim: Warning: Input is not from a terminal
+
+Other forms of the same problem:
+
+* ``sudo: no tty present and no askpass program specified``
+* ``su`` or ``ssh`` never accept a password sent as the next command
+* ``nano``, ``top`` or another full-screen program returns a jumble of
+  ``\x1b[`` sequences instead of readable text
+
+**Cause**
+
+By default a ``shell`` command is connected to pipes rather than a terminal.
+Editors and other full-screen programs detect this and refuse to draw a screen,
+and ``sudo``, ``su`` and ``ssh`` read passwords from ``/dev/tty``, which does not
+exist without a controlling terminal - so a password sent as an ordinary command
+never reaches them.
+
+**Solution**
+
+* Set ``pty: True`` on the command to give it a real terminal.
+* Add ``screen: True`` for programs that repaint the screen, so AttackMate
+  returns the text as displayed rather than the drawing instructions.
+* Send keystrokes by name, for example ``<ESC>``, ``<CR>`` or ``<C-x>``.
+
+.. code-block:: yaml
+
+  # Wrong - vim has no terminal and will not start:
+  - type: shell
+    cmd: "vim /tmp/notes\n"
+    interactive: True
+    creates_session: editor
+
+.. code-block:: yaml
+
+  # Correct:
+  - type: shell
+    cmd: "vim /tmp/notes\n"
+    pty: True
+    creates_session: editor
+
+.. seealso::
+    :ref:`session` for the difference between interactive and pseudo-terminal mode.
+
+----
+
+.. _error-shell-pty-hangs:
+
+Pseudo-Terminal Command Waits Forever
+-------------------------------------
+
+**Symptom**
+
+A command with ``pty: True`` never returns, or an error is raised at playbook
+start:
+
+.. code-block:: text
+
+  ERROR    | command_timeout 0 waits for a prompt, so at least one entry in
+             'prompts' is required. Set a timeout or define prompts.
+
+**Cause**
+
+``command_timeout: 0`` means "no time limit, stop when a prompt appears". Without
+any configured ``prompts`` there is nothing that can end the read.
+
+A command can also appear to hang when it keeps producing output: reading stops
+after ``command_timeout`` seconds of *silence*, so a program that never falls
+silent is never interrupted.
+
+**Solution**
+
+* Set ``prompts`` to the strings your shell ends with, for example ``["$ ", "# "]``.
+* Or give ``command_timeout`` a non-zero value.
+
+.. seealso::
+    :ref:`commands` for the full list of pseudo-terminal options.
+
+----
+
+.. _error-shell-session-exited:
+
+Session Has Exited
+------------------
+
+**Symptom**
+
+.. code-block:: text
+
+  ERROR    | Shell-Session 'foothold' has exited
+
+or, for a session that dies while the command is being written:
+
+.. code-block:: text
+
+  ERROR    | Shell-Session is no longer accepting input: [Errno 32] Broken pipe
+
+**Cause**
+
+The shell behind the session is gone — a reverse shell dropped, or a command in
+the session exited it. Earlier versions wrote into the dead shell and died of an
+uncaught ``BrokenPipeError``, ending the playbook without recording the step.
+
+**Solution**
+
+* Check a session before relying on it with ``type: session`` and ``cmd: status``.
+* Set ``exit_on_error: False`` on the step if losing the session is expected, and
+  branch on ``$RESULT_RETURNCODE``.
+* Remember that ``exit`` inside a session ends the session itself. Use a subshell
+  — ``(exit 3)`` — when you only want to set a status.
+
+.. seealso::
+    :ref:`session_command` for checking and closing sessions from a playbook.
+
+----
+
+.. _error-shell-step-never-finished:
+
+Step Recorded As Complete While It Is Still Running
+---------------------------------------------------
+
+**Symptom**
+
+``attackmate.json`` shows a step finishing long before its work did — processes
+it started are still running after the log says it completed.
+
+**Cause**
+
+``command_timeout`` is an *idle* timeout: a step returns once no new output has
+arrived for that long, not when the command exits. A script that pauses while
+working therefore looks finished.
+
+**Solution**
+
+* Set ``wait_for_exit: True`` so the step returns on actual completion and
+  records the command's real exit status.
+* Add ``read_timeout`` to bound the whole read, for a command that never falls
+  silent at all.
+* Compare ``start-datetime`` with ``end-datetime`` in ``attackmate.json`` to see
+  how long a step really took.
+
+.. seealso::
+    :ref:`shell` for ``wait_for_exit`` and ``read_timeout``.
+
+----
+
 SSH Command Errors
 ==================
 

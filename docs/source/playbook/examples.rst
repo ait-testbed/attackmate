@@ -29,6 +29,7 @@ Playbooks
 * `HTTP-client example <https://github.com/ait-aecid/attackmate/blob/main/examples/http-put_example.yml>`_
 * `Include command example <https://github.com/ait-aecid/attackmate/blob/main/examples/include.yml>`_
 * `Only If example <https://github.com/ait-aecid/attackmate/blob/main/examples/only_if.yml>`_
+* `Pseudo-terminal example (vim, nano) <https://github.com/ait-aecid/attackmate/blob/main/examples/pty_example.yml>`_
 * `SSH/SFTP example <https://github.com/ait-aecid/attackmate/blob/main/examples/ssh_example.yml>`_
 * `Upgrade meterpreter shell <https://github.com/ait-aecid/attackmate/blob/main/examples/upgrade_to_meterpreter.yml>`_
 * `Fileshare via webserv example <https://github.com/ait-aecid/attackmate/blob/main/examples/webserv.yml>`_

@@ -29,6 +29,7 @@ dependencies = [
     "passlib",
     "python-multipart>=0.0.32",
     "attackmate-client>=0.1.2",
+    "pyte",
 ]
 dynamic = ["version"]
 

@@ -5,11 +5,14 @@ This class enables executing commands via
 ssh.
 """
 
+import select
+
 from paramiko.client import SSHClient
 from paramiko import AutoAddPolicy
 from paramiko.ssh_exception import BadHostKeyException, AuthenticationException, SSHException
 from attackmate.executors.baseexecutor import BaseExecutor
 from attackmate.execexception import ExecException
+from attackmate.executors.common.terminal import PROMPT_TAIL, render_output, strip_ansi
 from attackmate.executors.ssh.interactfeature import Interactive
 from attackmate.result import Result
 from attackmate.executors.features.cmdvars import CmdVars
@@ -133,6 +136,7 @@ class SSHExecutor(BaseExecutor, SFTPFeature, Interactive):
     async def _exec_cmd(self, command: SFTPCommand | SSHCommand) -> Result:
         error = None
         output = ''
+        exit_status = None
 
         if command.clear_cache:
             self.set_defaults()
@@ -147,16 +151,45 @@ class SSHExecutor(BaseExecutor, SFTPFeature, Interactive):
             else:
                 if command.interactive:
                     stdin, stdout, stderr = self.exec_interactive_command(command, client, self.session_store)
+                    screen = None
+                    if command.screen:
+                        screen = self.session_store.get_screen(
+                            command.session or command.creates_session,
+                            CmdVars.variable_to_int('pty_rows', command.pty_rows),
+                            CmdVars.variable_to_int('pty_cols', command.pty_cols),
+                        )
+                    raw = b''
                     self.set_timer()
                     while self.check_timer(CmdVars.variable_to_int('timeout', command.command_timeout)):
-                        if stdout.channel.recv_ready():
-                            tmp = stdout.channel.recv(1025).decode('utf-8', 'ignore')
-                            output += tmp
-                            self.check_prompt(output, command.prompts)
+                        channel = stdout.channel
+                        if not channel.recv_ready():
+                            # Without this the loop spins on a core for the whole
+                            # command_timeout. select wakes as soon as data lands.
+                            select.select([channel], [], [], 0.05)
+                            continue
+                        # Accumulate bytes and decode once: a chunk boundary can
+                        # fall inside a multi-byte character.
+                        tmp = channel.recv(65536)
+                        raw += tmp
+                        if screen is not None:
+                            screen.feed(tmp)
+                        # Prompts are matched on readable text - a prompt is
+                        # usually trailed by colour codes that defeat endswith().
+                        # Only the tail can end with a prompt; re-scanning the
+                        # whole buffer each chunk would be quadratic.
+                        self.check_prompt(
+                            strip_ansi(raw[-PROMPT_TAIL:].decode('utf-8', 'ignore')), command.prompts
+                        )
+                    output = render_output(raw, screen=screen)
                 else:
                     stdin, stdout, stderr = client.exec_command(command.cmd)
                     output = stdout.read().decode('utf-8', 'ignore')
                     error = stderr.read().decode('utf-8', 'ignore')
+                    # The remote status was always available here and never
+                    # read. Without it the only failure signal is "wrote
+                    # something to stderr", which calls a successful noisy
+                    # command a failure and a silent failure a success.
+                    exit_status = stdout.channel.recv_exit_status()
         except ValueError as e:
             raise ExecException(e)
         except AttributeError as e:
@@ -171,6 +204,8 @@ class SSHExecutor(BaseExecutor, SFTPFeature, Interactive):
             raise ExecException(e)
 
         if error:
-            return Result(error, 1)
+            # Preserved as-is: existing playbooks rely on stderr meaning
+            # failure. The real status still reaches the audit log.
+            return Result(error, 1, exit_status=exit_status)
 
-        return Result(output, 0)
+        return self.build_result(command, output, exit_status)
