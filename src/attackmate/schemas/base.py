@@ -57,6 +57,12 @@ class BaseCommand(BaseModel):
     loop_if_not: Optional[str] = None
     loop_count: StringNumber = '3'
     exit_on_error: bool = True
+    # The real exit status of a command is always recorded in the JSON audit
+    # log. Set this to let it drive exit_on_error as well; off by default,
+    # because shell and ssh steps have always reported success regardless of
+    # what the command did, and playbooks depend on that.
+    use_exit_code: bool = False
+    substitute_cmd_vars: bool = True
     save: Optional[str] = None
     cmd: str
     background: bool = False

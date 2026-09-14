@@ -1,6 +1,9 @@
+import pickle
+
 import pytest
 from unittest.mock import MagicMock, patch
 import subprocess
+from attackmate.executors.shell.sessionstore import SessionStore
 from attackmate.executors.shell.shellexecutor import ShellExecutor
 from attackmate.execexception import ExecException
 from attackmate.schemas.shell import ShellCommand
@@ -12,6 +15,9 @@ from attackmate.processmanager import ProcessManager
 def mock_popen():
     mock_popen_instance = MagicMock(spec=subprocess.Popen)
     mock_popen_instance.communicate.return_value = (b'stdout', b'stderr')
+    # communicate() sets this on a real Popen, and the executor now reads it to
+    # report a true exit status.
+    mock_popen_instance.returncode = 0
     with patch('subprocess.Popen', return_value=mock_popen_instance) as mock:
         yield mock, mock_popen_instance
 
@@ -147,3 +153,29 @@ async def test_execution_of_command_with_non_utf8_output(shell_executor):
 
     result = await shell_executor._exec_cmd(command)
     assert result.stdout == 'ok�done'
+
+
+def test_session_store_stays_picklable_with_a_live_session():
+    """A background command pickles the whole executor, session store included.
+
+    features/background.py dispatches with a 'spawn' context and a bound method
+    as the target, so a playbook that opens a session and later runs any
+    background command used to die with
+    "TypeError: cannot pickle '_thread.lock' object".
+    """
+    store = SessionStore()
+    proc = subprocess.Popen(
+        ['/bin/sh'], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE
+    )
+    try:
+        store.set_session('s', proc, 'sh')
+
+        restored = pickle.loads(pickle.dumps(store))
+
+        # Emptied, not None, so a lookup in the child raises the usual KeyError
+        # instead of "argument of type 'NoneType' is not iterable".
+        assert restored.store == {}
+        with pytest.raises(KeyError):
+            restored.get_handle_by_session('s')
+    finally:
+        proc.kill()

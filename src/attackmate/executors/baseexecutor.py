@@ -1,7 +1,7 @@
 import logging
 import json
 from datetime import datetime
-from typing import Any
+from typing import Any, Optional
 from collections import OrderedDict
 
 from pydantic import BaseModel
@@ -106,6 +106,11 @@ class BaseExecutor(ExitOnError, CmdVars, Looper, Background):
         if command.only_if:
             if not Conditional.test(self.varstore.substitute(command.only_if, True)):
                 self.logger.info(f'Skipping {getattr(command, "type", "")}({command.cmd})')
+                # Recorded rather than dropped: a skipped step used to be absent
+                # from the log altogether, which is indistinguishable from a step
+                # that was never in the playbook.
+                skipped_at = datetime.now().isoformat()
+                self.log_json(self.json_logger, command, skipped_at, skipped=True)
                 return Result(None, None)
         self.reset_run_count()
         self.logger.debug(f"Template-Command: '{command.cmd}'")
@@ -114,16 +119,29 @@ class BaseExecutor(ExitOnError, CmdVars, Looper, Background):
             time_of_execution = datetime.now().isoformat()
             self.log_json(self.json_logger, command, time_of_execution)
             await self.exec_background(
-                self.substitute_template_vars(command, self.substitute_cmd_vars)
+                self.substitute_template_vars(command, self.substitutes_cmd_vars(command))
             )
             # the background command will return immidiately with Result('Command started in background', 0)
             # Return 0 instead of None so the API/Remote Client sees success
             result = Result('Command started in background', 0)
         else:
             result = await self.exec(
-                self.substitute_template_vars(command, self.substitute_cmd_vars)
+                self.substitute_template_vars(command, self.substitutes_cmd_vars(command))
             )
         return result
+
+    def substitutes_cmd_vars(self, command) -> bool:
+        """Whether ``cmd`` should be templated for this command.
+
+        Both the executor and the command get a say, and either can say no.
+        ``LoopExecutor`` turns it off for a whole loop body so each iteration
+        re-substitutes; a command turns it off to run exactly what the playbook
+        says. That matters because ``string.Template`` collapses ``$$`` to a
+        single ``$``, and in a shell ``$$`` is the process id - so ``kill -9
+        $$`` and ``/tmp/f.$$`` are silently rewritten, and the audit log records
+        the rewritten form.
+        """
+        return self.substitute_cmd_vars and getattr(command, 'substitute_cmd_vars', True)
 
     def log_command(self, command):
         """Log the start of a command execution at INFO level."""
@@ -134,7 +152,33 @@ class BaseExecutor(ExitOnError, CmdVars, Looper, Background):
         if command.metadata:
             logger.info(f'Metadata: {json.dumps(command.metadata)}')
 
-    def log_json(self, logger: logging.Logger, command, time):
+    @staticmethod
+    def build_result(command, output, exit_status=None) -> Result:
+        """Build a Result, honouring the command's ``use_exit_code`` opt-in.
+
+        The real status is always carried in ``exit_status`` so it reaches the
+        audit log. ``returncode`` - which is what ``exit_on_error`` acts on -
+        keeps its historical value of ``0`` unless the command opts in, because
+        making a true status authoritative by default would start failing
+        playbooks that have always passed.
+        """
+        returncode = 0
+        if getattr(command, 'use_exit_code', False) and exit_status is not None:
+            returncode = exit_status
+        return Result(output, returncode, exit_status=exit_status)
+
+    @staticmethod
+    def duration_seconds(start: str, end: str):
+        """Seconds between two ISO 8601 timestamps, or None if unparseable."""
+        try:
+            return round(
+                (datetime.fromisoformat(end) - datetime.fromisoformat(start)).total_seconds(), 6
+            )
+        except (TypeError, ValueError):
+            return None
+
+    def log_json(self, logger: logging.Logger, command, time, end_time=None,
+                 result: Optional[Result] = None, skipped: bool = False):
         """
         Serialize a command to JSON and write it to the JSON audit log.
 
@@ -149,8 +193,19 @@ class BaseExecutor(ExitOnError, CmdVars, Looper, Background):
             The command to serialize.
         time : str
             ISO 8601 timestamp of when the command started.
+        end_time : str, optional
+            ISO 8601 timestamp of when the command finished. Absent for a
+            command dispatched to the background, which has not finished.
+        result : Result, optional
+            The result of the command, used for its return code.
+        skipped : bool, optional
+            Record the step as skipped by its ``only_if`` condition. Such
+            steps used to be left out of the log entirely, which made a
+            skipped step indistinguishable from one that never existed.
         """
-        command_dict = self.make_command_serializable(command, time)
+        command_dict = self.make_command_serializable(
+            command, time, end_time=end_time, result=result, skipped=skipped
+        )
 
         try:
             logger.info(json.dumps(command_dict))
@@ -162,12 +217,28 @@ class BaseExecutor(ExitOnError, CmdVars, Looper, Background):
                 e,
             )
 
-    def make_command_serializable(self, command, time):
+    def make_command_serializable(self, command, time, end_time=None,
+                                  result: Optional[Result] = None, skipped: bool = False):
         command_dict = OrderedDict()
         command_dict['start-datetime'] = time
+        # Without an end time, everything about what a step actually did has to
+        # be reconstructed elsewhere - and an interactive step returns after a
+        # silence, not on exit, so its children can still be running long after
+        # the log says it finished.
+        if end_time is not None:
+            command_dict['end-datetime'] = end_time
+            command_dict['duration-seconds'] = self.duration_seconds(time, end_time)
+        if skipped:
+            command_dict['skipped'] = True
         if hasattr(command, 'type'):
             command_dict['type'] = command.type
         command_dict['cmd'] = command.cmd
+        if result is not None:
+            # None where no real status exists: inside a live session the shell
+            # is still running, so there is nothing to report unless the command
+            # asked for wait_for_exit. Never faked as 0.
+            command_dict['exit-status'] = getattr(result, 'exit_status', None)
+            command_dict['returncode'] = result.returncode
 
         command_dict['parameters'] = dict()
         for key, value in command.__dict__.items():
@@ -220,14 +291,27 @@ class BaseExecutor(ExitOnError, CmdVars, Looper, Background):
             The result of the command, or a ``Result(str(error), 1)`` if an
             :class:`~attackmate.execexception.ExecException` is raised.
         """
+        # Bound before the try: log_command can itself raise an ExecException
+        # (a non-numeric ssh port reaches variable_to_int through cache_settings),
+        # and the logging below would then die with UnboundLocalError.
+        time_of_execution = datetime.now().isoformat()
+        result = None
         try:
             self.log_command(command)
             self.log_metadata(self.logger, command)
-            time_of_execution = datetime.now().isoformat()
             result = await self._exec_cmd(command)
         except ExecException as error:
             result = Result(str(error), 1)
-        self.log_json(self.json_logger, command, time_of_execution)
+        finally:
+            # In a finally so that a step killed by an uncaught exception is
+            # still recorded. It used to be written only on the way out, so the
+            # run artifact showed a playbook that simply stopped, with no trace
+            # of the step that ended it - which is exactly how a dropped reverse
+            # shell presents.
+            self.log_json(
+                self.json_logger, command, time_of_execution,
+                end_time=datetime.now().isoformat(), result=result,
+            )
         self.save_output(command, result)
         if not command.background:
             if not self.is_api_instance:

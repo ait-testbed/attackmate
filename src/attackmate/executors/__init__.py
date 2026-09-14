@@ -12,6 +12,7 @@ from .http.httpclientexecutor import HttpClientExecutor
 from .vnc.vncexecutor import VncExecutor
 from .bettercap.bettercapexecutor import BettercapExecutor
 from .common.setvarexecutor import SetVarExecutor
+from .common.sessionexecutor import SessionExecutor
 from .common.sleepexecutor import SleepExecutor
 from .common.tempfileexecutor import TempfileExecutor
 from .common.debugexecutor import DebugExecutor
@@ -37,6 +38,7 @@ __all__ = [
     'WebServExecutor',
     'HttpClientExecutor',
     'SetVarExecutor',
+    'SessionExecutor',
     'SleepExecutor',
     'TempfileExecutor',
     'DebugExecutor',

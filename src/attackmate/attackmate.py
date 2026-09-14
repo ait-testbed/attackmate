@@ -78,8 +78,11 @@ class AttackMate:
 
         self._initialize_variable_parser(varstore)
         self.msfsessionstore = executors.MsfSessionStore(self.varstore)
-        self.executor_config = self._get_executor_config()
+        # Built before the executor config, which hands this same dict to the
+        # session executor so it can reach the store of whichever executor owns
+        # a given session.
         self.executors: Dict[str, BaseExecutor] = {}
+        self.executor_config = self._get_executor_config()
         self.is_api_instance = is_api_instance
 
     def _default_playbook(self) -> Playbook:
@@ -103,7 +106,14 @@ class AttackMate:
         # if attackmate is imported and initialized in another project, vars can be passed as dict
         # otherwise variable store is initialized with vars from playbook
         self.varstore.from_dict(varstore if varstore else self.playbook.vars)
-        self.varstore.replace_with_prefixed_env_vars()
+        replaced = self.varstore.replace_with_prefixed_env_vars()
+        if replaced:
+            # Without this the playbook on disk does not fully determine what
+            # ran, and nothing anywhere records the difference.
+            self.logger.warning(
+                'Variables overridden from the environment '
+                f'(ATTACKMATE_ prefix): {", ".join(sorted(replaced))}'
+            )
 
     def _get_executor_config(self) -> dict:
         config = {
@@ -116,6 +126,7 @@ class AttackMate:
             'msfsessionstore': self.msfsessionstore,
             'sliver_config': self.pyconfig.sliver_config,
             'runfunc': self._run_commands,
+            'executors': self.executors,
         }
         return config
 
@@ -164,7 +175,7 @@ class AttackMate:
             command_type = 'ssh' if command.type == 'sftp' else command.type
             executor = self._get_executor(command_type)
             if executor:
-                if command.type not in ('sleep', 'debug', 'setvar'):
+                if command.type not in ('sleep', 'debug', 'setvar', 'session'):
                     if cfg.command_delay_jitter:
                         offset = random.uniform(cfg.command_delay_jitter_min, cfg.command_delay_jitter_max)
                         sign = random.choice([-1, 1])
@@ -202,6 +213,9 @@ class AttackMate:
             msf_module_executor.cleanup()
         if (msf_session_executor := self.executors.get('msf-session')):
             msf_session_executor.cleanup()
+        # shell
+        if (shell_executor := self.executors.get('shell')):
+            shell_executor.cleanup()
         # ssh
         if (ssh_executor := self.executors.get('ssh')):
             ssh_executor.cleanup()
@@ -224,13 +238,30 @@ class AttackMate:
         tears down open sessions and background processes. Handles
         :exc:`KeyboardInterrupt` gracefully.
 
+        Cleanup runs in a ``finally``, so it happens however the run ends. It
+        used to sit in the ``try`` after :meth:`_run_commands`, which meant it
+        was skipped by every abnormal exit - and those are exactly the ones
+        that leave a session open on a target. ``exit_on_error``, ``error_if``
+        and the loop conditions all end the run with ``exit(1)``, and the
+        resulting ``SystemExit`` is neither an ``Exception`` nor a
+        ``KeyboardInterrupt``, so it passed straight through this handler and
+        the one in ``__main__``.
+
         :returns: ``0`` on completion.
         """
         try:
             await self._run_commands(self.playbook.commands)
-            await self.clean_session_stores()
-            self.pm.kill_or_wait_processes()
         except KeyboardInterrupt:
             self.logger.warning('Program stopped manually')
+        finally:
+            # Teardown must not mask whatever ended the run.
+            try:
+                await self.clean_session_stores()
+            except Exception as e:
+                self.logger.error(f'Error while cleaning up sessions: {e}')
+            try:
+                self.pm.kill_or_wait_processes()
+            except Exception as e:
+                self.logger.error(f'Error while stopping background processes: {e}')
 
         return 0

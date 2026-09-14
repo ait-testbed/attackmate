@@ -1,0 +1,115 @@
+###
+# Author: AttackMate
+#
+# Description:
+#     Demonstrates pseudo-terminal mode for shell commands.
+#     1. Edit a file with vim, driven by real keystrokes
+#     2. Verify what vim actually wrote
+#     3. Drive nano, a full-screen editor, using screen mode
+#     4. Show that a terminal is attached at all
+#
+# Requirements:
+#     1. A Unix-like system (pseudo-terminals are not available on Windows)
+#     2. vim and nano installed
+###
+vars:
+  $TARGET_FILE: /tmp/attackmate_pty_demo.txt
+
+commands:
+  # Programs like vim refuse to draw a screen without a terminal. pty: True
+  # gives the shell one, so the editor starts normally.
+  - type: shell
+    cmd: "vim $TARGET_FILE\n"
+    pty: True
+    creates_session: editor
+    metadata:
+      description: "Open vim in a pseudo-terminal and keep the session open"
+
+  # <ESC> is expanded into a real escape key. Key expansion is on by default
+  # whenever pty is set.
+  - type: shell
+    cmd: "oHello from AttackMate<ESC>:wq!\n"
+    pty: True
+    session: editor
+    metadata:
+      description: "Type a line in vim, leave insert mode and save the file"
+
+  # A plain command, no terminal needed - this proves vim really wrote the file.
+  - type: shell
+    cmd: cat $TARGET_FILE
+    error_if_not: "Hello from AttackMate"
+    metadata:
+      description: "Verify the content vim saved"
+
+  # nano repaints the whole screen, so its raw output is a stream of cursor
+  # movements. screen: True renders what would be displayed instead.
+  - type: shell
+    cmd: "nano $TARGET_FILE\n"
+    pty: True
+    screen: True
+    pty_rows: 24
+    pty_cols: 80
+    creates_session: nano
+    metadata:
+      description: "Open nano and render its screen"
+
+  # Ctrl-O writes the file, Enter confirms the name, Ctrl-X exits.
+  - type: shell
+    cmd: "Edited by AttackMate<C-o><CR><C-x>"
+    pty: True
+    session: nano
+    metadata:
+      description: "Write and close the file using nano's control keys"
+
+  - type: shell
+    cmd: cat $TARGET_FILE
+    error_if_not: "Edited by AttackMate"
+    metadata:
+      description: "Verify the content nano saved"
+
+  # Without pty this prints RESULT=no, which is why sudo and su cannot prompt
+  # for a password on the default shell path.
+  - type: shell
+    cmd: "test -t 0 && printf 'RESULT=%s\\n' yes || printf 'RESULT=%s\\n' no\n"
+    pty: True
+    prompts:
+      - "$ "
+      - "# "
+    error_if_not: "RESULT=yes"
+    metadata:
+      description: "Confirm that the command really runs attached to a terminal"
+
+  # command_timeout measures silence, so a script that pauses looks finished.
+  # wait_for_exit reads until the command really ends and reports its status.
+  - type: shell
+    cmd: "sleep 3; echo SCAN_COMPLETE; (exit 0)"
+    pty: True
+    wait_for_exit: True
+    read_timeout: 60
+    use_exit_code: True
+    error_if_not: "SCAN_COMPLETE"
+    creates_session: worker
+    metadata:
+      description: "Wait for a slow command to finish instead of for it to fall silent"
+
+  # A playbook can check its own foothold before sending commands into it.
+  - type: session
+    cmd: status
+    session: worker
+    metadata:
+      description: "Confirm the session is still alive"
+
+  # Sessions otherwise stay open until the run ends.
+  - type: session
+    cmd: close
+    session: worker
+    metadata:
+      description: "Close the session as soon as it is no longer needed"
+
+  # string.Template collapses $$ into $, and in a shell $$ is the process id.
+  - type: shell
+    cmd: echo "PID_IS:$$"
+    substitute_cmd_vars: False
+    error_if: "PID_IS:\\$$"
+    metadata:
+      description: "Run a command verbatim, without variable substitution"
