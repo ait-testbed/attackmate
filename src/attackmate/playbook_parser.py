@@ -1,12 +1,23 @@
 import os
+import difflib
 import logging
 import traceback
 import yaml
-from typing import Optional
+from typing import Any, List, Optional
 from pathlib import Path
 from pydantic import ValidationError
+from attackmate.command import CommandRegistry
 from attackmate.schemas.playbook import Playbook
 from attackmate.schemas.config import Config
+
+
+def _valid_fields_for_error(error: Any, playbook_yaml: Any) -> Optional[List[str]]:
+    try:
+        command = playbook_yaml['commands'][error['loc'][1]]
+        model = CommandRegistry.get_command_class(command['type'], command.get('cmd'))
+    except (KeyError, IndexError, TypeError, ValueError):
+        return None
+    return list(model.model_fields.keys())
 
 
 def load_configfile(config_file: str) -> Config:
@@ -152,6 +163,18 @@ def parse_playbook(playbook_file: str, logger: logging.Logger) -> Playbook:
                 logger.error(
                     f'Value error in command {int(error["loc"][-2]) + 1}: '
                     f'{error["loc"][-1]} - {error["msg"]}'
+                )
+            elif error['type'] == 'extra_forbidden':
+                bad_key = str(error['loc'][-1])
+                cmd_type = error['loc'][-2]
+                valid_fields = _valid_fields_for_error(error, playbook_yaml)
+                suggestion = ''
+                if valid_fields:
+                    matches = difflib.get_close_matches(bad_key, valid_fields, n=1)
+                    if matches:
+                        suggestion = f" , did you mean '{matches[0]}'?"
+                logger.error(
+                    f"Unknown field in {cmd_type} command: '{bad_key}'{suggestion}"
                 )
         logger.error(traceback.format_exc())
         exit(1)

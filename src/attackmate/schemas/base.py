@@ -1,6 +1,6 @@
 from typing import Annotated, List, Optional, Dict
 from dataclasses import field
-from pydantic import AfterValidator, BeforeValidator, BaseModel, ValidationInfo
+from pydantic import AfterValidator, BeforeValidator, BaseModel, ConfigDict, ValidationInfo
 import re
 
 # https://stackoverflow.com/questions/71539448/using-different-pydantic-models-depending-on-the-value-of-fields
@@ -27,6 +27,9 @@ StrInt = Annotated[Optional[str | int], BeforeValidator(transform_int_to_str)]
 
 
 class BaseCommand(BaseModel):
+    # Reject unknown/misspelled command parameters
+    model_config = ConfigDict(extra='forbid')
+
     def list_template_vars(self) -> List[str]:
         """Get a list of all variables that can be used as templates
 

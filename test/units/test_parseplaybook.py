@@ -56,3 +56,26 @@ def test_parse_playbook_nonexistent_file(mock_logger):
     with pytest.raises(SystemExit):
         parse_playbook(str(non_existent_file), mock_logger)
     mock_logger.error.assert_called_with(error_message)
+
+
+misspelled_param_playbook_yaml = """
+###
+commands:
+  - type: shell
+    cmd: ls
+    backgound: true
+"""
+
+
+def test_parse_playbook_misspelled_param(mock_logger, tmp_path):
+    playbook_file = tmp_path / 'playbook.yml'
+    playbook_file.write_text(misspelled_param_playbook_yaml)
+
+    with pytest.raises(SystemExit):
+        parse_playbook(str(playbook_file), mock_logger)
+
+    messages = [call.args[0] for call in mock_logger.error.call_args_list]
+    assert any(
+        "Unknown field in shell command: 'backgound'" in m and "did you mean 'background'?" in m
+        for m in messages
+    ), messages

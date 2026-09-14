@@ -1,4 +1,4 @@
-from typing import Dict, Tuple, Optional
+from typing import Dict, Tuple, Optional, Type
 from attackmate.schemas.base import BaseCommand
 
 
@@ -13,8 +13,8 @@ class CommandRegistry:
 
     The more specific ``(type, cmd)`` key takes precedence over the ``type``-only key.
     """
-    _type_registry: Dict[str, BaseCommand] = {}
-    _type_cmd_registry: Dict[Tuple[str, str], BaseCommand] = {}
+    _type_registry: Dict[str, Type[BaseCommand]] = {}
+    _type_cmd_registry: Dict[Tuple[str, str], Type[BaseCommand]] = {}
 
     @classmethod
     def register(cls, type_: str, cmd: Optional[str] = None):
@@ -32,7 +32,7 @@ class CommandRegistry:
                 ...
         """
 
-        def decorator(command_class: BaseCommand):
+        def decorator(command_class: Type[BaseCommand]):
             if cmd:
                 cls._type_cmd_registry[(type_, cmd)] = command_class
             else:
