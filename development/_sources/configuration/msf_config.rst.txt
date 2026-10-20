@@ -66,7 +66,7 @@ Multiple servers can be defined and selected per command via the :confval:`conne
    Enables encryption for the RPC connection.
 
    :type: bool
-   ::default: ``True``
+   :default: ``True``
 
 
 .. confval:: password

@@ -15,7 +15,7 @@ cached after the first command, so subsequent commands only need to specify what
 
 .. note::
 
-   Background mode is not supported for this commands.
+   Background mode is not supported for this command.
 
 .. code-block:: yaml
 

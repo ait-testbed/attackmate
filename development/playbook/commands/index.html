@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Commands &mdash; AttackMate 1.0.1 documentation</title>
+  <title>Commands &mdash; AttackMate 1.0.2 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css" />
 
@@ -319,7 +319,7 @@ until the pattern no longer matches or <code class="docutils literal notranslate
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http-client</span>
 <span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">get</span>
 <span class="w">    </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://www.google.com</span>
-<span class="w">    </span><span class="nt">loop_if_not</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;.*google.*&quot;</span>
+<span class="w">    </span><span class="nt">loop_if</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;.*google.*&quot;</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -347,7 +347,8 @@ until the pattern matches or <code class="docutils literal notranslate"><span cl
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-loop_count">
 <span class="sig-name descname"><span class="pre">loop_count</span></span><a class="headerlink" href="#confval-loop_count" title="Permalink to this definition"></a></dt>
-<dd><dl class="field-list simple">
+<dd><p>Maximum number of repetitions when <code class="docutils literal notranslate"><span class="pre">loop_if</span></code> or <code class="docutils literal notranslate"><span class="pre">loop_if_not</span></code> is set.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>int</p>
 </dd>
@@ -452,7 +453,7 @@ and <code class="docutils literal notranslate"><span class="pre">error_if</span>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>The command in background mode will change the <a class="reference internal" href="../vars.html#builtin-variables"><span class="std std-ref">builtin variables</span></a>
-<code class="docutils literal notranslate"><span class="pre">RESULT_STDOUT</span></code> to “Command started in Background” and <code class="docutils literal notranslate"><span class="pre">RESULT_CODE</span></code> to 0.</p>
+<code class="docutils literal notranslate"><span class="pre">RESULT_STDOUT</span></code> to “Command started in Background” and <code class="docutils literal notranslate"><span class="pre">RESULT_RETURNCODE</span></code> to 0.</p>
 </div>
 <p>Background mode is not supported for</p>
 <ul class="simple">

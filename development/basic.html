@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Basic Usage &mdash; AttackMate 1.0.1 documentation</title>
+  <title>Basic Usage &mdash; AttackMate 1.0.2 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css" />
 
@@ -180,19 +180,25 @@
 <span id="id1"></span><h1>Basic Usage<a class="headerlink" href="#basic-usage" title="Permalink to this heading"></a></h1>
 <p>AttackMate is invoked via the <code class="docutils literal notranslate"><span class="pre">attackmate</span></code> command:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">attackmate</span> <span class="o">-</span><span class="n">h</span>
-<span class="n">usage</span><span class="p">:</span> <span class="n">attackmate</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="o">--</span><span class="n">config</span> <span class="n">CONFIG</span> <span class="p">[</span><span class="o">--</span><span class="n">debug</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">version</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">json</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">append_logs</span><span class="p">]</span>
+<span class="n">usage</span><span class="p">:</span> <span class="n">attackmate</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">config</span> <span class="n">CONFIG</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">debug</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">json</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">append_logs</span><span class="p">]</span>
+                  <span class="p">[</span><span class="o">--</span><span class="n">version</span><span class="p">]</span>
+                  <span class="n">playbook</span>
 
-<span class="n">AttackMate</span> <span class="ow">is</span> <span class="n">an</span> <span class="n">attack</span> <span class="n">orchestration</span> <span class="n">tool</span> <span class="n">that</span> <span class="n">executes</span> <span class="n">full</span> <span class="n">attack</span><span class="o">-</span><span class="n">chains</span> <span class="n">based</span> <span class="n">on</span> <span class="n">playbooks</span><span class="o">.</span>
+<span class="n">AttackMate</span> <span class="ow">is</span> <span class="n">an</span> <span class="n">attack</span> <span class="n">orchestration</span> <span class="n">tool</span> <span class="n">to</span> <span class="n">execute</span> <span class="n">full</span> <span class="n">attack</span><span class="o">-</span><span class="n">chains</span> <span class="n">based</span>
+<span class="n">on</span> <span class="n">playbooks</span><span class="o">.</span>
+
+<span class="n">positional</span> <span class="n">arguments</span><span class="p">:</span>
+  <span class="n">playbook</span>         <span class="n">Playbook</span> <span class="ow">in</span> <span class="n">yaml</span><span class="o">-</span><span class="nb">format</span>
 
 <span class="n">options</span><span class="p">:</span>
   <span class="o">-</span><span class="n">h</span><span class="p">,</span> <span class="o">--</span><span class="n">help</span>       <span class="n">show</span> <span class="n">this</span> <span class="n">help</span> <span class="n">message</span> <span class="ow">and</span> <span class="n">exit</span>
-  <span class="o">--</span><span class="n">config</span> <span class="n">CONFIG</span>  <span class="n">Attack</span><span class="o">-</span><span class="n">Playbook</span> <span class="ow">in</span> <span class="n">yaml</span><span class="o">-</span><span class="nb">format</span>
+  <span class="o">--</span><span class="n">config</span> <span class="n">CONFIG</span>  <span class="n">Configfile</span> <span class="ow">in</span> <span class="n">yaml</span><span class="o">-</span><span class="nb">format</span>
   <span class="o">--</span><span class="n">debug</span>          <span class="n">Enable</span> <span class="n">verbose</span> <span class="n">output</span>
-  <span class="o">--</span><span class="n">version</span>        <span class="n">show</span> <span class="n">program</span><span class="s1">&#39;s version number and exit</span>
   <span class="o">--</span><span class="n">json</span>           <span class="n">log</span> <span class="n">commands</span> <span class="n">to</span> <span class="n">attackmate</span><span class="o">.</span><span class="n">json</span>
   <span class="o">--</span><span class="n">append_logs</span>    <span class="n">append</span> <span class="n">logs</span> <span class="n">to</span> <span class="n">attackmate</span><span class="o">.</span><span class="n">log</span><span class="p">,</span> <span class="n">output</span><span class="o">.</span><span class="n">log</span> <span class="ow">and</span> <span class="n">attackmate</span><span class="o">.</span><span class="n">json</span> <span class="n">instead</span> <span class="n">of</span> <span class="n">overwriting</span>
+  <span class="o">--</span><span class="n">version</span>        <span class="n">show</span> <span class="n">program</span><span class="s1">&#39;s version number and exit</span>
 
-<span class="p">(</span><span class="n">Austrian</span> <span class="n">Institute</span> <span class="n">of</span> <span class="n">Technology</span><span class="p">)</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">aecid</span><span class="o">.</span><span class="n">ait</span><span class="o">.</span><span class="n">ac</span><span class="o">.</span><span class="n">at</span> <span class="n">Version</span><span class="p">:</span> <span class="mf">0.2.0</span>
+<span class="p">(</span><span class="n">Austrian</span> <span class="n">Institute</span> <span class="n">of</span> <span class="n">Technology</span><span class="p">)</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">aecid</span><span class="o">.</span><span class="n">ait</span><span class="o">.</span><span class="n">ac</span><span class="o">.</span><span class="n">at</span> <span class="n">Version</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">version</span><span class="o">&gt;</span>
 </pre></div>
 </div>
 <section id="sample-playbook">

@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Troubleshooting &mdash; AttackMate 1.0.1 documentation</title>
+  <title>Troubleshooting &mdash; AttackMate 1.0.2 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css" />
 
@@ -191,7 +191,7 @@ model validation.</p>
 <section id="invalid-command-type">
 <span id="error-invalid-command-type"></span><h3>Invalid Command Type<a class="headerlink" href="#invalid-command-type" title="Permalink to this heading"></a></h3>
 <p><strong>Symptom</strong></p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>ERROR | A Validation error occured when parsing playbook file playbooks/example.yml
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>ERROR | A Validation error occurred when parsing playbook file playbooks/example.yml
 ERROR | Traceback (most recent call last):
   ...
 pydantic_core._pydantic_core.ValidationError: 1 validation error for Playbook
@@ -224,7 +224,7 @@ factory. see <a class="reference internal" href="../developing/command.html#comm
 <section id="missing-required-field">
 <span id="error-missing-field"></span><h3>Missing Required Field<a class="headerlink" href="#missing-required-field" title="Permalink to this heading"></a></h3>
 <p><strong>Symptom</strong></p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>ERROR | A Validation error occured when parsing playbook file playbooks/example.yml
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>ERROR | A Validation error occurred when parsing playbook file playbooks/example.yml
 ERROR | Missing field in shell command: cmd - Field required
 ERROR | Traceback (most recent call last):
   ...
@@ -248,7 +248,7 @@ are required.</p></li>
 <section id="commands-not-formatted-as-a-list">
 <span id="error-commands-not-a-list"></span><h3>Commands Not Formatted as a List<a class="headerlink" href="#commands-not-formatted-as-a-list" title="Permalink to this heading"></a></h3>
 <p><strong>Symptom</strong></p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>ERROR | A Validation error occured when parsing playbook file playbooks/example.yml
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>ERROR | A Validation error occurred when parsing playbook file playbooks/example.yml
 ERROR | Traceback (most recent call last):
   ...
 pydantic_core._pydantic_core.ValidationError: 1 validation error for Playbook
@@ -408,7 +408,7 @@ that the password has not changed.</p></li>
 </ul>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
-<p><span class="xref std std-ref">remote</span> and <a class="reference internal" href="../configuration/remote_config.html#remote-config"><span class="std std-ref">remote_config</span></a> for the full list of required configuration fields.</p>
+<p><a class="reference internal" href="commands/remote.html#remote"><span class="std std-ref">remote</span></a> and <a class="reference internal" href="../configuration/remote_config.html#remote-config"><span class="std std-ref">remote_config</span></a> for the full list of required configuration fields.</p>
 </div>
 <hr class="docutils" />
 </section>
@@ -446,7 +446,7 @@ from which AttackMate is invoked.</p></li>
 </div>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
-<p><span class="xref std std-ref">remote</span> and <a class="reference internal" href="../configuration/remote_config.html#remote-config"><span class="std std-ref">remote_config</span></a> for the full list of required configuration fields.</p>
+<p><a class="reference internal" href="commands/remote.html#remote"><span class="std std-ref">remote</span></a> and <a class="reference internal" href="../configuration/remote_config.html#remote-config"><span class="std std-ref">remote_config</span></a> for the full list of required configuration fields.</p>
 </div>
 <hr class="docutils" />
 </section>
@@ -484,16 +484,15 @@ and the <code class="docutils literal notranslate"><span class="pre">cafile</spa
 </div>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
-<p><span class="xref std std-ref">remote</span> and <a class="reference internal" href="../configuration/remote_config.html#remote-config"><span class="std std-ref">remote_config</span></a> for the full list of required
+<p><a class="reference internal" href="commands/remote.html#remote"><span class="std std-ref">remote</span></a> and <a class="reference internal" href="../configuration/remote_config.html#remote-config"><span class="std std-ref">remote_config</span></a> for the full list of required
 configuration fields.</p>
 </div>
-<p><a href="#id2"><span class="problematic" id="id3">``</span></a></p>
 <hr class="docutils" />
 </section>
 <section id="command-type-not-supported-on-remote-instances">
 <span id="error-remote-command-not-supported"></span><h3>Command Type Not Supported on Remote Instances<a class="headerlink" href="#command-type-not-supported-on-remote-instances" title="Permalink to this heading"></a></h3>
 <p><strong>Symptom</strong></p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>ERROR | A Validation error occured when parsing playbook file playbooks/remote_remote.yml
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>ERROR | A Validation error occurred when parsing playbook file playbooks/remote_remote.yml
 ERROR | Traceback (most recent call last):
   ...
 pydantic_core._pydantic_core.ValidationError: 1 validation error for Playbook
@@ -579,7 +578,7 @@ missing colons, or unquoted special characters.</p></li>
 <p><a class="reference internal" href="#error-commands-not-a-list"><span class="std std-ref">Commands Not Formatted as a List</span></a> for the command not a valid list validation error.</p>
 <p><a class="reference internal" href="#error-invalid-command-type"><span class="std std-ref">Invalid Command Type</span></a> for invalid command type errors.</p>
 <p><a class="reference internal" href="#error-missing-field"><span class="std std-ref">Missing Required Field</span></a> for missing required field errors.</p>
-<p><span class="xref std std-ref">remote</span> for documentation on the <code class="docutils literal notranslate"><span class="pre">execute_playbook</span></code> command.</p>
+<p><a class="reference internal" href="commands/remote.html#remote"><span class="std std-ref">remote</span></a> for documentation on the <code class="docutils literal notranslate"><span class="pre">execute_playbook</span></code> command.</p>
 </div>
 </section>
 </section>
@@ -623,12 +622,10 @@ one of the following:</p>
 <li><p>A firewall or network policy is blocking the connection.</p></li>
 <li><p>The IP address or port in the SSH configuration is incorrect.</p></li>
 </ul>
-<p><strong>Solution</strong>
-* Verify that the target host is reachable, for example with <code class="docutils literal notranslate"><span class="pre">ping</span></code> or</p>
-<blockquote>
-<div><p><code class="docutils literal notranslate"><span class="pre">traceroute</span></code>.</p>
-</div></blockquote>
+<p><strong>Solution</strong></p>
 <ul class="simple">
+<li><p>Verify that the target host is reachable, for example with <code class="docutils literal notranslate"><span class="pre">ping</span></code> or
+<code class="docutils literal notranslate"><span class="pre">traceroute</span></code>.</p></li>
 <li><p>Confirm that an SSH service is running on the target and listening on the
 configured port (default: <code class="docutils literal notranslate"><span class="pre">22</span></code>).</p></li>
 <li><p>Check that no firewall rule is blocking the connection on either the
@@ -657,12 +654,10 @@ AttackMate’s session store. This happens when the <code class="docutils litera
 the command points to a session that was never established — either
 because the session-opening command was never executed, was skipped due
 to a prior error, or the session name contains a typo.</p>
-<p><strong>Solution</strong>
-* Review the playbook order and confirm the session is established before</p>
-<blockquote>
-<div><p>it is used.</p>
-</div></blockquote>
+<p><strong>Solution</strong></p>
 <ul class="simple">
+<li><p>Review the playbook order and confirm the session is established before
+it is used.</p></li>
 <li><p>Ensure that a session-opening SSH command with the matching session name
 runs successfully before any commands that reference it.</p></li>
 <li><p>Check for typos in the <code class="docutils literal notranslate"><span class="pre">session</span></code> field — session names are case-sensitive.</p></li>

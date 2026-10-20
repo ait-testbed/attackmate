@@ -114,7 +114,7 @@ Using ``mode: split``, a string can be tokenized by a delimiter, in this case, w
    If the pattern does not match, no output variables are set. If ``sub`` or
    ``split`` find no match, the original input string is returned.
 
-   The :ref:`builtin variables <builtin-variables>` ``REGEX_MATCHES_LIST`` is also populated with a list of
+   The :ref:`builtin variable <builtin-variables>` ``REGEX_MATCHES_LIST`` is also populated with a list of
    all matches whenever the command produces results.
 
 

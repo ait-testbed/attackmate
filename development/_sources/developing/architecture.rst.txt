@@ -1,6 +1,6 @@
-=======================
+========================
 System Architecture (C4)
-=======================
+========================
 
 This section presents the architecture of AttackMate using the
 `C4 model <https://c4model.com>`_, a visual framework for describing software architecture across different levels of detail.

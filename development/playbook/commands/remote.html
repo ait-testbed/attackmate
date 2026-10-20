@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>remote &mdash; AttackMate 1.0.1 documentation</title>
+  <title>remote &mdash; AttackMate 1.0.2 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css" />
 
@@ -198,7 +198,7 @@
            <div itemprop="articleBody">
              
   <section id="remote">
-<h1>remote<a class="headerlink" href="#remote" title="Permalink to this heading"></a></h1>
+<span id="id1"></span><h1>remote<a class="headerlink" href="#remote" title="Permalink to this heading"></a></h1>
 <p>Execute playbooks or commands on a remote AttackMate instance.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -209,7 +209,7 @@ deploying AttackMate as an API server via a role variable.</p>
 </div>
 <p>Remote connections are defined in the <code class="docutils literal notranslate"><span class="pre">remote_config</span></code> section of the configuration file.
 If no <code class="docutils literal notranslate"><span class="pre">connection</span></code> is specified, the first entry in the <code class="docutils literal notranslate"><span class="pre">remote_config</span></code> section is used as default.</p>
-<p>Each entry requires at minimum a <code class="docutils literal notranslate"><span class="pre">url</span></code> a <code class="docutils literal notranslate"><span class="pre">username</span></code>, <code class="docutils literal notranslate"><span class="pre">password</span></code>, and <code class="docutils literal notranslate"><span class="pre">cafile</span></code>
+<p>Each entry requires at minimum a <code class="docutils literal notranslate"><span class="pre">url</span></code>, a <code class="docutils literal notranslate"><span class="pre">username</span></code>, <code class="docutils literal notranslate"><span class="pre">password</span></code>, and <code class="docutils literal notranslate"><span class="pre">cafile</span></code>
 for TLS certificate verification.</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">remote_config</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">my-remote-instance</span><span class="p">:</span>
@@ -319,7 +319,7 @@ of the AttackMate configuration file. If omitted, the first entry in <code class
 <dl class="std confval">
 <dt class="sig sig-object std" id="confval-playbook_path">
 <span class="sig-name descname"><span class="pre">playbook_path</span></span><a class="headerlink" href="#confval-playbook_path" title="Permalink to this definition"></a></dt>
-<dd><p>Path to a local YAML playbook file to sent to and execute on the remote AttackMate.
+<dd><p>Path to a local YAML playbook file to send to and execute on the remote AttackMate.
 Required when <code class="docutils literal notranslate"><span class="pre">cmd</span></code> is <code class="docutils literal notranslate"><span class="pre">execute_playbook</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
@@ -370,7 +370,7 @@ Supports any command type that the remote AttackMate instance is configured to h
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">commands</span><span class="p">:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">remote</span>
 <span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">execute_playbook</span>
-<span class="w">    </span><span class="nt">playbook_path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/homeuser/playbooks/recon.yaml</span>
+<span class="w">    </span><span class="nt">playbook_path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/home/user/playbooks/recon.yaml</span>
 </pre></div>
 </div>
 </section>

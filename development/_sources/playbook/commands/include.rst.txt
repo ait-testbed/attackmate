@@ -8,7 +8,7 @@ Include and run commands from another yaml-file.
 
 .. note::
 
-   Background mode is not supported for this commands.
+   Background mode is not supported for this command.
 
 .. code-block:: yaml
 
