@@ -27,7 +27,7 @@ AttackMate is invoked via the ``attackmate`` command:
      --append_logs    append logs to attackmate.log, output.log and attackmate.json instead of overwriting
      --version        show program's version number and exit
 
-   (Austrian Institute of Technology) https://aecid.ait.ac.at Version: 1.0.2
+   (Austrian Institute of Technology) https://aecid.ait.ac.at Version: <version>
 
 Sample Playbook
 ===============
