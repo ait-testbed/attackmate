@@ -26,7 +26,7 @@ Invalid Command Type
 
 .. code-block:: text
 
-    ERROR | A Validation error occured when parsing playbook file playbooks/example.yml
+    ERROR | A Validation error occurred when parsing playbook file playbooks/example.yml
     ERROR | Traceback (most recent call last):
       ...
     pydantic_core._pydantic_core.ValidationError: 1 validation error for Playbook
@@ -65,7 +65,7 @@ Missing Required Field
 
 .. code-block:: text
 
-    ERROR | A Validation error occured when parsing playbook file playbooks/example.yml
+    ERROR | A Validation error occurred when parsing playbook file playbooks/example.yml
     ERROR | Missing field in shell command: cmd - Field required
     ERROR | Traceback (most recent call last):
       ...
@@ -96,7 +96,7 @@ Commands Not Formatted as a List
 
 .. code-block:: text
 
-    ERROR | A Validation error occured when parsing playbook file playbooks/example.yml
+    ERROR | A Validation error occurred when parsing playbook file playbooks/example.yml
     ERROR | Traceback (most recent call last):
       ...
     pydantic_core._pydantic_core.ValidationError: 1 validation error for Playbook
@@ -392,7 +392,7 @@ Command Type Not Supported on Remote Instances
 
 .. code-block:: text
 
-    ERROR | A Validation error occured when parsing playbook file playbooks/remote_remote.yml
+    ERROR | A Validation error occurred when parsing playbook file playbooks/remote_remote.yml
     ERROR | Traceback (most recent call last):
       ...
     pydantic_core._pydantic_core.ValidationError: 1 validation error for Playbook

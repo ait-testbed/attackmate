@@ -149,7 +149,7 @@ def parse_playbook(playbook_file: str, logger: logging.Logger) -> Playbook:
         logger.error(f'Error: Could not open playbook file {target_file}')
         exit(1)
     except ValidationError as e:
-        logger.error(f'A Validation error occured when parsing playbook file {playbook_file}')
+        logger.error(f'A Validation error occurred when parsing playbook file {playbook_file}')
         for error in e.errors():
             if error['type'] == 'missing':
                 logger.error(
