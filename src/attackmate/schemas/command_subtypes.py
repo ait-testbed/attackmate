@@ -4,6 +4,7 @@ from pydantic import Field
 # Core Commands
 from .sleep import SleepCommand
 from .shell import ShellCommand
+from .session import SessionCommand
 from .setvar import SetVarCommand
 from .include import IncludeCommand
 from .loop import LoopCommand
@@ -82,6 +83,7 @@ RemotelyExecutableCommand: TypeAlias = Annotated[
         FatherCommand,
         SFTPCommand,
         DebugCommand,
+        SessionCommand,
         SetVarCommand,
         RegExCommand,
         TempfileCommand,

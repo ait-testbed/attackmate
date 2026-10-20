@@ -35,6 +35,11 @@ class SSHCommand(SSHBase):
     command_timeout: StringNumber = '15'
     prompts: List[str] = ['$ ', '# ', '> ']
     bin: bool = False
+    screen: bool = False
+    expand_keys: bool = False
+    term: str = 'vt100'
+    pty_rows: StringNumber = '24'
+    pty_cols: StringNumber = '80'
 
 
 @CommandRegistry.register('sftp')

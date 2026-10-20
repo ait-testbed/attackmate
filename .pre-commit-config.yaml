@@ -18,7 +18,7 @@ repos:
     rev: v1.10.1
     hooks:
     -   id: mypy
-        additional_dependencies: [pydantic, types-PyYAML, types-requests, types-paramiko, types-tabulate]
+        additional_dependencies: [pydantic, types-PyYAML, types-requests, types-paramiko, types-tabulate, pyte]
 
 -   repo: https://github.com/myint/autoflake
     rev: 'v2.3.1'

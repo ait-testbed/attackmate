@@ -53,6 +53,46 @@ Every command, regardless of its type supports the following general options:
    :type: bool
    :default: ``True``
 
+.. confval:: use_exit_code
+
+   Let the command's real exit status decide whether the step failed.
+
+   :type: bool
+   :default: ``False``
+
+   ``shell`` and ``ssh`` steps report success regardless of what the command
+   actually did, so :confval:`exit_on_error` never fires for them. The true
+   status is always written to ``attackmate.json`` as ``exit-status``; setting
+   this makes it the step's return code as well, so ``exit_on_error`` and
+   ``loop_if`` act on it.
+
+   It is off by default because turning it on changes whether existing
+   playbooks fail. Note that inside a live session no true status exists - the
+   shell is still running - so it is recorded as ``null`` unless the command
+   also sets ``wait_for_exit``.
+
+.. confval:: substitute_cmd_vars
+
+   Substitute ``$variables`` in :confval:`cmd` before running it.
+
+   :type: bool
+   :default: ``True``
+
+   Set it to ``False`` to run the command exactly as written. Substitution uses
+   ``string.Template``, which also collapses ``$$`` into a single ``$`` - and in
+   a shell ``$$`` is the process id, so ``kill -9 $$``, ``/tmp/f.$$`` and
+   ``echo $$ > pidfile`` are all rewritten, with ``attackmate.json`` recording
+   the rewritten form.
+
+   .. code-block:: yaml
+
+      commands:
+        - type: shell
+          cmd: kill -9 $$
+          substitute_cmd_vars: False
+
+   Only ``cmd`` is affected; other fields are still templated.
+
 .. confval:: error_if
 
    Raise an error if the given pattern is found in the command output.
@@ -267,6 +307,7 @@ The next pages will describe each command type in detail.
    msf-session
    payload
    regex
+   session
    remote
    setvar
    shell

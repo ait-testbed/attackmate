@@ -201,7 +201,7 @@ class VariableStore:
         prefixed_env_vars = {k[len(prefix):]: v for k, v in os.environ.items() if k.startswith(prefix)}
         return prefixed_env_vars
 
-    def replace_with_prefixed_env_vars(self):
+    def replace_with_prefixed_env_vars(self) -> list[str]:
         """Override stored variables with matching prefixed environment variables.
 
         For each scalar variable currently in the store, if an environment variable
@@ -209,9 +209,16 @@ class VariableStore:
 
         Example: the stored variable ``FOO`` is overridden by the environment
         variable ``ATTACKMATE_FOO`` if it is set.
+
+        :returns: The names of the variables that were replaced. The caller logs
+            them, because the playbook on disk otherwise does not fully determine
+            what ran and nothing anywhere records the difference.
         """
         env_vars = self.get_prefixed_env_vars()
 
+        replaced = []
         for var_name in list(self.variables.keys()):
             if var_name in env_vars:
                 self.set_variable(var_name, env_vars[var_name])
+                replaced.append(var_name)
+        return replaced
