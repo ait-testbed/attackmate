@@ -53,7 +53,7 @@ Send HTTP requests with support for common methods, custom headers, cookies, and
 
    Store headers in the output.
 
-   :type: str
+   :type: bool
    :default: ``False``
    :required: False
 

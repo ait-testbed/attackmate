@@ -26,7 +26,7 @@ Invalid Command Type
 
 .. code-block:: text
 
-    ERROR | A Validation error occured when parsing playbook file playbooks/example.yml
+    ERROR | A Validation error occurred when parsing playbook file playbooks/example.yml
     ERROR | Traceback (most recent call last):
       ...
     pydantic_core._pydantic_core.ValidationError: 1 validation error for Playbook
@@ -65,7 +65,7 @@ Missing Required Field
 
 .. code-block:: text
 
-    ERROR | A Validation error occured when parsing playbook file playbooks/example.yml
+    ERROR | A Validation error occurred when parsing playbook file playbooks/example.yml
     ERROR | Missing field in shell command: cmd - Field required
     ERROR | Traceback (most recent call last):
       ...
@@ -96,7 +96,7 @@ Commands Not Formatted as a List
 
 .. code-block:: text
 
-    ERROR | A Validation error occured when parsing playbook file playbooks/example.yml
+    ERROR | A Validation error occurred when parsing playbook file playbooks/example.yml
     ERROR | Traceback (most recent call last):
       ...
     pydantic_core._pydantic_core.ValidationError: 1 validation error for Playbook
@@ -380,7 +380,6 @@ a certificate from a different CA or an unrelated server.
 
     :ref:`remote` and :ref:`remote_config` for the full list of required
     configuration fields.
-``
 
 ----
 
@@ -393,7 +392,7 @@ Command Type Not Supported on Remote Instances
 
 .. code-block:: text
 
-    ERROR | A Validation error occured when parsing playbook file playbooks/remote_remote.yml
+    ERROR | A Validation error occurred when parsing playbook file playbooks/remote_remote.yml
     ERROR | Traceback (most recent call last):
       ...
     pydantic_core._pydantic_core.ValidationError: 1 validation error for Playbook
@@ -529,7 +528,7 @@ An ``ssh`` command was executed, but AttackMate could not find an active session
 .. _error-unable-to-connect-session:
 
 Unable to connect SSH Session
------------------------
+-----------------------------
 
 **Symptom**
 
@@ -550,6 +549,7 @@ one of the following:
 * The IP address or port in the SSH configuration is incorrect.
 
 **Solution**
+
 * Verify that the target host is reachable, for example with ``ping`` or
   ``traceroute``.
 * Confirm that an SSH service is running on the target and listening on the
@@ -587,6 +587,7 @@ because the session-opening command was never executed, was skipped due
 to a prior error, or the session name contains a typo.
 
 **Solution**
+
 * Review the playbook order and confirm the session is established before
   it is used.
 * Ensure that a session-opening SSH command with the matching session name

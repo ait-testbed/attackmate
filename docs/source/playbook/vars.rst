@@ -59,7 +59,7 @@ an existing scalar name (or vice versa) silently replaces the previous entry.
 Comparing Variables
 ===================
 
-When a variable is used in a conditional expression (see :ref:`conditionals`), its
+When a variable is used in a conditional expression (see :ref:`conditionals <conditionals>`), its
 ``$`` reference is substituted *before* the expression is evaluated. Because the
 store always holds strings, the resolved value will be a ``str`` — even if the
 original value looked like a number or a boolean.
@@ -137,7 +137,7 @@ The following variables are set automatically by AttackMate during execution:
     Stores the standard output of the most recently executed command.
     Not set by ``debug``, ``regex``, or ``setvar`` commands.
 
-``RESULT_CODE``
+``RESULT_RETURNCODE``
     Stores the return code of the most recently executed command.
 
 ``LAST_MSF_SESSION``

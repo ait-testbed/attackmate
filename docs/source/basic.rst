@@ -9,19 +9,25 @@ AttackMate is invoked via the ``attackmate`` command:
 ::
 
    attackmate -h
-   usage: attackmate [-h] --config CONFIG [--debug] [--version] [--json] [--append_logs]
+   usage: attackmate [-h] [--config CONFIG] [--debug] [--json] [--append_logs]
+                     [--version]
+                     playbook
 
-   AttackMate is an attack orchestration tool that executes full attack-chains based on playbooks.
+   AttackMate is an attack orchestration tool to execute full attack-chains based
+   on playbooks.
+
+   positional arguments:
+     playbook         Playbook in yaml-format
 
    options:
      -h, --help       show this help message and exit
-     --config CONFIG  Attack-Playbook in yaml-format
+     --config CONFIG  Configfile in yaml-format
      --debug          Enable verbose output
-     --version        show program's version number and exit
      --json           log commands to attackmate.json
      --append_logs    append logs to attackmate.log, output.log and attackmate.json instead of overwriting
+     --version        show program's version number and exit
 
-   (Austrian Institute of Technology) https://aecid.ait.ac.at Version: 0.2.0
+   (Austrian Institute of Technology) https://aecid.ait.ac.at Version: <version>
 
 Sample Playbook
 ===============

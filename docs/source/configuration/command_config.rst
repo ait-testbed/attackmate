@@ -35,8 +35,7 @@ These are settings for **all** commands.
 
    When ``true``, randomizes the per-command delay. The effective delay is calculated as
    ``command_delay ± random(command_delay_jitter_min, command_delay_jitter_max)``,
-   clamped to a minimum of ``0``. Has no effect when ``command_delay_jitter``
-   is ``false``.
+   clamped to a minimum of ``0``.
 
    :type: bool
    :default: false

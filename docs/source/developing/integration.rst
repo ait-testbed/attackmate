@@ -87,7 +87,7 @@ created lazily on first use and reused across calls.
     ``sftp`` commands are internally routed to the ``ssh`` executor.
     Returns ``Result(None, None)`` if no executor is registered for the type.
 
-    Commands running in :ref:`background` mode return
+    Commands running in :ref:`background <background>` mode return
     ``Result('Command started in background', 0)`` immediately.
 
 ``await attackmate.main() -> int``
@@ -360,7 +360,7 @@ Returned by ``run_command``.
      - ``0`` on success, non-zero on failure.
 
 .. note::
-   Commands running in :ref:`background` mode return
+   Commands running in :ref:`background <background>` mode return
    ``Result('Command started in background', 0)`` immediately.
 
 VariableStore

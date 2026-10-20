@@ -50,7 +50,7 @@ The current item is accessible as the ``$LOOP_ITEM`` variable.
 Iterates over a range of integers ``start`` (inclusive) to ``end`` (exclusive). The current index is accessible as the ``$LOOP_INDEX`` variable.
 
 **until(condition)**
-Iterates indefinitely until the condition is evaluates to ``True``, checked before every command in the loop body.
+Iterates indefinitely until the condition evaluates to ``True``, checked before every command in the loop body.
 Variables in cmd section of an until loop command until(``$VAR1 == $VAR2``) will be substituted from the variable store on every iteration of the loop.
 The current iteration count is available as ``$LOOP_INDEX``.
 
@@ -61,7 +61,7 @@ Configuration
 
 .. confval:: cmd
 
-   The loop condition. Defines how the loop iterates, either over a list or a range of values, or idefinitely until the
+   The loop condition. Defines how the loop iterates, either over a list or a range of values, or indefinitely until the
    condition defined in ``until()`` is met.
 
    :type: str
@@ -76,7 +76,7 @@ Configuration
 .. confval:: break_if
 
    A condition checked before every command in the loop.
-   If it evaluates to `True`, the loop exits immediately
+   If it evaluates to `True`, the loop exits immediately.
    Supports the same operators as :confval:`only_if`.
 
    :type: str

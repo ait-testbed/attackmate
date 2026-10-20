@@ -99,7 +99,7 @@ Every command, regardless of its type supports the following general options:
         - type: http-client
           cmd: get
           url: https://www.google.com
-          loop_if_not: ".*google.*"
+          loop_if: ".*google.*"
 
 
 .. confval:: loop_if_not
@@ -120,7 +120,7 @@ Every command, regardless of its type supports the following general options:
 
 .. confval:: loop_count
 
-      Maximum number of repetitions when ``loop_if* or ``loop_if_not`` is set.
+   Maximum number of repetitions when ``loop_if`` or ``loop_if_not`` is set.
 
    :type: int
    :default: ``3``
@@ -224,7 +224,7 @@ Every command, regardless of its type supports the following general options:
    .. note::
 
       The command in background mode will change the :ref:`builtin variables <builtin-variables>`
-      ``RESULT_STDOUT`` to "Command started in Background" and ``RESULT_CODE`` to 0.
+      ``RESULT_STDOUT`` to "Command started in Background" and ``RESULT_RETURNCODE`` to 0.
 
    Background mode is not supported for
 

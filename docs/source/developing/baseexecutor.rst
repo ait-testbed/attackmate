@@ -30,7 +30,7 @@ Execution Flow
 Implementing a Custom Executor
 -------------------------------
 
-To create a custom executor, inherit from ``BaseExecutor`` and implement the ``_exec_cmd()`` method. Other methods can be overriden as needed.
+To create a custom executor, inherit from ``BaseExecutor`` and implement the ``_exec_cmd()`` method. Other methods can be overridden as needed.
 New executors must be registered using the @executor_factory.register_executor('<command_type>') decorator.
 
 Example:

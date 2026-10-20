@@ -8,15 +8,25 @@
 
 import os
 import sys
+
 sys.path.insert(0, os.path.abspath('../../src'))
+
+# Imported after sys.path is extended so ``attackmate`` is importable.
+from attackmate.metadata import __version__ as _attackmate_version  # noqa: E402
+
 
 project = 'AttackMate'
 copyright = '2023, Wolfgang Hotwagner'
 author = 'Wolfgang Hotwagner, Thorina Boenke, Erik Grafendorfer, Anna Erdi'
-release = '1.0.1'
+# Single-sourced from src/attackmate/metadata.py to avoid version drift.
+release = _attackmate_version
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
+
+# The README is included from its H2 onward (the H1 title and logo are skipped),
+# so MyST would warn that headings start at H2. Suppress that expected warning.
+suppress_warnings = ['myst.header']
 
 extensions = [
     'sphinx_multiversion',
