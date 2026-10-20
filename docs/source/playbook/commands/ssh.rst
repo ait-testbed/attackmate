@@ -11,7 +11,7 @@ Execute commands on a remote host via SSH.
    This command caches all settings so
    that they only need to be defined once.
 
-   Background mode with a session is not supported for this commands.
+   Background mode with a session is not supported for this command.
 
 .. code-block:: yaml
 

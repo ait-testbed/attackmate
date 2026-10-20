@@ -10,7 +10,7 @@ Execute Metasploit modules via the Metasploit RPC API.
 
    To configure the connection to ``msfrpcd``, see :ref:`msf_config`.
 
-   Background mode is not supported for this commands.
+   Background mode is not supported for this command.
 
 
 Some modules (like auxiliary scanners) produce direct output:

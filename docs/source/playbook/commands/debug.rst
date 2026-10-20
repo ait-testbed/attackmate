@@ -35,7 +35,7 @@ troubleshooting playbooks and does not modify ``RESULT_STDOUT`` (:ref:`builtin v
 
 .. confval:: exit
 
-   This setting causes the programm to exit when the command was
+   This setting causes the program to exit when the command was
    executed. It will exit with an error in order to indicate
    that this is an intentional early termination.
 

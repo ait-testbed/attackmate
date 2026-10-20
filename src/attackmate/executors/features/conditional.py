@@ -15,7 +15,9 @@ class ConditionalError(Exception):
 
 class Conditional:
     """Evaluates conditional statements
+
     Currently supported operations:
+
         * not var
         * var
         * None

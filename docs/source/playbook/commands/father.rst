@@ -2,7 +2,7 @@
 father
 ======
 
-The Father LD_PRELOAD rootkit requires to compile the config settings into the binary.
+The Father LD_PRELOAD rootkit requires compiling the config settings into the binary.
 This command compiles the binary and stores the path in the variable ``LAST_FATHER_PATH``.
 If ``local_path`` is not defined, the command will create a temporary directory and copy
 the sources into the directory before compiling the rootkit.
@@ -34,7 +34,7 @@ Father can be found at `this GitHub-Page <https://github.com/mav8557/Father>`_
 
 .. confval:: srcport
 
-   The magic port number that allows to connect to the accept-backdoor of father.
+   The magic port number that allows connecting to the accept-backdoor of father.
 
    :type: int
    :default: ``54321``
@@ -51,7 +51,7 @@ Father can be found at `this GitHub-Page <https://github.com/mav8557/Father>`_
 .. confval:: env_var
 
    Magic environment variable for Local Privilege Escalation (LPE). If this environment
-   variable is set, it is possible to escalate privileges using *sudo* or *gpasswd*
+   variable is set, it is possible to escalate privileges using *sudo* or *gpasswd*.
 
    :type: str
    :default: ``lobster``
@@ -75,7 +75,7 @@ Father can be found at `this GitHub-Page <https://github.com/mav8557/Father>`_
 
 .. confval:: hiddenport
 
-   Port to remove from netstat output, etc
+   Port to remove from netstat output, etc.
 
    :type: str(hex)
    :default: ``D431``

@@ -175,7 +175,7 @@ The path to the implant is saved and can be retrieved from the :ref:`builtin var
 .. confval:: filepath
 
    The local filepath to save the implant to. If omitted, the implant is saved to ``/tmp``.
-   The filename will be randomly genrated and have the format ^tmp[a-z0-9]{8}$.
+   The filename will be randomly generated and have the format ^tmp[a-z0-9]{8}$.
 
 
    :type: str

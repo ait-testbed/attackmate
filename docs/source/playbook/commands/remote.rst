@@ -1,3 +1,5 @@
+.. _remote:
+
 ======
 remote
 ======
@@ -14,7 +16,7 @@ Execute playbooks or commands on a remote AttackMate instance.
 Remote connections are defined in the ``remote_config`` section of the configuration file.
 If no ``connection`` is specified, the first entry in the ``remote_config`` section is used as default.
 
-Each entry requires at minimum a ``url`` a ``username``, ``password``, and ``cafile``
+Each entry requires at minimum a ``url``, a ``username``, ``password``, and ``cafile``
 for TLS certificate verification.
 
 .. code-block:: yaml
@@ -115,7 +117,7 @@ Options
 
 .. confval:: playbook_path
 
-   Path to a local YAML playbook file to sent to and execute on the remote AttackMate.
+   Path to a local YAML playbook file to send to and execute on the remote AttackMate.
    Required when ``cmd`` is ``execute_playbook``.
 
    :type: str
@@ -158,4 +160,4 @@ Execute a playbook on the default remote connection
    commands:
      - type: remote
        cmd: execute_playbook
-       playbook_path: /homeuser/playbooks/recon.yaml
+       playbook_path: /home/user/playbooks/recon.yaml

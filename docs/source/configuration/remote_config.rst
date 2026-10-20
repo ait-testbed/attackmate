@@ -46,7 +46,7 @@ default connection is used when none is specified:
         type: shell
         cmd: "whoami"
 
-    # Executed on 'attackmate-server' (defaults to first remote_config entry))
+    # Executed on 'attackmate-server' (defaults to first remote_config entry)
     - type: remote
       cmd: execute_playbook
       playbook_path: path/to/playbook.yml
